@@ -2,6 +2,10 @@ package cmd
 
 import (
 	"errors"
+	"github.com/cosmos/cosmos-sdk/codec/address"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 	"io"
 
 	"cosmossdk.io/log"
@@ -41,6 +45,7 @@ func initRootCmd(
 	)
 
 	server.AddCommands(rootCmd, app.DefaultNodeHome, newApp, appExport, addModuleInitFlags)
+	valOperAddressCodec := address.NewBech32Codec(sdk.GetConfig().GetBech32ValidatorAddrPrefix())
 
 	// add keybase, auxiliary RPC, query, genesis, and tx child commands
 	rootCmd.AddCommand(
@@ -49,6 +54,10 @@ func initRootCmd(
 		queryCommand(),
 		txCommand(),
 		keys.Commands(),
+		genutilcli.CollectGenTxsCmd(banktypes.GenesisBalancesIterator{}, app.DefaultNodeHome, genutiltypes.DefaultMessageValidator, valOperAddressCodec),
+		AddGenesisAccountCmd(app.DefaultNodeHome),
+		genutilcli.GenTxCmd(app.ModuleBasics, txConfig, banktypes.GenesisBalancesIterator{}, app.DefaultNodeHome, valOperAddressCodec),
+		genutilcli.ValidateGenesisCmd(app.ModuleBasics),
 	)
 }
 
@@ -110,7 +119,6 @@ func txCommand() *cobra.Command {
 		authcmd.GetEncodeCommand(),
 		authcmd.GetDecodeCommand(),
 		authcmd.GetSimulateCmd(),
-
 	)
 	cmd.PersistentFlags().String(flags.FlagChainID, "", "The network chain ID")
 
