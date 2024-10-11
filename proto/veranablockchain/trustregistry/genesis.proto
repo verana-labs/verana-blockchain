@@ -1,0 +1,19 @@
+syntax = "proto3";
+package veranablockchain.trustregistry;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "veranablockchain/trustregistry/params.proto";
+import "veranablockchain/trustregistry/types.proto";
+
+option go_package = "github.com/verana-labs/verana-blockchain/x/trustregistry/types";
+
+// GenesisState defines the trustregistry module's genesis state.
+message GenesisState {
+  // params defines all the parameters of the module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+  repeated TrustRegistry trust_registries = 2 [(gogoproto.nullable) = false];
+}

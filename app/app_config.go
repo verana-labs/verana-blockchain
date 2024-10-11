@@ -53,6 +53,9 @@ import (
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
 	"google.golang.org/protobuf/types/known/durationpb"
 
+	trustregistrymodulev1 "github.com/verana-labs/verana-blockchain/api/veranablockchain/trustregistry/module"
+	_ "github.com/verana-labs/verana-blockchain/x/trustregistry/module" // import for side-effects
+	trustregistrymoduletypes "github.com/verana-labs/verana-blockchain/x/trustregistry/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 )
 
@@ -90,14 +93,15 @@ var (
 		consensustypes.ModuleName,
 		circuittypes.ModuleName,
 		// chain modules
+		trustregistrymoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 
 	// During begin block slashing happens after distr.BeginBlocker so that
-    // there is nothing left over in the validator fee pool, so as to keep the
-    // CanWithdrawInvariant invariant.
-    // NOTE: staking module is required if HistoricalEntries param > 0
-    // NOTE: capability module's beginblocker must come before any modules using capabilities (e.g. IBC)
+	// there is nothing left over in the validator fee pool, so as to keep the
+	// CanWithdrawInvariant invariant.
+	// NOTE: staking module is required if HistoricalEntries param > 0
+	// NOTE: capability module's beginblocker must come before any modules using capabilities (e.g. IBC)
 	beginBlockers = []string{
 		// cosmos sdk modules
 		minttypes.ModuleName,
@@ -114,6 +118,7 @@ var (
 		icatypes.ModuleName,
 		ibcfeetypes.ModuleName,
 		// chain modules
+		trustregistrymoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	}
 
@@ -132,6 +137,7 @@ var (
 		icatypes.ModuleName,
 		ibcfeetypes.ModuleName,
 		// chain modules
+		trustregistrymoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	}
 
@@ -225,68 +231,72 @@ var (
 				}),
 			},
 			{
-                Name:   slashingtypes.ModuleName,
-                Config: appconfig.WrapAny(&slashingmodulev1.Module{}),
-            },
-            {
-                Name:   paramstypes.ModuleName,
-                Config: appconfig.WrapAny(&paramsmodulev1.Module{}),
-            },
-            {
-                Name:   "tx",
-                Config: appconfig.WrapAny(&txconfigv1.Config{}),
-            },
-            {
-                Name:   genutiltypes.ModuleName,
-                Config: appconfig.WrapAny(&genutilmodulev1.Module{}),
-            },
-            {
-                Name:   authz.ModuleName,
-                Config: appconfig.WrapAny(&authzmodulev1.Module{}),
-            },
-            {
-                Name:   upgradetypes.ModuleName,
-                Config: appconfig.WrapAny(&upgrademodulev1.Module{}),
-            },
-            {
-                Name:   distrtypes.ModuleName,
-                Config: appconfig.WrapAny(&distrmodulev1.Module{}),
-            },
-            {
-                Name:   evidencetypes.ModuleName,
-                Config: appconfig.WrapAny(&evidencemodulev1.Module{}),
-            },
-            {
-                Name:   minttypes.ModuleName,
-                Config: appconfig.WrapAny(&mintmodulev1.Module{}),
-            },
-            {
-                Name: group.ModuleName,
-                Config: appconfig.WrapAny(&groupmodulev1.Module{
-                    MaxExecutionPeriod: durationpb.New(time.Second * 1209600),
-                    MaxMetadataLen:     255,
-                }),
-            },
-            {
-                Name:   feegrant.ModuleName,
-                Config: appconfig.WrapAny(&feegrantmodulev1.Module{}),
-            },
-            {
-                Name:   govtypes.ModuleName,
-                Config: appconfig.WrapAny(&govmodulev1.Module{}),
-            },
-            {
-                Name:   crisistypes.ModuleName,
-                Config: appconfig.WrapAny(&crisismodulev1.Module{}),
-            },
-            {
-                Name:   consensustypes.ModuleName,
-                Config: appconfig.WrapAny(&consensusmodulev1.Module{}),
-            },
-            {
-                Name:   circuittypes.ModuleName,
-                Config: appconfig.WrapAny(&circuitmodulev1.Module{}),
-            },
+				Name:   slashingtypes.ModuleName,
+				Config: appconfig.WrapAny(&slashingmodulev1.Module{}),
+			},
+			{
+				Name:   paramstypes.ModuleName,
+				Config: appconfig.WrapAny(&paramsmodulev1.Module{}),
+			},
+			{
+				Name:   "tx",
+				Config: appconfig.WrapAny(&txconfigv1.Config{}),
+			},
+			{
+				Name:   genutiltypes.ModuleName,
+				Config: appconfig.WrapAny(&genutilmodulev1.Module{}),
+			},
+			{
+				Name:   authz.ModuleName,
+				Config: appconfig.WrapAny(&authzmodulev1.Module{}),
+			},
+			{
+				Name:   upgradetypes.ModuleName,
+				Config: appconfig.WrapAny(&upgrademodulev1.Module{}),
+			},
+			{
+				Name:   distrtypes.ModuleName,
+				Config: appconfig.WrapAny(&distrmodulev1.Module{}),
+			},
+			{
+				Name:   evidencetypes.ModuleName,
+				Config: appconfig.WrapAny(&evidencemodulev1.Module{}),
+			},
+			{
+				Name:   minttypes.ModuleName,
+				Config: appconfig.WrapAny(&mintmodulev1.Module{}),
+			},
+			{
+				Name: group.ModuleName,
+				Config: appconfig.WrapAny(&groupmodulev1.Module{
+					MaxExecutionPeriod: durationpb.New(time.Second * 1209600),
+					MaxMetadataLen:     255,
+				}),
+			},
+			{
+				Name:   feegrant.ModuleName,
+				Config: appconfig.WrapAny(&feegrantmodulev1.Module{}),
+			},
+			{
+				Name:   govtypes.ModuleName,
+				Config: appconfig.WrapAny(&govmodulev1.Module{}),
+			},
+			{
+				Name:   crisistypes.ModuleName,
+				Config: appconfig.WrapAny(&crisismodulev1.Module{}),
+			},
+			{
+				Name:   consensustypes.ModuleName,
+				Config: appconfig.WrapAny(&consensusmodulev1.Module{}),
+			},
+			{
+				Name:   circuittypes.ModuleName,
+				Config: appconfig.WrapAny(&circuitmodulev1.Module{}),
+			},
+			{
+				Name:   trustregistrymoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&trustregistrymodulev1.Module{}),
+			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},
 	})

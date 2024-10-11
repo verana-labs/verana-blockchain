@@ -45,7 +45,7 @@ func BenchmarkFullAppSimulation(b *testing.B) {
 
 	bApp, err := app.New(logger, db, nil, true, appOptions, interBlockCacheOpt())
 	require.NoError(b, err)
-    require.Equal(b, app.Name, bApp.Name())
+	require.Equal(b, app.Name, bApp.Name())
 
 	// run randomized simulation
 	_, simParams, simErr := simulation.SimulateFromSeed(
@@ -73,7 +73,6 @@ func BenchmarkFullAppSimulation(b *testing.B) {
 		simtestutil.PrintStats(db)
 	}
 }
-
 
 func BenchmarkInvariants(b *testing.B) {
 	b.ReportAllocs()
@@ -103,8 +102,8 @@ func BenchmarkInvariants(b *testing.B) {
 
 	bApp, err := app.New(logger, db, nil, true, appOptions, interBlockCacheOpt())
 	require.NoError(b, err)
-    require.Equal(b, app.Name, bApp.Name())
-    
+	require.Equal(b, app.Name, bApp.Name())
+
 	// run randomized simulation
 	_, simParams, simErr := simulation.SimulateFromSeed(
 		b,
