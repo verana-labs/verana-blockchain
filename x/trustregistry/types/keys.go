@@ -1,5 +1,7 @@
 package types
 
+import "cosmossdk.io/collections"
+
 const (
 	// ModuleName defines the module name
 	ModuleName = "trustregistry"
@@ -12,7 +14,10 @@ const (
 )
 
 var (
-	ParamsKey = []byte("p_trustregistry")
+	ParamsKey                      = collections.NewPrefix(0)
+	TrustRegistryKey               = collections.NewPrefix(1)
+	GovernanceFrameworkVersionKey  = collections.NewPrefix(2)
+	GovernanceFrameworkDocumentKey = collections.NewPrefix(3)
 )
 
 func KeyPrefix(p string) []byte {

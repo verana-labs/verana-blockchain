@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
 	"github.com/verana-labs/verana-blockchain/x/trustregistry/types"
 )
 
@@ -42,12 +41,28 @@ func NewKeeper(
 		panic(fmt.Sprintf("invalid authority address: %s", authority))
 	}
 
-	return Keeper{
-		cdc:          cdc,
-		storeService: storeService,
-		authority:    authority,
-		logger:       logger,
+	sb := collections.NewSchemaBuilder(storeService)
+	k := Keeper{
+		cdc: cdc,
+		//addressCodec:  addressCodec,
+		storeService:  storeService,
+		authority:     authority,
+		logger:        logger,
+		Params:        collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+		TrustRegistry: collections.NewMap(sb, types.TrustRegistryKey, "trust_registry", collections.StringKey, codec.CollValue[types.TrustRegistry](cdc)),
+		GFVersion:     collections.NewMap(sb, types.GovernanceFrameworkVersionKey, "gf_version", collections.StringKey, codec.CollValue[types.GovernanceFrameworkVersion](cdc)),
+		GFDocument:    collections.NewMap(sb, types.GovernanceFrameworkDocumentKey, "gf_document", collections.StringKey, codec.CollValue[types.GovernanceFrameworkDocument](cdc)),
+		//bankKeeper:    bankKeeper,
 	}
+
+	schema, err := sb.Build()
+	if err != nil {
+		panic(err)
+	}
+	k.Schema = schema
+
+	return k
+
 }
 
 // GetAuthority returns the module's authority.
