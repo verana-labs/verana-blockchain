@@ -8,7 +8,7 @@ import (
 	svrcmd "github.com/cosmos/cosmos-sdk/server/cmd"
 
 	"github.com/verana-labs/verana-blockchain/app"
-	"github.com/verana-labs/verana-blockchain/cmd/verana/cmd"
+	"github.com/verana-labs/verana-blockchain/cmd/veranad/cmd"
 )
 
 func main() {

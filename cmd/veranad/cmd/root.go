@@ -23,7 +23,7 @@ import (
 	"github.com/verana-labs/verana-blockchain/app"
 )
 
-// NewRootCmd creates a new root command for verana. It is called once in the main function.
+// NewRootCmd creates a new root command for veranad. It is called once in the main function.
 func NewRootCmd() *cobra.Command {
 	var (
 		autoCliOpts        autocli.AppOptions
@@ -48,7 +48,7 @@ func NewRootCmd() *cobra.Command {
 	}
 
 	rootCmd := &cobra.Command{
-		Use:           app.Name,
+		Use:           app.Name + "d",
 		Short:         "Start veranablockchain node",
 		SilenceErrors: true,
 		PersistentPreRunE: func(cmd *cobra.Command, _ []string) error {
