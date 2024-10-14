@@ -19,8 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Msg_UpdateParams_FullMethodName        = "/veranablockchain.trustregistry.Msg/UpdateParams"
-	Msg_CreateTrustRegistry_FullMethodName = "/veranablockchain.trustregistry.Msg/CreateTrustRegistry"
+	Msg_UpdateParams_FullMethodName                   = "/veranablockchain.trustregistry.Msg/UpdateParams"
+	Msg_CreateTrustRegistry_FullMethodName            = "/veranablockchain.trustregistry.Msg/CreateTrustRegistry"
+	Msg_AddGovernanceFrameworkDocument_FullMethodName = "/veranablockchain.trustregistry.Msg/AddGovernanceFrameworkDocument"
 )
 
 // MsgClient is the client API for Msg service.
@@ -32,6 +33,7 @@ type MsgClient interface {
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
 	// CreateTrustRegistry creates a new trust registry.
 	CreateTrustRegistry(ctx context.Context, in *MsgCreateTrustRegistry, opts ...grpc.CallOption) (*MsgCreateTrustRegistryResponse, error)
+	AddGovernanceFrameworkDocument(ctx context.Context, in *MsgAddGovernanceFrameworkDocument, opts ...grpc.CallOption) (*MsgAddGovernanceFrameworkDocumentResponse, error)
 }
 
 type msgClient struct {
@@ -60,6 +62,15 @@ func (c *msgClient) CreateTrustRegistry(ctx context.Context, in *MsgCreateTrustR
 	return out, nil
 }
 
+func (c *msgClient) AddGovernanceFrameworkDocument(ctx context.Context, in *MsgAddGovernanceFrameworkDocument, opts ...grpc.CallOption) (*MsgAddGovernanceFrameworkDocumentResponse, error) {
+	out := new(MsgAddGovernanceFrameworkDocumentResponse)
+	err := c.cc.Invoke(ctx, Msg_AddGovernanceFrameworkDocument_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
@@ -69,6 +80,7 @@ type MsgServer interface {
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
 	// CreateTrustRegistry creates a new trust registry.
 	CreateTrustRegistry(context.Context, *MsgCreateTrustRegistry) (*MsgCreateTrustRegistryResponse, error)
+	AddGovernanceFrameworkDocument(context.Context, *MsgAddGovernanceFrameworkDocument) (*MsgAddGovernanceFrameworkDocumentResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -81,6 +93,9 @@ func (UnimplementedMsgServer) UpdateParams(context.Context, *MsgUpdateParams) (*
 }
 func (UnimplementedMsgServer) CreateTrustRegistry(context.Context, *MsgCreateTrustRegistry) (*MsgCreateTrustRegistryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateTrustRegistry not implemented")
+}
+func (UnimplementedMsgServer) AddGovernanceFrameworkDocument(context.Context, *MsgAddGovernanceFrameworkDocument) (*MsgAddGovernanceFrameworkDocumentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddGovernanceFrameworkDocument not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -131,6 +146,24 @@ func _Msg_CreateTrustRegistry_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_AddGovernanceFrameworkDocument_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgAddGovernanceFrameworkDocument)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).AddGovernanceFrameworkDocument(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_AddGovernanceFrameworkDocument_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).AddGovernanceFrameworkDocument(ctx, req.(*MsgAddGovernanceFrameworkDocument))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -145,6 +178,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateTrustRegistry",
 			Handler:    _Msg_CreateTrustRegistry_Handler,
+		},
+		{
+			MethodName: "AddGovernanceFrameworkDocument",
+			Handler:    _Msg_AddGovernanceFrameworkDocument_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

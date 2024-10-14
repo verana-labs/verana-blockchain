@@ -248,11 +248,139 @@ func (m *MsgCreateTrustRegistryResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgCreateTrustRegistryResponse proto.InternalMessageInfo
 
+// MsgAddGovernanceFrameworkDocument defines the Msg/AddGovernanceFrameworkDocument request type.
+type MsgAddGovernanceFrameworkDocument struct {
+	Creator     string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	Did         string `protobuf:"bytes,2,opt,name=did,proto3" json:"did,omitempty"`
+	DocLanguage string `protobuf:"bytes,3,opt,name=doc_language,json=docLanguage,proto3" json:"doc_language,omitempty"`
+	DocUrl      string `protobuf:"bytes,4,opt,name=doc_url,json=docUrl,proto3" json:"doc_url,omitempty"`
+	DocHash     string `protobuf:"bytes,5,opt,name=doc_hash,json=docHash,proto3" json:"doc_hash,omitempty"`
+	Version     int32  `protobuf:"varint,6,opt,name=version,proto3" json:"version,omitempty"`
+}
+
+func (m *MsgAddGovernanceFrameworkDocument) Reset()         { *m = MsgAddGovernanceFrameworkDocument{} }
+func (m *MsgAddGovernanceFrameworkDocument) String() string { return proto.CompactTextString(m) }
+func (*MsgAddGovernanceFrameworkDocument) ProtoMessage()    {}
+func (*MsgAddGovernanceFrameworkDocument) Descriptor() ([]byte, []int) {
+	return fileDescriptor_55f6f1dc061e8abe, []int{4}
+}
+func (m *MsgAddGovernanceFrameworkDocument) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgAddGovernanceFrameworkDocument) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgAddGovernanceFrameworkDocument.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgAddGovernanceFrameworkDocument) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgAddGovernanceFrameworkDocument.Merge(m, src)
+}
+func (m *MsgAddGovernanceFrameworkDocument) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgAddGovernanceFrameworkDocument) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgAddGovernanceFrameworkDocument.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgAddGovernanceFrameworkDocument proto.InternalMessageInfo
+
+func (m *MsgAddGovernanceFrameworkDocument) GetCreator() string {
+	if m != nil {
+		return m.Creator
+	}
+	return ""
+}
+
+func (m *MsgAddGovernanceFrameworkDocument) GetDid() string {
+	if m != nil {
+		return m.Did
+	}
+	return ""
+}
+
+func (m *MsgAddGovernanceFrameworkDocument) GetDocLanguage() string {
+	if m != nil {
+		return m.DocLanguage
+	}
+	return ""
+}
+
+func (m *MsgAddGovernanceFrameworkDocument) GetDocUrl() string {
+	if m != nil {
+		return m.DocUrl
+	}
+	return ""
+}
+
+func (m *MsgAddGovernanceFrameworkDocument) GetDocHash() string {
+	if m != nil {
+		return m.DocHash
+	}
+	return ""
+}
+
+func (m *MsgAddGovernanceFrameworkDocument) GetVersion() int32 {
+	if m != nil {
+		return m.Version
+	}
+	return 0
+}
+
+// MsgAddGovernanceFrameworkDocumentResponse defines the Msg/AddGovernanceFrameworkDocument response type.
+type MsgAddGovernanceFrameworkDocumentResponse struct {
+}
+
+func (m *MsgAddGovernanceFrameworkDocumentResponse) Reset() {
+	*m = MsgAddGovernanceFrameworkDocumentResponse{}
+}
+func (m *MsgAddGovernanceFrameworkDocumentResponse) String() string {
+	return proto.CompactTextString(m)
+}
+func (*MsgAddGovernanceFrameworkDocumentResponse) ProtoMessage() {}
+func (*MsgAddGovernanceFrameworkDocumentResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_55f6f1dc061e8abe, []int{5}
+}
+func (m *MsgAddGovernanceFrameworkDocumentResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgAddGovernanceFrameworkDocumentResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgAddGovernanceFrameworkDocumentResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgAddGovernanceFrameworkDocumentResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgAddGovernanceFrameworkDocumentResponse.Merge(m, src)
+}
+func (m *MsgAddGovernanceFrameworkDocumentResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgAddGovernanceFrameworkDocumentResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgAddGovernanceFrameworkDocumentResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgAddGovernanceFrameworkDocumentResponse proto.InternalMessageInfo
+
 func init() {
 	proto.RegisterType((*MsgUpdateParams)(nil), "veranablockchain.trustregistry.MsgUpdateParams")
 	proto.RegisterType((*MsgUpdateParamsResponse)(nil), "veranablockchain.trustregistry.MsgUpdateParamsResponse")
 	proto.RegisterType((*MsgCreateTrustRegistry)(nil), "veranablockchain.trustregistry.MsgCreateTrustRegistry")
 	proto.RegisterType((*MsgCreateTrustRegistryResponse)(nil), "veranablockchain.trustregistry.MsgCreateTrustRegistryResponse")
+	proto.RegisterType((*MsgAddGovernanceFrameworkDocument)(nil), "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument")
+	proto.RegisterType((*MsgAddGovernanceFrameworkDocumentResponse)(nil), "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocumentResponse")
 }
 
 func init() {
@@ -260,39 +388,45 @@ func init() {
 }
 
 var fileDescriptor_55f6f1dc061e8abe = []byte{
-	// 508 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x53, 0xcf, 0x6b, 0x13, 0x41,
-	0x14, 0xce, 0x34, 0x36, 0x6d, 0xc6, 0x82, 0x3a, 0x16, 0xb3, 0xd9, 0xc3, 0x1a, 0x72, 0xd0, 0x12,
-	0xe9, 0xae, 0x46, 0xa8, 0xd0, 0x43, 0xc1, 0xf4, 0xa2, 0x87, 0x80, 0xac, 0x16, 0xc4, 0x4b, 0x99,
-	0xdd, 0x1d, 0x66, 0x97, 0xec, 0xee, 0x2c, 0x33, 0xb3, 0x25, 0xb9, 0x89, 0x47, 0x41, 0xf0, 0xe4,
-	0xdf, 0xe0, 0x31, 0x07, 0xff, 0x88, 0x9e, 0xa4, 0x78, 0xd2, 0x8b, 0x48, 0x72, 0xc8, 0xbf, 0x21,
-	0xb3, 0x3f, 0x2c, 0x5d, 0x43, 0xa3, 0xbd, 0x24, 0xf3, 0xbe, 0xef, 0xbd, 0xef, 0xbd, 0xef, 0xcd,
-	0x2c, 0xbc, 0x7f, 0x42, 0x38, 0x8e, 0xb1, 0x13, 0x32, 0x77, 0xe4, 0xfa, 0x38, 0x88, 0x2d, 0xc9,
-	0x53, 0x21, 0x39, 0xa1, 0x81, 0x90, 0x7c, 0x62, 0xc9, 0xb1, 0x99, 0x70, 0x26, 0x19, 0x32, 0xaa,
-	0x89, 0xe6, 0x85, 0x44, 0xfd, 0x16, 0x8e, 0x82, 0x98, 0x59, 0xd9, 0x6f, 0x5e, 0xa2, 0xb7, 0x5c,
-	0x26, 0x22, 0x26, 0xac, 0x48, 0x50, 0xeb, 0xe4, 0x91, 0xfa, 0x2b, 0x88, 0x76, 0x4e, 0x1c, 0x67,
-	0x91, 0x95, 0x07, 0x05, 0xb5, 0x4d, 0x19, 0x65, 0x39, 0xae, 0x4e, 0x05, 0xfa, 0x60, 0xc5, 0x94,
-	0x09, 0xe6, 0x38, 0x2a, 0x24, 0xba, 0x3f, 0x00, 0xbc, 0x31, 0x14, 0xf4, 0x28, 0xf1, 0xb0, 0x24,
-	0x2f, 0x32, 0x06, 0xed, 0xc1, 0x26, 0x4e, 0xa5, 0xcf, 0x78, 0x20, 0x27, 0x1a, 0xe8, 0x80, 0x9d,
-	0xe6, 0x40, 0xfb, 0xf6, 0x65, 0x77, 0xbb, 0xe8, 0xfd, 0xd4, 0xf3, 0x38, 0x11, 0xe2, 0xa5, 0xe4,
-	0x41, 0x4c, 0xed, 0xf3, 0x54, 0xf4, 0x1c, 0x36, 0x72, 0x6d, 0x6d, 0xad, 0x03, 0x76, 0xae, 0xf7,
-	0xef, 0x99, 0x97, 0xaf, 0xc1, 0xcc, 0xfb, 0x0d, 0x9a, 0xa7, 0x3f, 0xef, 0xd6, 0x3e, 0x2f, 0xa6,
-	0x3d, 0x60, 0x17, 0x02, 0xfb, 0x87, 0xef, 0x16, 0xd3, 0xde, 0xb9, 0xf4, 0xfb, 0xc5, 0xb4, 0xf7,
-	0xf0, 0x2f, 0x5b, 0xe3, 0x8a, 0xb1, 0x8a, 0x8f, 0x6e, 0x1b, 0xb6, 0x2a, 0x90, 0x4d, 0x44, 0xc2,
-	0x62, 0x41, 0xba, 0x5f, 0x01, 0xbc, 0x33, 0x14, 0xf4, 0x90, 0x13, 0x2c, 0xc9, 0x2b, 0xa5, 0x62,
-	0x17, 0x2a, 0xa8, 0x0f, 0x37, 0x5c, 0x05, 0x33, 0xbe, 0xd2, 0x7b, 0x99, 0x88, 0x6e, 0xc2, 0xba,
-	0x17, 0x78, 0x99, 0xed, 0xa6, 0xad, 0x8e, 0x0a, 0xc1, 0x23, 0xac, 0xd5, 0x73, 0x04, 0x8f, 0x30,
-	0xd2, 0xe1, 0x66, 0x88, 0x63, 0x9a, 0x62, 0x4a, 0xb4, 0x6b, 0x19, 0xfc, 0x27, 0x46, 0x2d, 0xb8,
-	0xe1, 0x31, 0xf7, 0x38, 0xe5, 0xa1, 0xb6, 0x9e, 0x51, 0x0d, 0x8f, 0xb9, 0x47, 0x3c, 0x44, 0x6d,
-	0xb8, 0xa9, 0x08, 0x1f, 0x0b, 0x5f, 0x6b, 0x64, 0x8c, 0x4a, 0x7c, 0x86, 0x85, 0xbf, 0xbf, 0xa5,
-	0x56, 0x54, 0x4e, 0xd0, 0xed, 0x40, 0x63, 0xb9, 0x9f, 0xd2, 0x72, 0xff, 0xd3, 0x1a, 0xac, 0x0f,
-	0x05, 0x45, 0x63, 0xb8, 0x75, 0xe1, 0xb6, 0xad, 0x55, 0xb7, 0x54, 0xd9, 0xa1, 0xfe, 0xe4, 0x3f,
-	0x0b, 0xca, 0x09, 0xd0, 0x07, 0x00, 0x6f, 0x2f, 0xdb, 0xf8, 0xde, 0x3f, 0x08, 0x2e, 0xa9, 0xd3,
-	0x0f, 0xae, 0x56, 0x57, 0xce, 0xa3, 0xaf, 0xbf, 0x55, 0x6f, 0x6e, 0xf0, 0xfa, 0x74, 0x66, 0x80,
-	0xb3, 0x99, 0x01, 0x7e, 0xcd, 0x0c, 0xf0, 0x71, 0x6e, 0xd4, 0xce, 0xe6, 0x46, 0xed, 0xfb, 0xdc,
-	0xa8, 0xbd, 0x39, 0xa0, 0x81, 0xf4, 0x53, 0xc7, 0x74, 0x59, 0x64, 0xe5, 0xad, 0x76, 0x43, 0xec,
-	0x88, 0xf2, 0x7c, 0xc9, 0x53, 0x94, 0x93, 0x84, 0x08, 0xa7, 0x91, 0x7d, 0x63, 0x8f, 0x7f, 0x07,
-	0x00, 0x00, 0xff, 0xff, 0x2d, 0x86, 0xb9, 0x14, 0x38, 0x04, 0x00, 0x00,
+	// 606 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x54, 0xcf, 0x6b, 0x13, 0x41,
+	0x14, 0xce, 0x98, 0x26, 0x6d, 0xa6, 0x01, 0x75, 0x2d, 0x66, 0xb3, 0x87, 0x35, 0xcd, 0x41, 0x6b,
+	0x4a, 0xb3, 0x1a, 0xa1, 0x42, 0x0f, 0x85, 0xa4, 0xa2, 0x16, 0x0c, 0xc8, 0x6a, 0x41, 0xbc, 0x94,
+	0xc9, 0xee, 0x30, 0xbb, 0x24, 0xbb, 0x13, 0x66, 0x66, 0x63, 0x72, 0x13, 0x8f, 0x82, 0xe0, 0x9f,
+	0xe1, 0x49, 0x72, 0xf0, 0x7f, 0xb0, 0x27, 0x29, 0x9e, 0xf4, 0x22, 0x92, 0x1c, 0xe2, 0x9f, 0x21,
+	0xfb, 0x2b, 0x25, 0x6b, 0x4c, 0xea, 0x8f, 0x4b, 0x32, 0xf3, 0x7d, 0xef, 0x7d, 0xef, 0x7d, 0x8f,
+	0xb7, 0x03, 0x6f, 0xf4, 0x30, 0x43, 0x2e, 0x6a, 0x75, 0xa8, 0xd1, 0x36, 0x2c, 0x64, 0xbb, 0x9a,
+	0x60, 0x1e, 0x17, 0x0c, 0x13, 0x9b, 0x0b, 0x36, 0xd0, 0x44, 0xbf, 0xda, 0x65, 0x54, 0x50, 0x49,
+	0x4d, 0x06, 0x56, 0x67, 0x02, 0x95, 0xcb, 0xc8, 0xb1, 0x5d, 0xaa, 0x05, 0xbf, 0x61, 0x8a, 0x52,
+	0x30, 0x28, 0x77, 0x28, 0xd7, 0x1c, 0x4e, 0xb4, 0xde, 0x6d, 0xff, 0x2f, 0x22, 0x8a, 0x21, 0x71,
+	0x1c, 0xdc, 0xb4, 0xf0, 0x12, 0x51, 0x1b, 0x84, 0x12, 0x1a, 0xe2, 0xfe, 0x29, 0x42, 0xb7, 0x97,
+	0x74, 0xd9, 0x45, 0x0c, 0x39, 0x91, 0x44, 0xf9, 0x2b, 0x80, 0x17, 0x9b, 0x9c, 0x1c, 0x75, 0x4d,
+	0x24, 0xf0, 0xe3, 0x80, 0x91, 0x76, 0x61, 0x0e, 0x79, 0xc2, 0xa2, 0xcc, 0x16, 0x03, 0x19, 0x94,
+	0xc0, 0x56, 0xae, 0x21, 0x7f, 0xfe, 0xb0, 0xb3, 0x11, 0xd5, 0xae, 0x9b, 0x26, 0xc3, 0x9c, 0x3f,
+	0x11, 0xcc, 0x76, 0x89, 0x7e, 0x16, 0x2a, 0x1d, 0xc2, 0x6c, 0xa8, 0x2d, 0x5f, 0x28, 0x81, 0xad,
+	0xf5, 0xda, 0xf5, 0xea, 0xe2, 0x31, 0x54, 0xc3, 0x7a, 0x8d, 0xdc, 0xc9, 0xb7, 0x6b, 0xa9, 0x77,
+	0x93, 0x61, 0x05, 0xe8, 0x91, 0xc0, 0xde, 0xc1, 0xab, 0xc9, 0xb0, 0x72, 0x26, 0xfd, 0x7a, 0x32,
+	0xac, 0xdc, 0xfa, 0xc5, 0x56, 0x3f, 0x61, 0x2c, 0xe1, 0xa3, 0x5c, 0x84, 0x85, 0x04, 0xa4, 0x63,
+	0xde, 0xa5, 0x2e, 0xc7, 0xe5, 0x4f, 0x00, 0x5e, 0x6d, 0x72, 0x72, 0xc0, 0x30, 0x12, 0xf8, 0xa9,
+	0xaf, 0xa2, 0x47, 0x2a, 0x52, 0x0d, 0xae, 0x1a, 0x3e, 0x4c, 0xd9, 0x52, 0xef, 0x71, 0xa0, 0x74,
+	0x09, 0xa6, 0x4d, 0xdb, 0x0c, 0x6c, 0xe7, 0x74, 0xff, 0xe8, 0x23, 0xa8, 0x8d, 0xe4, 0x74, 0x88,
+	0xa0, 0x36, 0x92, 0x14, 0xb8, 0xd6, 0x41, 0x2e, 0xf1, 0x10, 0xc1, 0xf2, 0x4a, 0x00, 0x4f, 0xef,
+	0x52, 0x01, 0xae, 0x9a, 0xd4, 0x38, 0xf6, 0x58, 0x47, 0xce, 0x04, 0x54, 0xd6, 0xa4, 0xc6, 0x11,
+	0xeb, 0x48, 0x45, 0xb8, 0xe6, 0x13, 0x16, 0xe2, 0x96, 0x9c, 0x0d, 0x18, 0x3f, 0xf0, 0x21, 0xe2,
+	0xd6, 0x5e, 0xde, 0x1f, 0x51, 0xdc, 0x41, 0xb9, 0x04, 0xd5, 0xf9, 0x7e, 0xa6, 0x96, 0x7f, 0x00,
+	0xb8, 0xd9, 0xe4, 0xa4, 0x6e, 0x9a, 0x0f, 0x68, 0x0f, 0x33, 0x17, 0xb9, 0x06, 0xbe, 0xcf, 0x90,
+	0x83, 0x5f, 0x50, 0xd6, 0xbe, 0x47, 0x0d, 0xcf, 0xc1, 0xae, 0xf8, 0x4f, 0xee, 0x37, 0x61, 0xde,
+	0x6f, 0x7b, 0xea, 0x37, 0x1c, 0xc3, 0xba, 0x49, 0x8d, 0x47, 0x73, 0x2c, 0xaf, 0xfc, 0xd6, 0x72,
+	0x66, 0xc6, 0xb2, 0x24, 0xc3, 0xd5, 0x1e, 0x66, 0xdc, 0xa6, 0x6e, 0x30, 0x8c, 0x8c, 0x1e, 0x5f,
+	0x13, 0xc3, 0xd8, 0x86, 0x37, 0x97, 0x3a, 0x8d, 0xe7, 0x52, 0xfb, 0x98, 0x86, 0xe9, 0x26, 0x27,
+	0x52, 0x1f, 0xe6, 0x67, 0xbe, 0x02, 0x6d, 0xd9, 0xf6, 0x26, 0x76, 0x4b, 0xb9, 0xfb, 0x87, 0x09,
+	0x71, 0x07, 0xd2, 0x1b, 0x00, 0xaf, 0xcc, 0xdb, 0xc4, 0xdd, 0x73, 0x08, 0xce, 0xc9, 0x53, 0xf6,
+	0xff, 0x2e, 0x6f, 0xda, 0xcf, 0x7b, 0x00, 0xd5, 0x25, 0x6b, 0x52, 0x3f, 0x47, 0x89, 0xc5, 0x12,
+	0xca, 0xe1, 0x3f, 0x4b, 0xc4, 0x0d, 0x2b, 0x99, 0x97, 0xfe, 0xe3, 0xd1, 0x78, 0x76, 0x32, 0x52,
+	0xc1, 0xe9, 0x48, 0x05, 0xdf, 0x47, 0x2a, 0x78, 0x3b, 0x56, 0x53, 0xa7, 0x63, 0x35, 0xf5, 0x65,
+	0xac, 0xa6, 0x9e, 0xef, 0x13, 0x5b, 0x58, 0x5e, 0xab, 0x6a, 0x50, 0x47, 0x0b, 0xab, 0xee, 0x74,
+	0x50, 0x8b, 0xc7, 0xe7, 0x05, 0x6f, 0x8a, 0x18, 0x74, 0x31, 0x6f, 0x65, 0x83, 0xc7, 0xf2, 0xce,
+	0xcf, 0x00, 0x00, 0x00, 0xff, 0xff, 0xec, 0x6f, 0xa9, 0x3c, 0x01, 0x06, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -312,6 +446,7 @@ type MsgClient interface {
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
 	// CreateTrustRegistry creates a new trust registry.
 	CreateTrustRegistry(ctx context.Context, in *MsgCreateTrustRegistry, opts ...grpc.CallOption) (*MsgCreateTrustRegistryResponse, error)
+	AddGovernanceFrameworkDocument(ctx context.Context, in *MsgAddGovernanceFrameworkDocument, opts ...grpc.CallOption) (*MsgAddGovernanceFrameworkDocumentResponse, error)
 }
 
 type msgClient struct {
@@ -340,6 +475,15 @@ func (c *msgClient) CreateTrustRegistry(ctx context.Context, in *MsgCreateTrustR
 	return out, nil
 }
 
+func (c *msgClient) AddGovernanceFrameworkDocument(ctx context.Context, in *MsgAddGovernanceFrameworkDocument, opts ...grpc.CallOption) (*MsgAddGovernanceFrameworkDocumentResponse, error) {
+	out := new(MsgAddGovernanceFrameworkDocumentResponse)
+	err := c.cc.Invoke(ctx, "/veranablockchain.trustregistry.Msg/AddGovernanceFrameworkDocument", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
 	// UpdateParams defines a (governance) operation for updating the module
@@ -347,6 +491,7 @@ type MsgServer interface {
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
 	// CreateTrustRegistry creates a new trust registry.
 	CreateTrustRegistry(context.Context, *MsgCreateTrustRegistry) (*MsgCreateTrustRegistryResponse, error)
+	AddGovernanceFrameworkDocument(context.Context, *MsgAddGovernanceFrameworkDocument) (*MsgAddGovernanceFrameworkDocumentResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -358,6 +503,9 @@ func (*UnimplementedMsgServer) UpdateParams(ctx context.Context, req *MsgUpdateP
 }
 func (*UnimplementedMsgServer) CreateTrustRegistry(ctx context.Context, req *MsgCreateTrustRegistry) (*MsgCreateTrustRegistryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateTrustRegistry not implemented")
+}
+func (*UnimplementedMsgServer) AddGovernanceFrameworkDocument(ctx context.Context, req *MsgAddGovernanceFrameworkDocument) (*MsgAddGovernanceFrameworkDocumentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddGovernanceFrameworkDocument not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
@@ -400,6 +548,24 @@ func _Msg_CreateTrustRegistry_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_AddGovernanceFrameworkDocument_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgAddGovernanceFrameworkDocument)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).AddGovernanceFrameworkDocument(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/veranablockchain.trustregistry.Msg/AddGovernanceFrameworkDocument",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).AddGovernanceFrameworkDocument(ctx, req.(*MsgAddGovernanceFrameworkDocument))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var Msg_serviceDesc = _Msg_serviceDesc
 var _Msg_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "veranablockchain.trustregistry.Msg",
@@ -412,6 +578,10 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateTrustRegistry",
 			Handler:    _Msg_CreateTrustRegistry_Handler,
+		},
+		{
+			MethodName: "AddGovernanceFrameworkDocument",
+			Handler:    _Msg_AddGovernanceFrameworkDocument_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -569,6 +739,92 @@ func (m *MsgCreateTrustRegistryResponse) MarshalToSizedBuffer(dAtA []byte) (int,
 	return len(dAtA) - i, nil
 }
 
+func (m *MsgAddGovernanceFrameworkDocument) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgAddGovernanceFrameworkDocument) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgAddGovernanceFrameworkDocument) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Version != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.Version))
+		i--
+		dAtA[i] = 0x30
+	}
+	if len(m.DocHash) > 0 {
+		i -= len(m.DocHash)
+		copy(dAtA[i:], m.DocHash)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.DocHash)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.DocUrl) > 0 {
+		i -= len(m.DocUrl)
+		copy(dAtA[i:], m.DocUrl)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.DocUrl)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.DocLanguage) > 0 {
+		i -= len(m.DocLanguage)
+		copy(dAtA[i:], m.DocLanguage)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.DocLanguage)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Did) > 0 {
+		i -= len(m.Did)
+		copy(dAtA[i:], m.Did)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Did)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Creator) > 0 {
+		i -= len(m.Creator)
+		copy(dAtA[i:], m.Creator)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Creator)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgAddGovernanceFrameworkDocumentResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgAddGovernanceFrameworkDocumentResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgAddGovernanceFrameworkDocumentResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTx(v)
 	base := offset
@@ -638,6 +894,47 @@ func (m *MsgCreateTrustRegistry) Size() (n int) {
 }
 
 func (m *MsgCreateTrustRegistryResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgAddGovernanceFrameworkDocument) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Creator)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.Did)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.DocLanguage)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.DocUrl)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.DocHash)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.Version != 0 {
+		n += 1 + sovTx(uint64(m.Version))
+	}
+	return n
+}
+
+func (m *MsgAddGovernanceFrameworkDocumentResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1086,6 +1383,285 @@ func (m *MsgCreateTrustRegistryResponse) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: MsgCreateTrustRegistryResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgAddGovernanceFrameworkDocument) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgAddGovernanceFrameworkDocument: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgAddGovernanceFrameworkDocument: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Creator", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Creator = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Did", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Did = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DocLanguage", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DocLanguage = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DocUrl", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DocUrl = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DocHash", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DocHash = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Version", wireType)
+			}
+			m.Version = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Version |= int32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgAddGovernanceFrameworkDocumentResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgAddGovernanceFrameworkDocumentResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgAddGovernanceFrameworkDocumentResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:

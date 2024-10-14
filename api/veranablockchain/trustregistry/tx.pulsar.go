@@ -1967,6 +1967,1086 @@ func (x *fastReflection_MsgCreateTrustRegistryResponse) ProtoMethods() *protoifa
 	}
 }
 
+var (
+	md_MsgAddGovernanceFrameworkDocument              protoreflect.MessageDescriptor
+	fd_MsgAddGovernanceFrameworkDocument_creator      protoreflect.FieldDescriptor
+	fd_MsgAddGovernanceFrameworkDocument_did          protoreflect.FieldDescriptor
+	fd_MsgAddGovernanceFrameworkDocument_doc_language protoreflect.FieldDescriptor
+	fd_MsgAddGovernanceFrameworkDocument_doc_url      protoreflect.FieldDescriptor
+	fd_MsgAddGovernanceFrameworkDocument_doc_hash     protoreflect.FieldDescriptor
+	fd_MsgAddGovernanceFrameworkDocument_version      protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_veranablockchain_trustregistry_tx_proto_init()
+	md_MsgAddGovernanceFrameworkDocument = File_veranablockchain_trustregistry_tx_proto.Messages().ByName("MsgAddGovernanceFrameworkDocument")
+	fd_MsgAddGovernanceFrameworkDocument_creator = md_MsgAddGovernanceFrameworkDocument.Fields().ByName("creator")
+	fd_MsgAddGovernanceFrameworkDocument_did = md_MsgAddGovernanceFrameworkDocument.Fields().ByName("did")
+	fd_MsgAddGovernanceFrameworkDocument_doc_language = md_MsgAddGovernanceFrameworkDocument.Fields().ByName("doc_language")
+	fd_MsgAddGovernanceFrameworkDocument_doc_url = md_MsgAddGovernanceFrameworkDocument.Fields().ByName("doc_url")
+	fd_MsgAddGovernanceFrameworkDocument_doc_hash = md_MsgAddGovernanceFrameworkDocument.Fields().ByName("doc_hash")
+	fd_MsgAddGovernanceFrameworkDocument_version = md_MsgAddGovernanceFrameworkDocument.Fields().ByName("version")
+}
+
+var _ protoreflect.Message = (*fastReflection_MsgAddGovernanceFrameworkDocument)(nil)
+
+type fastReflection_MsgAddGovernanceFrameworkDocument MsgAddGovernanceFrameworkDocument
+
+func (x *MsgAddGovernanceFrameworkDocument) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgAddGovernanceFrameworkDocument)(x)
+}
+
+func (x *MsgAddGovernanceFrameworkDocument) slowProtoReflect() protoreflect.Message {
+	mi := &file_veranablockchain_trustregistry_tx_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_MsgAddGovernanceFrameworkDocument_messageType fastReflection_MsgAddGovernanceFrameworkDocument_messageType
+var _ protoreflect.MessageType = fastReflection_MsgAddGovernanceFrameworkDocument_messageType{}
+
+type fastReflection_MsgAddGovernanceFrameworkDocument_messageType struct{}
+
+func (x fastReflection_MsgAddGovernanceFrameworkDocument_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgAddGovernanceFrameworkDocument)(nil)
+}
+func (x fastReflection_MsgAddGovernanceFrameworkDocument_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgAddGovernanceFrameworkDocument)
+}
+func (x fastReflection_MsgAddGovernanceFrameworkDocument_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgAddGovernanceFrameworkDocument
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_MsgAddGovernanceFrameworkDocument) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgAddGovernanceFrameworkDocument
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_MsgAddGovernanceFrameworkDocument) Type() protoreflect.MessageType {
+	return _fastReflection_MsgAddGovernanceFrameworkDocument_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_MsgAddGovernanceFrameworkDocument) New() protoreflect.Message {
+	return new(fastReflection_MsgAddGovernanceFrameworkDocument)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_MsgAddGovernanceFrameworkDocument) Interface() protoreflect.ProtoMessage {
+	return (*MsgAddGovernanceFrameworkDocument)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_MsgAddGovernanceFrameworkDocument) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Creator != "" {
+		value := protoreflect.ValueOfString(x.Creator)
+		if !f(fd_MsgAddGovernanceFrameworkDocument_creator, value) {
+			return
+		}
+	}
+	if x.Did != "" {
+		value := protoreflect.ValueOfString(x.Did)
+		if !f(fd_MsgAddGovernanceFrameworkDocument_did, value) {
+			return
+		}
+	}
+	if x.DocLanguage != "" {
+		value := protoreflect.ValueOfString(x.DocLanguage)
+		if !f(fd_MsgAddGovernanceFrameworkDocument_doc_language, value) {
+			return
+		}
+	}
+	if x.DocUrl != "" {
+		value := protoreflect.ValueOfString(x.DocUrl)
+		if !f(fd_MsgAddGovernanceFrameworkDocument_doc_url, value) {
+			return
+		}
+	}
+	if x.DocHash != "" {
+		value := protoreflect.ValueOfString(x.DocHash)
+		if !f(fd_MsgAddGovernanceFrameworkDocument_doc_hash, value) {
+			return
+		}
+	}
+	if x.Version != int32(0) {
+		value := protoreflect.ValueOfInt32(x.Version)
+		if !f(fd_MsgAddGovernanceFrameworkDocument_version, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_MsgAddGovernanceFrameworkDocument) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.creator":
+		return x.Creator != ""
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.did":
+		return x.Did != ""
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.doc_language":
+		return x.DocLanguage != ""
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.doc_url":
+		return x.DocUrl != ""
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.doc_hash":
+		return x.DocHash != ""
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.version":
+		return x.Version != int32(0)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument"))
+		}
+		panic(fmt.Errorf("message veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgAddGovernanceFrameworkDocument) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.creator":
+		x.Creator = ""
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.did":
+		x.Did = ""
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.doc_language":
+		x.DocLanguage = ""
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.doc_url":
+		x.DocUrl = ""
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.doc_hash":
+		x.DocHash = ""
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.version":
+		x.Version = int32(0)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument"))
+		}
+		panic(fmt.Errorf("message veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_MsgAddGovernanceFrameworkDocument) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.creator":
+		value := x.Creator
+		return protoreflect.ValueOfString(value)
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.did":
+		value := x.Did
+		return protoreflect.ValueOfString(value)
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.doc_language":
+		value := x.DocLanguage
+		return protoreflect.ValueOfString(value)
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.doc_url":
+		value := x.DocUrl
+		return protoreflect.ValueOfString(value)
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.doc_hash":
+		value := x.DocHash
+		return protoreflect.ValueOfString(value)
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.version":
+		value := x.Version
+		return protoreflect.ValueOfInt32(value)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument"))
+		}
+		panic(fmt.Errorf("message veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgAddGovernanceFrameworkDocument) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.creator":
+		x.Creator = value.Interface().(string)
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.did":
+		x.Did = value.Interface().(string)
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.doc_language":
+		x.DocLanguage = value.Interface().(string)
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.doc_url":
+		x.DocUrl = value.Interface().(string)
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.doc_hash":
+		x.DocHash = value.Interface().(string)
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.version":
+		x.Version = int32(value.Int())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument"))
+		}
+		panic(fmt.Errorf("message veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgAddGovernanceFrameworkDocument) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.creator":
+		panic(fmt.Errorf("field creator of message veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument is not mutable"))
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.did":
+		panic(fmt.Errorf("field did of message veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument is not mutable"))
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.doc_language":
+		panic(fmt.Errorf("field doc_language of message veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument is not mutable"))
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.doc_url":
+		panic(fmt.Errorf("field doc_url of message veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument is not mutable"))
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.doc_hash":
+		panic(fmt.Errorf("field doc_hash of message veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument is not mutable"))
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.version":
+		panic(fmt.Errorf("field version of message veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument"))
+		}
+		panic(fmt.Errorf("message veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_MsgAddGovernanceFrameworkDocument) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.creator":
+		return protoreflect.ValueOfString("")
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.did":
+		return protoreflect.ValueOfString("")
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.doc_language":
+		return protoreflect.ValueOfString("")
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.doc_url":
+		return protoreflect.ValueOfString("")
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.doc_hash":
+		return protoreflect.ValueOfString("")
+	case "veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument.version":
+		return protoreflect.ValueOfInt32(int32(0))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument"))
+		}
+		panic(fmt.Errorf("message veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_MsgAddGovernanceFrameworkDocument) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_MsgAddGovernanceFrameworkDocument) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgAddGovernanceFrameworkDocument) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_MsgAddGovernanceFrameworkDocument) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_MsgAddGovernanceFrameworkDocument) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*MsgAddGovernanceFrameworkDocument)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		l = len(x.Creator)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.Did)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.DocLanguage)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.DocUrl)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.DocHash)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.Version != 0 {
+			n += 1 + runtime.Sov(uint64(x.Version))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*MsgAddGovernanceFrameworkDocument)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Version != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Version))
+			i--
+			dAtA[i] = 0x30
+		}
+		if len(x.DocHash) > 0 {
+			i -= len(x.DocHash)
+			copy(dAtA[i:], x.DocHash)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DocHash)))
+			i--
+			dAtA[i] = 0x2a
+		}
+		if len(x.DocUrl) > 0 {
+			i -= len(x.DocUrl)
+			copy(dAtA[i:], x.DocUrl)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DocUrl)))
+			i--
+			dAtA[i] = 0x22
+		}
+		if len(x.DocLanguage) > 0 {
+			i -= len(x.DocLanguage)
+			copy(dAtA[i:], x.DocLanguage)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DocLanguage)))
+			i--
+			dAtA[i] = 0x1a
+		}
+		if len(x.Did) > 0 {
+			i -= len(x.Did)
+			copy(dAtA[i:], x.Did)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Did)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if len(x.Creator) > 0 {
+			i -= len(x.Creator)
+			copy(dAtA[i:], x.Creator)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Creator)))
+			i--
+			dAtA[i] = 0xa
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*MsgAddGovernanceFrameworkDocument)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgAddGovernanceFrameworkDocument: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgAddGovernanceFrameworkDocument: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Creator", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Creator = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Did", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Did = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DocLanguage", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.DocLanguage = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 4:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DocUrl", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.DocUrl = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 5:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DocHash", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.DocHash = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 6:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Version", wireType)
+				}
+				x.Version = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Version |= int32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_MsgAddGovernanceFrameworkDocumentResponse protoreflect.MessageDescriptor
+)
+
+func init() {
+	file_veranablockchain_trustregistry_tx_proto_init()
+	md_MsgAddGovernanceFrameworkDocumentResponse = File_veranablockchain_trustregistry_tx_proto.Messages().ByName("MsgAddGovernanceFrameworkDocumentResponse")
+}
+
+var _ protoreflect.Message = (*fastReflection_MsgAddGovernanceFrameworkDocumentResponse)(nil)
+
+type fastReflection_MsgAddGovernanceFrameworkDocumentResponse MsgAddGovernanceFrameworkDocumentResponse
+
+func (x *MsgAddGovernanceFrameworkDocumentResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgAddGovernanceFrameworkDocumentResponse)(x)
+}
+
+func (x *MsgAddGovernanceFrameworkDocumentResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_veranablockchain_trustregistry_tx_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_MsgAddGovernanceFrameworkDocumentResponse_messageType fastReflection_MsgAddGovernanceFrameworkDocumentResponse_messageType
+var _ protoreflect.MessageType = fastReflection_MsgAddGovernanceFrameworkDocumentResponse_messageType{}
+
+type fastReflection_MsgAddGovernanceFrameworkDocumentResponse_messageType struct{}
+
+func (x fastReflection_MsgAddGovernanceFrameworkDocumentResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgAddGovernanceFrameworkDocumentResponse)(nil)
+}
+func (x fastReflection_MsgAddGovernanceFrameworkDocumentResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgAddGovernanceFrameworkDocumentResponse)
+}
+func (x fastReflection_MsgAddGovernanceFrameworkDocumentResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgAddGovernanceFrameworkDocumentResponse
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_MsgAddGovernanceFrameworkDocumentResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgAddGovernanceFrameworkDocumentResponse
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_MsgAddGovernanceFrameworkDocumentResponse) Type() protoreflect.MessageType {
+	return _fastReflection_MsgAddGovernanceFrameworkDocumentResponse_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_MsgAddGovernanceFrameworkDocumentResponse) New() protoreflect.Message {
+	return new(fastReflection_MsgAddGovernanceFrameworkDocumentResponse)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_MsgAddGovernanceFrameworkDocumentResponse) Interface() protoreflect.ProtoMessage {
+	return (*MsgAddGovernanceFrameworkDocumentResponse)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_MsgAddGovernanceFrameworkDocumentResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_MsgAddGovernanceFrameworkDocumentResponse) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocumentResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocumentResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgAddGovernanceFrameworkDocumentResponse) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocumentResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocumentResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_MsgAddGovernanceFrameworkDocumentResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocumentResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocumentResponse does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgAddGovernanceFrameworkDocumentResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocumentResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocumentResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgAddGovernanceFrameworkDocumentResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocumentResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocumentResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_MsgAddGovernanceFrameworkDocumentResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocumentResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocumentResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_MsgAddGovernanceFrameworkDocumentResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocumentResponse", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_MsgAddGovernanceFrameworkDocumentResponse) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgAddGovernanceFrameworkDocumentResponse) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_MsgAddGovernanceFrameworkDocumentResponse) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_MsgAddGovernanceFrameworkDocumentResponse) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*MsgAddGovernanceFrameworkDocumentResponse)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*MsgAddGovernanceFrameworkDocumentResponse)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*MsgAddGovernanceFrameworkDocumentResponse)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgAddGovernanceFrameworkDocumentResponse: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgAddGovernanceFrameworkDocumentResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
 // Code generated by protoc-gen-go. DO NOT EDIT.
 // versions:
 // 	protoc-gen-go v1.27.0
@@ -2159,6 +3239,109 @@ func (*MsgCreateTrustRegistryResponse) Descriptor() ([]byte, []int) {
 	return file_veranablockchain_trustregistry_tx_proto_rawDescGZIP(), []int{3}
 }
 
+// MsgAddGovernanceFrameworkDocument defines the Msg/AddGovernanceFrameworkDocument request type.
+type MsgAddGovernanceFrameworkDocument struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Creator     string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	Did         string `protobuf:"bytes,2,opt,name=did,proto3" json:"did,omitempty"`
+	DocLanguage string `protobuf:"bytes,3,opt,name=doc_language,json=docLanguage,proto3" json:"doc_language,omitempty"`
+	DocUrl      string `protobuf:"bytes,4,opt,name=doc_url,json=docUrl,proto3" json:"doc_url,omitempty"`
+	DocHash     string `protobuf:"bytes,5,opt,name=doc_hash,json=docHash,proto3" json:"doc_hash,omitempty"`
+	Version     int32  `protobuf:"varint,6,opt,name=version,proto3" json:"version,omitempty"`
+}
+
+func (x *MsgAddGovernanceFrameworkDocument) Reset() {
+	*x = MsgAddGovernanceFrameworkDocument{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_veranablockchain_trustregistry_tx_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *MsgAddGovernanceFrameworkDocument) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MsgAddGovernanceFrameworkDocument) ProtoMessage() {}
+
+// Deprecated: Use MsgAddGovernanceFrameworkDocument.ProtoReflect.Descriptor instead.
+func (*MsgAddGovernanceFrameworkDocument) Descriptor() ([]byte, []int) {
+	return file_veranablockchain_trustregistry_tx_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *MsgAddGovernanceFrameworkDocument) GetCreator() string {
+	if x != nil {
+		return x.Creator
+	}
+	return ""
+}
+
+func (x *MsgAddGovernanceFrameworkDocument) GetDid() string {
+	if x != nil {
+		return x.Did
+	}
+	return ""
+}
+
+func (x *MsgAddGovernanceFrameworkDocument) GetDocLanguage() string {
+	if x != nil {
+		return x.DocLanguage
+	}
+	return ""
+}
+
+func (x *MsgAddGovernanceFrameworkDocument) GetDocUrl() string {
+	if x != nil {
+		return x.DocUrl
+	}
+	return ""
+}
+
+func (x *MsgAddGovernanceFrameworkDocument) GetDocHash() string {
+	if x != nil {
+		return x.DocHash
+	}
+	return ""
+}
+
+func (x *MsgAddGovernanceFrameworkDocument) GetVersion() int32 {
+	if x != nil {
+		return x.Version
+	}
+	return 0
+}
+
+// MsgAddGovernanceFrameworkDocumentResponse defines the Msg/AddGovernanceFrameworkDocument response type.
+type MsgAddGovernanceFrameworkDocumentResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *MsgAddGovernanceFrameworkDocumentResponse) Reset() {
+	*x = MsgAddGovernanceFrameworkDocumentResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_veranablockchain_trustregistry_tx_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *MsgAddGovernanceFrameworkDocumentResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MsgAddGovernanceFrameworkDocumentResponse) ProtoMessage() {}
+
+// Deprecated: Use MsgAddGovernanceFrameworkDocumentResponse.ProtoReflect.Descriptor instead.
+func (*MsgAddGovernanceFrameworkDocumentResponse) Descriptor() ([]byte, []int) {
+	return file_veranablockchain_trustregistry_tx_proto_rawDescGZIP(), []int{5}
+}
+
 var File_veranablockchain_trustregistry_tx_proto protoreflect.FileDescriptor
 
 var file_veranablockchain_trustregistry_tx_proto_rawDesc = []byte{
@@ -2205,43 +3388,71 @@ var file_veranablockchain_trustregistry_tx_proto_rawDesc = []byte{
 	0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x64, 0x6f, 0x63, 0x48, 0x61, 0x73, 0x68, 0x3a, 0x0c, 0x82,
 	0xe7, 0xb0, 0x2a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x22, 0x20, 0x0a, 0x1e, 0x4d,
 	0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x72, 0x75, 0x73, 0x74, 0x52, 0x65, 0x67,
-	0x69, 0x73, 0x74, 0x72, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0x96, 0x02,
-	0x0a, 0x03, 0x4d, 0x73, 0x67, 0x12, 0x78, 0x0a, 0x0c, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50,
-	0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x2f, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c,
-	0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x74, 0x72, 0x75, 0x73, 0x74, 0x72, 0x65,
-	0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65,
-	0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x1a, 0x37, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62,
-	0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x74, 0x72, 0x75, 0x73, 0x74, 0x72,
-	0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74,
-	0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
-	0x8d, 0x01, 0x0a, 0x13, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x72, 0x75, 0x73, 0x74, 0x52,
-	0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x12, 0x36, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61,
-	0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x74, 0x72, 0x75, 0x73, 0x74,
-	0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61,
-	0x74, 0x65, 0x54, 0x72, 0x75, 0x73, 0x74, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x1a,
-	0x3e, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61,
+	0x69, 0x73, 0x74, 0x72, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xe8, 0x01,
+	0x0a, 0x21, 0x4d, 0x73, 0x67, 0x41, 0x64, 0x64, 0x47, 0x6f, 0x76, 0x65, 0x72, 0x6e, 0x61, 0x6e,
+	0x63, 0x65, 0x46, 0x72, 0x61, 0x6d, 0x65, 0x77, 0x6f, 0x72, 0x6b, 0x44, 0x6f, 0x63, 0x75, 0x6d,
+	0x65, 0x6e, 0x74, 0x12, 0x32, 0x0a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
+	0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x07,
+	0x63, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x12, 0x10, 0x0a, 0x03, 0x64, 0x69, 0x64, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x64, 0x69, 0x64, 0x12, 0x21, 0x0a, 0x0c, 0x64, 0x6f, 0x63,
+	0x5f, 0x6c, 0x61, 0x6e, 0x67, 0x75, 0x61, 0x67, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x0b, 0x64, 0x6f, 0x63, 0x4c, 0x61, 0x6e, 0x67, 0x75, 0x61, 0x67, 0x65, 0x12, 0x17, 0x0a, 0x07,
+	0x64, 0x6f, 0x63, 0x5f, 0x75, 0x72, 0x6c, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x64,
+	0x6f, 0x63, 0x55, 0x72, 0x6c, 0x12, 0x19, 0x0a, 0x08, 0x64, 0x6f, 0x63, 0x5f, 0x68, 0x61, 0x73,
+	0x68, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x64, 0x6f, 0x63, 0x48, 0x61, 0x73, 0x68,
+	0x12, 0x18, 0x0a, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x18, 0x06, 0x20, 0x01, 0x28,
+	0x05, 0x52, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x3a, 0x0c, 0x82, 0xe7, 0xb0, 0x2a,
+	0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x22, 0x2b, 0x0a, 0x29, 0x4d, 0x73, 0x67, 0x41,
+	0x64, 0x64, 0x47, 0x6f, 0x76, 0x65, 0x72, 0x6e, 0x61, 0x6e, 0x63, 0x65, 0x46, 0x72, 0x61, 0x6d,
+	0x65, 0x77, 0x6f, 0x72, 0x6b, 0x44, 0x6f, 0x63, 0x75, 0x6d, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0xc7, 0x03, 0x0a, 0x03, 0x4d, 0x73, 0x67, 0x12, 0x78, 0x0a,
+	0x0c, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x2f, 0x2e,
+	0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e,
+	0x2e, 0x74, 0x72, 0x75, 0x73, 0x74, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x2e, 0x4d,
+	0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x1a, 0x37,
+	0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69,
+	0x6e, 0x2e, 0x74, 0x72, 0x75, 0x73, 0x74, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x2e,
+	0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x8d, 0x01, 0x0a, 0x13, 0x43, 0x72, 0x65, 0x61,
+	0x74, 0x65, 0x54, 0x72, 0x75, 0x73, 0x74, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x12,
+	0x36, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61,
 	0x69, 0x6e, 0x2e, 0x74, 0x72, 0x75, 0x73, 0x74, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79,
 	0x2e, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x72, 0x75, 0x73, 0x74, 0x52,
-	0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a,
-	0x05, 0x80, 0xe7, 0xb0, 0x2a, 0x01, 0x42, 0x93, 0x02, 0x0a, 0x22, 0x63, 0x6f, 0x6d, 0x2e, 0x76,
-	0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e,
-	0x74, 0x72, 0x75, 0x73, 0x74, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x42, 0x07, 0x54,
-	0x78, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x4b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62,
-	0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x2d, 0x6c, 0x61, 0x62, 0x73,
-	0x2f, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x2d, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61,
-	0x69, 0x6e, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f,
-	0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2f, 0x74, 0x72, 0x75, 0x73, 0x74, 0x72, 0x65, 0x67,
-	0x69, 0x73, 0x74, 0x72, 0x79, 0xa2, 0x02, 0x03, 0x56, 0x54, 0x58, 0xaa, 0x02, 0x1e, 0x56, 0x65,
-	0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x54,
-	0x72, 0x75, 0x73, 0x74, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0xca, 0x02, 0x1e, 0x56,
-	0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x5c,
-	0x54, 0x72, 0x75, 0x73, 0x74, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0xe2, 0x02, 0x2a,
-	0x56, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e,
-	0x5c, 0x54, 0x72, 0x75, 0x73, 0x74, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x5c, 0x47,
-	0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x1f, 0x56, 0x65, 0x72,
-	0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x3a, 0x3a, 0x54,
-	0x72, 0x75, 0x73, 0x74, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x62, 0x06, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x33,
+	0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x1a, 0x3e, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61,
+	0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x74, 0x72, 0x75, 0x73, 0x74,
+	0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61,
+	0x74, 0x65, 0x54, 0x72, 0x75, 0x73, 0x74, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0xae, 0x01, 0x0a, 0x1e, 0x41, 0x64, 0x64, 0x47,
+	0x6f, 0x76, 0x65, 0x72, 0x6e, 0x61, 0x6e, 0x63, 0x65, 0x46, 0x72, 0x61, 0x6d, 0x65, 0x77, 0x6f,
+	0x72, 0x6b, 0x44, 0x6f, 0x63, 0x75, 0x6d, 0x65, 0x6e, 0x74, 0x12, 0x41, 0x2e, 0x76, 0x65, 0x72,
+	0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x74, 0x72,
+	0x75, 0x73, 0x74, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x2e, 0x4d, 0x73, 0x67, 0x41,
+	0x64, 0x64, 0x47, 0x6f, 0x76, 0x65, 0x72, 0x6e, 0x61, 0x6e, 0x63, 0x65, 0x46, 0x72, 0x61, 0x6d,
+	0x65, 0x77, 0x6f, 0x72, 0x6b, 0x44, 0x6f, 0x63, 0x75, 0x6d, 0x65, 0x6e, 0x74, 0x1a, 0x49, 0x2e,
+	0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e,
+	0x2e, 0x74, 0x72, 0x75, 0x73, 0x74, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x2e, 0x4d,
+	0x73, 0x67, 0x41, 0x64, 0x64, 0x47, 0x6f, 0x76, 0x65, 0x72, 0x6e, 0x61, 0x6e, 0x63, 0x65, 0x46,
+	0x72, 0x61, 0x6d, 0x65, 0x77, 0x6f, 0x72, 0x6b, 0x44, 0x6f, 0x63, 0x75, 0x6d, 0x65, 0x6e, 0x74,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05, 0x80, 0xe7, 0xb0, 0x2a, 0x01, 0x42,
+	0x93, 0x02, 0x0a, 0x22, 0x63, 0x6f, 0x6d, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c,
+	0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x74, 0x72, 0x75, 0x73, 0x74, 0x72, 0x65,
+	0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x42, 0x07, 0x54, 0x78, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50,
+	0x01, 0x5a, 0x4b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x76, 0x65,
+	0x72, 0x61, 0x6e, 0x61, 0x2d, 0x6c, 0x61, 0x62, 0x73, 0x2f, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61,
+	0x2d, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2f, 0x61, 0x70, 0x69, 0x2f,
+	0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e,
+	0x2f, 0x74, 0x72, 0x75, 0x73, 0x74, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0xa2, 0x02,
+	0x03, 0x56, 0x54, 0x58, 0xaa, 0x02, 0x1e, 0x56, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f,
+	0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x54, 0x72, 0x75, 0x73, 0x74, 0x72, 0x65, 0x67,
+	0x69, 0x73, 0x74, 0x72, 0x79, 0xca, 0x02, 0x1e, 0x56, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c,
+	0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x5c, 0x54, 0x72, 0x75, 0x73, 0x74, 0x72, 0x65,
+	0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0xe2, 0x02, 0x2a, 0x56, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62,
+	0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x5c, 0x54, 0x72, 0x75, 0x73, 0x74, 0x72,
+	0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64,
+	0x61, 0x74, 0x61, 0xea, 0x02, 0x1f, 0x56, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63,
+	0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x3a, 0x3a, 0x54, 0x72, 0x75, 0x73, 0x74, 0x72, 0x65, 0x67,
+	0x69, 0x73, 0x74, 0x72, 0x79, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -2256,22 +3467,26 @@ func file_veranablockchain_trustregistry_tx_proto_rawDescGZIP() []byte {
 	return file_veranablockchain_trustregistry_tx_proto_rawDescData
 }
 
-var file_veranablockchain_trustregistry_tx_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_veranablockchain_trustregistry_tx_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_veranablockchain_trustregistry_tx_proto_goTypes = []interface{}{
-	(*MsgUpdateParams)(nil),                // 0: veranablockchain.trustregistry.MsgUpdateParams
-	(*MsgUpdateParamsResponse)(nil),        // 1: veranablockchain.trustregistry.MsgUpdateParamsResponse
-	(*MsgCreateTrustRegistry)(nil),         // 2: veranablockchain.trustregistry.MsgCreateTrustRegistry
-	(*MsgCreateTrustRegistryResponse)(nil), // 3: veranablockchain.trustregistry.MsgCreateTrustRegistryResponse
-	(*Params)(nil),                         // 4: veranablockchain.trustregistry.Params
+	(*MsgUpdateParams)(nil),                           // 0: veranablockchain.trustregistry.MsgUpdateParams
+	(*MsgUpdateParamsResponse)(nil),                   // 1: veranablockchain.trustregistry.MsgUpdateParamsResponse
+	(*MsgCreateTrustRegistry)(nil),                    // 2: veranablockchain.trustregistry.MsgCreateTrustRegistry
+	(*MsgCreateTrustRegistryResponse)(nil),            // 3: veranablockchain.trustregistry.MsgCreateTrustRegistryResponse
+	(*MsgAddGovernanceFrameworkDocument)(nil),         // 4: veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument
+	(*MsgAddGovernanceFrameworkDocumentResponse)(nil), // 5: veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocumentResponse
+	(*Params)(nil),                                    // 6: veranablockchain.trustregistry.Params
 }
 var file_veranablockchain_trustregistry_tx_proto_depIdxs = []int32{
-	4, // 0: veranablockchain.trustregistry.MsgUpdateParams.params:type_name -> veranablockchain.trustregistry.Params
+	6, // 0: veranablockchain.trustregistry.MsgUpdateParams.params:type_name -> veranablockchain.trustregistry.Params
 	0, // 1: veranablockchain.trustregistry.Msg.UpdateParams:input_type -> veranablockchain.trustregistry.MsgUpdateParams
 	2, // 2: veranablockchain.trustregistry.Msg.CreateTrustRegistry:input_type -> veranablockchain.trustregistry.MsgCreateTrustRegistry
-	1, // 3: veranablockchain.trustregistry.Msg.UpdateParams:output_type -> veranablockchain.trustregistry.MsgUpdateParamsResponse
-	3, // 4: veranablockchain.trustregistry.Msg.CreateTrustRegistry:output_type -> veranablockchain.trustregistry.MsgCreateTrustRegistryResponse
-	3, // [3:5] is the sub-list for method output_type
-	1, // [1:3] is the sub-list for method input_type
+	4, // 3: veranablockchain.trustregistry.Msg.AddGovernanceFrameworkDocument:input_type -> veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocument
+	1, // 4: veranablockchain.trustregistry.Msg.UpdateParams:output_type -> veranablockchain.trustregistry.MsgUpdateParamsResponse
+	3, // 5: veranablockchain.trustregistry.Msg.CreateTrustRegistry:output_type -> veranablockchain.trustregistry.MsgCreateTrustRegistryResponse
+	5, // 6: veranablockchain.trustregistry.Msg.AddGovernanceFrameworkDocument:output_type -> veranablockchain.trustregistry.MsgAddGovernanceFrameworkDocumentResponse
+	4, // [4:7] is the sub-list for method output_type
+	1, // [1:4] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name
 	1, // [1:1] is the sub-list for extension extendee
 	0, // [0:1] is the sub-list for field type_name
@@ -2332,6 +3547,30 @@ func file_veranablockchain_trustregistry_tx_proto_init() {
 				return nil
 			}
 		}
+		file_veranablockchain_trustregistry_tx_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MsgAddGovernanceFrameworkDocument); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_veranablockchain_trustregistry_tx_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MsgAddGovernanceFrameworkDocumentResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -2339,7 +3578,7 @@ func file_veranablockchain_trustregistry_tx_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_veranablockchain_trustregistry_tx_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

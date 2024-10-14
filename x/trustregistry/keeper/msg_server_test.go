@@ -87,3 +87,88 @@ func TestMsgServerCreateTrustRegistry(t *testing.T) {
 		})
 	}
 }
+
+func TestMsgServerAddGovernanceFrameworkDocument(t *testing.T) {
+	k, ms, ctx := setupMsgServer(t)
+
+	creator := sdk.AccAddress([]byte("test_creator")).String()
+	validDid := "did:example:123456789abcdefghi"
+
+	// First, create a trust registry
+	createMsg := &types.MsgCreateTrustRegistry{
+		Creator:  creator,
+		Did:      validDid,
+		Language: "en",
+		DocUrl:   "http://example.com/doc",
+		DocHash:  "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+	}
+	_, err := ms.CreateTrustRegistry(ctx, createMsg)
+	require.NoError(t, err)
+
+	testCases := []struct {
+		name    string
+		msg     *types.MsgAddGovernanceFrameworkDocument
+		isValid bool
+	}{
+		{
+			name: "Valid Add Governance Framework Document",
+			msg: &types.MsgAddGovernanceFrameworkDocument{
+				Creator:     creator,
+				Did:         validDid,
+				DocLanguage: "en",
+				DocUrl:      "http://example.com/doc2",
+				DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+				Version:     2,
+			},
+			isValid: true,
+		},
+		{
+			name: "Invalid DID",
+			msg: &types.MsgAddGovernanceFrameworkDocument{
+				Creator:     creator,
+				Did:         "invalid-did",
+				DocLanguage: "en",
+				DocUrl:      "http://example.com/doc2",
+				DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+				Version:     2,
+			},
+			isValid: false,
+		},
+		{
+			name: "Invalid Version (Same as Active)",
+			msg: &types.MsgAddGovernanceFrameworkDocument{
+				Creator:     creator,
+				Did:         validDid,
+				DocLanguage: "en",
+				DocUrl:      "http://example.com/doc2",
+				DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+				Version:     1,
+			},
+			isValid: false,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			resp, err := ms.AddGovernanceFrameworkDocument(ctx, tc.msg)
+			if tc.isValid {
+				require.NoError(t, err)
+				require.NotNil(t, resp)
+				// Check if the document was actually added or not
+				var found bool
+				err = k.GFDocument.Walk(ctx, nil, func(key string, gfd types.GovernanceFrameworkDocument) (bool, error) {
+					if gfd.Language == tc.msg.DocLanguage && gfd.Url == tc.msg.DocUrl && gfd.Hash == tc.msg.DocHash {
+						found = true
+						return true, nil
+					}
+					return false, nil
+				})
+				require.NoError(t, err)
+				require.True(t, found)
+			} else {
+				require.Error(t, err)
+				require.Nil(t, resp)
+			}
+		})
+	}
+}
