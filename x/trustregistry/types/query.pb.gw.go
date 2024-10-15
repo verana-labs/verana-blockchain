@@ -262,7 +262,7 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 var (
 	pattern_Query_Params_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"verana-labs", "verana-blockchain", "trustregistry", "params"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_GetTrustRegistry_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"ptr-1.x", "tr", "get", "did"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_GetTrustRegistry_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"dtr", "v1", "tr", "get", "did"}, "", runtime.AssumeColonVerbOpt(false)))
 )
 
 var (

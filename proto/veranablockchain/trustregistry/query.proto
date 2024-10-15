@@ -18,7 +18,7 @@ service Query {
   }
   // GetTrustRegistry returns the trust registry information.
   rpc GetTrustRegistry(QueryGetTrustRegistryRequest) returns (QueryGetTrustRegistryResponse) {
-    option (google.api.http).get = "/ptr-1.x/tr/get/{did}";
+    option (google.api.http).get = "/dtr/v1/tr/get/{did}";
   }
 }
 
