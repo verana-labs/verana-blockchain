@@ -1,51 +1,78 @@
-# veranablockchain
-**veranablockchain** is a blockchain built using Cosmos SDK and Tendermint and created with [Ignite CLI](https://ignite.com/cli).
+# Verana Blockchain Trust Registry Module
 
-## Get started
+This README provides instructions for setting up the Verana blockchain and interacting with the Trust Registry module.
 
-```
-ignite chain serve
-```
+## Setting Up the Chain
 
-`serve` command installs dependencies, builds, initializes, and starts your blockchain in development.
+1. Clone the repository:
+   ```
+   git clone https://github.com/verana-labs/verana-blockchain.git
+   cd verana-blockchain
+   ```
 
-### Configure
+2. Run the setup script:
+   ```
+   ./scripts/setup_verana.sh
+   ```
 
-Your blockchain in development can be configured with `config.yml`. To learn more, see the [Ignite CLI docs](https://docs.ignite.com).
+   This script initializes the chain and starts the node.
 
-### Web Frontend
+## Interacting with the Trust Registry Module
 
-Additionally, Ignite CLI offers both Vue and React options for frontend scaffolding:
+### Using CLI
 
-For a Vue frontend, use: `ignite scaffold vue`
-For a React frontend, use: `ignite scaffold react`
-These commands can be run within your scaffolded blockchain project. 
+1. Create a Trust Registry:
+   ```
+   veranad tx trustregistry create-trust-registry \
+   did:example:123456789abcdefghi \
+   http://example-aka.com \
+   en \
+   https://example.com/governance-framework.pdf \
+   e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 \
+   --from cooluser --keyring-backend test \
+   --chain-id test-1 \
+   --gas auto \
+   --gas-adjustment 1.3 \
+   --gas-prices 1.1uvna \
+   --keyring-backend test
+   ```
 
+2. Add Governance Framework Document:
+   ```
+   veranad tx trustregistry add-governance-framework-document \
+   did:example:123456789abcdefghi \
+   en \
+   https://example.com/updated-governance-framework.pdf \
+   e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 \
+   2 \
+   --from cooluser --keyring-backend test \
+   --chain-id test-1 \
+   --gas auto \
+   --gas-adjustment 1.3 \
+   --gas-prices 1.1uvna \
+   --keyring-backend test
+   ```
 
-For more information see the [monorepo for Ignite front-end development](https://github.com/ignite/web).
+3. Increase Active Governance Framework Version:
+   ```
+   veranad tx trustregistry increase-active-gf-version \
+   did:example:123456789abcdefghi \
+   --from cooluser --keyring-backend test \
+   --chain-id test-1 \
+   --gas auto \
+   --gas-adjustment 1.3 \
+   --gas-prices 1.1uvna \
+   --keyring-backend test
+   ```
 
-## Release
-To release a new version of your blockchain, create and push a new tag with `v` prefix. A new draft release with the configured targets will be created.
+4. Query Trust Registry:
+   ```
+   veranad q trustregistry get-trust-registry did:example:123456789abcdefghi \     
+    --active-gf-only \
+    --preferred-language en \
+    --output json
+   ```
 
-```
-git tag v0.1
-git push origin v0.1
-```
+### Using curl
 
-After a draft release is created, make your final changes from the release page and publish it.
-
-### Install
-To install the latest version of your blockchain node's binary, execute the following command on your machine:
-
-```
-curl https://get.ignite.com/verana-labs/verana-blockchain@latest! | sudo bash
-```
-`verana-labs/verana-blockchain` should match the `username` and `repo_name` of the Github repository to which the source code was pushed. Learn more about [the install process](https://github.com/allinbits/starport-installer).
-
-## Learn more
-
-- [Ignite CLI](https://ignite.com/cli)
-- [Tutorials](https://docs.ignite.com/guide)
-- [Ignite CLI docs](https://docs.ignite.com)
-- [Cosmos SDK docs](https://docs.cosmos.network)
-- [Developer Chat](https://discord.gg/ignite)
+For each transaction, you need to first create and sign the transaction, then broadcast it using curl.
