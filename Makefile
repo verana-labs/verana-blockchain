@@ -11,7 +11,7 @@ ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=verana \
 
 BUILD_FLAGS := -ldflags '$(ldflags)'
 
-.PHONY: all build install clean
+.PHONY: all build install clean test test-verbose test-coverage
 
 all: install
 
@@ -25,3 +25,17 @@ install: build
 clean:
 	@echo "Removing Veranad binary..."
 	@rm -f $(GOBIN)/$(BINARY_NAME)
+
+test:
+	@echo "Running tests..."
+	@go test ./x/trustregistry/keeper/...
+
+test-verbose:
+	@echo "Running tests with verbose output..."
+	@go test -v ./x/trustregistry/keeper/...
+
+test-coverage:
+	@echo "Running tests with coverage..."
+	@go test -coverprofile=coverage.out ./x/trustregistry/keeper/...
+	@go tool cover -html=coverage.out -o coverage.html
+	@echo "Coverage report generated: coverage.html"
