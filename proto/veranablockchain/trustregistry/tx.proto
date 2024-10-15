@@ -19,6 +19,8 @@ service Msg {
   // CreateTrustRegistry creates a new trust registry.
   rpc CreateTrustRegistry(MsgCreateTrustRegistry) returns (MsgCreateTrustRegistryResponse);
   rpc AddGovernanceFrameworkDocument(MsgAddGovernanceFrameworkDocument) returns (MsgAddGovernanceFrameworkDocumentResponse);
+  rpc IncreaseActiveGovernanceFrameworkVersion(MsgIncreaseActiveGovernanceFrameworkVersion) returns (MsgIncreaseActiveGovernanceFrameworkVersionResponse);
+
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
@@ -71,3 +73,14 @@ message MsgAddGovernanceFrameworkDocument {
 
 // MsgAddGovernanceFrameworkDocumentResponse defines the Msg/AddGovernanceFrameworkDocument response type.
 message MsgAddGovernanceFrameworkDocumentResponse {}
+
+// MsgIncreaseActiveGovernanceFrameworkVersion defines the Msg/IncreaseActiveGovernanceFrameworkVersion request type.
+message MsgIncreaseActiveGovernanceFrameworkVersion {
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string did = 2;
+}
+
+// MsgIncreaseActiveGovernanceFrameworkVersion defines the Msg/IncreaseActiveGovernanceFrameworkVersion response type.
+message MsgIncreaseActiveGovernanceFrameworkVersionResponse {}

@@ -19,9 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Msg_UpdateParams_FullMethodName                   = "/veranablockchain.trustregistry.Msg/UpdateParams"
-	Msg_CreateTrustRegistry_FullMethodName            = "/veranablockchain.trustregistry.Msg/CreateTrustRegistry"
-	Msg_AddGovernanceFrameworkDocument_FullMethodName = "/veranablockchain.trustregistry.Msg/AddGovernanceFrameworkDocument"
+	Msg_UpdateParams_FullMethodName                             = "/veranablockchain.trustregistry.Msg/UpdateParams"
+	Msg_CreateTrustRegistry_FullMethodName                      = "/veranablockchain.trustregistry.Msg/CreateTrustRegistry"
+	Msg_AddGovernanceFrameworkDocument_FullMethodName           = "/veranablockchain.trustregistry.Msg/AddGovernanceFrameworkDocument"
+	Msg_IncreaseActiveGovernanceFrameworkVersion_FullMethodName = "/veranablockchain.trustregistry.Msg/IncreaseActiveGovernanceFrameworkVersion"
 )
 
 // MsgClient is the client API for Msg service.
@@ -34,6 +35,7 @@ type MsgClient interface {
 	// CreateTrustRegistry creates a new trust registry.
 	CreateTrustRegistry(ctx context.Context, in *MsgCreateTrustRegistry, opts ...grpc.CallOption) (*MsgCreateTrustRegistryResponse, error)
 	AddGovernanceFrameworkDocument(ctx context.Context, in *MsgAddGovernanceFrameworkDocument, opts ...grpc.CallOption) (*MsgAddGovernanceFrameworkDocumentResponse, error)
+	IncreaseActiveGovernanceFrameworkVersion(ctx context.Context, in *MsgIncreaseActiveGovernanceFrameworkVersion, opts ...grpc.CallOption) (*MsgIncreaseActiveGovernanceFrameworkVersionResponse, error)
 }
 
 type msgClient struct {
@@ -71,6 +73,15 @@ func (c *msgClient) AddGovernanceFrameworkDocument(ctx context.Context, in *MsgA
 	return out, nil
 }
 
+func (c *msgClient) IncreaseActiveGovernanceFrameworkVersion(ctx context.Context, in *MsgIncreaseActiveGovernanceFrameworkVersion, opts ...grpc.CallOption) (*MsgIncreaseActiveGovernanceFrameworkVersionResponse, error) {
+	out := new(MsgIncreaseActiveGovernanceFrameworkVersionResponse)
+	err := c.cc.Invoke(ctx, Msg_IncreaseActiveGovernanceFrameworkVersion_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
@@ -81,6 +92,7 @@ type MsgServer interface {
 	// CreateTrustRegistry creates a new trust registry.
 	CreateTrustRegistry(context.Context, *MsgCreateTrustRegistry) (*MsgCreateTrustRegistryResponse, error)
 	AddGovernanceFrameworkDocument(context.Context, *MsgAddGovernanceFrameworkDocument) (*MsgAddGovernanceFrameworkDocumentResponse, error)
+	IncreaseActiveGovernanceFrameworkVersion(context.Context, *MsgIncreaseActiveGovernanceFrameworkVersion) (*MsgIncreaseActiveGovernanceFrameworkVersionResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -96,6 +108,9 @@ func (UnimplementedMsgServer) CreateTrustRegistry(context.Context, *MsgCreateTru
 }
 func (UnimplementedMsgServer) AddGovernanceFrameworkDocument(context.Context, *MsgAddGovernanceFrameworkDocument) (*MsgAddGovernanceFrameworkDocumentResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddGovernanceFrameworkDocument not implemented")
+}
+func (UnimplementedMsgServer) IncreaseActiveGovernanceFrameworkVersion(context.Context, *MsgIncreaseActiveGovernanceFrameworkVersion) (*MsgIncreaseActiveGovernanceFrameworkVersionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method IncreaseActiveGovernanceFrameworkVersion not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -164,6 +179,24 @@ func _Msg_AddGovernanceFrameworkDocument_Handler(srv interface{}, ctx context.Co
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_IncreaseActiveGovernanceFrameworkVersion_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgIncreaseActiveGovernanceFrameworkVersion)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).IncreaseActiveGovernanceFrameworkVersion(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_IncreaseActiveGovernanceFrameworkVersion_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).IncreaseActiveGovernanceFrameworkVersion(ctx, req.(*MsgIncreaseActiveGovernanceFrameworkVersion))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -182,6 +215,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AddGovernanceFrameworkDocument",
 			Handler:    _Msg_AddGovernanceFrameworkDocument_Handler,
+		},
+		{
+			MethodName: "IncreaseActiveGovernanceFrameworkVersion",
+			Handler:    _Msg_IncreaseActiveGovernanceFrameworkVersion_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

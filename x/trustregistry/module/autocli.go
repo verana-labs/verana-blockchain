@@ -56,6 +56,28 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 						{ProtoField: "doc_hash"},
 					},
 				},
+				{
+					RpcMethod: "AddGovernanceFrameworkDocument",
+					Use:       "add-governance-framework-document [did] [doc-language] [doc-url] [doc-hash] [version]",
+					Short:     "Add a new governance framework document to an existing trust registry",
+					Long:      "Add a new governance framework document to an existing trust registry. The version must be either equal to the highest existing version or exactly one more.",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "did"},
+						{ProtoField: "doc_language"},
+						{ProtoField: "doc_url"},
+						{ProtoField: "doc_hash"},
+						{ProtoField: "version"},
+					},
+				},
+				{
+					RpcMethod: "IncreaseActiveGovernanceFrameworkVersion",
+					Use:       "increase-active-gf-version [did]",
+					Short:     "Increase the active governance framework version for a trust registry",
+					Long:      "Increase the active governance framework version for a trust registry. This can only be done by the controller of the trust registry.",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "did"},
+					},
+				},
 			},
 		},
 	}

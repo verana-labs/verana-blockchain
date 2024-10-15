@@ -62,3 +62,24 @@ func (ms msgServer) AddGovernanceFrameworkDocument(goCtx context.Context, msg *t
 
 	return &types.MsgAddGovernanceFrameworkDocumentResponse{}, nil
 }
+
+func (ms msgServer) IncreaseActiveGovernanceFrameworkVersion(goCtx context.Context, msg *types.MsgIncreaseActiveGovernanceFrameworkVersion) (*types.MsgIncreaseActiveGovernanceFrameworkVersionResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Validate parameters
+	if err := ms.validateIncreaseActiveGovernanceFrameworkVersionParams(ctx, msg); err != nil {
+		return nil, err
+	}
+
+	// Check fees
+	if err := ms.checkSufficientFees(ctx, msg.Creator); err != nil {
+		return nil, err
+	}
+
+	// Execute the increase
+	if err := ms.executeIncreaseActiveGovernanceFrameworkVersion(ctx, msg); err != nil {
+		return nil, err
+	}
+
+	return &types.MsgIncreaseActiveGovernanceFrameworkVersionResponse{}, nil
+}
