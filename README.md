@@ -73,6 +73,39 @@ This README provides instructions for setting up the Verana blockchain and inter
     --output json
    ```
 
+5. List Trust Registries:
+   ```
+   veranad q trustregistry list-trust-registries \
+    --modified="2023-01-01T00:00:00Z" \
+    --active-gf-only \
+    --preferred-language en \
+    --response-max-size 100 \
+    --output json
+   ```
+
 ### Using curl
 
 For each transaction, you need to first create and sign the transaction, then broadcast it using curl.
+
+WIP
+
+## Running Tests
+
+To run the test suite for the Trust Registry module, use the following commands:
+
+1. Run all tests:
+   ```
+   make test
+   ```
+
+2. Run tests with coverage and generate a coverage report:
+   ```
+   make test-coverage
+   ```
+
+   This command generates a `coverage.html` file. To view the coverage report, use:
+   ```
+   open coverage.html
+   ```
+
+Note: Replace `cooluser` with your actual key name, and adjust the chain ID, gas prices, and other parameters as necessary for your specific setup.

@@ -94,6 +94,16 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+# Update app.toml
+log "Updating app.toml..."
+sed -i '' 's/enable = false/enable = true/' "$APP_TOML_PATH"
+sed -i '' 's/swagger = false/swagger = true/' "$APP_TOML_PATH"
+sed -i '' 's/enabled-unsafe-cors = false/enabled-unsafe-cors = true/' "$APP_TOML_PATH"
+if [ $? -ne 0 ]; then
+    log "Error: Failed to update app.toml."
+    exit 1
+fi
+
 # Start the chain
 log "Starting the Verana blockchain..."
 $BINARY start

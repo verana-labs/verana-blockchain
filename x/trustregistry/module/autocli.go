@@ -38,6 +38,34 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Use:       "params",
 					Short:     "Get the current module parameters",
 				},
+				{
+					RpcMethod: "ListTrustRegistries",
+					Use:       "list-trust-registries [flags]",
+					Short:     "List Trust Registries",
+					Long:      "List Trust Registries with optional filtering and pagination",
+					FlagOptions: map[string]*autocliv1.FlagOptions{
+						"modified": {
+							Name:         "modified",
+							Usage:        "Filter by modified time (RFC3339 format)",
+							DefaultValue: "",
+						},
+						"active_gf_only": {
+							Name:         "active-gf-only",
+							Usage:        "Include only current governance framework data",
+							DefaultValue: "false",
+						},
+						"preferred_language": {
+							Name:         "preferred-language",
+							Usage:        "Preferred language for returned documents",
+							DefaultValue: "",
+						},
+						"response_max_size": {
+							Name:         "response-max-size",
+							Usage:        "Maximum number of results to return (1-1024)",
+							DefaultValue: "64",
+						},
+					},
+				},
 			},
 		},
 		Tx: &autocliv1.ServiceCommandDescriptor{

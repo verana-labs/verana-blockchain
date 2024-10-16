@@ -7,6 +7,7 @@ import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "veranablockchain/trustregistry/params.proto";
 import "veranablockchain/trustregistry/types.proto";
+import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/verana-labs/verana-blockchain/x/trustregistry/types";
 
@@ -19,6 +20,11 @@ service Query {
   // GetTrustRegistry returns the trust registry information.
   rpc GetTrustRegistry(QueryGetTrustRegistryRequest) returns (QueryGetTrustRegistryResponse) {
     option (google.api.http).get = "/dtr/v1/tr/get/{did}";
+  }
+
+  // ListTrustRegistries returns a list of Trust Registries
+  rpc ListTrustRegistries(QueryListTrustRegistriesRequest) returns (QueryListTrustRegistriesResponse) {
+    option (google.api.http).get = "/dtr/v1/tr/list";
   }
 }
 
@@ -46,4 +52,17 @@ message QueryGetTrustRegistryResponse {
   TrustRegistry trust_registry = 1;
   repeated GovernanceFrameworkVersion versions = 2[(gogoproto.nullable) = false];
   repeated GovernanceFrameworkDocument documents = 3[(gogoproto.nullable) = false];
+}
+
+// QueryListTrustRegistriesRequest is the request type for the Query/ListTrustRegistries RPC method.
+message QueryListTrustRegistriesRequest {
+  google.protobuf.Timestamp modified = 1 [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
+  bool active_gf_only = 2;
+  string preferred_language = 3;
+  uint32 response_max_size = 4;
+}
+
+// QueryListTrustRegistriesResponse is the response type for the Query/ListTrustRegistries RPC method.
+message QueryListTrustRegistriesResponse {
+  repeated TrustRegistry trust_registries = 1 [(gogoproto.nullable) = false];
 }

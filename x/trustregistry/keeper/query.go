@@ -7,6 +7,7 @@ import (
 	"github.com/verana-labs/verana-blockchain/x/trustregistry/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"sort"
 )
 
 var _ types.QueryServer = queryServer{}
@@ -68,6 +69,36 @@ func (qs queryServer) GetTrustRegistry(ctx context.Context, req *types.QueryGetT
 		TrustRegistry: &tr,
 		Versions:      versions,
 		Documents:     documents,
+	}, nil
+}
+
+func (qs queryServer) ListTrustRegistries(ctx context.Context, req *types.QueryListTrustRegistriesRequest) (*types.QueryListTrustRegistriesResponse, error) {
+	if req.ResponseMaxSize < 1 || req.ResponseMaxSize > 1024 {
+		return nil, status.Error(codes.InvalidArgument, "response_max_size must be between 1 and 1024")
+	}
+
+	var trustRegistries []types.TrustRegistry
+	var err error
+
+	err = qs.k.TrustRegistry.Walk(ctx, nil, func(key string, tr types.TrustRegistry) (bool, error) {
+		if req.Modified != nil && !tr.Modified.After(*req.Modified) {
+			return false, nil
+		}
+		trustRegistries = append(trustRegistries, tr)
+		return len(trustRegistries) >= int(req.ResponseMaxSize), nil
+	})
+
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	// Sort by modified time ascending
+	sort.Slice(trustRegistries, func(i, j int) bool {
+		return trustRegistries[i].Modified.Before(trustRegistries[j].Modified)
+	})
+
+	return &types.QueryListTrustRegistriesResponse{
+		TrustRegistries: trustRegistries,
 	}, nil
 }
 
