@@ -7,6 +7,19 @@ log() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
 }
 
+# Detecting the OS
+OS="$(uname)"
+log "Detected OS: $OS"
+
+# Function to handle sed compatibility between macOS and Linux
+sed_inplace() {
+    if [[ "$OS" == "Darwin" ]]; then
+        sed -i '' "$1" "$2" # macOS version of sed needs '' for in-place editing
+    else
+        sed -i "$1" "$2"    # Linux version of sed
+    fi
+}
+
 # Variables
 CHAIN_ID="test-1"
 MONIKER="testdev"
@@ -65,7 +78,7 @@ fi
 
 # Update minimum-gas-prices in app.toml
 log "Updating minimum gas prices..."
-sed -i '' 's/^minimum-gas-prices = ""/minimum-gas-prices = "0.25uvna"/' "$APP_TOML_PATH"
+sed_inplace 's/^minimum-gas-prices = ""/minimum-gas-prices = "0.25uvna"/' "$APP_TOML_PATH"
 if [ $? -ne 0 ]; then
     log "Error: Failed to update minimum gas prices in app.toml."
     exit 1
@@ -73,7 +86,7 @@ fi
 
 # Replace all occurrences of "stake" with "uvna" in genesis.json
 log "Replacing 'stake' with 'uvna' in genesis.json..."
-sed -i '' 's/stake/uvna/g' "$GENESIS_JSON_PATH"
+sed_inplace 's/stake/uvna/g' "$GENESIS_JSON_PATH"
 if [ $? -ne 0 ]; then
     log "Error: Failed to replace 'stake' with 'uvna' in genesis.json."
     exit 1
