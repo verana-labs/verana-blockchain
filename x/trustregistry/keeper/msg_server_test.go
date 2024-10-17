@@ -172,3 +172,58 @@ func TestMsgServerAddGovernanceFrameworkDocument(t *testing.T) {
 		})
 	}
 }
+
+func TestMsgServerIncreaseActiveGovernanceFrameworkVersion(t *testing.T) {
+	k, ms, ctx := setupMsgServer(t)
+
+	createMsg := &types.MsgCreateTrustRegistry{
+		Creator:  "creator",
+		Did:      "did:example:123",
+		Language: "en",
+		DocUrl:   "http://example.com/doc",
+		DocHash:  "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+	}
+	_, err := ms.CreateTrustRegistry(ctx, createMsg)
+	require.NoError(t, err)
+
+	addGFDocMsg := &types.MsgAddGovernanceFrameworkDocument{
+		Creator:     "creator",
+		Did:         "did:example:123",
+		DocLanguage: "en",
+		DocUrl:      "http://example.com/doc2",
+		DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+		Version:     2,
+	}
+	_, err = ms.AddGovernanceFrameworkDocument(ctx, addGFDocMsg)
+	require.NoError(t, err)
+
+	// Now test increasing the active version
+	increaseMsg := &types.MsgIncreaseActiveGovernanceFrameworkVersion{
+		Creator: "creator",
+		Did:     "did:example:123",
+	}
+
+	resp, err := ms.IncreaseActiveGovernanceFrameworkVersion(ctx, increaseMsg)
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+
+	// Verify that the active version has been increased
+	tr, err := k.TrustRegistry.Get(ctx, "did:example:123")
+	require.NoError(t, err)
+	require.Equal(t, int32(2), tr.ActiveVersion)
+
+	// Test error cases
+	// 1. Non-existent DID
+	_, err = ms.IncreaseActiveGovernanceFrameworkVersion(ctx, &types.MsgIncreaseActiveGovernanceFrameworkVersion{
+		Creator: "creator",
+		Did:     "did:example:nonexistent",
+	})
+	require.Error(t, err)
+
+	// 2. Non-controller trying to increase version
+	_, err = ms.IncreaseActiveGovernanceFrameworkVersion(ctx, &types.MsgIncreaseActiveGovernanceFrameworkVersion{
+		Creator: "not-the-controller",
+		Did:     "did:example:123",
+	})
+	require.Error(t, err)
+}
