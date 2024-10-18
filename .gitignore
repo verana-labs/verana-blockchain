@@ -1,0 +1,27 @@
+# Ignore build directory
+build/
+
+# Ignore binary
+/verana
+
+# Ignore macOS system files
+.DS_Store
+**/.DS_Store
+
+# Ignore Go build and test files
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Ignore dependency directories (add if you're not committing these)
+vendor/
+
+# Ignore IDE specific files (optional, add if you use these IDEs)
+.idea/
+.vscode/
+*.swp
+*.swo

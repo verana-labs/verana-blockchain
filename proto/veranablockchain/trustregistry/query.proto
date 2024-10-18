@@ -1,0 +1,68 @@
+syntax = "proto3";
+package veranablockchain.trustregistry;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "veranablockchain/trustregistry/params.proto";
+import "veranablockchain/trustregistry/types.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/verana-labs/verana-blockchain/x/trustregistry/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Parameters queries the parameters of the module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/verana-labs/verana-blockchain/trustregistry/params";
+  }
+  // GetTrustRegistry returns the trust registry information.
+  rpc GetTrustRegistry(QueryGetTrustRegistryRequest) returns (QueryGetTrustRegistryResponse) {
+    option (google.api.http).get = "/dtr/v1/tr/get/{did}";
+  }
+
+  // ListTrustRegistries returns a list of Trust Registries
+  rpc ListTrustRegistries(QueryListTrustRegistriesRequest) returns (QueryListTrustRegistriesResponse) {
+    option (google.api.http).get = "/dtr/v1/tr/list";
+  }
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params holds all the parameters of this module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+// QueryGetTrustRegistryRequest is the request type for the Query/GetTrustRegistry RPC method.
+message QueryGetTrustRegistryRequest {
+  string did = 1;
+  bool active_gf_only = 2;
+  string preferred_language = 3;
+}
+
+// QueryGetTrustRegistryResponse is the response type for the Query/GetTrustRegistry RPC method.
+message QueryGetTrustRegistryResponse {
+  TrustRegistry trust_registry = 1;
+  repeated GovernanceFrameworkVersion versions = 2[(gogoproto.nullable) = false];
+  repeated GovernanceFrameworkDocument documents = 3[(gogoproto.nullable) = false];
+}
+
+// QueryListTrustRegistriesRequest is the request type for the Query/ListTrustRegistries RPC method.
+message QueryListTrustRegistriesRequest {
+  google.protobuf.Timestamp modified = 1 [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
+  bool active_gf_only = 2;
+  string preferred_language = 3;
+  uint32 response_max_size = 4;
+}
+
+// QueryListTrustRegistriesResponse is the response type for the Query/ListTrustRegistries RPC method.
+message QueryListTrustRegistriesResponse {
+  repeated TrustRegistry trust_registries = 1 [(gogoproto.nullable) = false];
+}
