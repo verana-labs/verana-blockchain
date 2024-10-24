@@ -14,6 +14,7 @@ BINARY="veranad"
 HOME_DIR="$HOME/.verana"
 GENESIS_JSON_PATH="$HOME_DIR/config/genesis.json"
 APP_TOML_PATH="$HOME_DIR/config/app.toml"
+CONFIG_TOML_PATH="$HOME_DIR/config/config.toml"
 VALIDATOR_NAME="cooluser"
 VALIDATOR_AMOUNT="1000000000000000000000uvna"
 GENTX_AMOUNT="1000000000uvna"
@@ -101,6 +102,14 @@ sed -i '' 's/swagger = false/swagger = true/' "$APP_TOML_PATH"
 sed -i '' 's/enabled-unsafe-cors = false/enabled-unsafe-cors = true/' "$APP_TOML_PATH"
 if [ $? -ne 0 ]; then
     log "Error: Failed to update app.toml."
+    exit 1
+fi
+
+# Update config.toml CORS settings
+log "Updating CORS settings in config.toml..."
+sed -i '' 's/cors_allowed_origins = \[\]/cors_allowed_origins = \["*"\]/' "$CONFIG_TOML_PATH"
+if [ $? -ne 0 ]; then
+    log "Error: Failed to update CORS settings in config.toml."
     exit 1
 fi
 
