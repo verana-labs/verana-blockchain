@@ -18,6 +18,7 @@ import (
 
 var (
 	md_TrustRegistry                protoreflect.MessageDescriptor
+	fd_TrustRegistry_id             protoreflect.FieldDescriptor
 	fd_TrustRegistry_did            protoreflect.FieldDescriptor
 	fd_TrustRegistry_controller     protoreflect.FieldDescriptor
 	fd_TrustRegistry_created        protoreflect.FieldDescriptor
@@ -31,6 +32,7 @@ var (
 func init() {
 	file_veranablockchain_trustregistry_types_proto_init()
 	md_TrustRegistry = File_veranablockchain_trustregistry_types_proto.Messages().ByName("TrustRegistry")
+	fd_TrustRegistry_id = md_TrustRegistry.Fields().ByName("id")
 	fd_TrustRegistry_did = md_TrustRegistry.Fields().ByName("did")
 	fd_TrustRegistry_controller = md_TrustRegistry.Fields().ByName("controller")
 	fd_TrustRegistry_created = md_TrustRegistry.Fields().ByName("created")
@@ -106,6 +108,12 @@ func (x *fastReflection_TrustRegistry) Interface() protoreflect.ProtoMessage {
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_TrustRegistry) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Id != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.Id)
+		if !f(fd_TrustRegistry_id, value) {
+			return
+		}
+	}
 	if x.Did != "" {
 		value := protoreflect.ValueOfString(x.Did)
 		if !f(fd_TrustRegistry_did, value) {
@@ -169,6 +177,8 @@ func (x *fastReflection_TrustRegistry) Range(f func(protoreflect.FieldDescriptor
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_TrustRegistry) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
+	case "veranablockchain.trustregistry.TrustRegistry.id":
+		return x.Id != uint64(0)
 	case "veranablockchain.trustregistry.TrustRegistry.did":
 		return x.Did != ""
 	case "veranablockchain.trustregistry.TrustRegistry.controller":
@@ -201,6 +211,8 @@ func (x *fastReflection_TrustRegistry) Has(fd protoreflect.FieldDescriptor) bool
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_TrustRegistry) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
+	case "veranablockchain.trustregistry.TrustRegistry.id":
+		x.Id = uint64(0)
 	case "veranablockchain.trustregistry.TrustRegistry.did":
 		x.Did = ""
 	case "veranablockchain.trustregistry.TrustRegistry.controller":
@@ -233,6 +245,9 @@ func (x *fastReflection_TrustRegistry) Clear(fd protoreflect.FieldDescriptor) {
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_TrustRegistry) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
+	case "veranablockchain.trustregistry.TrustRegistry.id":
+		value := x.Id
+		return protoreflect.ValueOfUint64(value)
 	case "veranablockchain.trustregistry.TrustRegistry.did":
 		value := x.Did
 		return protoreflect.ValueOfString(value)
@@ -277,6 +292,8 @@ func (x *fastReflection_TrustRegistry) Get(descriptor protoreflect.FieldDescript
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_TrustRegistry) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
+	case "veranablockchain.trustregistry.TrustRegistry.id":
+		x.Id = value.Uint()
 	case "veranablockchain.trustregistry.TrustRegistry.did":
 		x.Did = value.Interface().(string)
 	case "veranablockchain.trustregistry.TrustRegistry.controller":
@@ -323,6 +340,8 @@ func (x *fastReflection_TrustRegistry) Mutable(fd protoreflect.FieldDescriptor) 
 			x.Modified = new(timestamppb.Timestamp)
 		}
 		return protoreflect.ValueOfMessage(x.Modified.ProtoReflect())
+	case "veranablockchain.trustregistry.TrustRegistry.id":
+		panic(fmt.Errorf("field id of message veranablockchain.trustregistry.TrustRegistry is not mutable"))
 	case "veranablockchain.trustregistry.TrustRegistry.did":
 		panic(fmt.Errorf("field did of message veranablockchain.trustregistry.TrustRegistry is not mutable"))
 	case "veranablockchain.trustregistry.TrustRegistry.controller":
@@ -348,6 +367,8 @@ func (x *fastReflection_TrustRegistry) Mutable(fd protoreflect.FieldDescriptor) 
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_TrustRegistry) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "veranablockchain.trustregistry.TrustRegistry.id":
+		return protoreflect.ValueOfUint64(uint64(0))
 	case "veranablockchain.trustregistry.TrustRegistry.did":
 		return protoreflect.ValueOfString("")
 	case "veranablockchain.trustregistry.TrustRegistry.controller":
@@ -435,6 +456,9 @@ func (x *fastReflection_TrustRegistry) ProtoMethods() *protoiface.Methods {
 		var n int
 		var l int
 		_ = l
+		if x.Id != 0 {
+			n += 1 + runtime.Sov(uint64(x.Id))
+		}
 		l = len(x.Did)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
@@ -499,24 +523,24 @@ func (x *fastReflection_TrustRegistry) ProtoMethods() *protoiface.Methods {
 			copy(dAtA[i:], x.Language)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Language)))
 			i--
-			dAtA[i] = 0x42
+			dAtA[i] = 0x4a
 		}
 		if x.ActiveVersion != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.ActiveVersion))
 			i--
-			dAtA[i] = 0x38
+			dAtA[i] = 0x40
 		}
 		if len(x.Aka) > 0 {
 			i -= len(x.Aka)
 			copy(dAtA[i:], x.Aka)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Aka)))
 			i--
-			dAtA[i] = 0x32
+			dAtA[i] = 0x3a
 		}
 		if x.Deposit != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.Deposit))
 			i--
-			dAtA[i] = 0x28
+			dAtA[i] = 0x30
 		}
 		if x.Modified != nil {
 			encoded, err := options.Marshal(x.Modified)
@@ -530,7 +554,7 @@ func (x *fastReflection_TrustRegistry) ProtoMethods() *protoiface.Methods {
 			copy(dAtA[i:], encoded)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
-			dAtA[i] = 0x22
+			dAtA[i] = 0x2a
 		}
 		if x.Created != nil {
 			encoded, err := options.Marshal(x.Created)
@@ -544,21 +568,26 @@ func (x *fastReflection_TrustRegistry) ProtoMethods() *protoiface.Methods {
 			copy(dAtA[i:], encoded)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
-			dAtA[i] = 0x1a
+			dAtA[i] = 0x22
 		}
 		if len(x.Controller) > 0 {
 			i -= len(x.Controller)
 			copy(dAtA[i:], x.Controller)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Controller)))
 			i--
-			dAtA[i] = 0x12
+			dAtA[i] = 0x1a
 		}
 		if len(x.Did) > 0 {
 			i -= len(x.Did)
 			copy(dAtA[i:], x.Did)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Did)))
 			i--
-			dAtA[i] = 0xa
+			dAtA[i] = 0x12
+		}
+		if x.Id != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Id))
+			i--
+			dAtA[i] = 0x8
 		}
 		if input.Buf != nil {
 			input.Buf = append(input.Buf, dAtA...)
@@ -610,6 +639,25 @@ func (x *fastReflection_TrustRegistry) ProtoMethods() *protoiface.Methods {
 			}
 			switch fieldNum {
 			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+				}
+				x.Id = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Id |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 2:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Did", wireType)
 				}
@@ -641,7 +689,7 @@ func (x *fastReflection_TrustRegistry) ProtoMethods() *protoiface.Methods {
 				}
 				x.Did = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
-			case 2:
+			case 3:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Controller", wireType)
 				}
@@ -673,7 +721,7 @@ func (x *fastReflection_TrustRegistry) ProtoMethods() *protoiface.Methods {
 				}
 				x.Controller = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
-			case 3:
+			case 4:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Created", wireType)
 				}
@@ -709,7 +757,7 @@ func (x *fastReflection_TrustRegistry) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
-			case 4:
+			case 5:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Modified", wireType)
 				}
@@ -745,7 +793,7 @@ func (x *fastReflection_TrustRegistry) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
-			case 5:
+			case 6:
 				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Deposit", wireType)
 				}
@@ -764,7 +812,7 @@ func (x *fastReflection_TrustRegistry) ProtoMethods() *protoiface.Methods {
 						break
 					}
 				}
-			case 6:
+			case 7:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Aka", wireType)
 				}
@@ -796,7 +844,7 @@ func (x *fastReflection_TrustRegistry) ProtoMethods() *protoiface.Methods {
 				}
 				x.Aka = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
-			case 7:
+			case 8:
 				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ActiveVersion", wireType)
 				}
@@ -815,7 +863,7 @@ func (x *fastReflection_TrustRegistry) ProtoMethods() *protoiface.Methods {
 						break
 					}
 				}
-			case 8:
+			case 9:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Language", wireType)
 				}
@@ -885,7 +933,7 @@ func (x *fastReflection_TrustRegistry) ProtoMethods() *protoiface.Methods {
 var (
 	md_GovernanceFrameworkVersion              protoreflect.MessageDescriptor
 	fd_GovernanceFrameworkVersion_id           protoreflect.FieldDescriptor
-	fd_GovernanceFrameworkVersion_tr_did       protoreflect.FieldDescriptor
+	fd_GovernanceFrameworkVersion_tr_id        protoreflect.FieldDescriptor
 	fd_GovernanceFrameworkVersion_created      protoreflect.FieldDescriptor
 	fd_GovernanceFrameworkVersion_version      protoreflect.FieldDescriptor
 	fd_GovernanceFrameworkVersion_active_since protoreflect.FieldDescriptor
@@ -895,7 +943,7 @@ func init() {
 	file_veranablockchain_trustregistry_types_proto_init()
 	md_GovernanceFrameworkVersion = File_veranablockchain_trustregistry_types_proto.Messages().ByName("GovernanceFrameworkVersion")
 	fd_GovernanceFrameworkVersion_id = md_GovernanceFrameworkVersion.Fields().ByName("id")
-	fd_GovernanceFrameworkVersion_tr_did = md_GovernanceFrameworkVersion.Fields().ByName("tr_did")
+	fd_GovernanceFrameworkVersion_tr_id = md_GovernanceFrameworkVersion.Fields().ByName("tr_id")
 	fd_GovernanceFrameworkVersion_created = md_GovernanceFrameworkVersion.Fields().ByName("created")
 	fd_GovernanceFrameworkVersion_version = md_GovernanceFrameworkVersion.Fields().ByName("version")
 	fd_GovernanceFrameworkVersion_active_since = md_GovernanceFrameworkVersion.Fields().ByName("active_since")
@@ -966,15 +1014,15 @@ func (x *fastReflection_GovernanceFrameworkVersion) Interface() protoreflect.Pro
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_GovernanceFrameworkVersion) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.Id != "" {
-		value := protoreflect.ValueOfString(x.Id)
+	if x.Id != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.Id)
 		if !f(fd_GovernanceFrameworkVersion_id, value) {
 			return
 		}
 	}
-	if x.TrDid != "" {
-		value := protoreflect.ValueOfString(x.TrDid)
-		if !f(fd_GovernanceFrameworkVersion_tr_did, value) {
+	if x.TrId != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.TrId)
+		if !f(fd_GovernanceFrameworkVersion_tr_id, value) {
 			return
 		}
 	}
@@ -1012,9 +1060,9 @@ func (x *fastReflection_GovernanceFrameworkVersion) Range(f func(protoreflect.Fi
 func (x *fastReflection_GovernanceFrameworkVersion) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	case "veranablockchain.trustregistry.GovernanceFrameworkVersion.id":
-		return x.Id != ""
-	case "veranablockchain.trustregistry.GovernanceFrameworkVersion.tr_did":
-		return x.TrDid != ""
+		return x.Id != uint64(0)
+	case "veranablockchain.trustregistry.GovernanceFrameworkVersion.tr_id":
+		return x.TrId != uint64(0)
 	case "veranablockchain.trustregistry.GovernanceFrameworkVersion.created":
 		return x.Created != nil
 	case "veranablockchain.trustregistry.GovernanceFrameworkVersion.version":
@@ -1038,9 +1086,9 @@ func (x *fastReflection_GovernanceFrameworkVersion) Has(fd protoreflect.FieldDes
 func (x *fastReflection_GovernanceFrameworkVersion) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	case "veranablockchain.trustregistry.GovernanceFrameworkVersion.id":
-		x.Id = ""
-	case "veranablockchain.trustregistry.GovernanceFrameworkVersion.tr_did":
-		x.TrDid = ""
+		x.Id = uint64(0)
+	case "veranablockchain.trustregistry.GovernanceFrameworkVersion.tr_id":
+		x.TrId = uint64(0)
 	case "veranablockchain.trustregistry.GovernanceFrameworkVersion.created":
 		x.Created = nil
 	case "veranablockchain.trustregistry.GovernanceFrameworkVersion.version":
@@ -1065,10 +1113,10 @@ func (x *fastReflection_GovernanceFrameworkVersion) Get(descriptor protoreflect.
 	switch descriptor.FullName() {
 	case "veranablockchain.trustregistry.GovernanceFrameworkVersion.id":
 		value := x.Id
-		return protoreflect.ValueOfString(value)
-	case "veranablockchain.trustregistry.GovernanceFrameworkVersion.tr_did":
-		value := x.TrDid
-		return protoreflect.ValueOfString(value)
+		return protoreflect.ValueOfUint64(value)
+	case "veranablockchain.trustregistry.GovernanceFrameworkVersion.tr_id":
+		value := x.TrId
+		return protoreflect.ValueOfUint64(value)
 	case "veranablockchain.trustregistry.GovernanceFrameworkVersion.created":
 		value := x.Created
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
@@ -1099,9 +1147,9 @@ func (x *fastReflection_GovernanceFrameworkVersion) Get(descriptor protoreflect.
 func (x *fastReflection_GovernanceFrameworkVersion) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	case "veranablockchain.trustregistry.GovernanceFrameworkVersion.id":
-		x.Id = value.Interface().(string)
-	case "veranablockchain.trustregistry.GovernanceFrameworkVersion.tr_did":
-		x.TrDid = value.Interface().(string)
+		x.Id = value.Uint()
+	case "veranablockchain.trustregistry.GovernanceFrameworkVersion.tr_id":
+		x.TrId = value.Uint()
 	case "veranablockchain.trustregistry.GovernanceFrameworkVersion.created":
 		x.Created = value.Message().Interface().(*timestamppb.Timestamp)
 	case "veranablockchain.trustregistry.GovernanceFrameworkVersion.version":
@@ -1140,8 +1188,8 @@ func (x *fastReflection_GovernanceFrameworkVersion) Mutable(fd protoreflect.Fiel
 		return protoreflect.ValueOfMessage(x.ActiveSince.ProtoReflect())
 	case "veranablockchain.trustregistry.GovernanceFrameworkVersion.id":
 		panic(fmt.Errorf("field id of message veranablockchain.trustregistry.GovernanceFrameworkVersion is not mutable"))
-	case "veranablockchain.trustregistry.GovernanceFrameworkVersion.tr_did":
-		panic(fmt.Errorf("field tr_did of message veranablockchain.trustregistry.GovernanceFrameworkVersion is not mutable"))
+	case "veranablockchain.trustregistry.GovernanceFrameworkVersion.tr_id":
+		panic(fmt.Errorf("field tr_id of message veranablockchain.trustregistry.GovernanceFrameworkVersion is not mutable"))
 	case "veranablockchain.trustregistry.GovernanceFrameworkVersion.version":
 		panic(fmt.Errorf("field version of message veranablockchain.trustregistry.GovernanceFrameworkVersion is not mutable"))
 	default:
@@ -1158,9 +1206,9 @@ func (x *fastReflection_GovernanceFrameworkVersion) Mutable(fd protoreflect.Fiel
 func (x *fastReflection_GovernanceFrameworkVersion) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	case "veranablockchain.trustregistry.GovernanceFrameworkVersion.id":
-		return protoreflect.ValueOfString("")
-	case "veranablockchain.trustregistry.GovernanceFrameworkVersion.tr_did":
-		return protoreflect.ValueOfString("")
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "veranablockchain.trustregistry.GovernanceFrameworkVersion.tr_id":
+		return protoreflect.ValueOfUint64(uint64(0))
 	case "veranablockchain.trustregistry.GovernanceFrameworkVersion.created":
 		m := new(timestamppb.Timestamp)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
@@ -1238,13 +1286,11 @@ func (x *fastReflection_GovernanceFrameworkVersion) ProtoMethods() *protoiface.M
 		var n int
 		var l int
 		_ = l
-		l = len(x.Id)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
+		if x.Id != 0 {
+			n += 1 + runtime.Sov(uint64(x.Id))
 		}
-		l = len(x.TrDid)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
+		if x.TrId != 0 {
+			n += 1 + runtime.Sov(uint64(x.TrId))
 		}
 		if x.Created != nil {
 			l = options.Size(x.Created)
@@ -1319,19 +1365,15 @@ func (x *fastReflection_GovernanceFrameworkVersion) ProtoMethods() *protoiface.M
 			i--
 			dAtA[i] = 0x1a
 		}
-		if len(x.TrDid) > 0 {
-			i -= len(x.TrDid)
-			copy(dAtA[i:], x.TrDid)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.TrDid)))
+		if x.TrId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.TrId))
 			i--
-			dAtA[i] = 0x12
+			dAtA[i] = 0x10
 		}
-		if len(x.Id) > 0 {
-			i -= len(x.Id)
-			copy(dAtA[i:], x.Id)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Id)))
+		if x.Id != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Id))
 			i--
-			dAtA[i] = 0xa
+			dAtA[i] = 0x8
 		}
 		if input.Buf != nil {
 			input.Buf = append(input.Buf, dAtA...)
@@ -1383,10 +1425,10 @@ func (x *fastReflection_GovernanceFrameworkVersion) ProtoMethods() *protoiface.M
 			}
 			switch fieldNum {
 			case 1:
-				if wireType != 2 {
+				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
 				}
-				var stringLen uint64
+				x.Id = 0
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -1396,29 +1438,16 @@ func (x *fastReflection_GovernanceFrameworkVersion) ProtoMethods() *protoiface.M
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
+					x.Id |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.Id = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
 			case 2:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TrDid", wireType)
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TrId", wireType)
 				}
-				var stringLen uint64
+				x.TrId = 0
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -1428,24 +1457,11 @@ func (x *fastReflection_GovernanceFrameworkVersion) ProtoMethods() *protoiface.M
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
+					x.TrId |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.TrDid = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
 			case 3:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Created", wireType)
@@ -1658,14 +1674,14 @@ func (x *fastReflection_GovernanceFrameworkDocument) Interface() protoreflect.Pr
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_GovernanceFrameworkDocument) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.Id != "" {
-		value := protoreflect.ValueOfString(x.Id)
+	if x.Id != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.Id)
 		if !f(fd_GovernanceFrameworkDocument_id, value) {
 			return
 		}
 	}
-	if x.GfvId != "" {
-		value := protoreflect.ValueOfString(x.GfvId)
+	if x.GfvId != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.GfvId)
 		if !f(fd_GovernanceFrameworkDocument_gfv_id, value) {
 			return
 		}
@@ -1710,9 +1726,9 @@ func (x *fastReflection_GovernanceFrameworkDocument) Range(f func(protoreflect.F
 func (x *fastReflection_GovernanceFrameworkDocument) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	case "veranablockchain.trustregistry.GovernanceFrameworkDocument.id":
-		return x.Id != ""
+		return x.Id != uint64(0)
 	case "veranablockchain.trustregistry.GovernanceFrameworkDocument.gfv_id":
-		return x.GfvId != ""
+		return x.GfvId != uint64(0)
 	case "veranablockchain.trustregistry.GovernanceFrameworkDocument.created":
 		return x.Created != nil
 	case "veranablockchain.trustregistry.GovernanceFrameworkDocument.language":
@@ -1738,9 +1754,9 @@ func (x *fastReflection_GovernanceFrameworkDocument) Has(fd protoreflect.FieldDe
 func (x *fastReflection_GovernanceFrameworkDocument) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	case "veranablockchain.trustregistry.GovernanceFrameworkDocument.id":
-		x.Id = ""
+		x.Id = uint64(0)
 	case "veranablockchain.trustregistry.GovernanceFrameworkDocument.gfv_id":
-		x.GfvId = ""
+		x.GfvId = uint64(0)
 	case "veranablockchain.trustregistry.GovernanceFrameworkDocument.created":
 		x.Created = nil
 	case "veranablockchain.trustregistry.GovernanceFrameworkDocument.language":
@@ -1767,10 +1783,10 @@ func (x *fastReflection_GovernanceFrameworkDocument) Get(descriptor protoreflect
 	switch descriptor.FullName() {
 	case "veranablockchain.trustregistry.GovernanceFrameworkDocument.id":
 		value := x.Id
-		return protoreflect.ValueOfString(value)
+		return protoreflect.ValueOfUint64(value)
 	case "veranablockchain.trustregistry.GovernanceFrameworkDocument.gfv_id":
 		value := x.GfvId
-		return protoreflect.ValueOfString(value)
+		return protoreflect.ValueOfUint64(value)
 	case "veranablockchain.trustregistry.GovernanceFrameworkDocument.created":
 		value := x.Created
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
@@ -1804,9 +1820,9 @@ func (x *fastReflection_GovernanceFrameworkDocument) Get(descriptor protoreflect
 func (x *fastReflection_GovernanceFrameworkDocument) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	case "veranablockchain.trustregistry.GovernanceFrameworkDocument.id":
-		x.Id = value.Interface().(string)
+		x.Id = value.Uint()
 	case "veranablockchain.trustregistry.GovernanceFrameworkDocument.gfv_id":
-		x.GfvId = value.Interface().(string)
+		x.GfvId = value.Uint()
 	case "veranablockchain.trustregistry.GovernanceFrameworkDocument.created":
 		x.Created = value.Message().Interface().(*timestamppb.Timestamp)
 	case "veranablockchain.trustregistry.GovernanceFrameworkDocument.language":
@@ -1864,9 +1880,9 @@ func (x *fastReflection_GovernanceFrameworkDocument) Mutable(fd protoreflect.Fie
 func (x *fastReflection_GovernanceFrameworkDocument) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	case "veranablockchain.trustregistry.GovernanceFrameworkDocument.id":
-		return protoreflect.ValueOfString("")
+		return protoreflect.ValueOfUint64(uint64(0))
 	case "veranablockchain.trustregistry.GovernanceFrameworkDocument.gfv_id":
-		return protoreflect.ValueOfString("")
+		return protoreflect.ValueOfUint64(uint64(0))
 	case "veranablockchain.trustregistry.GovernanceFrameworkDocument.created":
 		m := new(timestamppb.Timestamp)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
@@ -1945,13 +1961,11 @@ func (x *fastReflection_GovernanceFrameworkDocument) ProtoMethods() *protoiface.
 		var n int
 		var l int
 		_ = l
-		l = len(x.Id)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
+		if x.Id != 0 {
+			n += 1 + runtime.Sov(uint64(x.Id))
 		}
-		l = len(x.GfvId)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
+		if x.GfvId != 0 {
+			n += 1 + runtime.Sov(uint64(x.GfvId))
 		}
 		if x.Created != nil {
 			l = options.Size(x.Created)
@@ -2033,19 +2047,15 @@ func (x *fastReflection_GovernanceFrameworkDocument) ProtoMethods() *protoiface.
 			i--
 			dAtA[i] = 0x1a
 		}
-		if len(x.GfvId) > 0 {
-			i -= len(x.GfvId)
-			copy(dAtA[i:], x.GfvId)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.GfvId)))
+		if x.GfvId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.GfvId))
 			i--
-			dAtA[i] = 0x12
+			dAtA[i] = 0x10
 		}
-		if len(x.Id) > 0 {
-			i -= len(x.Id)
-			copy(dAtA[i:], x.Id)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Id)))
+		if x.Id != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Id))
 			i--
-			dAtA[i] = 0xa
+			dAtA[i] = 0x8
 		}
 		if input.Buf != nil {
 			input.Buf = append(input.Buf, dAtA...)
@@ -2097,10 +2107,10 @@ func (x *fastReflection_GovernanceFrameworkDocument) ProtoMethods() *protoiface.
 			}
 			switch fieldNum {
 			case 1:
-				if wireType != 2 {
+				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
 				}
-				var stringLen uint64
+				x.Id = 0
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -2110,29 +2120,16 @@ func (x *fastReflection_GovernanceFrameworkDocument) ProtoMethods() *protoiface.
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
+					x.Id |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.Id = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
 			case 2:
-				if wireType != 2 {
+				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field GfvId", wireType)
 				}
-				var stringLen uint64
+				x.GfvId = 0
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -2142,24 +2139,11 @@ func (x *fastReflection_GovernanceFrameworkDocument) ProtoMethods() *protoiface.
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
+					x.GfvId |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.GfvId = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
 			case 3:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Created", wireType)
@@ -2345,14 +2329,15 @@ type TrustRegistry struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Did           string                 `protobuf:"bytes,1,opt,name=did,proto3" json:"did,omitempty"`
-	Controller    string                 `protobuf:"bytes,2,opt,name=controller,proto3" json:"controller,omitempty"`
-	Created       *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=created,proto3" json:"created,omitempty"`
-	Modified      *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=modified,proto3" json:"modified,omitempty"`
-	Deposit       int64                  `protobuf:"varint,5,opt,name=deposit,proto3" json:"deposit,omitempty"`
-	Aka           string                 `protobuf:"bytes,6,opt,name=aka,proto3" json:"aka,omitempty"`
-	ActiveVersion int32                  `protobuf:"varint,7,opt,name=active_version,json=activeVersion,proto3" json:"active_version,omitempty"`
-	Language      string                 `protobuf:"bytes,8,opt,name=language,proto3" json:"language,omitempty"`
+	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"` // Added id field
+	Did           string                 `protobuf:"bytes,2,opt,name=did,proto3" json:"did,omitempty"`
+	Controller    string                 `protobuf:"bytes,3,opt,name=controller,proto3" json:"controller,omitempty"`
+	Created       *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=created,proto3" json:"created,omitempty"`
+	Modified      *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=modified,proto3" json:"modified,omitempty"`
+	Deposit       int64                  `protobuf:"varint,6,opt,name=deposit,proto3" json:"deposit,omitempty"`
+	Aka           string                 `protobuf:"bytes,7,opt,name=aka,proto3" json:"aka,omitempty"`
+	ActiveVersion int32                  `protobuf:"varint,8,opt,name=active_version,json=activeVersion,proto3" json:"active_version,omitempty"`
+	Language      string                 `protobuf:"bytes,9,opt,name=language,proto3" json:"language,omitempty"`
 }
 
 func (x *TrustRegistry) Reset() {
@@ -2373,6 +2358,13 @@ func (*TrustRegistry) ProtoMessage() {}
 // Deprecated: Use TrustRegistry.ProtoReflect.Descriptor instead.
 func (*TrustRegistry) Descriptor() ([]byte, []int) {
 	return file_veranablockchain_trustregistry_types_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *TrustRegistry) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
 }
 
 func (x *TrustRegistry) GetDid() string {
@@ -2436,8 +2428,8 @@ type GovernanceFrameworkVersion struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id          string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	TrDid       string                 `protobuf:"bytes,2,opt,name=tr_did,json=trDid,proto3" json:"tr_did,omitempty"`
+	Id          uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`                 // Changed from string to uint64
+	TrId        uint64                 `protobuf:"varint,2,opt,name=tr_id,json=trId,proto3" json:"tr_id,omitempty"` // Changed from tr_did to tr_id
 	Created     *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=created,proto3" json:"created,omitempty"`
 	Version     int32                  `protobuf:"varint,4,opt,name=version,proto3" json:"version,omitempty"`
 	ActiveSince *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=active_since,json=activeSince,proto3" json:"active_since,omitempty"`
@@ -2463,18 +2455,18 @@ func (*GovernanceFrameworkVersion) Descriptor() ([]byte, []int) {
 	return file_veranablockchain_trustregistry_types_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *GovernanceFrameworkVersion) GetId() string {
+func (x *GovernanceFrameworkVersion) GetId() uint64 {
 	if x != nil {
 		return x.Id
 	}
-	return ""
+	return 0
 }
 
-func (x *GovernanceFrameworkVersion) GetTrDid() string {
+func (x *GovernanceFrameworkVersion) GetTrId() uint64 {
 	if x != nil {
-		return x.TrDid
+		return x.TrId
 	}
-	return ""
+	return 0
 }
 
 func (x *GovernanceFrameworkVersion) GetCreated() *timestamppb.Timestamp {
@@ -2503,8 +2495,8 @@ type GovernanceFrameworkDocument struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id       string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	GfvId    string                 `protobuf:"bytes,2,opt,name=gfv_id,json=gfvId,proto3" json:"gfv_id,omitempty"`
+	Id       uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`                    // Changed from string to uint64
+	GfvId    uint64                 `protobuf:"varint,2,opt,name=gfv_id,json=gfvId,proto3" json:"gfv_id,omitempty"` // Changed from string to uint64
 	Created  *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=created,proto3" json:"created,omitempty"`
 	Language string                 `protobuf:"bytes,4,opt,name=language,proto3" json:"language,omitempty"`
 	Url      string                 `protobuf:"bytes,5,opt,name=url,proto3" json:"url,omitempty"`
@@ -2531,18 +2523,18 @@ func (*GovernanceFrameworkDocument) Descriptor() ([]byte, []int) {
 	return file_veranablockchain_trustregistry_types_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *GovernanceFrameworkDocument) GetId() string {
+func (x *GovernanceFrameworkDocument) GetId() uint64 {
 	if x != nil {
 		return x.Id
 	}
-	return ""
+	return 0
 }
 
-func (x *GovernanceFrameworkDocument) GetGfvId() string {
+func (x *GovernanceFrameworkDocument) GetGfvId() uint64 {
 	if x != nil {
 		return x.GfvId
 	}
-	return ""
+	return 0
 }
 
 func (x *GovernanceFrameworkDocument) GetCreated() *timestamppb.Timestamp {
@@ -2587,73 +2579,74 @@ var file_veranablockchain_trustregistry_types_proto_rawDesc = []byte{
 	0x6f, 0x74, 0x6f, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
 	0x1a, 0x1f, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
 	0x66, 0x2f, 0x74, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x2e, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x22, 0xcc, 0x02, 0x0a, 0x0d, 0x54, 0x72, 0x75, 0x73, 0x74, 0x52, 0x65, 0x67, 0x69, 0x73,
-	0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x64, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
+	0x6f, 0x22, 0xdc, 0x02, 0x0a, 0x0d, 0x54, 0x72, 0x75, 0x73, 0x74, 0x52, 0x65, 0x67, 0x69, 0x73,
+	0x74, 0x72, 0x79, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52,
+	0x02, 0x69, 0x64, 0x12, 0x10, 0x0a, 0x03, 0x64, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09,
 	0x52, 0x03, 0x64, 0x69, 0x64, 0x12, 0x38, 0x0a, 0x0a, 0x63, 0x6f, 0x6e, 0x74, 0x72, 0x6f, 0x6c,
-	0x6c, 0x65, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63,
+	0x6c, 0x65, 0x72, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63,
 	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72,
 	0x69, 0x6e, 0x67, 0x52, 0x0a, 0x63, 0x6f, 0x6e, 0x74, 0x72, 0x6f, 0x6c, 0x6c, 0x65, 0x72, 0x12,
-	0x3e, 0x0a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b,
+	0x3e, 0x0a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b,
 	0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
 	0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x42, 0x08, 0xc8, 0xde,
 	0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01, 0x52, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x12,
-	0x40, 0x0a, 0x08, 0x6d, 0x6f, 0x64, 0x69, 0x66, 0x69, 0x65, 0x64, 0x18, 0x04, 0x20, 0x01, 0x28,
+	0x40, 0x0a, 0x08, 0x6d, 0x6f, 0x64, 0x69, 0x66, 0x69, 0x65, 0x64, 0x18, 0x05, 0x20, 0x01, 0x28,
 	0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
 	0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x42, 0x08, 0xc8,
 	0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01, 0x52, 0x08, 0x6d, 0x6f, 0x64, 0x69, 0x66, 0x69, 0x65,
-	0x64, 0x12, 0x18, 0x0a, 0x07, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x18, 0x05, 0x20, 0x01,
+	0x64, 0x12, 0x18, 0x0a, 0x07, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x18, 0x06, 0x20, 0x01,
 	0x28, 0x03, 0x52, 0x07, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x12, 0x10, 0x0a, 0x03, 0x61,
-	0x6b, 0x61, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x61, 0x6b, 0x61, 0x12, 0x25, 0x0a,
+	0x6b, 0x61, 0x18, 0x07, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x61, 0x6b, 0x61, 0x12, 0x25, 0x0a,
 	0x0e, 0x61, 0x63, 0x74, 0x69, 0x76, 0x65, 0x5f, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x18,
-	0x07, 0x20, 0x01, 0x28, 0x05, 0x52, 0x0d, 0x61, 0x63, 0x74, 0x69, 0x76, 0x65, 0x56, 0x65, 0x72,
+	0x08, 0x20, 0x01, 0x28, 0x05, 0x52, 0x0d, 0x61, 0x63, 0x74, 0x69, 0x76, 0x65, 0x56, 0x65, 0x72,
 	0x73, 0x69, 0x6f, 0x6e, 0x12, 0x1a, 0x0a, 0x08, 0x6c, 0x61, 0x6e, 0x67, 0x75, 0x61, 0x67, 0x65,
-	0x18, 0x08, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x6c, 0x61, 0x6e, 0x67, 0x75, 0x61, 0x67, 0x65,
-	0x22, 0xe6, 0x01, 0x0a, 0x1a, 0x47, 0x6f, 0x76, 0x65, 0x72, 0x6e, 0x61, 0x6e, 0x63, 0x65, 0x46,
+	0x18, 0x09, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x6c, 0x61, 0x6e, 0x67, 0x75, 0x61, 0x67, 0x65,
+	0x22, 0xe4, 0x01, 0x0a, 0x1a, 0x47, 0x6f, 0x76, 0x65, 0x72, 0x6e, 0x61, 0x6e, 0x63, 0x65, 0x46,
 	0x72, 0x61, 0x6d, 0x65, 0x77, 0x6f, 0x72, 0x6b, 0x56, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x12,
-	0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12,
-	0x15, 0x0a, 0x06, 0x74, 0x72, 0x5f, 0x64, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x05, 0x74, 0x72, 0x44, 0x69, 0x64, 0x12, 0x3e, 0x0a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65,
-	0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65,
-	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74,
-	0x61, 0x6d, 0x70, 0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01, 0x52, 0x07, 0x63,
-	0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x12, 0x18, 0x0a, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f,
-	0x6e, 0x18, 0x04, 0x20, 0x01, 0x28, 0x05, 0x52, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e,
-	0x12, 0x47, 0x0a, 0x0c, 0x61, 0x63, 0x74, 0x69, 0x76, 0x65, 0x5f, 0x73, 0x69, 0x6e, 0x63, 0x65,
-	0x18, 0x05, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61,
-	0x6d, 0x70, 0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01, 0x52, 0x0b, 0x61, 0x63,
-	0x74, 0x69, 0x76, 0x65, 0x53, 0x69, 0x6e, 0x63, 0x65, 0x22, 0xc6, 0x01, 0x0a, 0x1b, 0x47, 0x6f,
-	0x76, 0x65, 0x72, 0x6e, 0x61, 0x6e, 0x63, 0x65, 0x46, 0x72, 0x61, 0x6d, 0x65, 0x77, 0x6f, 0x72,
-	0x6b, 0x44, 0x6f, 0x63, 0x75, 0x6d, 0x65, 0x6e, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x15, 0x0a, 0x06, 0x67, 0x66, 0x76,
-	0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x67, 0x66, 0x76, 0x49, 0x64,
-	0x12, 0x3e, 0x0a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28,
-	0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x42, 0x08, 0xc8,
-	0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01, 0x52, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64,
-	0x12, 0x1a, 0x0a, 0x08, 0x6c, 0x61, 0x6e, 0x67, 0x75, 0x61, 0x67, 0x65, 0x18, 0x04, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x08, 0x6c, 0x61, 0x6e, 0x67, 0x75, 0x61, 0x67, 0x65, 0x12, 0x10, 0x0a, 0x03,
-	0x75, 0x72, 0x6c, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x75, 0x72, 0x6c, 0x12, 0x12,
-	0x0a, 0x04, 0x68, 0x61, 0x73, 0x68, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x68, 0x61,
-	0x73, 0x68, 0x42, 0x96, 0x02, 0x0a, 0x22, 0x63, 0x6f, 0x6d, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e,
-	0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x74, 0x72, 0x75, 0x73,
-	0x74, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x42, 0x0a, 0x54, 0x79, 0x70, 0x65, 0x73,
-	0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x4b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e,
-	0x63, 0x6f, 0x6d, 0x2f, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x2d, 0x6c, 0x61, 0x62, 0x73, 0x2f,
-	0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x2d, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69,
-	0x6e, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63,
-	0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2f, 0x74, 0x72, 0x75, 0x73, 0x74, 0x72, 0x65, 0x67, 0x69,
-	0x73, 0x74, 0x72, 0x79, 0xa2, 0x02, 0x03, 0x56, 0x54, 0x58, 0xaa, 0x02, 0x1e, 0x56, 0x65, 0x72,
-	0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x54, 0x72,
-	0x75, 0x73, 0x74, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0xca, 0x02, 0x1e, 0x56, 0x65,
-	0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x5c, 0x54,
-	0x72, 0x75, 0x73, 0x74, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0xe2, 0x02, 0x2a, 0x56,
-	0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x5c,
-	0x54, 0x72, 0x75, 0x73, 0x74, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x5c, 0x47, 0x50,
-	0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x1f, 0x56, 0x65, 0x72, 0x61,
-	0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x3a, 0x3a, 0x54, 0x72,
-	0x75, 0x73, 0x74, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x62, 0x06, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x33,
+	0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x12,
+	0x13, 0x0a, 0x05, 0x74, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x04,
+	0x74, 0x72, 0x49, 0x64, 0x12, 0x3e, 0x0a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x18,
+	0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d,
+	0x70, 0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01, 0x52, 0x07, 0x63, 0x72, 0x65,
+	0x61, 0x74, 0x65, 0x64, 0x12, 0x18, 0x0a, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x18,
+	0x04, 0x20, 0x01, 0x28, 0x05, 0x52, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x47,
+	0x0a, 0x0c, 0x61, 0x63, 0x74, 0x69, 0x76, 0x65, 0x5f, 0x73, 0x69, 0x6e, 0x63, 0x65, 0x18, 0x05,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70,
+	0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01, 0x52, 0x0b, 0x61, 0x63, 0x74, 0x69,
+	0x76, 0x65, 0x53, 0x69, 0x6e, 0x63, 0x65, 0x22, 0xc6, 0x01, 0x0a, 0x1b, 0x47, 0x6f, 0x76, 0x65,
+	0x72, 0x6e, 0x61, 0x6e, 0x63, 0x65, 0x46, 0x72, 0x61, 0x6d, 0x65, 0x77, 0x6f, 0x72, 0x6b, 0x44,
+	0x6f, 0x63, 0x75, 0x6d, 0x65, 0x6e, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x12, 0x15, 0x0a, 0x06, 0x67, 0x66, 0x76, 0x5f, 0x69,
+	0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x05, 0x67, 0x66, 0x76, 0x49, 0x64, 0x12, 0x3e,
+	0x0a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
+	0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x42, 0x08, 0xc8, 0xde, 0x1f,
+	0x00, 0x90, 0xdf, 0x1f, 0x01, 0x52, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x12, 0x1a,
+	0x0a, 0x08, 0x6c, 0x61, 0x6e, 0x67, 0x75, 0x61, 0x67, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x08, 0x6c, 0x61, 0x6e, 0x67, 0x75, 0x61, 0x67, 0x65, 0x12, 0x10, 0x0a, 0x03, 0x75, 0x72,
+	0x6c, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x75, 0x72, 0x6c, 0x12, 0x12, 0x0a, 0x04,
+	0x68, 0x61, 0x73, 0x68, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x68, 0x61, 0x73, 0x68,
+	0x42, 0x96, 0x02, 0x0a, 0x22, 0x63, 0x6f, 0x6d, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62,
+	0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x74, 0x72, 0x75, 0x73, 0x74, 0x72,
+	0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x42, 0x0a, 0x54, 0x79, 0x70, 0x65, 0x73, 0x50, 0x72,
+	0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x4b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f,
+	0x6d, 0x2f, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x2d, 0x6c, 0x61, 0x62, 0x73, 0x2f, 0x76, 0x65,
+	0x72, 0x61, 0x6e, 0x61, 0x2d, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2f,
+	0x61, 0x70, 0x69, 0x2f, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63,
+	0x68, 0x61, 0x69, 0x6e, 0x2f, 0x74, 0x72, 0x75, 0x73, 0x74, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74,
+	0x72, 0x79, 0xa2, 0x02, 0x03, 0x56, 0x54, 0x58, 0xaa, 0x02, 0x1e, 0x56, 0x65, 0x72, 0x61, 0x6e,
+	0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x54, 0x72, 0x75, 0x73,
+	0x74, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0xca, 0x02, 0x1e, 0x56, 0x65, 0x72, 0x61,
+	0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x5c, 0x54, 0x72, 0x75,
+	0x73, 0x74, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0xe2, 0x02, 0x2a, 0x56, 0x65, 0x72,
+	0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x5c, 0x54, 0x72,
+	0x75, 0x73, 0x74, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x5c, 0x47, 0x50, 0x42, 0x4d,
+	0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x1f, 0x56, 0x65, 0x72, 0x61, 0x6e, 0x61,
+	0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x3a, 0x3a, 0x54, 0x72, 0x75, 0x73,
+	0x74, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x33,
 }
 
 var (

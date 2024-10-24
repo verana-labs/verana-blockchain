@@ -4,31 +4,38 @@ import (
 	"errors"
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/google/uuid"
 	"github.com/verana-labs/verana-blockchain/x/trustregistry/types"
 	"time"
 )
 
 func (ms msgServer) validateAddGovernanceFrameworkDocumentParams(ctx sdk.Context, msg *types.MsgAddGovernanceFrameworkDocument) error {
-	//TODO: For language create a list of all the acceptable languages and then allow the given languages only
-	if msg.Did == "" || msg.DocLanguage == "" || msg.DocUrl == "" || msg.DocHash == "" {
+	// Check mandatory parameters
+	if msg.TrId == 0 || msg.DocLanguage == "" || msg.DocUrl == "" || msg.DocHash == "" {
 		return errors.New("missing mandatory parameter")
 	}
 
-	tr, err := ms.TrustRegistry.Get(ctx, msg.Did)
+	// Direct lookup of trust registry by ID
+	tr, err := ms.TrustRegistry.Get(ctx, msg.TrId)
 	if err != nil {
-		return fmt.Errorf("trust registry with DID %s does not exist", msg.Did)
+		return fmt.Errorf("trust registry with ID %d does not exist: %w", msg.TrId, err)
 	}
 
+	// Check controller
 	if tr.Controller != msg.Creator {
 		return errors.New("creator is not the controller of the trust registry")
 	}
 
-	// Check if the version is valid
+	// Check version validity
 	var maxVersion int32
-	err = ms.GFVersion.Walk(ctx, nil, func(key string, gfv types.GovernanceFrameworkVersion) (bool, error) {
-		if gfv.TrDid == msg.Did && gfv.Version > maxVersion {
-			maxVersion = gfv.Version
+	var hasVersion bool
+	err = ms.GFVersion.Walk(ctx, nil, func(id uint64, gfv types.GovernanceFrameworkVersion) (bool, error) {
+		if gfv.TrId == msg.TrId {
+			if gfv.Version == msg.Version {
+				hasVersion = true
+			}
+			if gfv.Version > maxVersion {
+				maxVersion = gfv.Version
+			}
 		}
 		return false, nil
 	})
@@ -36,7 +43,8 @@ func (ms msgServer) validateAddGovernanceFrameworkDocumentParams(ctx sdk.Context
 		return fmt.Errorf("error checking versions: %w", err)
 	}
 
-	if msg.Version != maxVersion+1 && msg.Version != maxVersion {
+	// Validate version according to spec
+	if !hasVersion && msg.Version != maxVersion+1 {
 		return fmt.Errorf("invalid version: must be %d or %d", maxVersion, maxVersion+1)
 	}
 
@@ -44,10 +52,12 @@ func (ms msgServer) validateAddGovernanceFrameworkDocumentParams(ctx sdk.Context
 		return fmt.Errorf("version must be greater than the active version %d", tr.ActiveVersion)
 	}
 
+	// Validate language tag
 	if !isValidLanguageTag(msg.DocLanguage) {
 		return errors.New("invalid language tag (must conform to rfc1766)")
 	}
 
+	// Validate URL and hash
 	if !isValidURL(msg.DocUrl) {
 		return errors.New("invalid document URL")
 	}
@@ -63,12 +73,13 @@ func (ms msgServer) executeAddGovernanceFrameworkDocument(ctx sdk.Context, msg *
 	now := ctx.BlockTime()
 
 	var gfv types.GovernanceFrameworkVersion
-	var err error
+	var gfvExists bool
 
-	// Check if the version already exists
-	err = ms.GFVersion.Walk(ctx, nil, func(key string, v types.GovernanceFrameworkVersion) (bool, error) {
-		if v.TrDid == msg.Did && v.Version == msg.Version {
+	// Check if version exists
+	err := ms.GFVersion.Walk(ctx, nil, func(id uint64, v types.GovernanceFrameworkVersion) (bool, error) {
+		if v.TrId == msg.TrId && v.Version == msg.Version {
 			gfv = v
+			gfvExists = true
 			return true, nil
 		}
 		return false, nil
@@ -77,23 +88,33 @@ func (ms msgServer) executeAddGovernanceFrameworkDocument(ctx sdk.Context, msg *
 		return fmt.Errorf("error checking existing version: %w", err)
 	}
 
-	// If the version doesn't exist, create a new one
-	if gfv.Id == "" {
+	// Create new version if needed
+	if !gfvExists {
+		gfvID, err := ms.Keeper.GetNextID(ctx, "gfv")
+		if err != nil {
+			return fmt.Errorf("failed to generate GFV ID: %w", err)
+		}
+
 		gfv = types.GovernanceFrameworkVersion{
-			Id:          uuid.New().String(),
-			TrDid:       msg.Did,
+			Id:          gfvID,
+			TrId:        msg.TrId,
 			Created:     now,
 			Version:     msg.Version,
-			ActiveSince: time.Time{}, // Set to zero time as it's not active yet
+			ActiveSince: time.Time{}, // Zero time as per spec - not active yet
 		}
 		if err := ms.GFVersion.Set(ctx, gfv.Id, gfv); err != nil {
 			return fmt.Errorf("failed to persist GovernanceFrameworkVersion: %w", err)
 		}
 	}
 
-	// Create and persist the new GovernanceFrameworkDocument
+	// Create new document
+	gfdID, err := ms.Keeper.GetNextID(ctx, "gfd")
+	if err != nil {
+		return fmt.Errorf("failed to generate GFD ID: %w", err)
+	}
+
 	gfd := types.GovernanceFrameworkDocument{
-		Id:       uuid.New().String(),
+		Id:       gfdID,
 		GfvId:    gfv.Id,
 		Created:  now,
 		Language: msg.DocLanguage,
