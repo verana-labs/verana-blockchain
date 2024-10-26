@@ -181,7 +181,6 @@ Note: Replace `cooluser`, chain ID, gas prices, and other parameters according t
    --gas 800000 \
    --gas-adjustment 1.3 \
    --gas-prices 1.1uvna \
-   --home ~/.verana2 \
    --node tcp://localhost:26757
    ```
    #### Without --node flag, it defaults to 26657 (primary validator's RPC)
