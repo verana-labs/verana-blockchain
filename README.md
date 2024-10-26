@@ -125,3 +125,78 @@ To run the test suite for the Trust Registry module:
    ```
 
 Note: Replace `cooluser`, chain ID, gas prices, and other parameters according to your setup.
+
+
+## Multi-Validator Setup and Testing
+
+### Setting Up Multiple Validators
+
+1. Clean up any existing data:
+   ```bash
+   rm -rf ~/.verana ~/.verana2
+   ```
+
+2. Start Primary Validator (Terminal 1):
+   ```bash
+   ./scripts/setup_primary_validator.sh
+   ```
+
+3. Start Second Validator (Terminal 2):
+   ```bash
+   ./scripts/setup_additional_validator.sh 2
+   ```
+
+### Testing with Multiple Validators
+
+1. Create Trust Registry through Primary Validator:
+   ```bash
+   # Terminal 1 (Primary Validator)
+   veranad tx trustregistry create-trust-registry \
+   did:example:123456789abcdefghi \
+   "http://example-aka.com" \
+   en \
+   https://example.com/governance-framework.pdf \
+   e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 \
+   --from cooluser \
+   --keyring-backend test \
+   --chain-id test-1 \
+   --gas 800000 \
+   --gas-adjustment 1.3 \
+   --gas-prices 1.1uvna \
+   --home ~/.verana
+   ```
+
+2. Create Trust Registry through Secondary Validator:
+   ```bash
+   # Terminal 2 (Secondary Validator)
+   veranad tx trustregistry create-trust-registry \
+   did:example:456789abcdefghi \
+   "http://example2-aka.com" \
+   es \
+   https://example2.com/governance-framework.pdf \
+   e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 \
+   --from cooluser \
+   --keyring-backend test \
+   --chain-id test-1 \
+   --gas 800000 \
+   --gas-adjustment 1.3 \
+   --gas-prices 1.1uvna \
+   --home ~/.verana2 \
+   --node tcp://localhost:26757
+   ```
+   #### Without --node flag, it defaults to 26657 (primary validator's RPC)
+   #### To interact with secondary validator, need to specify --node tcp://localhost:26757
+
+### Querying Transactions and Blocks
+
+1. Query Transaction by Height:
+   ```bash
+   # Can be executed on either validator
+   veranad q txs --query "tx.height=57"
+   ```
+
+2. Query Validators:
+   ```bash
+   # Check validator set
+   veranad q tendermint-validator-set --home ~/.verana
+   ```
