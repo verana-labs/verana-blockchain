@@ -21,11 +21,12 @@ type queryServer struct {
 }
 
 func (qs queryServer) GetTrustRegistry(ctx context.Context, req *types.QueryGetTrustRegistryRequest) (*types.QueryGetTrustRegistryResponse, error) {
-	if !isValidDID(req.Did) {
-		return nil, status.Error(codes.InvalidArgument, "invalid DID syntax")
+	if req.TrId == 0 {
+		return nil, status.Error(codes.InvalidArgument, "trust registry ID is required")
 	}
 
-	tr, err := qs.k.TrustRegistry.Get(ctx, req.Did)
+	// Direct lookup by ID
+	tr, err := qs.k.TrustRegistry.Get(ctx, req.TrId)
 	if err != nil {
 		if errors.Is(err, collections.ErrNotFound) {
 			return nil, status.Error(codes.NotFound, "trust registry not found")
@@ -33,13 +34,42 @@ func (qs queryServer) GetTrustRegistry(ctx context.Context, req *types.QueryGetT
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
+	return qs.getTrustRegistryData(ctx, tr, req.ActiveGfOnly, req.PreferredLanguage)
+}
+
+func (qs queryServer) GetTrustRegistryWithDID(ctx context.Context, req *types.QueryGetTrustRegistryWithDIDRequest) (*types.QueryGetTrustRegistryResponse, error) {
+	if !isValidDID(req.Did) {
+		return nil, status.Error(codes.InvalidArgument, "invalid DID syntax")
+	}
+
+	// Get ID from DID index
+	id, err := qs.k.TrustRegistryDIDIndex.Get(ctx, req.Did)
+	if err != nil {
+		if errors.Is(err, collections.ErrNotFound) {
+			return nil, status.Error(codes.NotFound, "trust registry not found")
+		}
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	// Get trust registry using ID
+	tr, err := qs.k.TrustRegistry.Get(ctx, id)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return qs.getTrustRegistryData(ctx, tr, req.ActiveGfOnly, req.PreferredLanguage)
+}
+
+func (qs queryServer) getTrustRegistryData(ctx context.Context, tr types.TrustRegistry, activeOnly bool, preferredLang string) (*types.QueryGetTrustRegistryResponse, error) {
 	var versions []types.GovernanceFrameworkVersion
 	var documents []types.GovernanceFrameworkDocument
 
 	// Fetch versions
-	err = qs.k.GFVersion.Walk(ctx, nil, func(key string, gfv types.GovernanceFrameworkVersion) (bool, error) {
-		if gfv.TrDid == req.Did && (!req.ActiveGfOnly || gfv.Version == tr.ActiveVersion) {
-			versions = append(versions, gfv)
+	err := qs.k.GFVersion.Walk(ctx, nil, func(id uint64, gfv types.GovernanceFrameworkVersion) (bool, error) {
+		if gfv.TrId == tr.Id {
+			if !activeOnly || gfv.Version == tr.ActiveVersion {
+				versions = append(versions, gfv)
+			}
 		}
 		return false, nil
 	})
@@ -48,21 +78,42 @@ func (qs queryServer) GetTrustRegistry(ctx context.Context, req *types.QueryGetT
 	}
 
 	// Fetch documents
-	err = qs.k.GFDocument.Walk(ctx, nil, func(key string, gfd types.GovernanceFrameworkDocument) (bool, error) {
-		for _, v := range versions {
+	for _, v := range versions {
+		var versionDocs []types.GovernanceFrameworkDocument
+		err = qs.k.GFDocument.Walk(ctx, nil, func(id uint64, gfd types.GovernanceFrameworkDocument) (bool, error) {
 			if gfd.GfvId == v.Id {
-				if req.PreferredLanguage == "" || gfd.Language == req.PreferredLanguage {
-					documents = append(documents, gfd)
+				versionDocs = append(versionDocs, gfd)
+			}
+			return false, nil
+		})
+		if err != nil {
+			return nil, status.Error(codes.Internal, err.Error())
+		}
+
+		// If preferred language is set, try to find a matching document
+		if preferredLang != "" {
+			var preferredDoc *types.GovernanceFrameworkDocument
+			var fallbackDoc *types.GovernanceFrameworkDocument
+
+			for i, doc := range versionDocs {
+				if doc.Language == preferredLang {
+					preferredDoc = &versionDocs[i]
 					break
-				} else if len(documents) == 0 || documents[len(documents)-1].GfvId != v.Id {
-					documents = append(documents, gfd)
+				} else if fallbackDoc == nil {
+					fallbackDoc = &versionDocs[i]
 				}
 			}
+
+			// Add preferred language doc if found, otherwise add fallback
+			if preferredDoc != nil {
+				documents = append(documents, *preferredDoc)
+			} else if fallbackDoc != nil {
+				documents = append(documents, *fallbackDoc)
+			}
+		} else {
+			// If no preferred language, add all documents
+			documents = append(documents, versionDocs...)
 		}
-		return false, nil
-	})
-	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	return &types.QueryGetTrustRegistryResponse{
@@ -73,21 +124,26 @@ func (qs queryServer) GetTrustRegistry(ctx context.Context, req *types.QueryGetT
 }
 
 func (qs queryServer) ListTrustRegistries(ctx context.Context, req *types.QueryListTrustRegistriesRequest) (*types.QueryListTrustRegistriesResponse, error) {
+	// Validate response_max_size
 	if req.ResponseMaxSize < 1 || req.ResponseMaxSize > 1024 {
-		return nil, status.Error(codes.InvalidArgument, "response_max_size must be between 1 and 1024")
+		return nil, status.Error(codes.InvalidArgument, "response_max_size must be between 1 and 1,024")
 	}
 
 	var trustRegistries []types.TrustRegistry
-	var err error
 
-	err = qs.k.TrustRegistry.Walk(ctx, nil, func(key string, tr types.TrustRegistry) (bool, error) {
-		if req.Modified != nil && !tr.Modified.After(*req.Modified) {
+	// Collect all matching trust registries
+	err := qs.k.TrustRegistry.Walk(ctx, nil, func(key uint64, tr types.TrustRegistry) (bool, error) {
+		// Apply filters
+		if req.Controller != "" && tr.Controller != req.Controller {
 			return false, nil
 		}
+		if req.ModifiedAfter != nil && !tr.Modified.After(*req.ModifiedAfter) {
+			return false, nil
+		}
+
 		trustRegistries = append(trustRegistries, tr)
 		return len(trustRegistries) >= int(req.ResponseMaxSize), nil
 	})
-
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}

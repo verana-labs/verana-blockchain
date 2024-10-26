@@ -30,14 +30,15 @@ var _ = time.Kitchen
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type TrustRegistry struct {
-	Did           string    `protobuf:"bytes,1,opt,name=did,proto3" json:"did,omitempty"`
-	Controller    string    `protobuf:"bytes,2,opt,name=controller,proto3" json:"controller,omitempty"`
-	Created       time.Time `protobuf:"bytes,3,opt,name=created,proto3,stdtime" json:"created"`
-	Modified      time.Time `protobuf:"bytes,4,opt,name=modified,proto3,stdtime" json:"modified"`
-	Deposit       int64     `protobuf:"varint,5,opt,name=deposit,proto3" json:"deposit,omitempty"`
-	Aka           string    `protobuf:"bytes,6,opt,name=aka,proto3" json:"aka,omitempty"`
-	ActiveVersion int32     `protobuf:"varint,7,opt,name=active_version,json=activeVersion,proto3" json:"active_version,omitempty"`
-	Language      string    `protobuf:"bytes,8,opt,name=language,proto3" json:"language,omitempty"`
+	Id            uint64    `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Did           string    `protobuf:"bytes,2,opt,name=did,proto3" json:"did,omitempty"`
+	Controller    string    `protobuf:"bytes,3,opt,name=controller,proto3" json:"controller,omitempty"`
+	Created       time.Time `protobuf:"bytes,4,opt,name=created,proto3,stdtime" json:"created"`
+	Modified      time.Time `protobuf:"bytes,5,opt,name=modified,proto3,stdtime" json:"modified"`
+	Deposit       int64     `protobuf:"varint,6,opt,name=deposit,proto3" json:"deposit,omitempty"`
+	Aka           string    `protobuf:"bytes,7,opt,name=aka,proto3" json:"aka,omitempty"`
+	ActiveVersion int32     `protobuf:"varint,8,opt,name=active_version,json=activeVersion,proto3" json:"active_version,omitempty"`
+	Language      string    `protobuf:"bytes,9,opt,name=language,proto3" json:"language,omitempty"`
 }
 
 func (m *TrustRegistry) Reset()         { *m = TrustRegistry{} }
@@ -72,6 +73,13 @@ func (m *TrustRegistry) XXX_DiscardUnknown() {
 }
 
 var xxx_messageInfo_TrustRegistry proto.InternalMessageInfo
+
+func (m *TrustRegistry) GetId() uint64 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
 
 func (m *TrustRegistry) GetDid() string {
 	if m != nil {
@@ -130,8 +138,8 @@ func (m *TrustRegistry) GetLanguage() string {
 }
 
 type GovernanceFrameworkVersion struct {
-	Id          string    `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	TrDid       string    `protobuf:"bytes,2,opt,name=tr_did,json=trDid,proto3" json:"tr_did,omitempty"`
+	Id          uint64    `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	TrId        uint64    `protobuf:"varint,2,opt,name=tr_id,json=trId,proto3" json:"tr_id,omitempty"`
 	Created     time.Time `protobuf:"bytes,3,opt,name=created,proto3,stdtime" json:"created"`
 	Version     int32     `protobuf:"varint,4,opt,name=version,proto3" json:"version,omitempty"`
 	ActiveSince time.Time `protobuf:"bytes,5,opt,name=active_since,json=activeSince,proto3,stdtime" json:"active_since"`
@@ -170,18 +178,18 @@ func (m *GovernanceFrameworkVersion) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GovernanceFrameworkVersion proto.InternalMessageInfo
 
-func (m *GovernanceFrameworkVersion) GetId() string {
+func (m *GovernanceFrameworkVersion) GetId() uint64 {
 	if m != nil {
 		return m.Id
 	}
-	return ""
+	return 0
 }
 
-func (m *GovernanceFrameworkVersion) GetTrDid() string {
+func (m *GovernanceFrameworkVersion) GetTrId() uint64 {
 	if m != nil {
-		return m.TrDid
+		return m.TrId
 	}
-	return ""
+	return 0
 }
 
 func (m *GovernanceFrameworkVersion) GetCreated() time.Time {
@@ -206,8 +214,8 @@ func (m *GovernanceFrameworkVersion) GetActiveSince() time.Time {
 }
 
 type GovernanceFrameworkDocument struct {
-	Id       string    `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	GfvId    string    `protobuf:"bytes,2,opt,name=gfv_id,json=gfvId,proto3" json:"gfv_id,omitempty"`
+	Id       uint64    `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	GfvId    uint64    `protobuf:"varint,2,opt,name=gfv_id,json=gfvId,proto3" json:"gfv_id,omitempty"`
 	Created  time.Time `protobuf:"bytes,3,opt,name=created,proto3,stdtime" json:"created"`
 	Language string    `protobuf:"bytes,4,opt,name=language,proto3" json:"language,omitempty"`
 	Url      string    `protobuf:"bytes,5,opt,name=url,proto3" json:"url,omitempty"`
@@ -247,18 +255,18 @@ func (m *GovernanceFrameworkDocument) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GovernanceFrameworkDocument proto.InternalMessageInfo
 
-func (m *GovernanceFrameworkDocument) GetId() string {
+func (m *GovernanceFrameworkDocument) GetId() uint64 {
 	if m != nil {
 		return m.Id
 	}
-	return ""
+	return 0
 }
 
-func (m *GovernanceFrameworkDocument) GetGfvId() string {
+func (m *GovernanceFrameworkDocument) GetGfvId() uint64 {
 	if m != nil {
 		return m.GfvId
 	}
-	return ""
+	return 0
 }
 
 func (m *GovernanceFrameworkDocument) GetCreated() time.Time {
@@ -300,40 +308,41 @@ func init() {
 }
 
 var fileDescriptor_7d6a1e5c27d81066 = []byte{
-	// 522 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x53, 0x4f, 0x6b, 0x13, 0x41,
-	0x14, 0xcf, 0xe4, 0x7f, 0xa7, 0xb6, 0xe8, 0x50, 0x61, 0x8c, 0xb0, 0x09, 0x01, 0x21, 0x08, 0xdd,
-	0x05, 0xbd, 0x78, 0x2a, 0x1a, 0x8a, 0xc5, 0xeb, 0xb6, 0x88, 0x78, 0x09, 0x93, 0xdd, 0xc9, 0x64,
-	0xc8, 0xee, 0x4c, 0x98, 0x99, 0x5d, 0xed, 0xb7, 0xe8, 0x87, 0xf1, 0x33, 0x48, 0x0f, 0x1e, 0x8a,
-	0x27, 0x4f, 0x2a, 0x09, 0xf8, 0x39, 0x64, 0x67, 0x76, 0x63, 0x2a, 0x39, 0x28, 0xbd, 0x0c, 0xbf,
-	0xf7, 0xe7, 0x37, 0xef, 0xfd, 0xde, 0xe3, 0xc1, 0xa7, 0x39, 0x55, 0x44, 0x90, 0x69, 0x22, 0xa3,
-	0x45, 0x34, 0x27, 0x5c, 0x04, 0x46, 0x65, 0xda, 0x28, 0xca, 0xb8, 0x36, 0xea, 0x32, 0x30, 0x97,
-	0x4b, 0xaa, 0xfd, 0xa5, 0x92, 0x46, 0x22, 0xef, 0xef, 0x5c, 0xff, 0x56, 0x6e, 0xef, 0x01, 0x49,
-	0xb9, 0x90, 0x81, 0x7d, 0x1d, 0xa5, 0x77, 0xc4, 0x24, 0x93, 0x16, 0x06, 0x05, 0x2a, 0xbd, 0x8f,
-	0x22, 0xa9, 0x53, 0xa9, 0x27, 0x2e, 0xe0, 0x8c, 0x32, 0xd4, 0x67, 0x52, 0xb2, 0x84, 0x06, 0xd6,
-	0x9a, 0x66, 0xb3, 0xc0, 0xf0, 0x94, 0x6a, 0x43, 0xd2, 0xa5, 0x4b, 0x18, 0x7e, 0xa9, 0xc3, 0x83,
-	0x8b, 0xa2, 0x6c, 0x58, 0x96, 0x45, 0xf7, 0x61, 0x23, 0xe6, 0x31, 0x06, 0x03, 0x30, 0xda, 0x0b,
-	0x0b, 0x88, 0x5e, 0x40, 0x18, 0x49, 0x61, 0x94, 0x4c, 0x12, 0xaa, 0x70, 0xbd, 0x08, 0x8c, 0xf1,
-	0xd7, 0x4f, 0xc7, 0x47, 0x65, 0xa9, 0x57, 0x71, 0xac, 0xa8, 0xd6, 0xe7, 0x46, 0x71, 0xc1, 0xc2,
-	0xad, 0x5c, 0x74, 0x02, 0x3b, 0x91, 0xa2, 0xc4, 0xd0, 0x18, 0x37, 0x06, 0x60, 0xb4, 0xff, 0xac,
-	0xe7, 0xbb, 0x86, 0xfc, 0xaa, 0x21, 0xff, 0xa2, 0x6a, 0x68, 0xdc, 0xbd, 0xfe, 0xde, 0xaf, 0x5d,
-	0xfd, 0xe8, 0x83, 0xb0, 0x22, 0xa1, 0x97, 0xb0, 0x9b, 0xca, 0x98, 0xcf, 0x38, 0x8d, 0x71, 0xf3,
-	0x3f, 0x3e, 0xd8, 0xb0, 0x10, 0x86, 0x9d, 0x98, 0x2e, 0xa5, 0xe6, 0x06, 0xb7, 0x06, 0x60, 0xd4,
-	0x08, 0x2b, 0xb3, 0xd0, 0x49, 0x16, 0x04, 0xb7, 0x9d, 0x4e, 0xb2, 0x20, 0xe8, 0x09, 0x3c, 0x24,
-	0x91, 0xe1, 0x39, 0x9d, 0xe4, 0x54, 0x69, 0x2e, 0x05, 0xee, 0x0c, 0xc0, 0xa8, 0x15, 0x1e, 0x38,
-	0xef, 0x5b, 0xe7, 0x44, 0x3d, 0xd8, 0x4d, 0x88, 0x60, 0x19, 0x61, 0x14, 0x77, 0x2d, 0x7b, 0x63,
-	0x0f, 0x7f, 0x01, 0xd8, 0x3b, 0x93, 0x39, 0x55, 0x82, 0x88, 0x88, 0xbe, 0x56, 0x24, 0xa5, 0x1f,
-	0xa4, 0x5a, 0x54, 0xd4, 0x43, 0x58, 0xdf, 0x8c, 0xb6, 0xce, 0x63, 0xf4, 0x10, 0xb6, 0x8d, 0x9a,
-	0x14, 0xe3, 0xb6, 0x53, 0x0d, 0x5b, 0x46, 0x9d, 0xf2, 0xf8, 0xce, 0x63, 0xc3, 0xb0, 0x53, 0x29,
-	0x68, 0x5a, 0x05, 0x95, 0x89, 0xce, 0xe0, 0xbd, 0x52, 0xa2, 0xe6, 0x22, 0xa2, 0x76, 0x26, 0xff,
-	0xfa, 0xfd, 0xbe, 0x63, 0x9e, 0x17, 0xc4, 0xe1, 0x67, 0x00, 0x1f, 0xef, 0x10, 0x7a, 0x2a, 0xa3,
-	0x2c, 0xa5, 0xc2, 0xec, 0x52, 0xca, 0x66, 0xf9, 0xe4, 0x8f, 0x52, 0x36, 0xcb, 0xdf, 0xdc, 0x5d,
-	0xe9, 0xf6, 0x2e, 0x9a, 0xb7, 0x77, 0x51, 0x2c, 0x38, 0x53, 0x89, 0x95, 0xb8, 0x17, 0x16, 0x10,
-	0x21, 0xd8, 0x9c, 0x13, 0x3d, 0x2f, 0x77, 0x6e, 0xf1, 0xf8, 0xdd, 0xf5, 0xca, 0x03, 0x37, 0x2b,
-	0x0f, 0xfc, 0x5c, 0x79, 0xe0, 0x6a, 0xed, 0xd5, 0x6e, 0xd6, 0x5e, 0xed, 0xdb, 0xda, 0xab, 0xbd,
-	0x3f, 0x61, 0xdc, 0xcc, 0xb3, 0xa9, 0x1f, 0xc9, 0x34, 0x70, 0xa7, 0x7a, 0x9c, 0x90, 0xa9, 0xae,
-	0xf0, 0xd6, 0x8d, 0x7f, 0xdc, 0x75, 0xe5, 0xd3, 0xb6, 0x95, 0xf0, 0xfc, 0x77, 0x00, 0x00, 0x00,
-	0xff, 0xff, 0x77, 0x8d, 0x1d, 0x9f, 0x14, 0x04, 0x00, 0x00,
+	// 531 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x53, 0xdd, 0x6a, 0x13, 0x41,
+	0x14, 0xce, 0x24, 0x9b, 0xbf, 0xa9, 0x2d, 0x3a, 0x56, 0x18, 0x23, 0x6c, 0x42, 0x40, 0x08, 0x42,
+	0x77, 0x41, 0x6f, 0xbc, 0x2a, 0x1a, 0xc4, 0xe2, 0xed, 0xb6, 0x88, 0x78, 0x13, 0x66, 0x77, 0x26,
+	0x93, 0x21, 0xbb, 0x33, 0x61, 0x66, 0x76, 0xb5, 0x6f, 0xd1, 0x87, 0xf1, 0x19, 0xa4, 0x97, 0xc5,
+	0x2b, 0x2f, 0x44, 0x25, 0xf1, 0x41, 0x64, 0xff, 0x6a, 0x5a, 0x7b, 0x53, 0xf1, 0x66, 0xf9, 0xce,
+	0xcf, 0xb7, 0xe7, 0x7c, 0xe7, 0xcc, 0x81, 0x4f, 0x32, 0xa6, 0x89, 0x24, 0x61, 0xac, 0xa2, 0x65,
+	0xb4, 0x20, 0x42, 0xfa, 0x56, 0xa7, 0xc6, 0x6a, 0xc6, 0x85, 0xb1, 0xfa, 0xd4, 0xb7, 0xa7, 0x2b,
+	0x66, 0xbc, 0x95, 0x56, 0x56, 0x21, 0xf7, 0x7a, 0xae, 0x77, 0x25, 0x77, 0x70, 0x8f, 0x24, 0x42,
+	0x2a, 0xbf, 0xf8, 0x96, 0x94, 0xc1, 0x3e, 0x57, 0x5c, 0x15, 0xd0, 0xcf, 0x51, 0xe5, 0x7d, 0x18,
+	0x29, 0x93, 0x28, 0x33, 0x2b, 0x03, 0xa5, 0x51, 0x85, 0x86, 0x5c, 0x29, 0x1e, 0x33, 0xbf, 0xb0,
+	0xc2, 0x74, 0xee, 0x5b, 0x91, 0x30, 0x63, 0x49, 0xb2, 0x2a, 0x13, 0xc6, 0xdf, 0x9a, 0x70, 0xf7,
+	0x24, 0x2f, 0x1b, 0x54, 0x65, 0xd1, 0x1e, 0x6c, 0x0a, 0x8a, 0xc1, 0x08, 0x4c, 0x9c, 0xa0, 0x29,
+	0x28, 0xba, 0x0b, 0x5b, 0x54, 0x50, 0xdc, 0x1c, 0x81, 0x49, 0x3f, 0xc8, 0x21, 0x7a, 0x0e, 0x61,
+	0xa4, 0xa4, 0xd5, 0x2a, 0x8e, 0x99, 0xc6, 0xad, 0x3c, 0x30, 0xc5, 0x5f, 0x3e, 0x1d, 0xec, 0x57,
+	0xa5, 0x5f, 0x52, 0xaa, 0x99, 0x31, 0xc7, 0x56, 0x0b, 0xc9, 0x83, 0xad, 0x5c, 0x74, 0x08, 0xbb,
+	0x91, 0x66, 0xc4, 0x32, 0x8a, 0x9d, 0x11, 0x98, 0xec, 0x3c, 0x1d, 0x78, 0x65, 0x83, 0x5e, 0xdd,
+	0xa0, 0x77, 0x52, 0x37, 0x38, 0xed, 0x9d, 0x7f, 0x1f, 0x36, 0xce, 0x7e, 0x0c, 0x41, 0x50, 0x93,
+	0xd0, 0x0b, 0xd8, 0x4b, 0x14, 0x15, 0x73, 0xc1, 0x28, 0x6e, 0xdf, 0xe2, 0x07, 0x97, 0x2c, 0x84,
+	0x61, 0x97, 0xb2, 0x95, 0x32, 0xc2, 0xe2, 0xce, 0x08, 0x4c, 0x5a, 0x41, 0x6d, 0xe6, 0x3a, 0xc9,
+	0x92, 0xe0, 0x6e, 0xa9, 0x93, 0x2c, 0x09, 0x7a, 0x0c, 0xf7, 0x48, 0x64, 0x45, 0xc6, 0x66, 0x19,
+	0xd3, 0x46, 0x28, 0x89, 0x7b, 0x23, 0x30, 0x69, 0x07, 0xbb, 0xa5, 0xf7, 0x6d, 0xe9, 0x44, 0x03,
+	0xd8, 0x8b, 0x89, 0xe4, 0x29, 0xe1, 0x0c, 0xf7, 0x0b, 0xf6, 0xa5, 0x3d, 0xfe, 0x05, 0xe0, 0xe0,
+	0x48, 0x65, 0x4c, 0x4b, 0x22, 0x23, 0xf6, 0x5a, 0x93, 0x84, 0x7d, 0x50, 0x7a, 0x59, 0x53, 0xaf,
+	0xcf, 0xfa, 0x3e, 0x6c, 0x5b, 0x3d, 0xab, 0xa6, 0xed, 0x04, 0x8e, 0xd5, 0x6f, 0xe8, 0xf6, 0xd0,
+	0x5a, 0xff, 0x32, 0x34, 0x0c, 0xbb, 0x75, 0xff, 0x4e, 0xd1, 0x7f, 0x6d, 0xa2, 0x23, 0x78, 0xa7,
+	0x12, 0x68, 0x84, 0x8c, 0xd8, 0xad, 0x46, 0xba, 0x53, 0x32, 0x8f, 0x73, 0xe2, 0xf8, 0x33, 0x80,
+	0x8f, 0x6e, 0x90, 0xf9, 0x4a, 0x45, 0x69, 0xc2, 0xa4, 0xfd, 0x4b, 0xe7, 0x03, 0xd8, 0xe1, 0xf3,
+	0xec, 0x8f, 0xd0, 0x36, 0x9f, 0x67, 0xff, 0x41, 0xe9, 0xf6, 0x26, 0x9c, 0xab, 0x9b, 0xc8, 0xd7,
+	0x9b, 0xea, 0xb8, 0x90, 0xd8, 0x0f, 0x72, 0x88, 0x10, 0x74, 0x16, 0xc4, 0x2c, 0x8a, 0x77, 0xd0,
+	0x0f, 0x0a, 0x3c, 0x7d, 0x77, 0xbe, 0x76, 0xc1, 0xc5, 0xda, 0x05, 0x3f, 0xd7, 0x2e, 0x38, 0xdb,
+	0xb8, 0x8d, 0x8b, 0x8d, 0xdb, 0xf8, 0xba, 0x71, 0x1b, 0xef, 0x0f, 0xb9, 0xb0, 0x8b, 0x34, 0xf4,
+	0x22, 0x95, 0xf8, 0xe5, 0xe1, 0x1e, 0xc4, 0x24, 0x34, 0x35, 0xde, 0xba, 0xf8, 0x8f, 0x37, 0xdd,
+	0x7c, 0xd8, 0x29, 0x24, 0x3c, 0xfb, 0x1d, 0x00, 0x00, 0xff, 0xff, 0xc2, 0xda, 0x53, 0x4b, 0x22,
+	0x04, 0x00, 0x00,
 }
 
 func (m *TrustRegistry) Marshal() (dAtA []byte, err error) {
@@ -361,24 +370,24 @@ func (m *TrustRegistry) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		copy(dAtA[i:], m.Language)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.Language)))
 		i--
-		dAtA[i] = 0x42
+		dAtA[i] = 0x4a
 	}
 	if m.ActiveVersion != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.ActiveVersion))
 		i--
-		dAtA[i] = 0x38
+		dAtA[i] = 0x40
 	}
 	if len(m.Aka) > 0 {
 		i -= len(m.Aka)
 		copy(dAtA[i:], m.Aka)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.Aka)))
 		i--
-		dAtA[i] = 0x32
+		dAtA[i] = 0x3a
 	}
 	if m.Deposit != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.Deposit))
 		i--
-		dAtA[i] = 0x28
+		dAtA[i] = 0x30
 	}
 	n1, err1 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.Modified, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.Modified):])
 	if err1 != nil {
@@ -387,7 +396,7 @@ func (m *TrustRegistry) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i -= n1
 	i = encodeVarintTypes(dAtA, i, uint64(n1))
 	i--
-	dAtA[i] = 0x22
+	dAtA[i] = 0x2a
 	n2, err2 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.Created, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.Created):])
 	if err2 != nil {
 		return 0, err2
@@ -395,20 +404,25 @@ func (m *TrustRegistry) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i -= n2
 	i = encodeVarintTypes(dAtA, i, uint64(n2))
 	i--
-	dAtA[i] = 0x1a
+	dAtA[i] = 0x22
 	if len(m.Controller) > 0 {
 		i -= len(m.Controller)
 		copy(dAtA[i:], m.Controller)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.Controller)))
 		i--
-		dAtA[i] = 0x12
+		dAtA[i] = 0x1a
 	}
 	if len(m.Did) > 0 {
 		i -= len(m.Did)
 		copy(dAtA[i:], m.Did)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.Did)))
 		i--
-		dAtA[i] = 0xa
+		dAtA[i] = 0x12
+	}
+	if m.Id != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Id))
+		i--
+		dAtA[i] = 0x8
 	}
 	return len(dAtA) - i, nil
 }
@@ -454,19 +468,15 @@ func (m *GovernanceFrameworkVersion) MarshalToSizedBuffer(dAtA []byte) (int, err
 	i = encodeVarintTypes(dAtA, i, uint64(n4))
 	i--
 	dAtA[i] = 0x1a
-	if len(m.TrDid) > 0 {
-		i -= len(m.TrDid)
-		copy(dAtA[i:], m.TrDid)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.TrDid)))
+	if m.TrId != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.TrId))
 		i--
-		dAtA[i] = 0x12
+		dAtA[i] = 0x10
 	}
-	if len(m.Id) > 0 {
-		i -= len(m.Id)
-		copy(dAtA[i:], m.Id)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Id)))
+	if m.Id != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Id))
 		i--
-		dAtA[i] = 0xa
+		dAtA[i] = 0x8
 	}
 	return len(dAtA) - i, nil
 }
@@ -520,19 +530,15 @@ func (m *GovernanceFrameworkDocument) MarshalToSizedBuffer(dAtA []byte) (int, er
 	i = encodeVarintTypes(dAtA, i, uint64(n5))
 	i--
 	dAtA[i] = 0x1a
-	if len(m.GfvId) > 0 {
-		i -= len(m.GfvId)
-		copy(dAtA[i:], m.GfvId)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.GfvId)))
+	if m.GfvId != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.GfvId))
 		i--
-		dAtA[i] = 0x12
+		dAtA[i] = 0x10
 	}
-	if len(m.Id) > 0 {
-		i -= len(m.Id)
-		copy(dAtA[i:], m.Id)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Id)))
+	if m.Id != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Id))
 		i--
-		dAtA[i] = 0xa
+		dAtA[i] = 0x8
 	}
 	return len(dAtA) - i, nil
 }
@@ -554,6 +560,9 @@ func (m *TrustRegistry) Size() (n int) {
 	}
 	var l int
 	_ = l
+	if m.Id != 0 {
+		n += 1 + sovTypes(uint64(m.Id))
+	}
 	l = len(m.Did)
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
@@ -589,13 +598,11 @@ func (m *GovernanceFrameworkVersion) Size() (n int) {
 	}
 	var l int
 	_ = l
-	l = len(m.Id)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
+	if m.Id != 0 {
+		n += 1 + sovTypes(uint64(m.Id))
 	}
-	l = len(m.TrDid)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
+	if m.TrId != 0 {
+		n += 1 + sovTypes(uint64(m.TrId))
 	}
 	l = github_com_cosmos_gogoproto_types.SizeOfStdTime(m.Created)
 	n += 1 + l + sovTypes(uint64(l))
@@ -613,13 +620,11 @@ func (m *GovernanceFrameworkDocument) Size() (n int) {
 	}
 	var l int
 	_ = l
-	l = len(m.Id)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
+	if m.Id != 0 {
+		n += 1 + sovTypes(uint64(m.Id))
 	}
-	l = len(m.GfvId)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
+	if m.GfvId != 0 {
+		n += 1 + sovTypes(uint64(m.GfvId))
 	}
 	l = github_com_cosmos_gogoproto_types.SizeOfStdTime(m.Created)
 	n += 1 + l + sovTypes(uint64(l))
@@ -674,6 +679,25 @@ func (m *TrustRegistry) Unmarshal(dAtA []byte) error {
 		}
 		switch fieldNum {
 		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Id |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Did", wireType)
 			}
@@ -705,7 +729,7 @@ func (m *TrustRegistry) Unmarshal(dAtA []byte) error {
 			}
 			m.Did = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 2:
+		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Controller", wireType)
 			}
@@ -737,7 +761,7 @@ func (m *TrustRegistry) Unmarshal(dAtA []byte) error {
 			}
 			m.Controller = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 3:
+		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Created", wireType)
 			}
@@ -770,7 +794,7 @@ func (m *TrustRegistry) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 4:
+		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Modified", wireType)
 			}
@@ -803,7 +827,7 @@ func (m *TrustRegistry) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 5:
+		case 6:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Deposit", wireType)
 			}
@@ -822,7 +846,7 @@ func (m *TrustRegistry) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 6:
+		case 7:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Aka", wireType)
 			}
@@ -854,7 +878,7 @@ func (m *TrustRegistry) Unmarshal(dAtA []byte) error {
 			}
 			m.Aka = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 7:
+		case 8:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ActiveVersion", wireType)
 			}
@@ -873,7 +897,7 @@ func (m *TrustRegistry) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 8:
+		case 9:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Language", wireType)
 			}
@@ -956,10 +980,10 @@ func (m *GovernanceFrameworkVersion) Unmarshal(dAtA []byte) error {
 		}
 		switch fieldNum {
 		case 1:
-			if wireType != 2 {
+			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
 			}
-			var stringLen uint64
+			m.Id = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTypes
@@ -969,29 +993,16 @@ func (m *GovernanceFrameworkVersion) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				m.Id |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Id = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TrDid", wireType)
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TrId", wireType)
 			}
-			var stringLen uint64
+			m.TrId = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTypes
@@ -1001,24 +1012,11 @@ func (m *GovernanceFrameworkVersion) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				m.TrId |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.TrDid = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Created", wireType)
@@ -1155,10 +1153,10 @@ func (m *GovernanceFrameworkDocument) Unmarshal(dAtA []byte) error {
 		}
 		switch fieldNum {
 		case 1:
-			if wireType != 2 {
+			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
 			}
-			var stringLen uint64
+			m.Id = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTypes
@@ -1168,29 +1166,16 @@ func (m *GovernanceFrameworkDocument) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				m.Id |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Id = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		case 2:
-			if wireType != 2 {
+			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field GfvId", wireType)
 			}
-			var stringLen uint64
+			m.GfvId = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTypes
@@ -1200,24 +1185,11 @@ func (m *GovernanceFrameworkDocument) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				m.GfvId |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.GfvId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Created", wireType)
