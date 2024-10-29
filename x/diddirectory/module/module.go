@@ -1,4 +1,4 @@
-package trustregistry
+package diddirectory
 
 import (
 	"context"
@@ -20,9 +20,9 @@ import (
 
 	// this line is used by starport scaffolding # 1
 
-	modulev1 "github.com/verana-labs/verana-blockchain/api/veranablockchain/trustregistry/module"
-	"github.com/verana-labs/verana-blockchain/x/trustregistry/keeper"
-	"github.com/verana-labs/verana-blockchain/x/trustregistry/types"
+	modulev1 "github.com/verana-labs/verana-blockchain/api/veranablockchain/diddirectory/module"
+	"github.com/verana-labs/verana-blockchain/x/diddirectory/keeper"
+	"github.com/verana-labs/verana-blockchain/x/diddirectory/types"
 )
 
 var (
@@ -117,8 +117,7 @@ func NewAppModule(
 // RegisterServices registers a gRPC query service to respond to the module-specific gRPC queries
 func (am AppModule) RegisterServices(cfg module.Configurator) {
 	types.RegisterMsgServer(cfg.MsgServer(), keeper.NewMsgServerImpl(am.keeper))
-	types.RegisterQueryServer(cfg.QueryServer(), keeper.NewQueryServerImpl(am.keeper))
-
+	types.RegisterQueryServer(cfg.QueryServer(), am.keeper)
 }
 
 // RegisterInvariants registers the invariants of the module. If an invariant deviates from its predicted value, the InvariantRegistry triggers appropriate logic (most often the chain will be halted)
@@ -188,8 +187,8 @@ type ModuleInputs struct {
 type ModuleOutputs struct {
 	depinject.Out
 
-	TrustregistryKeeper keeper.Keeper
-	Module              appmodule.AppModule
+	DiddirectoryKeeper keeper.Keeper
+	Module             appmodule.AppModule
 }
 
 func ProvideModule(in ModuleInputs) ModuleOutputs {
@@ -211,5 +210,5 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.BankKeeper,
 	)
 
-	return ModuleOutputs{TrustregistryKeeper: k, Module: m}
+	return ModuleOutputs{DiddirectoryKeeper: k, Module: m}
 }

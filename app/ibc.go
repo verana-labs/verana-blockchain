@@ -35,7 +35,6 @@ import (
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 	solomachine "github.com/cosmos/ibc-go/v8/modules/light-clients/06-solomachine"
 	ibctm "github.com/cosmos/ibc-go/v8/modules/light-clients/07-tendermint"
-
 	// this line is used by starport scaffolding # ibc/app/import
 )
 
@@ -200,7 +199,7 @@ func RegisterIBC(registry cdctypes.InterfaceRegistry) map[string]appmodule.AppMo
 		solomachine.ModuleName:      solomachine.AppModule{},
 	}
 
-    for name, m := range modules {
+	for name, m := range modules {
 		module.CoreAppModuleBasicAdaptor(name, m).RegisterInterfaces(registry)
 	}
 

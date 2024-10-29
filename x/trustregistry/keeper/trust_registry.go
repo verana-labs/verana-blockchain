@@ -1,14 +1,15 @@
 package keeper
 
 import (
-	"cosmossdk.io/collections"
 	"errors"
 	"fmt"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/verana-labs/verana-blockchain/x/trustregistry/types"
 	"net/url"
 	"regexp"
 	"time"
+
+	"cosmossdk.io/collections"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/verana-labs/verana-blockchain/x/trustregistry/types"
 )
 
 func (ms msgServer) validateCreateTrustRegistryParams(ctx sdk.Context, msg *types.MsgCreateTrustRegistry) error {

@@ -53,7 +53,10 @@ import (
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
 	"google.golang.org/protobuf/types/known/durationpb"
 
+	diddirectorymodulev1 "github.com/verana-labs/verana-blockchain/api/veranablockchain/diddirectory/module"
 	trustregistrymodulev1 "github.com/verana-labs/verana-blockchain/api/veranablockchain/trustregistry/module"
+	_ "github.com/verana-labs/verana-blockchain/x/diddirectory/module" // import for side-effects
+	diddirectorymoduletypes "github.com/verana-labs/verana-blockchain/x/diddirectory/types"
 	_ "github.com/verana-labs/verana-blockchain/x/trustregistry/module" // import for side-effects
 	trustregistrymoduletypes "github.com/verana-labs/verana-blockchain/x/trustregistry/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
@@ -94,6 +97,7 @@ var (
 		circuittypes.ModuleName,
 		// chain modules
 		trustregistrymoduletypes.ModuleName,
+		diddirectorymoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 
@@ -119,6 +123,7 @@ var (
 		ibcfeetypes.ModuleName,
 		// chain modules
 		trustregistrymoduletypes.ModuleName,
+		diddirectorymoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	}
 
@@ -138,6 +143,7 @@ var (
 		ibcfeetypes.ModuleName,
 		// chain modules
 		trustregistrymoduletypes.ModuleName,
+		diddirectorymoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	}
 
@@ -296,6 +302,10 @@ var (
 			{
 				Name:   trustregistrymoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&trustregistrymodulev1.Module{}),
+			},
+			{
+				Name:   diddirectorymoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&diddirectorymodulev1.Module{}),
 			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},
