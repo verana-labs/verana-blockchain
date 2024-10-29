@@ -6,24 +6,29 @@ package types
 import (
 	context "context"
 	fmt "fmt"
+	_ "github.com/cosmos/cosmos-proto"
 	_ "github.com/cosmos/cosmos-sdk/types/query"
 	_ "github.com/cosmos/cosmos-sdk/types/tx/amino"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	grpc1 "github.com/cosmos/gogoproto/grpc"
 	proto "github.com/cosmos/gogoproto/proto"
+	github_com_cosmos_gogoproto_types "github.com/cosmos/gogoproto/types"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	_ "google.golang.org/protobuf/types/known/timestamppb"
 	io "io"
 	math "math"
 	math_bits "math/bits"
+	time "time"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+var _ = time.Kitchen
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the proto package it is being compiled against.
@@ -114,9 +119,131 @@ func (m *QueryParamsResponse) GetParams() Params {
 	return Params{}
 }
 
+type QueryListDIDsRequest struct {
+	Account         string     `protobuf:"bytes,1,opt,name=account,proto3" json:"account,omitempty"`
+	Changed         *time.Time `protobuf:"bytes,2,opt,name=changed,proto3,stdtime" json:"changed,omitempty"`
+	Expired         bool       `protobuf:"varint,3,opt,name=expired,proto3" json:"expired,omitempty"`
+	OverGrace       bool       `protobuf:"varint,4,opt,name=over_grace,json=overGrace,proto3" json:"over_grace,omitempty"`
+	ResponseMaxSize uint32     `protobuf:"varint,5,opt,name=response_max_size,json=responseMaxSize,proto3" json:"response_max_size,omitempty"`
+}
+
+func (m *QueryListDIDsRequest) Reset()         { *m = QueryListDIDsRequest{} }
+func (m *QueryListDIDsRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryListDIDsRequest) ProtoMessage()    {}
+func (*QueryListDIDsRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b4c4a32fec548b8c, []int{2}
+}
+func (m *QueryListDIDsRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryListDIDsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryListDIDsRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryListDIDsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryListDIDsRequest.Merge(m, src)
+}
+func (m *QueryListDIDsRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryListDIDsRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryListDIDsRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryListDIDsRequest proto.InternalMessageInfo
+
+func (m *QueryListDIDsRequest) GetAccount() string {
+	if m != nil {
+		return m.Account
+	}
+	return ""
+}
+
+func (m *QueryListDIDsRequest) GetChanged() *time.Time {
+	if m != nil {
+		return m.Changed
+	}
+	return nil
+}
+
+func (m *QueryListDIDsRequest) GetExpired() bool {
+	if m != nil {
+		return m.Expired
+	}
+	return false
+}
+
+func (m *QueryListDIDsRequest) GetOverGrace() bool {
+	if m != nil {
+		return m.OverGrace
+	}
+	return false
+}
+
+func (m *QueryListDIDsRequest) GetResponseMaxSize() uint32 {
+	if m != nil {
+		return m.ResponseMaxSize
+	}
+	return 0
+}
+
+type QueryListDIDsResponse struct {
+	Dids []DIDDirectory `protobuf:"bytes,1,rep,name=dids,proto3" json:"dids"`
+}
+
+func (m *QueryListDIDsResponse) Reset()         { *m = QueryListDIDsResponse{} }
+func (m *QueryListDIDsResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryListDIDsResponse) ProtoMessage()    {}
+func (*QueryListDIDsResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b4c4a32fec548b8c, []int{3}
+}
+func (m *QueryListDIDsResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryListDIDsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryListDIDsResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryListDIDsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryListDIDsResponse.Merge(m, src)
+}
+func (m *QueryListDIDsResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryListDIDsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryListDIDsResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryListDIDsResponse proto.InternalMessageInfo
+
+func (m *QueryListDIDsResponse) GetDids() []DIDDirectory {
+	if m != nil {
+		return m.Dids
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*QueryParamsRequest)(nil), "veranablockchain.diddirectory.QueryParamsRequest")
 	proto.RegisterType((*QueryParamsResponse)(nil), "veranablockchain.diddirectory.QueryParamsResponse")
+	proto.RegisterType((*QueryListDIDsRequest)(nil), "veranablockchain.diddirectory.QueryListDIDsRequest")
+	proto.RegisterType((*QueryListDIDsResponse)(nil), "veranablockchain.diddirectory.QueryListDIDsResponse")
 }
 
 func init() {
@@ -124,28 +251,44 @@ func init() {
 }
 
 var fileDescriptor_b4c4a32fec548b8c = []byte{
-	// 335 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xd2, 0x2c, 0x4b, 0x2d, 0x4a,
-	0xcc, 0x4b, 0x4c, 0xca, 0xc9, 0x4f, 0xce, 0x4e, 0xce, 0x48, 0xcc, 0xcc, 0xd3, 0x4f, 0xc9, 0x4c,
-	0x49, 0xc9, 0x2c, 0x4a, 0x4d, 0x2e, 0xc9, 0x2f, 0xaa, 0xd4, 0x2f, 0x2c, 0x4d, 0x2d, 0xaa, 0xd4,
-	0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x92, 0x45, 0x57, 0xaa, 0x87, 0xac, 0x54, 0x4a, 0x30, 0x31,
-	0x37, 0x33, 0x2f, 0x5f, 0x1f, 0x4c, 0x42, 0x74, 0x48, 0x89, 0xa4, 0xe7, 0xa7, 0xe7, 0x83, 0x99,
-	0xfa, 0x20, 0x16, 0x54, 0x54, 0x26, 0x3d, 0x3f, 0x3f, 0x3d, 0x27, 0x55, 0x3f, 0xb1, 0x20, 0x53,
-	0x3f, 0x31, 0x2f, 0x2f, 0xbf, 0x24, 0xb1, 0x24, 0x33, 0x3f, 0xaf, 0x18, 0x2a, 0xab, 0x95, 0x9c,
-	0x5f, 0x9c, 0x9b, 0x5f, 0xac, 0x9f, 0x94, 0x58, 0x9c, 0x0a, 0xb1, 0x5e, 0xbf, 0xcc, 0x30, 0x29,
-	0xb5, 0x24, 0xd1, 0x50, 0xbf, 0x20, 0x31, 0x3d, 0x33, 0x0f, 0xac, 0x18, 0xa6, 0x16, 0xbf, 0xe3,
-	0x0b, 0x12, 0x8b, 0x12, 0x73, 0xa1, 0xe6, 0x2a, 0x89, 0x70, 0x09, 0x05, 0x82, 0x4c, 0x0b, 0x00,
-	0x0b, 0x06, 0xa5, 0x16, 0x96, 0xa6, 0x16, 0x97, 0x28, 0xc5, 0x73, 0x09, 0xa3, 0x88, 0x16, 0x17,
-	0xe4, 0xe7, 0x15, 0xa7, 0x0a, 0x79, 0x70, 0xb1, 0x41, 0x34, 0x4b, 0x30, 0x2a, 0x30, 0x6a, 0x70,
-	0x1b, 0xa9, 0xea, 0xe1, 0xf5, 0xbb, 0x1e, 0x44, 0xbb, 0x13, 0xe7, 0x89, 0x7b, 0xf2, 0x0c, 0x2b,
-	0x9e, 0x6f, 0xd0, 0x62, 0x0c, 0x82, 0xea, 0x37, 0xda, 0xca, 0xc8, 0xc5, 0x0a, 0xb6, 0x41, 0x68,
-	0x35, 0x23, 0x17, 0x1b, 0x44, 0x9d, 0x90, 0x21, 0x01, 0xe3, 0x30, 0x1d, 0x2a, 0x65, 0x44, 0x8a,
-	0x16, 0x88, 0x2f, 0x94, 0xac, 0x9a, 0x2e, 0x3f, 0x99, 0xcc, 0x64, 0x22, 0x64, 0xa4, 0x0f, 0xd1,
-	0xab, 0x9b, 0x93, 0x98, 0x54, 0x0c, 0x63, 0xe3, 0x0f, 0x34, 0xa7, 0xf0, 0x13, 0x8f, 0xe4, 0x18,
-	0x2f, 0x3c, 0x92, 0x63, 0x7c, 0xf0, 0x48, 0x8e, 0x71, 0xc2, 0x63, 0x39, 0x86, 0x0b, 0x8f, 0xe5,
-	0x18, 0x6e, 0x3c, 0x96, 0x63, 0x88, 0xb2, 0x4d, 0xcf, 0x2c, 0xc9, 0x28, 0x4d, 0xd2, 0x4b, 0xce,
-	0xcf, 0x25, 0x60, 0x6e, 0x05, 0xaa, 0xc9, 0x25, 0x95, 0x05, 0xa9, 0xc5, 0x49, 0x6c, 0xe0, 0xe8,
-	0x30, 0x06, 0x04, 0x00, 0x00, 0xff, 0xff, 0x3d, 0xa6, 0x96, 0xf5, 0x79, 0x02, 0x00, 0x00,
+	// 592 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x53, 0x4f, 0x6b, 0x13, 0x41,
+	0x1c, 0xcd, 0xf4, 0x7f, 0xa7, 0x48, 0xe9, 0x18, 0x71, 0x0d, 0x76, 0x53, 0x02, 0x42, 0xac, 0x74,
+	0x87, 0x6c, 0x7b, 0x12, 0x14, 0x0c, 0x11, 0x2d, 0x28, 0xe8, 0x56, 0x10, 0x3c, 0x18, 0x66, 0x77,
+	0xc6, 0xed, 0x60, 0x76, 0x67, 0x3b, 0x33, 0x09, 0x69, 0x8f, 0x7e, 0x00, 0x29, 0xf8, 0x25, 0x04,
+	0x2f, 0x1e, 0xfc, 0x0c, 0xd2, 0x63, 0xd1, 0x8b, 0xa7, 0x2a, 0xad, 0xe0, 0xd1, 0xaf, 0x20, 0x3b,
+	0xbb, 0x03, 0x1a, 0x25, 0xb1, 0x97, 0x30, 0xbf, 0xdf, 0xef, 0xbd, 0x79, 0xef, 0xf7, 0x32, 0x0b,
+	0xaf, 0x0f, 0x98, 0x24, 0x29, 0x09, 0x7b, 0x22, 0x7a, 0x19, 0xed, 0x12, 0x9e, 0x62, 0xca, 0x29,
+	0xe5, 0x92, 0x45, 0x5a, 0xc8, 0x7d, 0xbc, 0xd7, 0x67, 0x72, 0xdf, 0xcb, 0xa4, 0xd0, 0x02, 0xad,
+	0x8e, 0x42, 0xbd, 0xdf, 0xa1, 0xb5, 0x15, 0x92, 0xf0, 0x54, 0x60, 0xf3, 0x5b, 0x30, 0x6a, 0xd5,
+	0x58, 0xc4, 0xc2, 0x1c, 0x71, 0x7e, 0x2a, 0xbb, 0x57, 0x63, 0x21, 0xe2, 0x1e, 0xc3, 0x24, 0xe3,
+	0x98, 0xa4, 0xa9, 0xd0, 0x44, 0x73, 0x91, 0xaa, 0x72, 0xba, 0x1e, 0x09, 0x95, 0x08, 0x85, 0x43,
+	0xa2, 0x58, 0x21, 0x8f, 0x07, 0xad, 0x90, 0x69, 0xd2, 0xc2, 0x19, 0x89, 0x79, 0x6a, 0xc0, 0x16,
+	0x3b, 0xde, 0x7c, 0x46, 0x24, 0x49, 0xec, 0xbd, 0xf5, 0x52, 0xd5, 0x54, 0x61, 0xff, 0x05, 0xd6,
+	0x3c, 0x61, 0x4a, 0x93, 0x24, 0x2b, 0x01, 0x57, 0x0a, 0xe1, 0x6e, 0xe1, 0xb7, 0x28, 0xca, 0xd1,
+	0x84, 0x90, 0xf4, 0x7e, 0xc6, 0x4a, 0x68, 0xa3, 0x0a, 0xd1, 0xe3, 0xdc, 0xf4, 0x23, 0xa3, 0x1d,
+	0xb0, 0xbd, 0x3e, 0x53, 0xba, 0xd1, 0x85, 0x17, 0xff, 0xe8, 0xaa, 0x4c, 0xa4, 0x8a, 0xa1, 0xfb,
+	0x70, 0xae, 0xf0, 0xe8, 0x80, 0x35, 0xd0, 0x5c, 0xf2, 0xaf, 0x79, 0x63, 0x23, 0xf6, 0x0a, 0x7a,
+	0x7b, 0xf1, 0xe8, 0xa4, 0x5e, 0x79, 0xfb, 0xe3, 0xfd, 0x3a, 0x08, 0x4a, 0x7e, 0xe3, 0x27, 0x80,
+	0x55, 0xa3, 0xf0, 0x80, 0x2b, 0xdd, 0xd9, 0xee, 0x58, 0x65, 0xe4, 0xc3, 0x79, 0x12, 0x45, 0xa2,
+	0x9f, 0x6a, 0xa3, 0xb1, 0xd8, 0x76, 0x3e, 0x7d, 0xd8, 0xa8, 0x96, 0xdb, 0xdd, 0xa1, 0x54, 0x32,
+	0xa5, 0x76, 0xb4, 0xe4, 0x69, 0x1c, 0x58, 0x20, 0xba, 0x0d, 0xe7, 0xa3, 0x5d, 0x92, 0xc6, 0x8c,
+	0x3a, 0x53, 0xc6, 0x57, 0xcd, 0x2b, 0xc2, 0xf3, 0x6c, 0x78, 0xde, 0x13, 0x1b, 0x5e, 0x7b, 0xe1,
+	0xe8, 0xa4, 0x0e, 0x0e, 0xbf, 0xd6, 0x41, 0x60, 0x49, 0xc8, 0x81, 0xf3, 0x6c, 0x98, 0x71, 0xc9,
+	0xa8, 0x33, 0xbd, 0x06, 0x9a, 0x0b, 0x81, 0x2d, 0xd1, 0x2a, 0x84, 0x62, 0xc0, 0x64, 0x37, 0x96,
+	0x24, 0x62, 0xce, 0x8c, 0x19, 0x2e, 0xe6, 0x9d, 0x7b, 0x79, 0x03, 0xad, 0xc3, 0x15, 0x59, 0x66,
+	0xd3, 0x4d, 0xc8, 0xb0, 0xab, 0xf8, 0x01, 0x73, 0x66, 0xd7, 0x40, 0xf3, 0x42, 0xb0, 0x6c, 0x07,
+	0x0f, 0xc9, 0x70, 0x87, 0x1f, 0xb0, 0xc6, 0x73, 0x78, 0x69, 0x64, 0xe1, 0x32, 0xd4, 0xbb, 0x70,
+	0x86, 0x72, 0x9a, 0x47, 0x3a, 0xdd, 0x5c, 0xf2, 0x6f, 0x4c, 0x88, 0xb4, 0xb3, 0xdd, 0xe9, 0xd8,
+	0xa2, 0x3d, 0x93, 0x07, 0x1b, 0x18, 0xba, 0xff, 0x71, 0x0a, 0xce, 0x1a, 0x01, 0xf4, 0x0e, 0xc0,
+	0xb9, 0x22, 0x79, 0xd4, 0x9a, 0x70, 0xdb, 0xdf, 0x7f, 0x7d, 0xcd, 0x3f, 0x0f, 0xa5, 0x58, 0xa1,
+	0x71, 0xf3, 0xd5, 0xe7, 0xef, 0x6f, 0xa6, 0xb6, 0x90, 0x8f, 0x0b, 0xee, 0x46, 0x8f, 0x84, 0xca,
+	0x9e, 0xc7, 0xbf, 0x76, 0xf4, 0x1a, 0xc0, 0x05, 0x9b, 0x09, 0xda, 0xfc, 0x1f, 0xf1, 0x91, 0x27,
+	0x53, 0xdb, 0x3a, 0x1f, 0xa9, 0xf4, 0x7c, 0xd9, 0x78, 0x5e, 0x41, 0xcb, 0x98, 0x6a, 0x89, 0x07,
+	0x2d, 0x4c, 0x29, 0xee, 0x71, 0xa5, 0xdb, 0x4f, 0x8f, 0x4e, 0x5d, 0x70, 0x7c, 0xea, 0x82, 0x6f,
+	0xa7, 0x2e, 0x38, 0x3c, 0x73, 0x2b, 0xc7, 0x67, 0x6e, 0xe5, 0xcb, 0x99, 0x5b, 0x79, 0x76, 0x2b,
+	0xe6, 0x7a, 0xb7, 0x1f, 0x7a, 0x91, 0x48, 0x26, 0x2c, 0x3a, 0xfc, 0xc7, 0x07, 0x17, 0xce, 0x99,
+	0xd7, 0xb8, 0xf9, 0x2b, 0x00, 0x00, 0xff, 0xff, 0xde, 0x8e, 0x60, 0xc6, 0xc3, 0x04, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -162,6 +305,7 @@ const _ = grpc.SupportPackageIsVersion4
 type QueryClient interface {
 	// Parameters queries the parameters of the module.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
+	ListDIDs(ctx context.Context, in *QueryListDIDsRequest, opts ...grpc.CallOption) (*QueryListDIDsResponse, error)
 }
 
 type queryClient struct {
@@ -181,10 +325,20 @@ func (c *queryClient) Params(ctx context.Context, in *QueryParamsRequest, opts .
 	return out, nil
 }
 
+func (c *queryClient) ListDIDs(ctx context.Context, in *QueryListDIDsRequest, opts ...grpc.CallOption) (*QueryListDIDsResponse, error) {
+	out := new(QueryListDIDsResponse)
+	err := c.cc.Invoke(ctx, "/veranablockchain.diddirectory.Query/ListDIDs", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 type QueryServer interface {
 	// Parameters queries the parameters of the module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
+	ListDIDs(context.Context, *QueryListDIDsRequest) (*QueryListDIDsResponse, error)
 }
 
 // UnimplementedQueryServer can be embedded to have forward compatible implementations.
@@ -193,6 +347,9 @@ type UnimplementedQueryServer struct {
 
 func (*UnimplementedQueryServer) Params(ctx context.Context, req *QueryParamsRequest) (*QueryParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Params not implemented")
+}
+func (*UnimplementedQueryServer) ListDIDs(ctx context.Context, req *QueryListDIDsRequest) (*QueryListDIDsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListDIDs not implemented")
 }
 
 func RegisterQueryServer(s grpc1.Server, srv QueryServer) {
@@ -217,6 +374,24 @@ func _Query_Params_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_ListDIDs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryListDIDsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).ListDIDs(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/veranablockchain.diddirectory.Query/ListDIDs",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).ListDIDs(ctx, req.(*QueryListDIDsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var Query_serviceDesc = _Query_serviceDesc
 var _Query_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "veranablockchain.diddirectory.Query",
@@ -225,6 +400,10 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Params",
 			Handler:    _Query_Params_Handler,
+		},
+		{
+			MethodName: "ListDIDs",
+			Handler:    _Query_ListDIDs_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -287,6 +466,108 @@ func (m *QueryParamsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *QueryListDIDsRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryListDIDsRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryListDIDsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ResponseMaxSize != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.ResponseMaxSize))
+		i--
+		dAtA[i] = 0x28
+	}
+	if m.OverGrace {
+		i--
+		if m.OverGrace {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x20
+	}
+	if m.Expired {
+		i--
+		if m.Expired {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.Changed != nil {
+		n2, err2 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(*m.Changed, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(*m.Changed):])
+		if err2 != nil {
+			return 0, err2
+		}
+		i -= n2
+		i = encodeVarintQuery(dAtA, i, uint64(n2))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Account) > 0 {
+		i -= len(m.Account)
+		copy(dAtA[i:], m.Account)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.Account)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryListDIDsResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryListDIDsResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryListDIDsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Dids) > 0 {
+		for iNdEx := len(m.Dids) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Dids[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintQuery(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintQuery(dAtA []byte, offset int, v uint64) int {
 	offset -= sovQuery(v)
 	base := offset
@@ -315,6 +596,47 @@ func (m *QueryParamsResponse) Size() (n int) {
 	_ = l
 	l = m.Params.Size()
 	n += 1 + l + sovQuery(uint64(l))
+	return n
+}
+
+func (m *QueryListDIDsRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Account)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	if m.Changed != nil {
+		l = github_com_cosmos_gogoproto_types.SizeOfStdTime(*m.Changed)
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	if m.Expired {
+		n += 2
+	}
+	if m.OverGrace {
+		n += 2
+	}
+	if m.ResponseMaxSize != 0 {
+		n += 1 + sovQuery(uint64(m.ResponseMaxSize))
+	}
+	return n
+}
+
+func (m *QueryListDIDsResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Dids) > 0 {
+		for _, e := range m.Dids {
+			l = e.Size()
+			n += 1 + l + sovQuery(uint64(l))
+		}
+	}
 	return n
 }
 
@@ -433,6 +755,267 @@ func (m *QueryParamsResponse) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if err := m.Params.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryListDIDsRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryListDIDsRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryListDIDsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Account", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Account = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Changed", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Changed == nil {
+				m.Changed = new(time.Time)
+			}
+			if err := github_com_cosmos_gogoproto_types.StdTimeUnmarshal(m.Changed, dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Expired", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Expired = bool(v != 0)
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OverGrace", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.OverGrace = bool(v != 0)
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ResponseMaxSize", wireType)
+			}
+			m.ResponseMaxSize = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ResponseMaxSize |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryListDIDsResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryListDIDsResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryListDIDsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Dids", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Dids = append(m.Dids, DIDDirectory{})
+			if err := m.Dids[len(m.Dids)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

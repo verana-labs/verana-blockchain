@@ -36,6 +36,6 @@ test-verbose:
 
 test-coverage:
 	@echo "Running tests with coverage..."
-	@go test -coverprofile=coverage.out ./x/trustregistry/keeper/...
+	@go test -coverprofile=coverage.out ./x/trustregistry/keeper/... ./x/diddirectory/keeper/...
 	@go tool cover -html=coverage.out -o coverage.html
 	@echo "Coverage report generated: coverage.html"

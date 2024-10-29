@@ -17,6 +17,39 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Use:       "params",
 					Short:     "Shows the parameters of the module",
 				},
+				{
+					RpcMethod: "ListDIDs",
+					Use:       "list-dids",
+					Short:     "List DIDs with optional filtering",
+					Long:      "List DIDs in the directory with optional filtering by controller, changed time, expiration status, and pagination",
+					FlagOptions: map[string]*autocliv1.FlagOptions{
+						"account": {
+							Name:         "account",
+							Usage:        "Filter by controller account address",
+							DefaultValue: "",
+						},
+						"changed": {
+							Name:         "changed-after",
+							Usage:        "Filter by changed time (RFC3339 format)",
+							DefaultValue: "",
+						},
+						"expired": {
+							Name:         "expired",
+							Usage:        "Show expired services",
+							DefaultValue: "false",
+						},
+						"over_grace": {
+							Name:         "over-grace",
+							Usage:        "Show services over grace period",
+							DefaultValue: "false",
+						},
+						"response_max_size": {
+							Name:         "max-results",
+							Usage:        "Maximum number of results (1-1024, default 64)",
+							DefaultValue: "64",
+						},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},
