@@ -199,3 +199,89 @@ Note: Replace `cooluser`, chain ID, gas prices, and other parameters according t
    # Check validator set
    veranad q tendermint-validator-set --home ~/.verana
    ```
+
+## Interacting with the DID Directory Module
+
+### Using CLI
+
+1. Add a DID:
+   ```bash
+   veranad tx diddirectory add-did \
+   did:example:123456789abcdefghi \
+   5 \
+   --from cooluser \
+   --keyring-backend test \
+   --chain-id test-1 \
+   --gas 800000 \
+   --gas-adjustment 1.3 \
+   --gas-prices 1.1uvna
+   ```
+   Note: The second parameter (5) is the number of years for DID registration (1-31 years, defaults to 1 if not specified)
+
+2. Renew a DID:
+   ```bash
+   veranad tx diddirectory renew-did \
+   did:example:123456789abcdefghi \
+   2 \
+   --from cooluser \
+   --keyring-backend test \
+   --chain-id test-1 \
+   --gas 800000 \
+   --gas-adjustment 1.3 \
+   --gas-prices 1.1uvna
+   ```
+   Note: The second parameter (2) is the number of additional years to extend the registration
+
+3. Remove a DID:
+   ```bash
+   veranad tx diddirectory remove-did \
+   did:example:123456789abcdefghi \
+   --from cooluser \
+   --keyring-backend test \
+   --chain-id test-1 \
+   --gas 800000 \
+   --gas-adjustment 1.3 \
+   --gas-prices 1.1uvna
+   ```
+   Note: Only the controller can remove before grace period. Anyone can remove after grace period.
+
+4. Touch a DID:
+   ```bash
+   veranad tx diddirectory touch-did \
+   did:example:123456789abcdefghi \
+   --from cooluser \
+   --keyring-backend test \
+   --chain-id test-1 \
+   --gas 800000 \
+   --gas-adjustment 1.3 \
+   --gas-prices 1.1uvna
+   ```
+   Note: Updates the last modified time to trigger reindexing
+
+### Queries
+
+1. List DIDs:
+   ```bash
+   veranad q diddirectory list-dids \
+   --account <controller_address> \
+   --changed "2024-01-01T00:00:00Z" \
+   --expired=false \
+   --over-grace=false \
+   --max-results 64 \
+   --output json
+   ```
+
+2. Get DID Details:
+   ```bash
+   veranad q diddirectory get-did \
+   did:example:123456789abcdefghi \
+   --output json
+   ```
+
+### Query Parameters
+
+- `account`: Filter DIDs by controller account address
+- `changed-after`: Filter DIDs modified after timestamp
+- `expired`: Show expired DIDs
+- `over-grace`: Show DIDs that are past grace period
+- `max-results`: Maximum number of results to return (1-1024, default 64)

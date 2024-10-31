@@ -29,7 +29,7 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 							DefaultValue: "",
 						},
 						"changed": {
-							Name:         "changed-after",
+							Name:         "changed",
 							Usage:        "Filter by changed time (RFC3339 format)",
 							DefaultValue: "",
 						},
