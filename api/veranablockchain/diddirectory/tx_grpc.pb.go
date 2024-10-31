@@ -21,6 +21,9 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	Msg_UpdateParams_FullMethodName = "/veranablockchain.diddirectory.Msg/UpdateParams"
 	Msg_AddDID_FullMethodName       = "/veranablockchain.diddirectory.Msg/AddDID"
+	Msg_RenewDID_FullMethodName     = "/veranablockchain.diddirectory.Msg/RenewDID"
+	Msg_RemoveDID_FullMethodName    = "/veranablockchain.diddirectory.Msg/RemoveDID"
+	Msg_TouchDID_FullMethodName     = "/veranablockchain.diddirectory.Msg/TouchDID"
 )
 
 // MsgClient is the client API for Msg service.
@@ -31,6 +34,9 @@ type MsgClient interface {
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
 	AddDID(ctx context.Context, in *MsgAddDID, opts ...grpc.CallOption) (*MsgAddDIDResponse, error)
+	RenewDID(ctx context.Context, in *MsgRenewDID, opts ...grpc.CallOption) (*MsgRenewDIDResponse, error)
+	RemoveDID(ctx context.Context, in *MsgRemoveDID, opts ...grpc.CallOption) (*MsgRemoveDIDResponse, error)
+	TouchDID(ctx context.Context, in *MsgTouchDID, opts ...grpc.CallOption) (*MsgTouchDIDResponse, error)
 }
 
 type msgClient struct {
@@ -59,6 +65,33 @@ func (c *msgClient) AddDID(ctx context.Context, in *MsgAddDID, opts ...grpc.Call
 	return out, nil
 }
 
+func (c *msgClient) RenewDID(ctx context.Context, in *MsgRenewDID, opts ...grpc.CallOption) (*MsgRenewDIDResponse, error) {
+	out := new(MsgRenewDIDResponse)
+	err := c.cc.Invoke(ctx, Msg_RenewDID_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) RemoveDID(ctx context.Context, in *MsgRemoveDID, opts ...grpc.CallOption) (*MsgRemoveDIDResponse, error) {
+	out := new(MsgRemoveDIDResponse)
+	err := c.cc.Invoke(ctx, Msg_RemoveDID_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) TouchDID(ctx context.Context, in *MsgTouchDID, opts ...grpc.CallOption) (*MsgTouchDIDResponse, error) {
+	out := new(MsgTouchDIDResponse)
+	err := c.cc.Invoke(ctx, Msg_TouchDID_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
@@ -67,6 +100,9 @@ type MsgServer interface {
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
 	AddDID(context.Context, *MsgAddDID) (*MsgAddDIDResponse, error)
+	RenewDID(context.Context, *MsgRenewDID) (*MsgRenewDIDResponse, error)
+	RemoveDID(context.Context, *MsgRemoveDID) (*MsgRemoveDIDResponse, error)
+	TouchDID(context.Context, *MsgTouchDID) (*MsgTouchDIDResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -79,6 +115,15 @@ func (UnimplementedMsgServer) UpdateParams(context.Context, *MsgUpdateParams) (*
 }
 func (UnimplementedMsgServer) AddDID(context.Context, *MsgAddDID) (*MsgAddDIDResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddDID not implemented")
+}
+func (UnimplementedMsgServer) RenewDID(context.Context, *MsgRenewDID) (*MsgRenewDIDResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RenewDID not implemented")
+}
+func (UnimplementedMsgServer) RemoveDID(context.Context, *MsgRemoveDID) (*MsgRemoveDIDResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveDID not implemented")
+}
+func (UnimplementedMsgServer) TouchDID(context.Context, *MsgTouchDID) (*MsgTouchDIDResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method TouchDID not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -129,6 +174,60 @@ func _Msg_AddDID_Handler(srv interface{}, ctx context.Context, dec func(interfac
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_RenewDID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgRenewDID)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).RenewDID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_RenewDID_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).RenewDID(ctx, req.(*MsgRenewDID))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_RemoveDID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgRemoveDID)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).RemoveDID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_RemoveDID_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).RemoveDID(ctx, req.(*MsgRemoveDID))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_TouchDID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgTouchDID)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).TouchDID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_TouchDID_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).TouchDID(ctx, req.(*MsgTouchDID))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -143,6 +242,18 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AddDID",
 			Handler:    _Msg_AddDID_Handler,
+		},
+		{
+			MethodName: "RenewDID",
+			Handler:    _Msg_RenewDID_Handler,
+		},
+		{
+			MethodName: "RemoveDID",
+			Handler:    _Msg_RemoveDID_Handler,
+		},
+		{
+			MethodName: "TouchDID",
+			Handler:    _Msg_TouchDID_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

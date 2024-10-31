@@ -21,6 +21,9 @@ service Query {
   rpc ListDIDs(QueryListDIDsRequest) returns (QueryListDIDsResponse) {
     option (google.api.http).get = "/dtr/v1/dd/list";
   }
+  rpc GetDID(QueryGetDIDRequest) returns (QueryGetDIDResponse) {
+    option (google.api.http).get = "/dtr/v1/did/get/{did}";
+  }
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -45,4 +48,12 @@ message QueryListDIDsRequest {
 
 message QueryListDIDsResponse {
   repeated DIDDirectory dids = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryGetDIDRequest {
+  string did = 1;
+}
+
+message QueryGetDIDResponse {
+  DIDDirectory did_entry = 1 [(gogoproto.nullable) = false];
 }

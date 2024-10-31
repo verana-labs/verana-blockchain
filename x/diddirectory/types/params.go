@@ -9,7 +9,6 @@ var _ paramtypes.ParamSet = (*Params)(nil)
 
 const (
 	DefaultDidDirectoryTrustDeposit = uint64(5)
-	DefaultDidDirectoryRemovalGas   = uint64(200000) // To be calculated by implementor
 	DefaultDidDirectoryGracePeriod  = uint64(30)
 )
 
@@ -19,10 +18,9 @@ func ParamKeyTable() paramtypes.KeyTable {
 }
 
 // NewParams creates a new Params instance
-func NewParams(trustDeposit, removalGas, gracePeriod uint64) Params {
+func NewParams(trustDeposit, gracePeriod uint64) Params {
 	return Params{
 		DidDirectoryTrustDeposit: trustDeposit,
-		DidDirectoryRemovalGas:   removalGas,
 		DidDirectoryGracePeriod:  gracePeriod,
 	}
 }
@@ -31,7 +29,6 @@ func NewParams(trustDeposit, removalGas, gracePeriod uint64) Params {
 func DefaultParams() Params {
 	return NewParams(
 		DefaultDidDirectoryTrustDeposit,
-		DefaultDidDirectoryRemovalGas,
 		DefaultDidDirectoryGracePeriod,
 	)
 }
@@ -46,9 +43,6 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 func (p Params) Validate() error {
 	if p.DidDirectoryTrustDeposit == 0 {
 		return fmt.Errorf("did directory trust deposit must be positive")
-	}
-	if p.DidDirectoryRemovalGas == 0 {
-		return fmt.Errorf("did directory removal gas must be positive")
 	}
 	if p.DidDirectoryGracePeriod == 0 {
 		return fmt.Errorf("did directory grace period must be positive")

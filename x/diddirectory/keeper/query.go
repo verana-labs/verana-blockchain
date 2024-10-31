@@ -76,3 +76,24 @@ func (k Keeper) ListDIDs(ctx context.Context, req *types.QueryListDIDsRequest) (
 		Dids: dids,
 	}, nil
 }
+
+func (k Keeper) GetDID(ctx context.Context, req *types.QueryGetDIDRequest) (*types.QueryGetDIDResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "empty request")
+	}
+
+	// Check DID format
+	if !isValidDID(req.Did) {
+		return nil, status.Error(codes.InvalidArgument, "invalid DID syntax")
+	}
+
+	// Get the DID entry
+	didEntry, err := k.DIDDirectory.Get(ctx, req.Did)
+	if err != nil {
+		return nil, status.Error(codes.NotFound, fmt.Sprintf("DID %s not found", req.Did))
+	}
+
+	return &types.QueryGetDIDResponse{
+		DidEntry: didEntry,
+	}, nil
+}

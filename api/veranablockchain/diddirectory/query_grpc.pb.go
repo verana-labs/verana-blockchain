@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	Query_Params_FullMethodName   = "/veranablockchain.diddirectory.Query/Params"
 	Query_ListDIDs_FullMethodName = "/veranablockchain.diddirectory.Query/ListDIDs"
+	Query_GetDID_FullMethodName   = "/veranablockchain.diddirectory.Query/GetDID"
 )
 
 // QueryClient is the client API for Query service.
@@ -30,6 +31,7 @@ type QueryClient interface {
 	// Parameters queries the parameters of the module.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
 	ListDIDs(ctx context.Context, in *QueryListDIDsRequest, opts ...grpc.CallOption) (*QueryListDIDsResponse, error)
+	GetDID(ctx context.Context, in *QueryGetDIDRequest, opts ...grpc.CallOption) (*QueryGetDIDResponse, error)
 }
 
 type queryClient struct {
@@ -58,6 +60,15 @@ func (c *queryClient) ListDIDs(ctx context.Context, in *QueryListDIDsRequest, op
 	return out, nil
 }
 
+func (c *queryClient) GetDID(ctx context.Context, in *QueryGetDIDRequest, opts ...grpc.CallOption) (*QueryGetDIDResponse, error) {
+	out := new(QueryGetDIDResponse)
+	err := c.cc.Invoke(ctx, Query_GetDID_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -65,6 +76,7 @@ type QueryServer interface {
 	// Parameters queries the parameters of the module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
 	ListDIDs(context.Context, *QueryListDIDsRequest) (*QueryListDIDsResponse, error)
+	GetDID(context.Context, *QueryGetDIDRequest) (*QueryGetDIDResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -77,6 +89,9 @@ func (UnimplementedQueryServer) Params(context.Context, *QueryParamsRequest) (*Q
 }
 func (UnimplementedQueryServer) ListDIDs(context.Context, *QueryListDIDsRequest) (*QueryListDIDsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListDIDs not implemented")
+}
+func (UnimplementedQueryServer) GetDID(context.Context, *QueryGetDIDRequest) (*QueryGetDIDResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetDID not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -127,6 +142,24 @@ func _Query_ListDIDs_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_GetDID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryGetDIDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).GetDID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_GetDID_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).GetDID(ctx, req.(*QueryGetDIDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -141,6 +174,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListDIDs",
 			Handler:    _Query_ListDIDs_Handler,
+		},
+		{
+			MethodName: "GetDID",
+			Handler:    _Query_GetDID_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

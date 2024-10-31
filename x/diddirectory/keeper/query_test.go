@@ -1,6 +1,7 @@
 package keeper_test
 
 import (
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"testing"
 	"time"
 
@@ -156,6 +157,90 @@ func TestListDIDs(t *testing.T) {
 			// Verify sorting by modified time
 			for i := 1; i < len(response.Dids); i++ {
 				require.True(t, response.Dids[i-1].Modified.Before(response.Dids[i].Modified))
+			}
+		})
+	}
+}
+
+func TestQueryGetDID(t *testing.T) {
+	k, ms, ctx := setupMsgServer(t)
+
+	creator := sdk.AccAddress([]byte("test_creator")).String()
+	validDID := "did:example:123456789abcdefghi"
+
+	// Create a DID for testing
+	createMsg := &types.MsgAddDID{
+		Creator: creator,
+		Did:     validDID,
+		Years:   1,
+	}
+	_, err := ms.AddDID(ctx, createMsg)
+	require.NoError(t, err)
+
+	testCases := []struct {
+		name          string
+		request       *types.QueryGetDIDRequest
+		expectedError bool
+		check         func(*testing.T, *types.QueryGetDIDResponse)
+	}{
+		{
+			name: "Valid Query",
+			request: &types.QueryGetDIDRequest{
+				Did: validDID,
+			},
+			expectedError: false,
+			check: func(t *testing.T, response *types.QueryGetDIDResponse) {
+				require.NotNil(t, response)
+				require.Equal(t, validDID, response.DidEntry.Did)
+				require.Equal(t, creator, response.DidEntry.Controller)
+				require.False(t, response.DidEntry.Created.IsZero())
+				require.False(t, response.DidEntry.Modified.IsZero())
+				require.False(t, response.DidEntry.Exp.IsZero())
+			},
+		},
+		{
+			name:          "Nil Request",
+			request:       nil,
+			expectedError: true,
+		},
+		{
+			name: "Empty DID",
+			request: &types.QueryGetDIDRequest{
+				Did: "",
+			},
+			expectedError: true,
+		},
+		{
+			name: "Invalid DID Format",
+			request: &types.QueryGetDIDRequest{
+				Did: "invalid-did",
+			},
+			expectedError: true,
+		},
+		{
+			name: "Non-existent DID",
+			request: &types.QueryGetDIDRequest{
+				Did: "did:example:nonexistent",
+			},
+			expectedError: true,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			response, err := k.GetDID(ctx, tc.request)
+
+			if tc.expectedError {
+				require.Error(t, err)
+				require.Nil(t, response)
+				return
+			}
+
+			require.NoError(t, err)
+			require.NotNil(t, response)
+
+			if tc.check != nil {
+				tc.check(t, response)
 			}
 		})
 	}

@@ -15,11 +15,7 @@ message Params {
     (gogoproto.moretags) = "yaml:\"did_directory_trust_deposit\"",
     (amino.dont_omitempty) = true
   ];
-  uint64 did_directory_removal_gas = 2 [
-    (gogoproto.moretags) = "yaml:\"did_directory_removal_gas\"",
-    (amino.dont_omitempty) = true
-  ];
-  uint64 did_directory_grace_period = 3 [
+  uint64 did_directory_grace_period = 2 [
     (gogoproto.moretags) = "yaml:\"did_directory_grace_period\"",
     (amino.dont_omitempty) = true
   ];

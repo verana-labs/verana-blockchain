@@ -50,6 +50,15 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 						},
 					},
 				},
+				{
+					RpcMethod: "GetDID",
+					Use:       "get-did [did]",
+					Short:     "Get details of a DID entry",
+					Long:      "Get the full details of a DID entry from the directory",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "did"},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},
@@ -72,6 +81,37 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 							ProtoField: "years",
 							Optional:   true,
 						},
+					},
+				},
+				{
+					RpcMethod: "RenewDID",
+					Use:       "renew-did [did] [years]",
+					Short:     "Renew an existing DID registration",
+					Long:      "Renew an existing DID registration for additional years (1-31, default 1). Must be called by the DID controller.",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "did"},
+						{
+							ProtoField: "years",
+							Optional:   true,
+						},
+					},
+				},
+				{
+					RpcMethod: "RemoveDID",
+					Use:       "remove-did [did]",
+					Short:     "Remove a DID from the directory",
+					Long:      "Remove a DID from the directory. Only the controller can remove before grace period, anyone can remove after grace period has passed.",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "did"},
+					},
+				},
+				{
+					RpcMethod: "TouchDID",
+					Use:       "touch-did [did]",
+					Short:     "Update the last modified time of a DID",
+					Long:      "Update the last modified time of a DID to indicate it should be reindexed by DID resolvers and crawlers",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "did"},
 					},
 				},
 				// this line is used by ignite scaffolding # autocli/tx
