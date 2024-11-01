@@ -1,6 +1,7 @@
 package app
 
 import (
+	"github.com/verana-labs/verana-blockchain/app/upgrades"
 	"io"
 
 	"cosmossdk.io/x/evidence"
@@ -148,6 +149,7 @@ type App struct {
 	appCodec          codec.Codec
 	txConfig          client.TxConfig
 	interfaceRegistry codectypes.InterfaceRegistry
+	configurator      module.Configurator
 
 	// keepers
 	AccountKeeper         authkeeper.AccountKeeper
@@ -229,6 +231,10 @@ func AppConfig() depinject.Config {
 			},
 		),
 	)
+}
+
+func (app *App) GetDiddirectoryKeeper() diddirectorymodulekeeper.Keeper {
+	return app.DiddirectoryKeeper
 }
 
 // New returns a reference to an initialized App.
@@ -335,11 +341,31 @@ func New(
 		return app.App.InitChainer(ctx, req)
 	})
 
+	app.configurator = module.NewConfigurator(app.appCodec, app.MsgServiceRouter(), app.GRPCQueryRouter())
+
+	// Set up upgrade handlers
+	app.setupUpgradeHandlers()
+
 	if err := app.Load(loadLatest); err != nil {
 		return nil, err
 	}
 
 	return app, nil
+}
+
+// Add setupUpgradeHandlers function
+func (app *App) setupUpgradeHandlers() {
+	for _, u := range upgrades.Upgrades {
+		app.UpgradeKeeper.SetUpgradeHandler(
+			u.UpgradeName,
+			u.CreateUpgradeHandler(
+				app.ModuleManager,
+				app.configurator,
+				app.BaseApp,
+				app,
+			),
+		)
+	}
 }
 
 // LegacyAmino returns App's amino codec.
