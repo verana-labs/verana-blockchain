@@ -1,6 +1,8 @@
 package app
 
 import (
+	upgradetypes "cosmossdk.io/x/upgrade/types"
+	"fmt"
 	"github.com/verana-labs/verana-blockchain/app/upgrades"
 	"io"
 
@@ -345,12 +347,30 @@ func New(
 
 	// Set up upgrade handlers
 	app.setupUpgradeHandlers()
+	app.setupUpgradeStoreLoaders()
 
 	if err := app.Load(loadLatest); err != nil {
 		return nil, err
 	}
 
 	return app, nil
+}
+
+func (app *App) setupUpgradeStoreLoaders() {
+	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
+	if err != nil {
+		panic(fmt.Sprintf("failed to read upgrade info from disk %s", err))
+	}
+
+	if app.UpgradeKeeper.IsSkipHeight(upgradeInfo.Height) {
+		return
+	}
+
+	for _, upgrade := range upgrades.Upgrades {
+		if upgradeInfo.Name == upgrade.UpgradeName {
+			app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &upgrade.StoreUpgrades))
+		}
+	}
 }
 
 // Add setupUpgradeHandlers function

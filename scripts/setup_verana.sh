@@ -95,6 +95,15 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+# Update governance params in genesis.json
+log "Updating governance parameters in genesis.json..."
+sed -i '' 's/"max_deposit_period": ".*"/"max_deposit_period": "100s"/' "$GENESIS_JSON_PATH"
+sed -i '' 's/"voting_period": ".*"/"voting_period": "100s"/' "$GENESIS_JSON_PATH"
+if [ $? -ne 0 ]; then
+    log "Error: Failed to update governance parameters in genesis.json."
+    exit 1
+fi
+
 # Update app.toml
 log "Updating app.toml..."
 sed -i '' 's/enable = false/enable = true/' "$APP_TOML_PATH"
