@@ -6,24 +6,29 @@ package types
 import (
 	context "context"
 	fmt "fmt"
+	_ "github.com/cosmos/cosmos-proto"
 	_ "github.com/cosmos/cosmos-sdk/types/query"
 	_ "github.com/cosmos/cosmos-sdk/types/tx/amino"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	grpc1 "github.com/cosmos/gogoproto/grpc"
 	proto "github.com/cosmos/gogoproto/proto"
+	github_com_cosmos_gogoproto_types "github.com/cosmos/gogoproto/types"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	_ "google.golang.org/protobuf/types/known/timestamppb"
 	io "io"
 	math "math"
 	math_bits "math/bits"
+	time "time"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+var _ = time.Kitchen
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the proto package it is being compiled against.
@@ -116,7 +121,7 @@ func (m *QueryParamsResponse) GetParams() Params {
 
 // QueryGetTrustRegistryRequest is the request type for the Query/GetTrustRegistry RPC method.
 type QueryGetTrustRegistryRequest struct {
-	Did               string `protobuf:"bytes,1,opt,name=did,proto3" json:"did,omitempty"`
+	TrId              uint64 `protobuf:"varint,1,opt,name=tr_id,json=trId,proto3" json:"tr_id,omitempty"`
 	ActiveGfOnly      bool   `protobuf:"varint,2,opt,name=active_gf_only,json=activeGfOnly,proto3" json:"active_gf_only,omitempty"`
 	PreferredLanguage string `protobuf:"bytes,3,opt,name=preferred_language,json=preferredLanguage,proto3" json:"preferred_language,omitempty"`
 }
@@ -154,11 +159,11 @@ func (m *QueryGetTrustRegistryRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryGetTrustRegistryRequest proto.InternalMessageInfo
 
-func (m *QueryGetTrustRegistryRequest) GetDid() string {
+func (m *QueryGetTrustRegistryRequest) GetTrId() uint64 {
 	if m != nil {
-		return m.Did
+		return m.TrId
 	}
-	return ""
+	return 0
 }
 
 func (m *QueryGetTrustRegistryRequest) GetActiveGfOnly() bool {
@@ -236,11 +241,196 @@ func (m *QueryGetTrustRegistryResponse) GetDocuments() []GovernanceFrameworkDocu
 	return nil
 }
 
+// QueryListTrustRegistriesRequest is the request type for the Query/ListTrustRegistries RPC method.
+type QueryListTrustRegistriesRequest struct {
+	Controller        string     `protobuf:"bytes,1,opt,name=controller,proto3" json:"controller,omitempty"`
+	ModifiedAfter     *time.Time `protobuf:"bytes,2,opt,name=modified_after,json=modifiedAfter,proto3,stdtime" json:"modified_after,omitempty"`
+	ActiveGfOnly      bool       `protobuf:"varint,3,opt,name=active_gf_only,json=activeGfOnly,proto3" json:"active_gf_only,omitempty"`
+	PreferredLanguage string     `protobuf:"bytes,4,opt,name=preferred_language,json=preferredLanguage,proto3" json:"preferred_language,omitempty"`
+	ResponseMaxSize   uint32     `protobuf:"varint,5,opt,name=response_max_size,json=responseMaxSize,proto3" json:"response_max_size,omitempty"`
+}
+
+func (m *QueryListTrustRegistriesRequest) Reset()         { *m = QueryListTrustRegistriesRequest{} }
+func (m *QueryListTrustRegistriesRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryListTrustRegistriesRequest) ProtoMessage()    {}
+func (*QueryListTrustRegistriesRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3e500ee22150b7e8, []int{4}
+}
+func (m *QueryListTrustRegistriesRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryListTrustRegistriesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryListTrustRegistriesRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryListTrustRegistriesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryListTrustRegistriesRequest.Merge(m, src)
+}
+func (m *QueryListTrustRegistriesRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryListTrustRegistriesRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryListTrustRegistriesRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryListTrustRegistriesRequest proto.InternalMessageInfo
+
+func (m *QueryListTrustRegistriesRequest) GetController() string {
+	if m != nil {
+		return m.Controller
+	}
+	return ""
+}
+
+func (m *QueryListTrustRegistriesRequest) GetModifiedAfter() *time.Time {
+	if m != nil {
+		return m.ModifiedAfter
+	}
+	return nil
+}
+
+func (m *QueryListTrustRegistriesRequest) GetActiveGfOnly() bool {
+	if m != nil {
+		return m.ActiveGfOnly
+	}
+	return false
+}
+
+func (m *QueryListTrustRegistriesRequest) GetPreferredLanguage() string {
+	if m != nil {
+		return m.PreferredLanguage
+	}
+	return ""
+}
+
+func (m *QueryListTrustRegistriesRequest) GetResponseMaxSize() uint32 {
+	if m != nil {
+		return m.ResponseMaxSize
+	}
+	return 0
+}
+
+// QueryListTrustRegistriesResponse is the response type for the Query/ListTrustRegistries RPC method.
+type QueryListTrustRegistriesResponse struct {
+	TrustRegistries []TrustRegistry `protobuf:"bytes,1,rep,name=trust_registries,json=trustRegistries,proto3" json:"trust_registries"`
+}
+
+func (m *QueryListTrustRegistriesResponse) Reset()         { *m = QueryListTrustRegistriesResponse{} }
+func (m *QueryListTrustRegistriesResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryListTrustRegistriesResponse) ProtoMessage()    {}
+func (*QueryListTrustRegistriesResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3e500ee22150b7e8, []int{5}
+}
+func (m *QueryListTrustRegistriesResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryListTrustRegistriesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryListTrustRegistriesResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryListTrustRegistriesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryListTrustRegistriesResponse.Merge(m, src)
+}
+func (m *QueryListTrustRegistriesResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryListTrustRegistriesResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryListTrustRegistriesResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryListTrustRegistriesResponse proto.InternalMessageInfo
+
+func (m *QueryListTrustRegistriesResponse) GetTrustRegistries() []TrustRegistry {
+	if m != nil {
+		return m.TrustRegistries
+	}
+	return nil
+}
+
+type QueryGetTrustRegistryWithDIDRequest struct {
+	Did               string `protobuf:"bytes,1,opt,name=did,proto3" json:"did,omitempty"`
+	ActiveGfOnly      bool   `protobuf:"varint,2,opt,name=active_gf_only,json=activeGfOnly,proto3" json:"active_gf_only,omitempty"`
+	PreferredLanguage string `protobuf:"bytes,3,opt,name=preferred_language,json=preferredLanguage,proto3" json:"preferred_language,omitempty"`
+}
+
+func (m *QueryGetTrustRegistryWithDIDRequest) Reset()         { *m = QueryGetTrustRegistryWithDIDRequest{} }
+func (m *QueryGetTrustRegistryWithDIDRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryGetTrustRegistryWithDIDRequest) ProtoMessage()    {}
+func (*QueryGetTrustRegistryWithDIDRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3e500ee22150b7e8, []int{6}
+}
+func (m *QueryGetTrustRegistryWithDIDRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryGetTrustRegistryWithDIDRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryGetTrustRegistryWithDIDRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryGetTrustRegistryWithDIDRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryGetTrustRegistryWithDIDRequest.Merge(m, src)
+}
+func (m *QueryGetTrustRegistryWithDIDRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryGetTrustRegistryWithDIDRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryGetTrustRegistryWithDIDRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryGetTrustRegistryWithDIDRequest proto.InternalMessageInfo
+
+func (m *QueryGetTrustRegistryWithDIDRequest) GetDid() string {
+	if m != nil {
+		return m.Did
+	}
+	return ""
+}
+
+func (m *QueryGetTrustRegistryWithDIDRequest) GetActiveGfOnly() bool {
+	if m != nil {
+		return m.ActiveGfOnly
+	}
+	return false
+}
+
+func (m *QueryGetTrustRegistryWithDIDRequest) GetPreferredLanguage() string {
+	if m != nil {
+		return m.PreferredLanguage
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterType((*QueryParamsRequest)(nil), "veranablockchain.trustregistry.QueryParamsRequest")
 	proto.RegisterType((*QueryParamsResponse)(nil), "veranablockchain.trustregistry.QueryParamsResponse")
 	proto.RegisterType((*QueryGetTrustRegistryRequest)(nil), "veranablockchain.trustregistry.QueryGetTrustRegistryRequest")
 	proto.RegisterType((*QueryGetTrustRegistryResponse)(nil), "veranablockchain.trustregistry.QueryGetTrustRegistryResponse")
+	proto.RegisterType((*QueryListTrustRegistriesRequest)(nil), "veranablockchain.trustregistry.QueryListTrustRegistriesRequest")
+	proto.RegisterType((*QueryListTrustRegistriesResponse)(nil), "veranablockchain.trustregistry.QueryListTrustRegistriesResponse")
+	proto.RegisterType((*QueryGetTrustRegistryWithDIDRequest)(nil), "veranablockchain.trustregistry.QueryGetTrustRegistryWithDIDRequest")
 }
 
 func init() {
@@ -248,43 +438,62 @@ func init() {
 }
 
 var fileDescriptor_3e500ee22150b7e8 = []byte{
-	// 574 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x94, 0x41, 0x6b, 0x13, 0x41,
-	0x14, 0xc7, 0xb3, 0x89, 0x96, 0x76, 0xaa, 0xa5, 0x1d, 0x83, 0x84, 0x10, 0xd7, 0x10, 0x44, 0x42,
-	0x24, 0x19, 0x92, 0xe0, 0xc5, 0xaa, 0x87, 0x20, 0x06, 0x41, 0x50, 0x97, 0x22, 0x22, 0x42, 0x9c,
-	0xdd, 0x9d, 0x6c, 0x97, 0xee, 0xce, 0x6c, 0x67, 0x66, 0x57, 0x83, 0x78, 0x11, 0xbc, 0x0b, 0x7e,
-	0x09, 0x2f, 0x8a, 0x07, 0x3f, 0x44, 0x8f, 0x05, 0x2f, 0x9e, 0x44, 0x12, 0x41, 0x3f, 0x86, 0xec,
-	0xec, 0x34, 0x9a, 0x6a, 0x5d, 0xed, 0x25, 0xbc, 0xcc, 0xbc, 0xff, 0xef, 0xbd, 0xff, 0x9b, 0xd9,
-	0x01, 0xad, 0x84, 0x70, 0x4c, 0xb1, 0x1d, 0x30, 0x67, 0xc7, 0xd9, 0xc6, 0x3e, 0x45, 0x92, 0xc7,
-	0x42, 0x72, 0xe2, 0xf9, 0x42, 0xf2, 0x09, 0xda, 0x8d, 0x09, 0x9f, 0x74, 0x22, 0xce, 0x24, 0x83,
-	0xe6, 0xe1, 0xdc, 0xce, 0x42, 0x6e, 0x75, 0x03, 0x87, 0x3e, 0x65, 0x48, 0xfd, 0x66, 0x92, 0x6a,
-	0xd9, 0x63, 0x1e, 0x53, 0x21, 0x4a, 0x23, 0xbd, 0x5a, 0xf3, 0x18, 0xf3, 0x02, 0x82, 0x70, 0xe4,
-	0x23, 0x4c, 0x29, 0x93, 0x58, 0xfa, 0x8c, 0x0a, 0xbd, 0xdb, 0x72, 0x98, 0x08, 0x99, 0x40, 0x36,
-	0x16, 0x24, 0xab, 0x8f, 0x92, 0xae, 0x4d, 0x24, 0xee, 0xa2, 0x08, 0x7b, 0x3e, 0x55, 0xc9, 0x3a,
-	0xf7, 0x52, 0x4e, 0xfb, 0x11, 0xe6, 0x38, 0x9c, 0x83, 0x73, 0x92, 0xe5, 0x24, 0x22, 0x3a, 0xb7,
-	0x51, 0x06, 0xf0, 0x5e, 0x5a, 0xfa, 0xae, 0x02, 0x58, 0x64, 0x37, 0x26, 0x42, 0x36, 0x1e, 0x83,
-	0x33, 0x0b, 0xab, 0x22, 0x62, 0x54, 0x10, 0x78, 0x0b, 0x2c, 0x65, 0x85, 0x2a, 0x46, 0xdd, 0x68,
-	0xae, 0xf6, 0x2e, 0x76, 0xfe, 0x3e, 0xa9, 0x4e, 0xa6, 0x1f, 0xac, 0xec, 0x7d, 0x3e, 0x5f, 0x78,
-	0xf3, 0xed, 0x7d, 0xcb, 0xb0, 0x34, 0xa0, 0xf1, 0xd2, 0x00, 0x35, 0x55, 0x62, 0x48, 0xe4, 0x56,
-	0xaa, 0xb1, 0xb4, 0x46, 0xb7, 0x00, 0xd7, 0x41, 0xc9, 0xf5, 0x5d, 0x55, 0x68, 0xc5, 0x4a, 0x43,
-	0x78, 0x01, 0xac, 0x61, 0x47, 0xfa, 0x09, 0x19, 0x79, 0xe3, 0x11, 0xa3, 0xc1, 0xa4, 0x52, 0xac,
-	0x1b, 0xcd, 0x65, 0xeb, 0x54, 0xb6, 0x3a, 0x1c, 0xdf, 0xa1, 0xc1, 0x04, 0xb6, 0x01, 0x8c, 0x38,
-	0x19, 0x13, 0xce, 0x89, 0x3b, 0x0a, 0x30, 0xf5, 0x62, 0xec, 0x91, 0x4a, 0x49, 0x61, 0x36, 0xe6,
-	0x3b, 0xb7, 0xf5, 0x46, 0xe3, 0x43, 0x11, 0x9c, 0x3b, 0xa2, 0x0f, 0x6d, 0x7a, 0x0b, 0xac, 0x29,
-	0x53, 0xa3, 0x03, 0x57, 0xda, 0x7c, 0x3b, 0xcf, 0xfc, 0x22, 0xee, 0xb4, 0xfc, 0xf5, 0x2f, 0x7c,
-	0x04, 0x96, 0x13, 0xc2, 0x45, 0x7a, 0x1d, 0x2a, 0xc5, 0x7a, 0xa9, 0xb9, 0xda, 0xbb, 0x92, 0xc7,
-	0x1b, 0xb2, 0x84, 0x70, 0x8a, 0xa9, 0x43, 0x6e, 0x72, 0x1c, 0x92, 0x27, 0x8c, 0xef, 0xdc, 0xcf,
-	0x10, 0x83, 0x13, 0xe9, 0x80, 0xad, 0x39, 0x11, 0x8e, 0xc0, 0x8a, 0xcb, 0x9c, 0x38, 0x24, 0x54,
-	0x8a, 0x4a, 0x49, 0xe1, 0x37, 0x8f, 0x81, 0xbf, 0xa1, 0x19, 0x9a, 0xff, 0x93, 0xd9, 0xfb, 0x5e,
-	0x04, 0x27, 0xd5, 0xd8, 0xe0, 0x3b, 0x03, 0x2c, 0x65, 0xc7, 0x0c, 0x7b, 0x79, 0x25, 0x7e, 0xbf,
-	0x69, 0xd5, 0xfe, 0x7f, 0x69, 0xb2, 0x23, 0x69, 0x6c, 0xbe, 0xf8, 0xf8, 0xf5, 0x75, 0xf1, 0x32,
-	0xec, 0xa3, 0x4c, 0xdc, 0x0e, 0xb0, 0x2d, 0x0e, 0xe2, 0x9c, 0x6f, 0x04, 0xbe, 0x35, 0xc0, 0xfa,
-	0xe1, 0xc3, 0x86, 0x57, 0xff, 0xa9, 0x8d, 0x23, 0xee, 0x6a, 0xf5, 0xda, 0x31, 0xd5, 0xda, 0x4e,
-	0x4d, 0xd9, 0x39, 0x0b, 0xcb, 0xc8, 0x95, 0x1c, 0x25, 0x5d, 0x24, 0x39, 0xf2, 0x88, 0x44, 0xcf,
-	0x5c, 0xdf, 0x7d, 0x3e, 0x78, 0xb0, 0x37, 0x35, 0x8d, 0xfd, 0xa9, 0x69, 0x7c, 0x99, 0x9a, 0xc6,
-	0xab, 0x99, 0x59, 0xd8, 0x9f, 0x99, 0x85, 0x4f, 0x33, 0xb3, 0xf0, 0xf0, 0xba, 0xe7, 0xcb, 0xed,
-	0xd8, 0xee, 0x38, 0x2c, 0xcc, 0x19, 0xc4, 0xd3, 0x3f, 0xbd, 0x00, 0xf6, 0x92, 0x7a, 0x02, 0xfa,
-	0x3f, 0x02, 0x00, 0x00, 0xff, 0xff, 0x71, 0xfe, 0x0f, 0x36, 0x1c, 0x05, 0x00, 0x00,
+	// 875 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x55, 0x4d, 0x6f, 0x1b, 0x45,
+	0x18, 0xce, 0xd8, 0x49, 0x14, 0x4f, 0xc8, 0xd7, 0x24, 0xa2, 0xc6, 0x6a, 0x6d, 0xcb, 0x7c, 0xc8,
+	0x0a, 0x8a, 0x47, 0x71, 0x84, 0x84, 0x28, 0x5f, 0x35, 0x11, 0x51, 0x44, 0x11, 0xb0, 0x8d, 0x00,
+	0x21, 0xc4, 0x32, 0xde, 0x1d, 0x6f, 0x46, 0xdd, 0x9d, 0xd9, 0xce, 0x8c, 0xdd, 0xb8, 0x55, 0x2f,
+	0x3d, 0x71, 0xe0, 0x50, 0x89, 0x3f, 0x01, 0x17, 0x3e, 0xa4, 0xfe, 0x04, 0x0e, 0x39, 0x56, 0x70,
+	0xe1, 0x54, 0x50, 0x02, 0xe2, 0x6f, 0xa0, 0x9d, 0x9d, 0x0d, 0xd9, 0x12, 0xe3, 0xc4, 0x88, 0x8b,
+	0x35, 0x3b, 0xf3, 0xbe, 0xcf, 0xfb, 0xbc, 0xcf, 0x3c, 0xf3, 0x1a, 0xae, 0x0f, 0xa8, 0x24, 0x9c,
+	0x74, 0x43, 0xe1, 0xdd, 0xf4, 0xf6, 0x09, 0xe3, 0x58, 0xcb, 0xbe, 0xd2, 0x92, 0x06, 0x4c, 0x69,
+	0x39, 0xc4, 0xb7, 0xfa, 0x54, 0x0e, 0x5b, 0xb1, 0x14, 0x5a, 0xa0, 0xea, 0x93, 0xb1, 0xad, 0x5c,
+	0x6c, 0x65, 0x85, 0x44, 0x8c, 0x0b, 0x6c, 0x7e, 0xd3, 0x94, 0xca, 0x5a, 0x20, 0x02, 0x61, 0x96,
+	0x38, 0x59, 0xd9, 0xdd, 0xcb, 0x81, 0x10, 0x41, 0x48, 0x31, 0x89, 0x19, 0x26, 0x9c, 0x0b, 0x4d,
+	0x34, 0x13, 0x5c, 0xd9, 0xd3, 0x75, 0x4f, 0xa8, 0x48, 0x28, 0xdc, 0x25, 0x8a, 0xa6, 0xf5, 0xf1,
+	0x60, 0xb3, 0x4b, 0x35, 0xd9, 0xc4, 0x31, 0x09, 0x18, 0x37, 0xc1, 0x36, 0xf6, 0xc5, 0x31, 0xf4,
+	0x63, 0x22, 0x49, 0x74, 0x02, 0x3c, 0x26, 0x58, 0x0f, 0x63, 0x9a, 0xc5, 0x3e, 0x93, 0x92, 0x70,
+	0x53, 0xee, 0xe9, 0x87, 0x3d, 0xaa, 0x59, 0xf6, 0xe6, 0xab, 0xdb, 0xef, 0x61, 0xcd, 0x22, 0xaa,
+	0x34, 0x89, 0xe2, 0x34, 0xa0, 0xb1, 0x06, 0xd1, 0x07, 0x09, 0xed, 0xf7, 0x4d, 0x71, 0x87, 0xde,
+	0xea, 0x53, 0xa5, 0x1b, 0x9f, 0xc3, 0xd5, 0xdc, 0xae, 0x8a, 0x05, 0x57, 0x14, 0xed, 0xc2, 0xd9,
+	0x94, 0x64, 0x19, 0xd4, 0x41, 0x73, 0xbe, 0xfd, 0x42, 0xeb, 0xdf, 0x55, 0x6e, 0xa5, 0xf9, 0x9d,
+	0xd2, 0xe1, 0xe3, 0xda, 0xd4, 0xd7, 0x7f, 0x7e, 0xbf, 0x0e, 0x1c, 0x0b, 0xd0, 0xf8, 0x02, 0xc0,
+	0xcb, 0xa6, 0xc4, 0x0e, 0xd5, 0x7b, 0x49, 0x8e, 0x63, 0x73, 0x2c, 0x05, 0xb4, 0x0a, 0x67, 0xb4,
+	0x74, 0x99, 0x6f, 0x4a, 0x4d, 0x3b, 0xd3, 0x5a, 0xee, 0xfa, 0xe8, 0x39, 0xb8, 0x48, 0x3c, 0xcd,
+	0x06, 0xd4, 0x0d, 0x7a, 0xae, 0xe0, 0xe1, 0xb0, 0x5c, 0xa8, 0x83, 0xe6, 0x9c, 0xf3, 0x54, 0xba,
+	0xbb, 0xd3, 0x7b, 0x8f, 0x87, 0x43, 0xb4, 0x01, 0x51, 0x2c, 0x69, 0x8f, 0x4a, 0x49, 0x7d, 0x37,
+	0x24, 0x3c, 0xe8, 0x93, 0x80, 0x96, 0x8b, 0x75, 0xd0, 0x2c, 0x39, 0x2b, 0x27, 0x27, 0xd7, 0xed,
+	0x41, 0xe3, 0x61, 0x01, 0x5e, 0x19, 0x41, 0xc5, 0xf6, 0xbd, 0x07, 0x17, 0x4d, 0x5f, 0x6e, 0xd6,
+	0x98, 0xed, 0x7f, 0x63, 0x5c, 0xff, 0x79, 0xb8, 0x05, 0x7d, 0xfa, 0x13, 0x7d, 0x0a, 0xe7, 0x06,
+	0x54, 0xaa, 0xc4, 0x4d, 0xe5, 0x42, 0xbd, 0xd8, 0x9c, 0x6f, 0xbf, 0x32, 0x0e, 0x6f, 0x47, 0x0c,
+	0xa8, 0xe4, 0x84, 0x7b, 0xf4, 0x6d, 0x49, 0x22, 0x7a, 0x5b, 0xc8, 0x9b, 0x1f, 0xa6, 0x10, 0x9d,
+	0xe9, 0x44, 0x63, 0xe7, 0x04, 0x11, 0xb9, 0xb0, 0xe4, 0x0b, 0xaf, 0x1f, 0x51, 0xae, 0x55, 0xb9,
+	0x68, 0xe0, 0xaf, 0x4e, 0x00, 0xbf, 0x6d, 0x31, 0x2c, 0xfe, 0xdf, 0x98, 0x8d, 0x6f, 0x0a, 0xb0,
+	0x66, 0x64, 0xbb, 0xce, 0x54, 0x4e, 0x37, 0x46, 0x33, 0x1f, 0xa1, 0x97, 0x21, 0xf4, 0x04, 0xd7,
+	0x52, 0x84, 0x21, 0x95, 0x46, 0xb4, 0x52, 0xa7, 0xfc, 0xd3, 0xc3, 0x8d, 0x35, 0x6b, 0xd2, 0x6b,
+	0xbe, 0x2f, 0xa9, 0x52, 0x37, 0xb4, 0x64, 0x3c, 0x70, 0x4e, 0xc5, 0xa2, 0x77, 0xe0, 0x62, 0x24,
+	0x7c, 0xd6, 0x63, 0xd4, 0x77, 0x49, 0x4f, 0x53, 0x69, 0x6e, 0x7a, 0xbe, 0x5d, 0x69, 0xa5, 0x8e,
+	0x6e, 0x65, 0x8e, 0x6e, 0xed, 0x65, 0x8e, 0xee, 0xcc, 0x1d, 0x3e, 0xae, 0x81, 0x07, 0xbf, 0xd6,
+	0x80, 0xb3, 0x90, 0xe5, 0x5e, 0x4b, 0x52, 0xcf, 0xb0, 0x4d, 0xf1, 0xdc, 0xb6, 0x99, 0x1e, 0x61,
+	0x1b, 0xb4, 0x0e, 0x57, 0xa4, 0x35, 0x88, 0x1b, 0x91, 0x03, 0x57, 0xb1, 0x3b, 0xb4, 0x3c, 0x53,
+	0x07, 0xcd, 0x05, 0x67, 0x29, 0x3b, 0x78, 0x97, 0x1c, 0xdc, 0x60, 0x77, 0x68, 0xe3, 0x3e, 0x80,
+	0xf5, 0xd1, 0x5a, 0x59, 0x97, 0x7d, 0x06, 0x97, 0x73, 0x2e, 0x63, 0x34, 0x79, 0x67, 0xc5, 0x0b,
+	0xfb, 0xcc, 0x5e, 0xd5, 0x92, 0xce, 0xd7, 0x69, 0x7c, 0x09, 0xe0, 0xb3, 0x67, 0xfa, 0xfc, 0x23,
+	0xa6, 0xf7, 0xb7, 0x77, 0xb7, 0xb3, 0x4b, 0x5b, 0x86, 0x45, 0xdf, 0xbe, 0xbb, 0x92, 0x93, 0x2c,
+	0xff, 0x97, 0x67, 0xd7, 0xfe, 0x63, 0x06, 0xce, 0x18, 0x3a, 0xe8, 0x5b, 0x00, 0x67, 0xd3, 0x49,
+	0x81, 0xda, 0xe3, 0x3a, 0xfd, 0xe7, 0xb0, 0xaa, 0x6c, 0x5d, 0x28, 0x27, 0x15, 0xbb, 0x71, 0xf5,
+	0xfe, 0xcf, 0xbf, 0x7f, 0x55, 0x78, 0x09, 0x6d, 0xe1, 0x34, 0x79, 0x23, 0x24, 0x5d, 0x95, 0xad,
+	0xc7, 0x8c, 0x68, 0xf4, 0x1d, 0x80, 0xcb, 0x4f, 0x8a, 0x88, 0x5e, 0x3d, 0x17, 0x8d, 0x11, 0xe3,
+	0xae, 0xf2, 0xda, 0x84, 0xd9, 0xb6, 0x9d, 0xaa, 0x69, 0xa7, 0x8c, 0x9e, 0xc6, 0xbe, 0x96, 0x78,
+	0xb0, 0x89, 0xb5, 0xc4, 0x01, 0xd5, 0xf8, 0xae, 0x99, 0xa1, 0xf7, 0xd0, 0x0f, 0x00, 0xae, 0x9e,
+	0xe1, 0x3d, 0xf4, 0xc6, 0xb9, 0xca, 0x8e, 0x7e, 0xe1, 0x95, 0x37, 0x27, 0x07, 0xb0, 0xd4, 0x2f,
+	0x19, 0xea, 0x2b, 0x68, 0xe9, 0x14, 0xf5, 0x90, 0x29, 0x8d, 0x7e, 0x04, 0xf0, 0xd2, 0x08, 0xab,
+	0xa2, 0xb7, 0x26, 0x92, 0x2b, 0x6f, 0xf4, 0xff, 0xaa, 0xf9, 0xf3, 0x86, 0x78, 0x0d, 0x5d, 0xc9,
+	0x6b, 0xee, 0xde, 0x66, 0x7a, 0xdf, 0xf5, 0x99, 0x8f, 0xef, 0xfa, 0xcc, 0xbf, 0xd7, 0xf9, 0xf8,
+	0xf0, 0xa8, 0x0a, 0x1e, 0x1d, 0x55, 0xc1, 0x6f, 0x47, 0x55, 0xf0, 0xe0, 0xb8, 0x3a, 0xf5, 0xe8,
+	0xb8, 0x3a, 0xf5, 0xcb, 0x71, 0x75, 0xea, 0x93, 0xd7, 0x03, 0xa6, 0xf7, 0xfb, 0xdd, 0x96, 0x27,
+	0xa2, 0x31, 0x2e, 0x3c, 0x38, 0xeb, 0xdf, 0xbf, 0x3b, 0x6b, 0x66, 0xe0, 0xd6, 0x5f, 0x01, 0x00,
+	0x00, 0xff, 0xff, 0xcd, 0x6f, 0x5e, 0x82, 0x18, 0x09, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -303,6 +512,10 @@ type QueryClient interface {
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
 	// GetTrustRegistry returns the trust registry information.
 	GetTrustRegistry(ctx context.Context, in *QueryGetTrustRegistryRequest, opts ...grpc.CallOption) (*QueryGetTrustRegistryResponse, error)
+	// ListTrustRegistries returns a list of Trust Registries
+	ListTrustRegistries(ctx context.Context, in *QueryListTrustRegistriesRequest, opts ...grpc.CallOption) (*QueryListTrustRegistriesResponse, error)
+	// GetTrustRegistryWithDID queries by DID
+	GetTrustRegistryWithDID(ctx context.Context, in *QueryGetTrustRegistryWithDIDRequest, opts ...grpc.CallOption) (*QueryGetTrustRegistryResponse, error)
 }
 
 type queryClient struct {
@@ -331,12 +544,34 @@ func (c *queryClient) GetTrustRegistry(ctx context.Context, in *QueryGetTrustReg
 	return out, nil
 }
 
+func (c *queryClient) ListTrustRegistries(ctx context.Context, in *QueryListTrustRegistriesRequest, opts ...grpc.CallOption) (*QueryListTrustRegistriesResponse, error) {
+	out := new(QueryListTrustRegistriesResponse)
+	err := c.cc.Invoke(ctx, "/veranablockchain.trustregistry.Query/ListTrustRegistries", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) GetTrustRegistryWithDID(ctx context.Context, in *QueryGetTrustRegistryWithDIDRequest, opts ...grpc.CallOption) (*QueryGetTrustRegistryResponse, error) {
+	out := new(QueryGetTrustRegistryResponse)
+	err := c.cc.Invoke(ctx, "/veranablockchain.trustregistry.Query/GetTrustRegistryWithDID", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 type QueryServer interface {
 	// Parameters queries the parameters of the module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
 	// GetTrustRegistry returns the trust registry information.
 	GetTrustRegistry(context.Context, *QueryGetTrustRegistryRequest) (*QueryGetTrustRegistryResponse, error)
+	// ListTrustRegistries returns a list of Trust Registries
+	ListTrustRegistries(context.Context, *QueryListTrustRegistriesRequest) (*QueryListTrustRegistriesResponse, error)
+	// GetTrustRegistryWithDID queries by DID
+	GetTrustRegistryWithDID(context.Context, *QueryGetTrustRegistryWithDIDRequest) (*QueryGetTrustRegistryResponse, error)
 }
 
 // UnimplementedQueryServer can be embedded to have forward compatible implementations.
@@ -348,6 +583,12 @@ func (*UnimplementedQueryServer) Params(ctx context.Context, req *QueryParamsReq
 }
 func (*UnimplementedQueryServer) GetTrustRegistry(ctx context.Context, req *QueryGetTrustRegistryRequest) (*QueryGetTrustRegistryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTrustRegistry not implemented")
+}
+func (*UnimplementedQueryServer) ListTrustRegistries(ctx context.Context, req *QueryListTrustRegistriesRequest) (*QueryListTrustRegistriesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListTrustRegistries not implemented")
+}
+func (*UnimplementedQueryServer) GetTrustRegistryWithDID(ctx context.Context, req *QueryGetTrustRegistryWithDIDRequest) (*QueryGetTrustRegistryResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTrustRegistryWithDID not implemented")
 }
 
 func RegisterQueryServer(s grpc1.Server, srv QueryServer) {
@@ -390,6 +631,42 @@ func _Query_GetTrustRegistry_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_ListTrustRegistries_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryListTrustRegistriesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).ListTrustRegistries(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/veranablockchain.trustregistry.Query/ListTrustRegistries",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).ListTrustRegistries(ctx, req.(*QueryListTrustRegistriesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_GetTrustRegistryWithDID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryGetTrustRegistryWithDIDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).GetTrustRegistryWithDID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/veranablockchain.trustregistry.Query/GetTrustRegistryWithDID",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).GetTrustRegistryWithDID(ctx, req.(*QueryGetTrustRegistryWithDIDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var Query_serviceDesc = _Query_serviceDesc
 var _Query_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "veranablockchain.trustregistry.Query",
@@ -402,6 +679,14 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetTrustRegistry",
 			Handler:    _Query_GetTrustRegistry_Handler,
+		},
+		{
+			MethodName: "ListTrustRegistries",
+			Handler:    _Query_ListTrustRegistries_Handler,
+		},
+		{
+			MethodName: "GetTrustRegistryWithDID",
+			Handler:    _Query_GetTrustRegistryWithDID_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -501,12 +786,10 @@ func (m *QueryGetTrustRegistryRequest) MarshalToSizedBuffer(dAtA []byte) (int, e
 		i--
 		dAtA[i] = 0x10
 	}
-	if len(m.Did) > 0 {
-		i -= len(m.Did)
-		copy(dAtA[i:], m.Did)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.Did)))
+	if m.TrId != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.TrId))
 		i--
-		dAtA[i] = 0xa
+		dAtA[i] = 0x8
 	}
 	return len(dAtA) - i, nil
 }
@@ -574,6 +857,152 @@ func (m *QueryGetTrustRegistryResponse) MarshalToSizedBuffer(dAtA []byte) (int, 
 	return len(dAtA) - i, nil
 }
 
+func (m *QueryListTrustRegistriesRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryListTrustRegistriesRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryListTrustRegistriesRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ResponseMaxSize != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.ResponseMaxSize))
+		i--
+		dAtA[i] = 0x28
+	}
+	if len(m.PreferredLanguage) > 0 {
+		i -= len(m.PreferredLanguage)
+		copy(dAtA[i:], m.PreferredLanguage)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.PreferredLanguage)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.ActiveGfOnly {
+		i--
+		if m.ActiveGfOnly {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.ModifiedAfter != nil {
+		n3, err3 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(*m.ModifiedAfter, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(*m.ModifiedAfter):])
+		if err3 != nil {
+			return 0, err3
+		}
+		i -= n3
+		i = encodeVarintQuery(dAtA, i, uint64(n3))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Controller) > 0 {
+		i -= len(m.Controller)
+		copy(dAtA[i:], m.Controller)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.Controller)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryListTrustRegistriesResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryListTrustRegistriesResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryListTrustRegistriesResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.TrustRegistries) > 0 {
+		for iNdEx := len(m.TrustRegistries) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.TrustRegistries[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintQuery(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryGetTrustRegistryWithDIDRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryGetTrustRegistryWithDIDRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryGetTrustRegistryWithDIDRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.PreferredLanguage) > 0 {
+		i -= len(m.PreferredLanguage)
+		copy(dAtA[i:], m.PreferredLanguage)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.PreferredLanguage)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.ActiveGfOnly {
+		i--
+		if m.ActiveGfOnly {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Did) > 0 {
+		i -= len(m.Did)
+		copy(dAtA[i:], m.Did)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.Did)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintQuery(dAtA []byte, offset int, v uint64) int {
 	offset -= sovQuery(v)
 	base := offset
@@ -611,9 +1040,8 @@ func (m *QueryGetTrustRegistryRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
-	l = len(m.Did)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
+	if m.TrId != 0 {
+		n += 1 + sovQuery(uint64(m.TrId))
 	}
 	if m.ActiveGfOnly {
 		n += 2
@@ -646,6 +1074,68 @@ func (m *QueryGetTrustRegistryResponse) Size() (n int) {
 			l = e.Size()
 			n += 1 + l + sovQuery(uint64(l))
 		}
+	}
+	return n
+}
+
+func (m *QueryListTrustRegistriesRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Controller)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	if m.ModifiedAfter != nil {
+		l = github_com_cosmos_gogoproto_types.SizeOfStdTime(*m.ModifiedAfter)
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	if m.ActiveGfOnly {
+		n += 2
+	}
+	l = len(m.PreferredLanguage)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	if m.ResponseMaxSize != 0 {
+		n += 1 + sovQuery(uint64(m.ResponseMaxSize))
+	}
+	return n
+}
+
+func (m *QueryListTrustRegistriesResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.TrustRegistries) > 0 {
+		for _, e := range m.TrustRegistries {
+			l = e.Size()
+			n += 1 + l + sovQuery(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *QueryGetTrustRegistryWithDIDRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Did)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	if m.ActiveGfOnly {
+		n += 2
+	}
+	l = len(m.PreferredLanguage)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
 	}
 	return n
 }
@@ -819,10 +1309,10 @@ func (m *QueryGetTrustRegistryRequest) Unmarshal(dAtA []byte) error {
 		}
 		switch fieldNum {
 		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Did", wireType)
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TrId", wireType)
 			}
-			var stringLen uint64
+			m.TrId = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowQuery
@@ -832,24 +1322,11 @@ func (m *QueryGetTrustRegistryRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				m.TrId |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Did = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		case 2:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ActiveGfOnly", wireType)
@@ -1055,6 +1532,413 @@ func (m *QueryGetTrustRegistryResponse) Unmarshal(dAtA []byte) error {
 			if err := m.Documents[len(m.Documents)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryListTrustRegistriesRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryListTrustRegistriesRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryListTrustRegistriesRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Controller", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Controller = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ModifiedAfter", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ModifiedAfter == nil {
+				m.ModifiedAfter = new(time.Time)
+			}
+			if err := github_com_cosmos_gogoproto_types.StdTimeUnmarshal(m.ModifiedAfter, dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ActiveGfOnly", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.ActiveGfOnly = bool(v != 0)
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PreferredLanguage", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PreferredLanguage = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ResponseMaxSize", wireType)
+			}
+			m.ResponseMaxSize = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ResponseMaxSize |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryListTrustRegistriesResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryListTrustRegistriesResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryListTrustRegistriesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TrustRegistries", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TrustRegistries = append(m.TrustRegistries, TrustRegistry{})
+			if err := m.TrustRegistries[len(m.TrustRegistries)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryGetTrustRegistryWithDIDRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryGetTrustRegistryWithDIDRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryGetTrustRegistryWithDIDRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Did", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Did = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ActiveGfOnly", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.ActiveGfOnly = bool(v != 0)
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PreferredLanguage", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PreferredLanguage = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

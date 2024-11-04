@@ -1,5 +1,3 @@
-#!/bin/bash
-
 set -e
 
 # Function to log messages
@@ -9,7 +7,7 @@ log() {
 
 # Variables
 CHAIN_ID="test-1"
-MONIKER="testdev"
+MONIKER="validator1"
 BINARY="veranad"
 HOME_DIR="$HOME/.verana"
 GENESIS_JSON_PATH="$HOME_DIR/config/genesis.json"
@@ -19,7 +17,14 @@ VALIDATOR_NAME="cooluser"
 VALIDATOR_AMOUNT="1000000000000000000000uvna"
 GENTX_AMOUNT="1000000000uvna"
 
-log "Starting Verana blockchain setup..."
+# Default ports for primary validator
+P2P_PORT="26656"
+RPC_PORT="26657"
+API_PORT="1317"
+GRPC_PORT="9090"
+GRPC_WEB_PORT="9091"
+
+log "Starting Primary Validator setup..."
 
 # Ensure the binary is in the correct location
 if [ ! -f "/usr/local/bin/$BINARY" ]; then
@@ -57,7 +62,14 @@ fi
 
 # Create gentx
 log "Creating genesis transaction..."
-$BINARY gentx $VALIDATOR_NAME $GENTX_AMOUNT --chain-id $CHAIN_ID --keyring-backend test
+$BINARY gentx $VALIDATOR_NAME $GENTX_AMOUNT \
+    --chain-id $CHAIN_ID \
+    --moniker $MONIKER \
+    --commission-rate "0.10" \
+    --commission-max-rate "0.20" \
+    --commission-max-change-rate "0.01" \
+    --min-self-delegation "1" \
+    --keyring-backend test
 if [ $? -ne 0 ]; then
     log "Error: Failed to create genesis transaction."
     exit 1
@@ -66,55 +78,47 @@ fi
 # Update minimum-gas-prices in app.toml
 log "Updating minimum gas prices..."
 sed -i '' 's/^minimum-gas-prices = ""/minimum-gas-prices = "0.25uvna"/' "$APP_TOML_PATH"
-if [ $? -ne 0 ]; then
-    log "Error: Failed to update minimum gas prices in app.toml."
-    exit 1
-fi
+
+# Configure ports in app.toml
+sed -i '' "s/:1317/:$API_PORT/" "$APP_TOML_PATH"
+sed -i '' "s/:9090/:$GRPC_PORT/" "$APP_TOML_PATH"
+sed -i '' "s/:9091/:$GRPC_WEB_PORT/" "$APP_TOML_PATH"
 
 # Replace all occurrences of "stake" with "uvna" in genesis.json
 log "Replacing 'stake' with 'uvna' in genesis.json..."
 sed -i '' 's/stake/uvna/g' "$GENESIS_JSON_PATH"
-if [ $? -ne 0 ]; then
-    log "Error: Failed to replace 'stake' with 'uvna' in genesis.json."
-    exit 1
-fi
+
+# Configure ports in config.toml
+sed -i '' "s/:26656/:$P2P_PORT/" "$CONFIG_TOML_PATH"
+sed -i '' "s/:26657/:$RPC_PORT/" "$CONFIG_TOML_PATH"
+
+# Enable API and CORS
+log "Updating API and CORS settings..."
+sed -i '' 's/enable = false/enable = true/' "$APP_TOML_PATH"
+sed -i '' 's/swagger = false/swagger = true/' "$APP_TOML_PATH"
+sed -i '' 's/enabled-unsafe-cors = false/enabled-unsafe-cors = true/' "$APP_TOML_PATH"
+sed -i '' 's/cors_allowed_origins = \[\]/cors_allowed_origins = \["*"\]/' "$CONFIG_TOML_PATH"
 
 # Collect genesis transactions
 log "Collecting genesis transactions..."
 $BINARY collect-gentxs
-if [ $? -ne 0 ]; then
-    log "Error: Failed to collect genesis transactions."
-    exit 1
-fi
 
 # Validate genesis file
 log "Validating genesis file..."
 $BINARY validate-genesis
-if [ $? -ne 0 ]; then
-    log "Error: Genesis file validation failed."
-    exit 1
-fi
 
-# Update app.toml
-log "Updating app.toml..."
-sed -i '' 's/enable = false/enable = true/' "$APP_TOML_PATH"
-sed -i '' 's/swagger = false/swagger = true/' "$APP_TOML_PATH"
-sed -i '' 's/enabled-unsafe-cors = false/enabled-unsafe-cors = true/' "$APP_TOML_PATH"
-if [ $? -ne 0 ]; then
-    log "Error: Failed to update app.toml."
-    exit 1
-fi
+# Save the genesis file for other validators
+cp $GENESIS_JSON_PATH $HOME/genesis.json
+log "Genesis file saved to $HOME/genesis.json"
 
-# Update config.toml CORS settings
-log "Updating CORS settings in config.toml..."
-sed -i '' 's/cors_allowed_origins = \[\]/cors_allowed_origins = \["*"\]/' "$CONFIG_TOML_PATH"
-if [ $? -ne 0 ]; then
-    log "Error: Failed to update CORS settings in config.toml."
-    exit 1
-fi
+# Get validator node ID
+NODE_ID=$($BINARY tendermint show-node-id)
+log "Primary Validator Node ID: $NODE_ID"
+echo "Node ID: $NODE_ID" > $HOME/primary_validator_info.txt
+echo "P2P Address: localhost:$P2P_PORT" >> $HOME/primary_validator_info.txt
 
 # Start the chain
-log "Starting the Verana blockchain..."
+log "Starting the Primary Validator..."
 $BINARY start
 
-log "Setup complete. If you encounter any issues, please check the logs above."
+log "Primary Validator setup complete. If you encounter any issues, please check the logs above."

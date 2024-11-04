@@ -19,8 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Query_Params_FullMethodName           = "/veranablockchain.trustregistry.Query/Params"
-	Query_GetTrustRegistry_FullMethodName = "/veranablockchain.trustregistry.Query/GetTrustRegistry"
+	Query_Params_FullMethodName                  = "/veranablockchain.trustregistry.Query/Params"
+	Query_GetTrustRegistry_FullMethodName        = "/veranablockchain.trustregistry.Query/GetTrustRegistry"
+	Query_ListTrustRegistries_FullMethodName     = "/veranablockchain.trustregistry.Query/ListTrustRegistries"
+	Query_GetTrustRegistryWithDID_FullMethodName = "/veranablockchain.trustregistry.Query/GetTrustRegistryWithDID"
 )
 
 // QueryClient is the client API for Query service.
@@ -31,6 +33,10 @@ type QueryClient interface {
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
 	// GetTrustRegistry returns the trust registry information.
 	GetTrustRegistry(ctx context.Context, in *QueryGetTrustRegistryRequest, opts ...grpc.CallOption) (*QueryGetTrustRegistryResponse, error)
+	// ListTrustRegistries returns a list of Trust Registries
+	ListTrustRegistries(ctx context.Context, in *QueryListTrustRegistriesRequest, opts ...grpc.CallOption) (*QueryListTrustRegistriesResponse, error)
+	// GetTrustRegistryWithDID queries by DID
+	GetTrustRegistryWithDID(ctx context.Context, in *QueryGetTrustRegistryWithDIDRequest, opts ...grpc.CallOption) (*QueryGetTrustRegistryResponse, error)
 }
 
 type queryClient struct {
@@ -59,6 +65,24 @@ func (c *queryClient) GetTrustRegistry(ctx context.Context, in *QueryGetTrustReg
 	return out, nil
 }
 
+func (c *queryClient) ListTrustRegistries(ctx context.Context, in *QueryListTrustRegistriesRequest, opts ...grpc.CallOption) (*QueryListTrustRegistriesResponse, error) {
+	out := new(QueryListTrustRegistriesResponse)
+	err := c.cc.Invoke(ctx, Query_ListTrustRegistries_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) GetTrustRegistryWithDID(ctx context.Context, in *QueryGetTrustRegistryWithDIDRequest, opts ...grpc.CallOption) (*QueryGetTrustRegistryResponse, error) {
+	out := new(QueryGetTrustRegistryResponse)
+	err := c.cc.Invoke(ctx, Query_GetTrustRegistryWithDID_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -67,6 +91,10 @@ type QueryServer interface {
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
 	// GetTrustRegistry returns the trust registry information.
 	GetTrustRegistry(context.Context, *QueryGetTrustRegistryRequest) (*QueryGetTrustRegistryResponse, error)
+	// ListTrustRegistries returns a list of Trust Registries
+	ListTrustRegistries(context.Context, *QueryListTrustRegistriesRequest) (*QueryListTrustRegistriesResponse, error)
+	// GetTrustRegistryWithDID queries by DID
+	GetTrustRegistryWithDID(context.Context, *QueryGetTrustRegistryWithDIDRequest) (*QueryGetTrustRegistryResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -79,6 +107,12 @@ func (UnimplementedQueryServer) Params(context.Context, *QueryParamsRequest) (*Q
 }
 func (UnimplementedQueryServer) GetTrustRegistry(context.Context, *QueryGetTrustRegistryRequest) (*QueryGetTrustRegistryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTrustRegistry not implemented")
+}
+func (UnimplementedQueryServer) ListTrustRegistries(context.Context, *QueryListTrustRegistriesRequest) (*QueryListTrustRegistriesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListTrustRegistries not implemented")
+}
+func (UnimplementedQueryServer) GetTrustRegistryWithDID(context.Context, *QueryGetTrustRegistryWithDIDRequest) (*QueryGetTrustRegistryResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTrustRegistryWithDID not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -129,6 +163,42 @@ func _Query_GetTrustRegistry_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_ListTrustRegistries_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryListTrustRegistriesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).ListTrustRegistries(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_ListTrustRegistries_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).ListTrustRegistries(ctx, req.(*QueryListTrustRegistriesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_GetTrustRegistryWithDID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryGetTrustRegistryWithDIDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).GetTrustRegistryWithDID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_GetTrustRegistryWithDID_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).GetTrustRegistryWithDID(ctx, req.(*QueryGetTrustRegistryWithDIDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -143,6 +213,14 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetTrustRegistry",
 			Handler:    _Query_GetTrustRegistry_Handler,
+		},
+		{
+			MethodName: "ListTrustRegistries",
+			Handler:    _Query_ListTrustRegistries_Handler,
+		},
+		{
+			MethodName: "GetTrustRegistryWithDID",
+			Handler:    _Query_GetTrustRegistryWithDID_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
