@@ -1,6 +1,9 @@
 package app
 
 import (
+	upgradetypes "cosmossdk.io/x/upgrade/types"
+	"fmt"
+	"github.com/verana-labs/verana-blockchain/app/upgrades"
 	"io"
 
 	"cosmossdk.io/x/evidence"
@@ -92,7 +95,9 @@ import (
 	ibctransferkeeper "github.com/cosmos/ibc-go/v8/modules/apps/transfer/keeper"
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 
+	diddirectorymodulekeeper "github.com/verana-labs/verana-blockchain/x/diddirectory/keeper"
 	trustregistrymodulekeeper "github.com/verana-labs/verana-blockchain/x/trustregistry/keeper"
+
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 	authzmodule "github.com/cosmos/cosmos-sdk/x/authz/module"
 
@@ -146,6 +151,7 @@ type App struct {
 	appCodec          codec.Codec
 	txConfig          client.TxConfig
 	interfaceRegistry codectypes.InterfaceRegistry
+	configurator      module.Configurator
 
 	// keepers
 	AccountKeeper         authkeeper.AccountKeeper
@@ -183,6 +189,7 @@ type App struct {
 	ScopedKeepers             map[string]capabilitykeeper.ScopedKeeper
 
 	TrustregistryKeeper trustregistrymodulekeeper.Keeper
+	DiddirectoryKeeper  diddirectorymodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -226,6 +233,10 @@ func AppConfig() depinject.Config {
 			},
 		),
 	)
+}
+
+func (app *App) GetDiddirectoryKeeper() diddirectorymodulekeeper.Keeper {
+	return app.DiddirectoryKeeper
 }
 
 // New returns a reference to an initialized App.
@@ -287,6 +298,7 @@ func New(
 		&app.GroupKeeper,
 		&app.CircuitBreakerKeeper,
 		&app.TrustregistryKeeper,
+		&app.DiddirectoryKeeper,
 		// this line is used by starport scaffolding # stargate/app/keeperDefinition
 	); err != nil {
 		panic(err)
@@ -331,11 +343,49 @@ func New(
 		return app.App.InitChainer(ctx, req)
 	})
 
+	app.configurator = module.NewConfigurator(app.appCodec, app.MsgServiceRouter(), app.GRPCQueryRouter())
+
+	// Set up upgrade handlers
+	app.setupUpgradeHandlers()
+	app.setupUpgradeStoreLoaders()
+
 	if err := app.Load(loadLatest); err != nil {
 		return nil, err
 	}
 
 	return app, nil
+}
+
+func (app *App) setupUpgradeStoreLoaders() {
+	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
+	if err != nil {
+		panic(fmt.Sprintf("failed to read upgrade info from disk %s", err))
+	}
+
+	if app.UpgradeKeeper.IsSkipHeight(upgradeInfo.Height) {
+		return
+	}
+
+	for _, upgrade := range upgrades.Upgrades {
+		if upgradeInfo.Name == upgrade.UpgradeName {
+			app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &upgrade.StoreUpgrades))
+		}
+	}
+}
+
+// Add setupUpgradeHandlers function
+func (app *App) setupUpgradeHandlers() {
+	for _, u := range upgrades.Upgrades {
+		app.UpgradeKeeper.SetUpgradeHandler(
+			u.UpgradeName,
+			u.CreateUpgradeHandler(
+				app.ModuleManager,
+				app.configurator,
+				app.BaseApp,
+				app,
+			),
+		)
+	}
 }
 
 // LegacyAmino returns App's amino codec.

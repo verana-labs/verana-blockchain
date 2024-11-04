@@ -88,6 +88,15 @@ sed -i '' "s/:9091/:$GRPC_WEB_PORT/" "$APP_TOML_PATH"
 log "Replacing 'stake' with 'uvna' in genesis.json..."
 sed -i '' 's/stake/uvna/g' "$GENESIS_JSON_PATH"
 
+# Update governance params in genesis.json
+log "Updating governance parameters in genesis.json..."
+sed -i '' 's/"max_deposit_period": ".*"/"max_deposit_period": "100s"/' "$GENESIS_JSON_PATH"
+sed -i '' 's/"voting_period": ".*"/"voting_period": "100s"/' "$GENESIS_JSON_PATH"
+if [ $? -ne 0 ]; then
+    log "Error: Failed to update governance parameters in genesis.json."
+    exit 1
+fi
+
 # Configure ports in config.toml
 sed -i '' "s/:26656/:$P2P_PORT/" "$CONFIG_TOML_PATH"
 sed -i '' "s/:26657/:$RPC_PORT/" "$CONFIG_TOML_PATH"

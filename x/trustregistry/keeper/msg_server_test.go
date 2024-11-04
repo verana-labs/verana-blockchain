@@ -2,9 +2,10 @@ package keeper_test
 
 import (
 	"context"
+	"testing"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
-	"testing"
 
 	keepertest "github.com/verana-labs/verana-blockchain/testutil/keeper"
 	"github.com/verana-labs/verana-blockchain/x/trustregistry/keeper"
