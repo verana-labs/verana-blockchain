@@ -53,8 +53,11 @@ import (
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
 	"google.golang.org/protobuf/types/known/durationpb"
 
+	credentialschemamodulev1 "github.com/verana-labs/verana-blockchain/api/veranablockchain/credentialschema/module"
 	diddirectorymodulev1 "github.com/verana-labs/verana-blockchain/api/veranablockchain/diddirectory/module"
 	trustregistrymodulev1 "github.com/verana-labs/verana-blockchain/api/veranablockchain/trustregistry/module"
+	_ "github.com/verana-labs/verana-blockchain/x/credentialschema/module" // import for side-effects
+	credentialschemamoduletypes "github.com/verana-labs/verana-blockchain/x/credentialschema/types"
 	_ "github.com/verana-labs/verana-blockchain/x/diddirectory/module" // import for side-effects
 	diddirectorymoduletypes "github.com/verana-labs/verana-blockchain/x/diddirectory/types"
 	_ "github.com/verana-labs/verana-blockchain/x/trustregistry/module" // import for side-effects
@@ -98,6 +101,7 @@ var (
 		// chain modules
 		trustregistrymoduletypes.ModuleName,
 		diddirectorymoduletypes.ModuleName,
+		credentialschemamoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 
@@ -124,6 +128,7 @@ var (
 		// chain modules
 		trustregistrymoduletypes.ModuleName,
 		diddirectorymoduletypes.ModuleName,
+		credentialschemamoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	}
 
@@ -144,6 +149,7 @@ var (
 		// chain modules
 		trustregistrymoduletypes.ModuleName,
 		diddirectorymoduletypes.ModuleName,
+		credentialschemamoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	}
 
@@ -306,6 +312,10 @@ var (
 			{
 				Name:   diddirectorymoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&diddirectorymodulev1.Module{}),
+			},
+			{
+				Name:   credentialschemamoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&credentialschemamodulev1.Module{}),
 			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},

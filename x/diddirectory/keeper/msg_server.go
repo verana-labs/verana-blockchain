@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/verana-labs/verana-blockchain/x/diddirectory/types"
 )
@@ -84,7 +85,7 @@ func (ms msgServer) TouchDID(goCtx context.Context, msg *types.MsgTouchDID) (*ty
 	if err := ms.validateTouchDIDParams(ctx, msg); err != nil {
 		return nil, err
 	}
-	
+
 	if err := ms.executeTouchDID(ctx, msg); err != nil {
 		return nil, err
 	}

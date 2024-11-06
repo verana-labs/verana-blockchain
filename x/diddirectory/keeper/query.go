@@ -3,11 +3,12 @@ package keeper
 import (
 	"context"
 	"fmt"
+	"sort"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/verana-labs/verana-blockchain/x/diddirectory/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"sort"
 )
 
 var _ types.QueryServer = Keeper{}
