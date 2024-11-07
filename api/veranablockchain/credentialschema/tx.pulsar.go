@@ -1021,14 +1021,14 @@ func (x *fastReflection_MsgCreateCredentialSchema) Range(f func(protoreflect.Fie
 			return
 		}
 	}
-	if x.IssuerPermManagementMode != 0 {
-		value := protoreflect.ValueOfEnum((protoreflect.EnumNumber)(x.IssuerPermManagementMode))
+	if x.IssuerPermManagementMode != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.IssuerPermManagementMode)
 		if !f(fd_MsgCreateCredentialSchema_issuer_perm_management_mode, value) {
 			return
 		}
 	}
-	if x.VerifierPermManagementMode != 0 {
-		value := protoreflect.ValueOfEnum((protoreflect.EnumNumber)(x.VerifierPermManagementMode))
+	if x.VerifierPermManagementMode != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.VerifierPermManagementMode)
 		if !f(fd_MsgCreateCredentialSchema_verifier_perm_management_mode, value) {
 			return
 		}
@@ -1067,9 +1067,9 @@ func (x *fastReflection_MsgCreateCredentialSchema) Has(fd protoreflect.FieldDesc
 	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.holder_validation_validity_period":
 		return x.HolderValidationValidityPeriod != uint32(0)
 	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.issuer_perm_management_mode":
-		return x.IssuerPermManagementMode != 0
+		return x.IssuerPermManagementMode != uint32(0)
 	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.verifier_perm_management_mode":
-		return x.VerifierPermManagementMode != 0
+		return x.VerifierPermManagementMode != uint32(0)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.credentialschema.MsgCreateCredentialSchema"))
@@ -1105,9 +1105,9 @@ func (x *fastReflection_MsgCreateCredentialSchema) Clear(fd protoreflect.FieldDe
 	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.holder_validation_validity_period":
 		x.HolderValidationValidityPeriod = uint32(0)
 	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.issuer_perm_management_mode":
-		x.IssuerPermManagementMode = 0
+		x.IssuerPermManagementMode = uint32(0)
 	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.verifier_perm_management_mode":
-		x.VerifierPermManagementMode = 0
+		x.VerifierPermManagementMode = uint32(0)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.credentialschema.MsgCreateCredentialSchema"))
@@ -1153,10 +1153,10 @@ func (x *fastReflection_MsgCreateCredentialSchema) Get(descriptor protoreflect.F
 		return protoreflect.ValueOfUint32(value)
 	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.issuer_perm_management_mode":
 		value := x.IssuerPermManagementMode
-		return protoreflect.ValueOfEnum((protoreflect.EnumNumber)(value))
+		return protoreflect.ValueOfUint32(value)
 	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.verifier_perm_management_mode":
 		value := x.VerifierPermManagementMode
-		return protoreflect.ValueOfEnum((protoreflect.EnumNumber)(value))
+		return protoreflect.ValueOfUint32(value)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.credentialschema.MsgCreateCredentialSchema"))
@@ -1196,9 +1196,9 @@ func (x *fastReflection_MsgCreateCredentialSchema) Set(fd protoreflect.FieldDesc
 	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.holder_validation_validity_period":
 		x.HolderValidationValidityPeriod = uint32(value.Uint())
 	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.issuer_perm_management_mode":
-		x.IssuerPermManagementMode = (CredentialSchemaPermManagementMode)(value.Enum())
+		x.IssuerPermManagementMode = uint32(value.Uint())
 	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.verifier_perm_management_mode":
-		x.VerifierPermManagementMode = (CredentialSchemaPermManagementMode)(value.Enum())
+		x.VerifierPermManagementMode = uint32(value.Uint())
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.credentialschema.MsgCreateCredentialSchema"))
@@ -1273,9 +1273,9 @@ func (x *fastReflection_MsgCreateCredentialSchema) NewField(fd protoreflect.Fiel
 	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.holder_validation_validity_period":
 		return protoreflect.ValueOfUint32(uint32(0))
 	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.issuer_perm_management_mode":
-		return protoreflect.ValueOfEnum(0)
+		return protoreflect.ValueOfUint32(uint32(0))
 	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.verifier_perm_management_mode":
-		return protoreflect.ValueOfEnum(0)
+		return protoreflect.ValueOfUint32(uint32(0))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.credentialschema.MsgCreateCredentialSchema"))
@@ -1728,7 +1728,7 @@ func (x *fastReflection_MsgCreateCredentialSchema) ProtoMethods() *protoiface.Me
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.IssuerPermManagementMode |= CredentialSchemaPermManagementMode(b&0x7F) << shift
+					x.IssuerPermManagementMode |= uint32(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -1747,7 +1747,7 @@ func (x *fastReflection_MsgCreateCredentialSchema) ProtoMethods() *protoiface.Me
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.VerifierPermManagementMode |= CredentialSchemaPermManagementMode(b&0x7F) << shift
+					x.VerifierPermManagementMode |= uint32(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -2285,17 +2285,17 @@ type MsgCreateCredentialSchema struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Creator                                 string                             `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
-	Id                                      uint64                             `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
-	TrId                                    uint64                             `protobuf:"varint,3,opt,name=tr_id,json=trId,proto3" json:"tr_id,omitempty"`
-	JsonSchema                              string                             `protobuf:"bytes,4,opt,name=json_schema,json=jsonSchema,proto3" json:"json_schema,omitempty"`
-	IssuerGrantorValidationValidityPeriod   uint32                             `protobuf:"varint,5,opt,name=issuer_grantor_validation_validity_period,json=issuerGrantorValidationValidityPeriod,proto3" json:"issuer_grantor_validation_validity_period,omitempty"`
-	VerifierGrantorValidationValidityPeriod uint32                             `protobuf:"varint,6,opt,name=verifier_grantor_validation_validity_period,json=verifierGrantorValidationValidityPeriod,proto3" json:"verifier_grantor_validation_validity_period,omitempty"`
-	IssuerValidationValidityPeriod          uint32                             `protobuf:"varint,7,opt,name=issuer_validation_validity_period,json=issuerValidationValidityPeriod,proto3" json:"issuer_validation_validity_period,omitempty"`
-	VerifierValidationValidityPeriod        uint32                             `protobuf:"varint,8,opt,name=verifier_validation_validity_period,json=verifierValidationValidityPeriod,proto3" json:"verifier_validation_validity_period,omitempty"`
-	HolderValidationValidityPeriod          uint32                             `protobuf:"varint,9,opt,name=holder_validation_validity_period,json=holderValidationValidityPeriod,proto3" json:"holder_validation_validity_period,omitempty"`
-	IssuerPermManagementMode                CredentialSchemaPermManagementMode `protobuf:"varint,10,opt,name=issuer_perm_management_mode,json=issuerPermManagementMode,proto3,enum=veranablockchain.credentialschema.CredentialSchemaPermManagementMode" json:"issuer_perm_management_mode,omitempty"`
-	VerifierPermManagementMode              CredentialSchemaPermManagementMode `protobuf:"varint,11,opt,name=verifier_perm_management_mode,json=verifierPermManagementMode,proto3,enum=veranablockchain.credentialschema.CredentialSchemaPermManagementMode" json:"verifier_perm_management_mode,omitempty"`
+	Creator                                 string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	Id                                      uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	TrId                                    uint64 `protobuf:"varint,3,opt,name=tr_id,json=trId,proto3" json:"tr_id,omitempty"`
+	JsonSchema                              string `protobuf:"bytes,4,opt,name=json_schema,json=jsonSchema,proto3" json:"json_schema,omitempty"`
+	IssuerGrantorValidationValidityPeriod   uint32 `protobuf:"varint,5,opt,name=issuer_grantor_validation_validity_period,json=issuerGrantorValidationValidityPeriod,proto3" json:"issuer_grantor_validation_validity_period,omitempty"`
+	VerifierGrantorValidationValidityPeriod uint32 `protobuf:"varint,6,opt,name=verifier_grantor_validation_validity_period,json=verifierGrantorValidationValidityPeriod,proto3" json:"verifier_grantor_validation_validity_period,omitempty"`
+	IssuerValidationValidityPeriod          uint32 `protobuf:"varint,7,opt,name=issuer_validation_validity_period,json=issuerValidationValidityPeriod,proto3" json:"issuer_validation_validity_period,omitempty"`
+	VerifierValidationValidityPeriod        uint32 `protobuf:"varint,8,opt,name=verifier_validation_validity_period,json=verifierValidationValidityPeriod,proto3" json:"verifier_validation_validity_period,omitempty"`
+	HolderValidationValidityPeriod          uint32 `protobuf:"varint,9,opt,name=holder_validation_validity_period,json=holderValidationValidityPeriod,proto3" json:"holder_validation_validity_period,omitempty"`
+	IssuerPermManagementMode                uint32 `protobuf:"varint,10,opt,name=issuer_perm_management_mode,json=issuerPermManagementMode,proto3" json:"issuer_perm_management_mode,omitempty"`       // Changed to uint32
+	VerifierPermManagementMode              uint32 `protobuf:"varint,11,opt,name=verifier_perm_management_mode,json=verifierPermManagementMode,proto3" json:"verifier_perm_management_mode,omitempty"` // Changed to uint32
 }
 
 func (x *MsgCreateCredentialSchema) Reset() {
@@ -2381,18 +2381,18 @@ func (x *MsgCreateCredentialSchema) GetHolderValidationValidityPeriod() uint32 {
 	return 0
 }
 
-func (x *MsgCreateCredentialSchema) GetIssuerPermManagementMode() CredentialSchemaPermManagementMode {
+func (x *MsgCreateCredentialSchema) GetIssuerPermManagementMode() uint32 {
 	if x != nil {
 		return x.IssuerPermManagementMode
 	}
-	return CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_UNSPECIFIED
+	return 0
 }
 
-func (x *MsgCreateCredentialSchema) GetVerifierPermManagementMode() CredentialSchemaPermManagementMode {
+func (x *MsgCreateCredentialSchema) GetVerifierPermManagementMode() uint32 {
 	if x != nil {
 		return x.VerifierPermManagementMode
 	}
-	return CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_UNSPECIFIED
+	return 0
 }
 
 type MsgCreateCredentialSchemaResponse struct {
@@ -2465,7 +2465,7 @@ var file_veranablockchain_credentialschema_tx_proto_rawDesc = []byte{
 	0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x2f, 0x4d, 0x73,
 	0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x22, 0x19, 0x0a,
 	0x17, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xd2, 0x06, 0x0a, 0x19, 0x4d, 0x73, 0x67,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xc2, 0x05, 0x0a, 0x19, 0x4d, 0x73, 0x67,
 	0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c,
 	0x53, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x12, 0x32, 0x0a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f,
 	0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73,
@@ -2500,23 +2500,14 @@ var file_veranablockchain_credentialschema_tx_proto_rawDesc = []byte{
 	0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x69, 0x74, 0x79,
 	0x5f, 0x70, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x18, 0x09, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x1e, 0x68,
 	0x6f, 0x6c, 0x64, 0x65, 0x72, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x56,
-	0x61, 0x6c, 0x69, 0x64, 0x69, 0x74, 0x79, 0x50, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x12, 0x84, 0x01,
-	0x0a, 0x1b, 0x69, 0x73, 0x73, 0x75, 0x65, 0x72, 0x5f, 0x70, 0x65, 0x72, 0x6d, 0x5f, 0x6d, 0x61,
-	0x6e, 0x61, 0x67, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x5f, 0x6d, 0x6f, 0x64, 0x65, 0x18, 0x0a, 0x20,
-	0x01, 0x28, 0x0e, 0x32, 0x45, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63,
-	0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x63, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61,
-	0x6c, 0x73, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x2e, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69,
-	0x61, 0x6c, 0x53, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x50, 0x65, 0x72, 0x6d, 0x4d, 0x61, 0x6e, 0x61,
-	0x67, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x4d, 0x6f, 0x64, 0x65, 0x52, 0x18, 0x69, 0x73, 0x73, 0x75,
-	0x65, 0x72, 0x50, 0x65, 0x72, 0x6d, 0x4d, 0x61, 0x6e, 0x61, 0x67, 0x65, 0x6d, 0x65, 0x6e, 0x74,
-	0x4d, 0x6f, 0x64, 0x65, 0x12, 0x88, 0x01, 0x0a, 0x1d, 0x76, 0x65, 0x72, 0x69, 0x66, 0x69, 0x65,
-	0x72, 0x5f, 0x70, 0x65, 0x72, 0x6d, 0x5f, 0x6d, 0x61, 0x6e, 0x61, 0x67, 0x65, 0x6d, 0x65, 0x6e,
-	0x74, 0x5f, 0x6d, 0x6f, 0x64, 0x65, 0x18, 0x0b, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x45, 0x2e, 0x76,
-	0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e,
-	0x63, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x63, 0x68, 0x65, 0x6d, 0x61,
-	0x2e, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x53, 0x63, 0x68, 0x65, 0x6d,
-	0x61, 0x50, 0x65, 0x72, 0x6d, 0x4d, 0x61, 0x6e, 0x61, 0x67, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x4d,
-	0x6f, 0x64, 0x65, 0x52, 0x1a, 0x76, 0x65, 0x72, 0x69, 0x66, 0x69, 0x65, 0x72, 0x50, 0x65, 0x72,
+	0x61, 0x6c, 0x69, 0x64, 0x69, 0x74, 0x79, 0x50, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x12, 0x3d, 0x0a,
+	0x1b, 0x69, 0x73, 0x73, 0x75, 0x65, 0x72, 0x5f, 0x70, 0x65, 0x72, 0x6d, 0x5f, 0x6d, 0x61, 0x6e,
+	0x61, 0x67, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x5f, 0x6d, 0x6f, 0x64, 0x65, 0x18, 0x0a, 0x20, 0x01,
+	0x28, 0x0d, 0x52, 0x18, 0x69, 0x73, 0x73, 0x75, 0x65, 0x72, 0x50, 0x65, 0x72, 0x6d, 0x4d, 0x61,
+	0x6e, 0x61, 0x67, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x4d, 0x6f, 0x64, 0x65, 0x12, 0x41, 0x0a, 0x1d,
+	0x76, 0x65, 0x72, 0x69, 0x66, 0x69, 0x65, 0x72, 0x5f, 0x70, 0x65, 0x72, 0x6d, 0x5f, 0x6d, 0x61,
+	0x6e, 0x61, 0x67, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x5f, 0x6d, 0x6f, 0x64, 0x65, 0x18, 0x0b, 0x20,
+	0x01, 0x28, 0x0d, 0x52, 0x1a, 0x76, 0x65, 0x72, 0x69, 0x66, 0x69, 0x65, 0x72, 0x50, 0x65, 0x72,
 	0x6d, 0x4d, 0x61, 0x6e, 0x61, 0x67, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x4d, 0x6f, 0x64, 0x65, 0x3a,
 	0x0c, 0x82, 0xe7, 0xb0, 0x2a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x22, 0x33, 0x0a,
 	0x21, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e,
@@ -2581,21 +2572,18 @@ var file_veranablockchain_credentialschema_tx_proto_goTypes = []interface{}{
 	(*MsgCreateCredentialSchema)(nil),         // 2: veranablockchain.credentialschema.MsgCreateCredentialSchema
 	(*MsgCreateCredentialSchemaResponse)(nil), // 3: veranablockchain.credentialschema.MsgCreateCredentialSchemaResponse
 	(*Params)(nil),                            // 4: veranablockchain.credentialschema.Params
-	(CredentialSchemaPermManagementMode)(0),   // 5: veranablockchain.credentialschema.CredentialSchemaPermManagementMode
 }
 var file_veranablockchain_credentialschema_tx_proto_depIdxs = []int32{
 	4, // 0: veranablockchain.credentialschema.MsgUpdateParams.params:type_name -> veranablockchain.credentialschema.Params
-	5, // 1: veranablockchain.credentialschema.MsgCreateCredentialSchema.issuer_perm_management_mode:type_name -> veranablockchain.credentialschema.CredentialSchemaPermManagementMode
-	5, // 2: veranablockchain.credentialschema.MsgCreateCredentialSchema.verifier_perm_management_mode:type_name -> veranablockchain.credentialschema.CredentialSchemaPermManagementMode
-	0, // 3: veranablockchain.credentialschema.Msg.UpdateParams:input_type -> veranablockchain.credentialschema.MsgUpdateParams
-	2, // 4: veranablockchain.credentialschema.Msg.CreateCredentialSchema:input_type -> veranablockchain.credentialschema.MsgCreateCredentialSchema
-	1, // 5: veranablockchain.credentialschema.Msg.UpdateParams:output_type -> veranablockchain.credentialschema.MsgUpdateParamsResponse
-	3, // 6: veranablockchain.credentialschema.Msg.CreateCredentialSchema:output_type -> veranablockchain.credentialschema.MsgCreateCredentialSchemaResponse
-	5, // [5:7] is the sub-list for method output_type
-	3, // [3:5] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	0, // 1: veranablockchain.credentialschema.Msg.UpdateParams:input_type -> veranablockchain.credentialschema.MsgUpdateParams
+	2, // 2: veranablockchain.credentialschema.Msg.CreateCredentialSchema:input_type -> veranablockchain.credentialschema.MsgCreateCredentialSchema
+	1, // 3: veranablockchain.credentialschema.Msg.UpdateParams:output_type -> veranablockchain.credentialschema.MsgUpdateParamsResponse
+	3, // 4: veranablockchain.credentialschema.Msg.CreateCredentialSchema:output_type -> veranablockchain.credentialschema.MsgCreateCredentialSchemaResponse
+	3, // [3:5] is the sub-list for method output_type
+	1, // [1:3] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_veranablockchain_credentialschema_tx_proto_init() }

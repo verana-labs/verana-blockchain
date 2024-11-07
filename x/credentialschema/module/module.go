@@ -179,9 +179,9 @@ type ModuleInputs struct {
 	Config       *modulev1.Module
 	Logger       log.Logger
 
-	AccountKeeper       types.AccountKeeper
-	BankKeeper          types.BankKeeper
-	TrustRegistryKeeper types.TrustRegistryKeeper
+	BankKeeper          types.BankKeeper          `optional:"true"`
+	AccountKeeper       types.AccountKeeper       `optional:"true"`
+	TrustRegistryKeeper types.TrustRegistryKeeper `optional:"true"`
 }
 
 type ModuleOutputs struct {

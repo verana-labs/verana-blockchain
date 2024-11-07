@@ -12,262 +12,84 @@ import (
 // Official meta-schema for Draft 2020-12
 const jsonSchemaMetaSchema = `{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://json-schema.org/draft/2020-12/schema",
-  "$vocabulary": {
-    "https://json-schema.org/draft/2020-12/vocab/core": true,
-    "https://json-schema.org/draft/2020-12/vocab/applicator": true,
-    "https://json-schema.org/draft/2020-12/vocab/unevaluated": true,
-    "https://json-schema.org/draft/2020-12/vocab/validation": true,
-    "https://json-schema.org/draft/2020-12/vocab/meta-data": true,
-    "https://json-schema.org/draft/2020-12/vocab/format-annotation": true,
-    "https://json-schema.org/draft/2020-12/vocab/content": true
-  },
-  "$dynamicAnchor": "meta",
-  "title": "Core and Validation specifications meta-schema",
-  "allOf": [
-    {
-      "$ref": "https://json-schema.org/draft/2020-12/meta/core"
-    },
-    {
-      "$ref": "https://json-schema.org/draft/2020-12/meta/applicator"
-    },
-    {
-      "$ref": "https://json-schema.org/draft/2020-12/meta/unevaluated"
-    },
-    {
-      "$ref": "https://json-schema.org/draft/2020-12/meta/validation"
-    },
-    {
-      "$ref": "https://json-schema.org/draft/2020-12/meta/meta-data"
-    },
-    {
-      "$ref": "https://json-schema.org/draft/2020-12/meta/format-annotation"
-    },
-    {
-      "$ref": "https://json-schema.org/draft/2020-12/meta/content"
-    }
-  ],
-  "type": [
-    "object",
-    "boolean"
-  ],
+  "$id": "https://example.com/meta-schema/credential-schema",
+  "title": "Credential Schema Meta-Schema",
+  "type": "object",
+  "required": ["$id", "$schema", "type", "properties"],
   "properties": {
-    "definitions": {
-      "$comment": "While no longer an official keyword as it is replaced by $defs, this keyword is retained in the meta-schema to prevent incompatible extensions as it remains in common use.",
-      "type": "object",
-      "additionalProperties": {
-        "$dynamicRef": "#meta"
-      },
-      "default": {}
-    },
-    "$defs": {
-      "type": "object",
-      "additionalProperties": {
-        "$dynamicRef": "#meta"
-      }
-    },
     "$id": {
       "type": "string",
       "format": "uri-reference",
-      "$comment": "Non-empty fragments not allowed.",
-      "pattern": "^[^#]*#?$"
+      "pattern": "^/dtr/v1/cs/js/\\d+$",
+      "description": "$id must be a URI matching the rendering URL format"
     },
     "$schema": {
       "type": "string",
-      "format": "uri"
-    },
-    "$ref": {
-      "type": "string",
-      "format": "uri-reference"
-    },
-    "$anchor": {
-      "type": "string",
-      "pattern": "^[A-Za-z][-A-Za-z0-9.:_]*$"
-    },
-    "$dynamicRef": {
-      "type": "string",
-      "format": "uri-reference"
-    },
-    "$dynamicAnchor": {
-      "type": "string",
-      "pattern": "^[A-Za-z][-A-Za-z0-9.:_]*$"
-    },
-    "$vocabulary": {
-      "type": "object",
-      "propertyNames": {
-        "type": "string",
-        "format": "uri"
-      },
-      "additionalProperties": {
-        "type": "boolean"
-      }
-    },
-    "$comment": {
-      "type": "string"
-    },
-    "title": {
-      "type": "string"
-    },
-    "description": {
-      "type": "string"
-    },
-    "default": true,
-    "deprecated": {
-      "type": "boolean",
-      "default": false
-    },
-    "readOnly": {
-      "type": "boolean",
-      "default": false
-    },
-    "writeOnly": {
-      "type": "boolean",
-      "default": false
-    },
-    "examples": {
-      "type": "array",
-      "items": true
-    },
-    "multipleOf": {
-      "type": "number",
-      "exclusiveMinimum": 0
-    },
-    "maximum": {
-      "type": "number"
-    },
-    "exclusiveMaximum": {
-      "type": "number"
-    },
-    "minimum": {
-      "type": "number"
-    },
-    "exclusiveMinimum": {
-      "type": "number"
-    },
-    "maxLength": {
-      "$ref": "#/$defs/nonNegativeInteger"
-    },
-    "minLength": {
-      "$ref": "#/$defs/nonNegativeIntegerDefault0"
-    },
-    "pattern": {
-      "type": "string",
-      "format": "regex"
-    },
-    "maxItems": {
-      "$ref": "#/$defs/nonNegativeInteger"
-    },
-    "minItems": {
-      "$ref": "#/$defs/nonNegativeIntegerDefault0"
-    },
-    "uniqueItems": {
-      "type": "boolean",
-      "default": false
-    },
-    "maxContains": {
-      "$ref": "#/$defs/nonNegativeInteger"
-    },
-    "minContains": {
-      "$ref": "#/$defs/nonNegativeInteger",
-      "default": 1
-    },
-    "maxProperties": {
-      "$ref": "#/$defs/nonNegativeInteger"
-    },
-    "minProperties": {
-      "$ref": "#/$defs/nonNegativeIntegerDefault0"
-    },
-    "required": {
-      "$ref": "#/$defs/stringArray"
-    },
-    "dependentRequired": {
-      "type": "object",
-      "additionalProperties": {
-        "$ref": "#/$defs/stringArray"
-      }
-    },
-    "const": true,
-    "enum": {
-      "type": "array",
-      "items": true
+      "enum": ["https://json-schema.org/draft/2020-12/schema"],
+      "description": "$schema must be the Draft 2020-12 URI"
     },
     "type": {
-      "anyOf": [
-        {
-          "$ref": "#/$defs/simpleTypes"
-        },
-        {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/simpleTypes"
-          },
-          "minItems": 1,
-          "uniqueItems": true
-        }
-      ]
-    },
-    "format": {
-      "type": "string"
-    },
-    "contentMediaType": {
-      "type": "string"
-    },
-    "contentEncoding": {
-      "type": "string"
-    },
-    "contentSchema": {
-      "$dynamicRef": "#meta"
+      "type": "string",
+      "enum": ["object"],
+      "description": "The root type must be 'object'"
     },
     "properties": {
       "type": "object",
       "additionalProperties": {
-        "$dynamicRef": "#meta"
-      },
-      "default": {}
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["string", "number", "integer", "boolean", "object", "array"],
+            "description": "The type of each property"
+          },
+          "description": {
+            "type": "string"
+          },
+          "default": {
+            "type": ["string", "number", "integer", "boolean", "object", "array", "null"]
+          }
+        },
+        "required": ["type"]
+      }
     },
-    "patternProperties": {
-      "type": "object",
-      "additionalProperties": {
-        "$dynamicRef": "#meta"
+    "required": {
+      "type": "array",
+      "items": {
+        "type": "string"
       },
-      "propertyNames": {
-        "format": "regex"
-      },
-      "default": {}
+      "description": "List of required properties"
     },
     "additionalProperties": {
-      "$dynamicRef": "#meta"
+      "type": "boolean",
+      "default": true
     },
-    "propertyNames": {
-      "$dynamicRef": "#meta"
-    },
-    "unevaluatedProperties": {
-      "$dynamicRef": "#meta"
-    },
-    "items": {
-      "$dynamicRef": "#meta"
-    },
-    "additionalItems": {
-      "$dynamicRef": "#meta",
-      "deprecated": true
-    },
-    "contains": {
-      "$dynamicRef": "#meta"
-    },
-    "allOf": {
-      "$ref": "#/$defs/schemaArray"
-    },
-    "anyOf": {
-      "$ref": "#/$defs/schemaArray"
-    },
-    "oneOf": {
-      "$ref": "#/$defs/schemaArray"
-    },
-    "not": {
-      "$dynamicRef": "#meta"
+    "$defs": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object"
+      },
+      "description": "Optional definitions for reusable schema components"
     }
-  }
-}`
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "/dtr/v1/cs/js/1",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the entity"
+        }
+      },
+      "required": ["name"],
+      "additionalProperties": false
+    }
+  ]
+}
+`
 
 const TypeMsgCreateCredentialSchema = "create_credential_schema"
 
@@ -284,8 +106,8 @@ func NewMsgCreateCredentialSchema(
 	issuerValidationValidityPeriod uint32,
 	verifierValidationValidityPeriod uint32,
 	holderValidationValidityPeriod uint32,
-	issuerPermManagementMode CredentialSchemaPermManagementMode,
-	verifierPermManagementMode CredentialSchemaPermManagementMode,
+	issuerPermManagementMode uint32,
+	verifierPermManagementMode uint32,
 ) *MsgCreateCredentialSchema {
 	return &MsgCreateCredentialSchema{
 		Creator:                                 creator,
@@ -345,7 +167,7 @@ func (msg *MsgCreateCredentialSchema) ValidateBasic() error {
 	}
 
 	// Validate JSON Schema
-	if err := validateJSONSchema(msg.JsonSchema); err != nil {
+	if err := validateJSONSchema(msg.JsonSchema, msg.Id); err != nil {
 		return errors.Wrapf(ErrInvalidJSONSchema, err.Error())
 	}
 
@@ -362,7 +184,7 @@ func (msg *MsgCreateCredentialSchema) ValidateBasic() error {
 	return nil
 }
 
-func validateJSONSchema(schemaJSON string) error {
+func validateJSONSchema(schemaJSON string, id uint64) error {
 	if schemaJSON == "" {
 		return fmt.Errorf("json schema cannot be empty")
 	}
@@ -373,11 +195,24 @@ func validateJSONSchema(schemaJSON string) error {
 		return fmt.Errorf("invalid JSON format: %w", err)
 	}
 
-	// Load the meta-schema
+	if len(schemaJSON) > int(DefaultCredentialSchemaSchemaMaxSize) {
+		return fmt.Errorf("json schema exceeds maximum size of %d bytes", DefaultCredentialSchemaSchemaMaxSize)
+	}
+
+	// Check for $id field and print it for debugging
+	schemaId, ok := schemaDoc["$id"].(string)
+	if !ok {
+		return fmt.Errorf("$id must be a string")
+	}
+
+	expectedUrl := fmt.Sprintf("/dtr/v1/cs/js/%d", id) // Adjust URL pattern as per your API
+	if schemaId != expectedUrl {
+		return fmt.Errorf("$id must match the schema query URL pattern: %s", expectedUrl)
+	}
+
+	// Load the meta-schema and validate
 	metaSchemaLoader := gojsonschema.NewStringLoader(jsonSchemaMetaSchema)
 	schemaLoader := gojsonschema.NewStringLoader(schemaJSON)
-
-	// Validate against meta-schema
 	result, err := gojsonschema.Validate(metaSchemaLoader, schemaLoader)
 	if err != nil {
 		return fmt.Errorf("schema validation error: %w", err)
@@ -409,7 +244,6 @@ func validateJSONSchema(schemaJSON string) error {
 	if !ok || len(properties) == 0 {
 		return fmt.Errorf("schema must define non-empty properties")
 	}
-
 	return nil
 }
 
@@ -420,6 +254,17 @@ func validateValidityPeriods(msg *MsgCreateCredentialSchema) error {
 	if msg.VerifierGrantorValidationValidityPeriod < 0 {
 		return fmt.Errorf("verifier grantor validation validity period cannot be negative")
 	}
+	// Add maximum value checks
+	if msg.IssuerGrantorValidationValidityPeriod > 0 &&
+		msg.IssuerGrantorValidationValidityPeriod > DefaultCredentialSchemaIssuerGrantorValidationValidityPeriodMaxDays {
+		return fmt.Errorf("issuer grantor validation validity period exceeds maximum allowed days")
+	}
+
+	if msg.VerifierGrantorValidationValidityPeriod > 0 &&
+		msg.VerifierGrantorValidationValidityPeriod > DefaultCredentialSchemaVerifierGrantorValidationValidityPeriodMaxDays {
+		return fmt.Errorf("verifier grantor validation validity period exceeds maximum allowed days")
+	}
+
 	if msg.IssuerValidationValidityPeriod < 0 {
 		return fmt.Errorf("issuer validation validity period cannot be negative")
 	}
@@ -434,28 +279,19 @@ func validateValidityPeriods(msg *MsgCreateCredentialSchema) error {
 
 func validatePermManagementModes(msg *MsgCreateCredentialSchema) error {
 	// Check issuer permission management mode
-	if msg.IssuerPermManagementMode == CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_UNSPECIFIED {
+	if msg.IssuerPermManagementMode == 0 {
 		return fmt.Errorf("issuer permission management mode must be specified")
+	}
+	if msg.IssuerPermManagementMode > 3 {
+		return fmt.Errorf("invalid issuer permission management mode: must be between 1 and 3")
 	}
 
 	// Check verifier permission management mode
-	if msg.VerifierPermManagementMode == CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_UNSPECIFIED {
+	if msg.VerifierPermManagementMode == 0 {
 		return fmt.Errorf("verifier permission management mode must be specified")
 	}
-
-	// Define valid modes
-	validModes := map[CredentialSchemaPermManagementMode]bool{
-		CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_OPEN:                      true,
-		CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION:        true,
-		CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_TRUST_REGISTRY_VALIDATION: true,
-	}
-
-	if !validModes[msg.IssuerPermManagementMode] {
-		return fmt.Errorf("invalid issuer permission management mode")
-	}
-
-	if !validModes[msg.VerifierPermManagementMode] {
-		return fmt.Errorf("invalid verifier permission management mode")
+	if msg.VerifierPermManagementMode > 3 {
+		return fmt.Errorf("invalid verifier permission management mode: must be between 1 and 3")
 	}
 
 	return nil

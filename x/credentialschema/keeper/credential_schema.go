@@ -85,8 +85,8 @@ func (ms msgServer) executeCreateCredentialSchema(ctx sdk.Context, msg *types.Ms
 		IssuerValidationValidityPeriod:          msg.IssuerValidationValidityPeriod,
 		VerifierValidationValidityPeriod:        msg.VerifierValidationValidityPeriod,
 		HolderValidationValidityPeriod:          msg.HolderValidationValidityPeriod,
-		IssuerPermManagementMode:                msg.IssuerPermManagementMode,
-		VerifierPermManagementMode:              msg.VerifierPermManagementMode,
+		IssuerPermManagementMode:                types.CredentialSchemaPermManagementMode(msg.IssuerPermManagementMode),
+		VerifierPermManagementMode:              types.CredentialSchemaPermManagementMode(msg.VerifierPermManagementMode),
 	}
 
 	// TODO:Handle trust deposit

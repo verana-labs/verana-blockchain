@@ -54,8 +54,8 @@ message MsgCreateCredentialSchema {
   uint32 issuer_validation_validity_period = 7;
   uint32 verifier_validation_validity_period = 8;
   uint32 holder_validation_validity_period = 9;
-  CredentialSchemaPermManagementMode issuer_perm_management_mode = 10;
-  CredentialSchemaPermManagementMode verifier_perm_management_mode = 11;
+  uint32 issuer_perm_management_mode = 10;    // Changed to uint32
+  uint32 verifier_perm_management_mode = 11;  // Changed to uint32
 }
 
 message MsgCreateCredentialSchemaResponse {

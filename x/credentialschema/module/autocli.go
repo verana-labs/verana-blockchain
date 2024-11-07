@@ -28,6 +28,57 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					RpcMethod: "UpdateParams",
 					Skip:      true, // skipped because authority gated
 				},
+				{
+					RpcMethod: "CreateCredentialSchema",
+					Use:       "create-credential-schema [id] [tr-id] [json-schema] [issuer-grantor-period] [verifier-grantor-period] [issuer-period] [verifier-period] [holder-period] [issuer-mode] [verifier-mode]",
+					Short:     "Create a new credential schema",
+					Long: `Create a new credential schema with the specified parameters:
+						- id: unique identifier for the schema
+						- tr-id: trust registry ID
+						- json-schema: path to JSON schema file or JSON string
+						- issuer-grantor-period: validation period for issuer grantors (days)
+						- verifier-grantor-period: validation period for verifier grantors (days)
+						- issuer-period: validation period for issuers (days)
+						- verifier-period: validation period for verifiers (days)
+						- holder-period: validation period for holders (days)
+						- issuer-mode: permission management mode for issuers (0=UNSPECIFIED, 1=OPEN, 2=GRANTOR_VALIDATION, 3=TRUST_REGISTRY_VALIDATION)
+						- verifier-mode: permission management mode for verifiers (0=UNSPECIFIED, 1=OPEN, 2=GRANTOR_VALIDATION, 3=TRUST_REGISTRY_VALIDATION)
+					
+						Example:
+						$ veranad tx credentialschema create-credential-schema 1 1 schema.json 365 365 180 180 180 2 2`,
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "id",
+						},
+						{
+							ProtoField: "tr_id",
+						},
+						{
+							ProtoField: "json_schema",
+						},
+						{
+							ProtoField: "issuer_grantor_validation_validity_period",
+						},
+						{
+							ProtoField: "verifier_grantor_validation_validity_period",
+						},
+						{
+							ProtoField: "issuer_validation_validity_period",
+						},
+						{
+							ProtoField: "verifier_validation_validity_period",
+						},
+						{
+							ProtoField: "holder_validation_validity_period",
+						},
+						{
+							ProtoField: "issuer_perm_management_mode",
+						},
+						{
+							ProtoField: "verifier_perm_management_mode",
+						},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},

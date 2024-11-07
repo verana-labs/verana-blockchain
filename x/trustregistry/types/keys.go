@@ -1,6 +1,9 @@
 package types
 
-import "cosmossdk.io/collections"
+import (
+	"cosmossdk.io/collections"
+	"encoding/binary"
+)
 
 const (
 	// ModuleName defines the module name
@@ -24,4 +27,10 @@ var (
 
 func KeyPrefix(p string) []byte {
 	return []byte(p)
+}
+
+func GetTrustRegistryKey(id uint64) []byte {
+	bz := make([]byte, 8)
+	binary.BigEndian.PutUint64(bz, id)
+	return append(TrustRegistryKey, bz...)
 }
