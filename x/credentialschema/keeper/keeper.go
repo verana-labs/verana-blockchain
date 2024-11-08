@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"cosmossdk.io/collections"
 	"fmt"
 
 	"cosmossdk.io/core/store"
@@ -22,6 +23,11 @@ type (
 		authority           string
 		bankKeeper          types.BankKeeper
 		trustregistryKeeper types.TrustRegistryKeeper
+
+		// State management
+		Schema collections.Schema
+		//Params           collections.Item[types.Params]
+		CredentialSchema collections.Map[uint64, types.CredentialSchema]
 	}
 )
 
@@ -37,14 +43,33 @@ func NewKeeper(
 		panic(fmt.Sprintf("invalid authority address: %s", authority))
 	}
 
-	return Keeper{
+	sb := collections.NewSchemaBuilder(storeService)
+
+	k := Keeper{
 		cdc:                 cdc,
 		storeService:        storeService,
-		authority:           authority,
 		logger:              logger,
+		authority:           authority,
 		bankKeeper:          bankKeeper,
 		trustregistryKeeper: trustregistryKeeper,
+
+		// Initialize collections
+		CredentialSchema: collections.NewMap(
+			sb,
+			types.CredentialSchemaKey,
+			"credential_schema",
+			collections.Uint64Key,
+			codec.CollValue[types.CredentialSchema](cdc),
+		),
 	}
+
+	schema, err := sb.Build()
+	if err != nil {
+		panic(err)
+	}
+	k.Schema = schema
+
+	return k
 }
 
 // GetAuthority returns the module's authority.
@@ -59,49 +84,22 @@ func (k Keeper) Logger() log.Logger {
 
 // GetCredentialSchema returns a credential schema by ID
 func (k Keeper) GetCredentialSchema(ctx sdk.Context, id uint64) (types.CredentialSchema, error) {
-	kvStore := k.storeService.OpenKVStore(ctx)
-
-	var credentialSchema types.CredentialSchema
-	bz, err := kvStore.Get(types.GetCredentialSchemaKey(id))
-	if err != nil {
-		return credentialSchema, err
-	}
-	if bz == nil {
-		return credentialSchema, types.ErrCredentialSchemaNotFound
-	}
-
-	k.cdc.MustUnmarshal(bz, &credentialSchema)
-	return credentialSchema, nil
+	return k.CredentialSchema.Get(ctx, id)
 }
 
 // SetCredentialSchema sets a credential schema
-func (k Keeper) SetCredentialSchema(ctx sdk.Context, credentialSchema types.CredentialSchema) error {
-	kvStore := k.storeService.OpenKVStore(ctx)
-	bz := k.cdc.MustMarshal(&credentialSchema)
-
-	return kvStore.Set(types.GetCredentialSchemaKey(credentialSchema.Id), bz)
+func (k Keeper) SetCredentialSchema(ctx sdk.Context, schema types.CredentialSchema) error {
+	return k.CredentialSchema.Set(ctx, schema.Id, schema)
 }
 
 // DeleteCredentialSchema deletes a credential schema
 func (k Keeper) DeleteCredentialSchema(ctx sdk.Context, id uint64) error {
-	kvStore := k.storeService.OpenKVStore(ctx)
-	return kvStore.Delete(types.GetCredentialSchemaKey(id))
+	return k.CredentialSchema.Remove(ctx, id)
 }
 
 // IterateCredentialSchemas iterates over all credential schemas
-func (k Keeper) IterateCredentialSchemas(ctx sdk.Context, fn func(schema types.CredentialSchema) (stop bool)) {
-	kvStore := k.storeService.OpenKVStore(ctx)
-	iterator, err := kvStore.Iterator(types.CredentialSchemaKeyPrefix, nil)
-	if err != nil {
-		panic(err)
-	}
-	defer iterator.Close()
-
-	for ; iterator.Valid(); iterator.Next() {
-		var schema types.CredentialSchema
-		k.cdc.MustUnmarshal(iterator.Value(), &schema)
-		if stop := fn(schema); stop {
-			break
-		}
-	}
+func (k Keeper) IterateCredentialSchemas(ctx sdk.Context, fn func(schema types.CredentialSchema) (stop bool)) error {
+	return k.CredentialSchema.Walk(ctx, nil, func(key uint64, value types.CredentialSchema) (bool, error) {
+		return fn(value), nil
+	})
 }

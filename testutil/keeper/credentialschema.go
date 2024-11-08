@@ -21,12 +21,21 @@ import (
 	"github.com/verana-labs/verana-blockchain/x/credentialschema/keeper"
 	"github.com/verana-labs/verana-blockchain/x/credentialschema/types"
 	trtypes "github.com/verana-labs/verana-blockchain/x/trustregistry/types"
-	trustregistrytypes "github.com/verana-labs/verana-blockchain/x/trustregistry/types"
 )
 
 // MockBankKeeper is a mock implementation of types.BankKeeper
 type MockBankKeeper struct {
 	bankBalances map[string]sdk.Coins
+}
+
+func (k *MockBankKeeper) SendCoinsFromModuleToAccount(ctx sdk.Context, senderModule string, recipientAddr sdk.AccAddress, amt sdk.Coins) error {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (k *MockBankKeeper) SendCoinsFromModuleToModule(ctx sdk.Context, senderModule, recipientModule string, amt sdk.Coins) error {
+	//TODO implement me
+	panic("implement me")
 }
 
 func (k *MockBankKeeper) SpendableCoins(ctx context.Context, address sdk.AccAddress) sdk.Coins {
@@ -50,8 +59,6 @@ func (k *MockBankKeeper) SendCoinsFromAccountToModule(ctx sdk.Context, senderAdd
 	return nil
 }
 
-// Add other required methods from types.BankKeeper...
-
 // MockTrustRegistryKeeper is a mock implementation of types.TrustRegistryKeeper
 type MockTrustRegistryKeeper struct {
 	trustRegistries map[uint64]trtypes.TrustRegistry
@@ -63,17 +70,26 @@ func NewMockTrustRegistryKeeper() *MockTrustRegistryKeeper {
 	}
 }
 
-// Implement required methods from types.TrustRegistryKeeper interface
 func (k *MockTrustRegistryKeeper) GetTrustRegistry(ctx sdk.Context, id uint64) (trtypes.TrustRegistry, error) {
 	if tr, ok := k.trustRegistries[id]; ok {
 		return tr, nil
 	}
-	return trtypes.TrustRegistry{}, trustregistrytypes.ErrTrustRegistryNotFound
+	return trtypes.TrustRegistry{}, trtypes.ErrTrustRegistryNotFound
 }
 
-// Add other required methods from types.TrustRegistryKeeper...
+func (k *MockTrustRegistryKeeper) CreateMockTrustRegistry(creator string, did string) uint64 {
+	id := uint64(len(k.trustRegistries) + 1)
+	k.trustRegistries[id] = trtypes.TrustRegistry{
+		Id:            id,
+		Did:           did,
+		Controller:    creator,
+		ActiveVersion: 1,
+		Language:      "en",
+	}
+	return id
+}
 
-func CredentialschemaKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
+func CredentialschemaKeeper(t testing.TB) (keeper.Keeper, *MockTrustRegistryKeeper, sdk.Context) { // Changed return types
 	storeKey := storetypes.NewKVStoreKey(types.StoreKey)
 
 	db := dbm.NewMemDB()
@@ -105,5 +121,5 @@ func CredentialschemaKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
 		panic(err)
 	}
 
-	return k, ctx
+	return k, trustRegistryKeeper, ctx // Return the mock keeper
 }
