@@ -90,10 +90,10 @@ jobs:
 
       - name: Upload binaries to OVH
         run: |
-          s3cmd put binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-linux-amd64 s3://$BUCKET_NAME/binaries/${{github.event.inputs.BINARY_NAME}}-${{ env.TAG }}-linux-amd64 --acl-public
-          s3cmd put binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-linux-arm64 s3://$BUCKET_NAME/binaries/${{github.event.inputs.BINARY_NAME}}-${{ env.TAG }}-linux-arm64 --acl-public
-          s3cmd put binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-darwin-amd64 s3://$BUCKET_NAME/binaries/${{github.event.inputs.BINARY_NAME}}-${{ env.TAG }}-darwin-amd64 --acl-public
-          s3cmd put binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-darwin-arm64 s3://$BUCKET_NAME/binaries/${{github.event.inputs.BINARY_NAME}}-${{ env.TAG }}-darwin-arm64 --acl-public
+          s3cmd put binaries/${{github.event.inputs.BINARY_NAME}}-linux-amd64 s3://$BUCKET_NAME/binaries/${{github.event.inputs.BINARY_NAME}}-${{ env.TAG }}-linux-amd64 --acl-public
+          s3cmd put binaries/${{github.event.inputs.BINARY_NAME}}-linux-arm64 s3://$BUCKET_NAME/binaries/${{github.event.inputs.BINARY_NAME}}-${{ env.TAG }}-linux-arm64 --acl-public
+          s3cmd put binaries/${{github.event.inputs.BINARY_NAME}}-darwin-amd64 s3://$BUCKET_NAME/binaries/${{github.event.inputs.BINARY_NAME}}-${{ env.TAG }}-darwin-amd64 --acl-public
+          s3cmd put binaries/${{github.event.inputs.BINARY_NAME}}-darwin-arm64 s3://$BUCKET_NAME/binaries/${{github.event.inputs.BINARY_NAME}}-${{ env.TAG }}-darwin-arm64 --acl-public
 
       - name: Update manifest.json
         run: |
@@ -108,4 +108,4 @@ jobs:
           EOL
 
           # Upload manifest.json to S3
-          s3cmd put manifest.json s3://$BUCKET_NAME/${{ env.BRANCH_NAME }}/binaries/manifest.json --acl-public --force
+          s3cmd put manifest.json s3://$BUCKET_NAME/binaries/manifest.json --acl-public --force
