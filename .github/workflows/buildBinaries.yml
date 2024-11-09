@@ -61,22 +61,22 @@ jobs:
         run: |
           mkdir -p binaries/testnet_v1
           echo "LDFLAGS: $LDFLAGS"
-          GOOS=linux GOARCH=amd64 go build -ldflags="$LDFLAGS" -o binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-testnet_v1-linux-amd64 ./cmd/${{github.event.inputs.BINARY_NAME}}
+          GOOS=linux GOARCH=amd64 go build -ldflags="$LDFLAGS" -o binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-linux-amd64 ./cmd/${{github.event.inputs.BINARY_NAME}}
 
       - name: Build binary for Linux ARM64
         run: |
           mkdir -p binaries/testnet_v1
-          GOOS=linux GOARCH=arm64 go build -ldflags="$LDFLAGS" -o binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-testnet_v1-linux-arm64 ./cmd/${{github.event.inputs.BINARY_NAME}}
+          GOOS=linux GOARCH=arm64 go build -ldflags="$LDFLAGS" -o binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-linux-arm64 ./cmd/${{github.event.inputs.BINARY_NAME}}
 
       - name: Build binary for Darwin AMD64
         run: |
           mkdir -p binaries/testnet_v1
-          GOOS=darwin GOARCH=amd64 go build -ldflags="$LDFLAGS" -o binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-testnet_v1-darwin-amd64 ./cmd/${{github.event.inputs.BINARY_NAME}}
+          GOOS=darwin GOARCH=amd64 go build -ldflags="$LDFLAGS" -o binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-darwin-amd64 ./cmd/${{github.event.inputs.BINARY_NAME}}
 
       - name: Build binary for Darwin ARM64
         run: |
           mkdir -p binaries/testnet_v1
-          GOOS=darwin GOARCH=arm64 go build -ldflags="$LDFLAGS" -o binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-testnet_v1-darwin-arm64 ./cmd/${{github.event.inputs.BINARY_NAME}}
+          GOOS=darwin GOARCH=arm64 go build -ldflags="$LDFLAGS" -o binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-darwin-arm64 ./cmd/${{github.event.inputs.BINARY_NAME}}
 
       - name: Generate release tag
         id: generate_tag
@@ -90,20 +90,20 @@ jobs:
 
       - name: Upload binaries to OVH
         run: |
-          s3cmd put binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-testnet_v1-linux-amd64 s3://$BUCKET_NAME/${{ env.BRANCH_NAME }}/binaries/${{github.event.inputs.BINARY_NAME}}-testnet_v1-${{ env.TAG }}-linux-amd64 --acl-public
-          s3cmd put binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-testnet_v1-linux-arm64 s3://$BUCKET_NAME/${{ env.BRANCH_NAME }}/binaries/${{github.event.inputs.BINARY_NAME}}-testnet_v1-${{ env.TAG }}-linux-arm64 --acl-public
-          s3cmd put binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-testnet_v1-darwin-amd64 s3://$BUCKET_NAME/${{ env.BRANCH_NAME }}/binaries/${{github.event.inputs.BINARY_NAME}}-testnet_v1-${{ env.TAG }}-darwin-amd64 --acl-public
-          s3cmd put binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-testnet_v1-darwin-arm64 s3://$BUCKET_NAME/${{ env.BRANCH_NAME }}/binaries/${{github.event.inputs.BINARY_NAME}}-testnet_v1-${{ env.TAG }}-darwin-arm64 --acl-public
+          s3cmd put binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-linux-amd64 s3://$BUCKET_NAME/binaries/${{github.event.inputs.BINARY_NAME}}-${{ env.TAG }}-linux-amd64 --acl-public
+          s3cmd put binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-linux-arm64 s3://$BUCKET_NAME/binaries/${{github.event.inputs.BINARY_NAME}}-${{ env.TAG }}-linux-arm64 --acl-public
+          s3cmd put binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-darwin-amd64 s3://$BUCKET_NAME/binaries/${{github.event.inputs.BINARY_NAME}}-${{ env.TAG }}-darwin-amd64 --acl-public
+          s3cmd put binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-darwin-arm64 s3://$BUCKET_NAME/binaries/${{github.event.inputs.BINARY_NAME}}-${{ env.TAG }}-darwin-arm64 --acl-public
 
       - name: Update manifest.json
         run: |
           # Create or update manifest.json
           cat > manifest.json <<EOL
           {
-            "linux-amd64": "${{github.event.inputs.BINARY_NAME}}-testnet_v1-${{ env.TAG }}-linux-amd64",
-            "linux-arm64": "${{github.event.inputs.BINARY_NAME}}-testnet_v1-${{ env.TAG }}-linux-arm64",
-            "darwin-amd64": "${{github.event.inputs.BINARY_NAME}}-testnet_v1-${{ env.TAG }}-darwin-amd64",
-            "darwin-arm64": "${{github.event.inputs.BINARY_NAME}}-testnet_v1-${{ env.TAG }}-darwin-arm64"
+            "linux-amd64": "${{github.event.inputs.BINARY_NAME}}-${{ env.TAG }}-linux-amd64",
+            "linux-arm64": "${{github.event.inputs.BINARY_NAME}}-${{ env.TAG }}-linux-arm64",
+            "darwin-amd64": "${{github.event.inputs.BINARY_NAME}}-${{ env.TAG }}-darwin-amd64",
+            "darwin-arm64": "${{github.event.inputs.BINARY_NAME}}-${{ env.TAG }}-darwin-arm64"
           }
           EOL
 
