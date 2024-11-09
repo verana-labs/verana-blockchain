@@ -1,0 +1,116 @@
+name: 1.Build Binaries
+
+on:
+  workflow_dispatch:
+    inputs:
+      BINARY_NAME:
+        description: 'The CMD binary name; veranad ,utctestchaind'
+        required: true
+        default: 'veranad'
+
+
+env:
+  OVH_S3_APPLICATION_KEY: ${{ secrets.OVH_S3_APPLICATION_KEY }}
+  OVH_S3_APPLICATION_SECRET: ${{ secrets.OVH_S3_APPLICATION_SECRET }}
+  OVH_SERVICE_NAME: 'utc'
+  BUCKET_NAME: 'utc-public-bucket'
+  VERANA_CODE_REPO_PATH: 'utc-cosmos-testnet'
+  VERANA_CODE_REPO_KEY: ${{ secrets.VERANA_DEPLOY_KEY }}
+  VERANA_BLOCKCHAIN_CODE_REPO_KEY: ${{ secrets.VERANA_BLOCKCHAIN_DEPLOY_KEY }}
+  VERANA_DEPLOY_PATH: 'verana-deploy'
+
+
+jobs:
+  build-binaries-s3:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout Dockerfiles from verana-deploy
+        uses: actions/checkout@v3
+        with:
+          repository: verana-labs/verana-deploy
+          ref: ${{ github.ref_name }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: ${{ env.VERANA_DEPLOY_PATH }}
+
+      - name: Set up Go environment
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.21
+
+      - name: Determine Branch or Environment
+        id: determine-branch
+        run: |
+          if [ -z "${{ github.event.inputs.NAME_SPACE }}" ]; then
+            if [ "${{ github.event.inputs.VERANA_BRANCH }}" == "main" ]; then
+              echo "BRANCH_NAME=vna-devnet-main" >> $GITHUB_ENV
+            else
+              BRANCH_NAME=$(echo "vna-devnet-${{ github.event.inputs.VERANA_BRANCH }}" | sed 's/\//-/g')
+              echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+            fi
+          else
+            echo "BRANCH_NAME=${{ github.event.inputs.NAME_SPACE }}" >> $GITHUB_ENV
+          fi
+
+      - name: Set LDFLAGS environment variable
+        run: |
+          VERSION=$(git describe --tags)
+          COMMIT=$(git rev-parse --short HEAD)
+          LDFLAGS="-X github.com/cosmos/cosmos-sdk/version.Name=verana \
+          -X github.com/cosmos/cosmos-sdk/version.AppName=verana \
+          -X github.com/cosmos/cosmos-sdk/version.Version=${VERSION} \
+          -X github.com/cosmos/cosmos-sdk/version.Commit=${COMMIT}"
+          echo "LDFLAGS=${LDFLAGS}" >> $GITHUB_ENV
+
+      - name: Build binary for Linux AMD64
+        run: |
+          mkdir -p binaries/testnet_v1
+          echo "LDFLAGS: $LDFLAGS"
+          GOOS=linux GOARCH=amd64 go build -ldflags="$LDFLAGS" -o binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-testnet_v1-linux-amd64 ./cmd/${{github.event.inputs.BINARY_NAME}}
+
+      - name: Build binary for Linux ARM64
+        run: |
+          mkdir -p binaries/testnet_v1
+          GOOS=linux GOARCH=arm64 go build -ldflags="$LDFLAGS" -o binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-testnet_v1-linux-arm64 ./cmd/${{github.event.inputs.BINARY_NAME}}
+
+      - name: Build binary for Darwin AMD64
+        run: |
+          mkdir -p binaries/testnet_v1
+          GOOS=darwin GOARCH=amd64 go build -ldflags="$LDFLAGS" -o binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-testnet_v1-darwin-amd64 ./cmd/${{github.event.inputs.BINARY_NAME}}
+
+      - name: Build binary for Darwin ARM64
+        run: |
+          mkdir -p binaries/testnet_v1
+          GOOS=darwin GOARCH=arm64 go build -ldflags="$LDFLAGS" -o binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-testnet_v1-darwin-arm64 ./cmd/${{github.event.inputs.BINARY_NAME}}
+
+      - name: Generate release tag
+        id: generate_tag
+        run: echo "TAG=v$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
+
+      - name: Install s3cmd
+        run: sudo apt-get install s3cmd
+
+      - name: Configure s3cmd
+        run: s3cmd --access_key=$OVH_S3_APPLICATION_KEY --secret_key=$OVH_S3_APPLICATION_SECRET --region=bhs --host=s3.bhs.io.cloud.ovh.net --host-bucket=HOST_BUCKET --ssl --no-encrypt --dump-config 2>&1 | tee /home/runner/.s3cfg
+
+      - name: Upload binaries to OVH
+        run: |
+          s3cmd put binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-testnet_v1-linux-amd64 s3://$BUCKET_NAME/${{ env.BRANCH_NAME }}/binaries/${{github.event.inputs.BINARY_NAME}}-testnet_v1-${{ env.TAG }}-linux-amd64 --acl-public
+          s3cmd put binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-testnet_v1-linux-arm64 s3://$BUCKET_NAME/${{ env.BRANCH_NAME }}/binaries/${{github.event.inputs.BINARY_NAME}}-testnet_v1-${{ env.TAG }}-linux-arm64 --acl-public
+          s3cmd put binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-testnet_v1-darwin-amd64 s3://$BUCKET_NAME/${{ env.BRANCH_NAME }}/binaries/${{github.event.inputs.BINARY_NAME}}-testnet_v1-${{ env.TAG }}-darwin-amd64 --acl-public
+          s3cmd put binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-testnet_v1-darwin-arm64 s3://$BUCKET_NAME/${{ env.BRANCH_NAME }}/binaries/${{github.event.inputs.BINARY_NAME}}-testnet_v1-${{ env.TAG }}-darwin-arm64 --acl-public
+
+      - name: Update manifest.json
+        run: |
+          # Create or update manifest.json
+          cat > manifest.json <<EOL
+          {
+            "linux-amd64": "${{github.event.inputs.BINARY_NAME}}-testnet_v1-${{ env.TAG }}-linux-amd64",
+            "linux-arm64": "${{github.event.inputs.BINARY_NAME}}-testnet_v1-${{ env.TAG }}-linux-arm64",
+            "darwin-amd64": "${{github.event.inputs.BINARY_NAME}}-testnet_v1-${{ env.TAG }}-darwin-amd64",
+            "darwin-arm64": "${{github.event.inputs.BINARY_NAME}}-testnet_v1-${{ env.TAG }}-darwin-arm64"
+          }
+          EOL
+
+          # Upload manifest.json to S3
+          s3cmd put manifest.json s3://$BUCKET_NAME/${{ env.BRANCH_NAME }}/binaries/manifest.json --acl-public --force
