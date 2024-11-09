@@ -25,14 +25,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - name: Checkout Dockerfiles from verana-deploy
-        uses: actions/checkout@v3
-        with:
-          repository: verana-labs/verana-deploy
-          ref: ${{ github.ref_name }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-          path: ${{ env.VERANA_DEPLOY_PATH }}
-
       - name: Set up Go environment
         uses: actions/setup-go@v3
         with:
