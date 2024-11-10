@@ -49,16 +49,23 @@ jobs:
 
       - name: Set LDFLAGS environment variable
         run: |
+          echo executing: git describe --tags --exact-match
+          git describe --tags --exact-match || true
           if git describe --tags --exact-match > /dev/null 2>&1; then
             VERSION=$(git describe --tags --exact-match)
+            echo "then VERSION=${VERSION}"
           else
             VERSION="dev"
+            echo "else VERSION=${VERSION}"
           fi
           COMMIT=$(git rev-parse --short HEAD)
           LDFLAGS="-X github.com/cosmos/cosmos-sdk/version.Name=verana \
           -X github.com/cosmos/cosmos-sdk/version.AppName=verana \
           -X github.com/cosmos/cosmos-sdk/version.Version=${VERSION} \
           -X github.com/cosmos/cosmos-sdk/version.Commit=${COMMIT}"
+          echo "LDFLAGS=${LDFLAGS}"
+          echo "VERSION=${VERSION}"
+          echo "COMMIT=${COMMIT}"
           echo "LDFLAGS=${LDFLAGS}" >> $GITHUB_ENV
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
           echo "COMMIT=${COMMIT}" >> $GITHUB_ENV          
