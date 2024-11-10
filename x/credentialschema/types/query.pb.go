@@ -11,19 +11,23 @@ import (
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	grpc1 "github.com/cosmos/gogoproto/grpc"
 	proto "github.com/cosmos/gogoproto/proto"
+	github_com_cosmos_gogoproto_types "github.com/cosmos/gogoproto/types"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	_ "google.golang.org/protobuf/types/known/timestamppb"
 	io "io"
 	math "math"
 	math_bits "math/bits"
+	time "time"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+var _ = time.Kitchen
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the proto package it is being compiled against.
@@ -114,9 +118,115 @@ func (m *QueryParamsResponse) GetParams() Params {
 	return Params{}
 }
 
+type QueryListCredentialSchemasRequest struct {
+	TrId            uint64     `protobuf:"varint,1,opt,name=tr_id,json=trId,proto3" json:"tr_id,omitempty"`
+	CreatedAfter    *time.Time `protobuf:"bytes,2,opt,name=created_after,json=createdAfter,proto3,stdtime" json:"created_after,omitempty"`
+	ResponseMaxSize uint32     `protobuf:"varint,3,opt,name=response_max_size,json=responseMaxSize,proto3" json:"response_max_size,omitempty"`
+}
+
+func (m *QueryListCredentialSchemasRequest) Reset()         { *m = QueryListCredentialSchemasRequest{} }
+func (m *QueryListCredentialSchemasRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryListCredentialSchemasRequest) ProtoMessage()    {}
+func (*QueryListCredentialSchemasRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_abc2dfc1bf61ae30, []int{2}
+}
+func (m *QueryListCredentialSchemasRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryListCredentialSchemasRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryListCredentialSchemasRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryListCredentialSchemasRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryListCredentialSchemasRequest.Merge(m, src)
+}
+func (m *QueryListCredentialSchemasRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryListCredentialSchemasRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryListCredentialSchemasRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryListCredentialSchemasRequest proto.InternalMessageInfo
+
+func (m *QueryListCredentialSchemasRequest) GetTrId() uint64 {
+	if m != nil {
+		return m.TrId
+	}
+	return 0
+}
+
+func (m *QueryListCredentialSchemasRequest) GetCreatedAfter() *time.Time {
+	if m != nil {
+		return m.CreatedAfter
+	}
+	return nil
+}
+
+func (m *QueryListCredentialSchemasRequest) GetResponseMaxSize() uint32 {
+	if m != nil {
+		return m.ResponseMaxSize
+	}
+	return 0
+}
+
+type QueryListCredentialSchemasResponse struct {
+	Schemas []CredentialSchema `protobuf:"bytes,1,rep,name=schemas,proto3" json:"schemas"`
+}
+
+func (m *QueryListCredentialSchemasResponse) Reset()         { *m = QueryListCredentialSchemasResponse{} }
+func (m *QueryListCredentialSchemasResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryListCredentialSchemasResponse) ProtoMessage()    {}
+func (*QueryListCredentialSchemasResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_abc2dfc1bf61ae30, []int{3}
+}
+func (m *QueryListCredentialSchemasResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryListCredentialSchemasResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryListCredentialSchemasResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryListCredentialSchemasResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryListCredentialSchemasResponse.Merge(m, src)
+}
+func (m *QueryListCredentialSchemasResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryListCredentialSchemasResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryListCredentialSchemasResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryListCredentialSchemasResponse proto.InternalMessageInfo
+
+func (m *QueryListCredentialSchemasResponse) GetSchemas() []CredentialSchema {
+	if m != nil {
+		return m.Schemas
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*QueryParamsRequest)(nil), "veranablockchain.credentialschema.QueryParamsRequest")
 	proto.RegisterType((*QueryParamsResponse)(nil), "veranablockchain.credentialschema.QueryParamsResponse")
+	proto.RegisterType((*QueryListCredentialSchemasRequest)(nil), "veranablockchain.credentialschema.QueryListCredentialSchemasRequest")
+	proto.RegisterType((*QueryListCredentialSchemasResponse)(nil), "veranablockchain.credentialschema.QueryListCredentialSchemasResponse")
 }
 
 func init() {
@@ -124,29 +234,41 @@ func init() {
 }
 
 var fileDescriptor_abc2dfc1bf61ae30 = []byte{
-	// 338 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x91, 0x31, 0x4b, 0xc3, 0x40,
-	0x14, 0xc7, 0x73, 0x82, 0x05, 0xe3, 0x64, 0xec, 0x20, 0x45, 0xa2, 0x76, 0xd2, 0x42, 0x73, 0xb4,
-	0x62, 0x71, 0x12, 0xec, 0xec, 0xa0, 0x1d, 0x75, 0x7a, 0x39, 0x8f, 0xf4, 0x30, 0xb9, 0x97, 0xe6,
-	0xae, 0xc5, 0xae, 0x7e, 0x02, 0xc1, 0x2f, 0xe1, 0xe8, 0xe6, 0xec, 0xd6, 0xb1, 0xe0, 0xe2, 0x24,
-	0xd2, 0x08, 0x7e, 0x0d, 0xe9, 0x5d, 0x1c, 0x6c, 0x87, 0xe8, 0x72, 0x3c, 0xfe, 0xf7, 0xff, 0xff,
-	0xee, 0xbd, 0x77, 0x6e, 0x73, 0xc4, 0x33, 0x90, 0x10, 0xc6, 0xc8, 0x6e, 0x58, 0x1f, 0x84, 0xa4,
-	0x2c, 0xe3, 0xd7, 0x5c, 0x6a, 0x01, 0xb1, 0x62, 0x7d, 0x9e, 0x00, 0x1d, 0x0c, 0x79, 0x36, 0x0e,
-	0xd2, 0x0c, 0x35, 0x7a, 0x7b, 0x8b, 0xf6, 0x60, 0xd1, 0x5e, 0xdb, 0x80, 0x44, 0x48, 0xa4, 0xe6,
-	0xb4, 0xa9, 0x5a, 0x35, 0xc2, 0x08, 0x4d, 0x49, 0xe7, 0x55, 0xa1, 0x6e, 0x47, 0x88, 0x51, 0xcc,
-	0x29, 0xa4, 0x82, 0x82, 0x94, 0xa8, 0x41, 0x0b, 0x94, 0xaa, 0xb8, 0x6d, 0x30, 0x54, 0x09, 0x2a,
-	0x1a, 0x82, 0xe2, 0xb6, 0x05, 0x3a, 0x6a, 0x85, 0x5c, 0x43, 0x8b, 0xa6, 0x10, 0x09, 0x69, 0xcc,
-	0x85, 0x37, 0x28, 0x1f, 0x22, 0x85, 0x0c, 0x92, 0x82, 0x5d, 0xaf, 0xba, 0xde, 0xc5, 0x9c, 0x78,
-	0x6e, 0xc4, 0x1e, 0x1f, 0x0c, 0xb9, 0xd2, 0x75, 0xe6, 0x6e, 0xfe, 0x52, 0x55, 0x8a, 0x52, 0x71,
-	0xef, 0xcc, 0xad, 0xd8, 0xf0, 0x16, 0xd9, 0x25, 0xfb, 0xeb, 0xed, 0x83, 0xa0, 0x74, 0x07, 0x81,
-	0x45, 0x74, 0xd7, 0x26, 0xef, 0x3b, 0xce, 0xe3, 0xd7, 0x53, 0x83, 0xf4, 0x0a, 0x46, 0xfb, 0x85,
-	0xb8, 0xab, 0xe6, 0x15, 0xef, 0x99, 0xb8, 0x15, 0xeb, 0xf3, 0x8e, 0xfe, 0x80, 0x5c, 0x6e, 0xb8,
-	0xd6, 0xf9, 0x6f, 0xcc, 0x4e, 0x54, 0x3f, 0xb9, 0x7b, 0xfd, 0x7c, 0x58, 0x39, 0xf6, 0x3a, 0xd4,
-	0xe6, 0x9b, 0x31, 0x84, 0xea, 0xa7, 0x2e, 0x5f, 0x62, 0xf7, 0x6a, 0x32, 0xf3, 0xc9, 0x74, 0xe6,
-	0x93, 0x8f, 0x99, 0x4f, 0xee, 0x73, 0xdf, 0x99, 0xe6, 0xbe, 0xf3, 0x96, 0xfb, 0xce, 0xe5, 0x69,
-	0x24, 0x74, 0x7f, 0x18, 0x06, 0x0c, 0x93, 0x12, 0xf6, 0xed, 0x32, 0x5d, 0x8f, 0x53, 0xae, 0xc2,
-	0x8a, 0xf9, 0xa2, 0xc3, 0xef, 0x00, 0x00, 0x00, 0xff, 0xff, 0x5f, 0xa9, 0xc8, 0x63, 0x99, 0x02,
-	0x00, 0x00,
+	// 542 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x53, 0x41, 0x6f, 0xd3, 0x30,
+	0x18, 0xad, 0xd7, 0xae, 0x80, 0xc7, 0x34, 0xd5, 0x1b, 0xa2, 0xaa, 0x50, 0xba, 0xe5, 0x54, 0x2a,
+	0x2d, 0x56, 0x3b, 0x31, 0x71, 0x42, 0x5a, 0x81, 0xc3, 0xa4, 0x21, 0x41, 0xca, 0x09, 0x0e, 0x95,
+	0x93, 0x7a, 0xa9, 0x45, 0x13, 0x67, 0xb6, 0x5b, 0xb5, 0xbb, 0xc1, 0x2f, 0x98, 0xc4, 0x9f, 0xe0,
+	0x06, 0x37, 0x4e, 0xdc, 0x7b, 0x9c, 0xc4, 0x85, 0xd3, 0x40, 0x2d, 0x12, 0x7f, 0x03, 0xc5, 0x4e,
+	0x90, 0x28, 0xb0, 0x16, 0xed, 0x12, 0x39, 0xf6, 0x7b, 0xef, 0x7b, 0xef, 0xc5, 0x81, 0xbb, 0x43,
+	0x2a, 0x48, 0x44, 0xbc, 0x3e, 0xf7, 0x5f, 0xf9, 0x3d, 0xc2, 0x22, 0xec, 0x0b, 0xda, 0xa5, 0x91,
+	0x62, 0xa4, 0x2f, 0xfd, 0x1e, 0x0d, 0x09, 0x3e, 0x19, 0x50, 0x31, 0x76, 0x62, 0xc1, 0x15, 0x47,
+	0x3b, 0xf3, 0x70, 0x67, 0x1e, 0x5e, 0x29, 0x91, 0x90, 0x45, 0x1c, 0xeb, 0xa7, 0x61, 0x55, 0xb6,
+	0x02, 0x1e, 0x70, 0xbd, 0xc4, 0xc9, 0x2a, 0xdd, 0xbd, 0x13, 0x70, 0x1e, 0xf4, 0x29, 0x26, 0x31,
+	0xc3, 0x24, 0x8a, 0xb8, 0x22, 0x8a, 0xf1, 0x48, 0xa6, 0xa7, 0x75, 0x9f, 0xcb, 0x90, 0x4b, 0xec,
+	0x11, 0x49, 0x8d, 0x05, 0x3c, 0x6c, 0x78, 0x54, 0x91, 0x06, 0x8e, 0x49, 0xc0, 0x22, 0x0d, 0x4e,
+	0xb1, 0xce, 0xe2, 0x10, 0x31, 0x11, 0x24, 0xcc, 0xb4, 0x97, 0x08, 0xad, 0xc6, 0x31, 0xcd, 0xe0,
+	0xd5, 0xd4, 0xa8, 0x7e, 0xf3, 0x06, 0xc7, 0x58, 0xb1, 0x90, 0x4a, 0x45, 0xc2, 0xd8, 0x00, 0xec,
+	0x2d, 0x88, 0x9e, 0x25, 0x0e, 0x9f, 0xea, 0x21, 0x2e, 0x3d, 0x19, 0x50, 0xa9, 0x6c, 0x1f, 0x6e,
+	0xfe, 0xb6, 0x2b, 0x63, 0x1e, 0x49, 0x8a, 0x8e, 0x60, 0xd1, 0x98, 0x29, 0x83, 0x6d, 0x50, 0x5b,
+	0x6b, 0xde, 0x75, 0x16, 0x76, 0xea, 0x18, 0x89, 0xd6, 0x8d, 0xc9, 0x45, 0x35, 0xf7, 0xee, 0xc7,
+	0x87, 0x3a, 0x70, 0x53, 0x0d, 0xfb, 0x3d, 0x80, 0x3b, 0x7a, 0xca, 0x11, 0x93, 0xea, 0xe1, 0x2f,
+	0x5e, 0x5b, 0xf3, 0x32, 0x2b, 0x68, 0x13, 0xae, 0x2a, 0xd1, 0x61, 0x5d, 0x3d, 0xb2, 0xe0, 0x16,
+	0x94, 0x38, 0xec, 0xa2, 0x43, 0xb8, 0xee, 0x0b, 0x4a, 0x14, 0xed, 0x76, 0xc8, 0xb1, 0xa2, 0xa2,
+	0xbc, 0xa2, 0xfd, 0x54, 0x1c, 0x13, 0xd7, 0xc9, 0xe2, 0x3a, 0xcf, 0xb3, 0xb8, 0xad, 0xeb, 0x93,
+	0x8b, 0x2a, 0x38, 0xfb, 0x5a, 0x05, 0xee, 0xcd, 0x94, 0x7a, 0x90, 0x30, 0x51, 0x1d, 0x96, 0x44,
+	0x9a, 0xaf, 0x13, 0x92, 0x51, 0x47, 0xb2, 0x53, 0x5a, 0xce, 0x6f, 0x83, 0xda, 0xba, 0xbb, 0x91,
+	0x1d, 0x3c, 0x21, 0xa3, 0x36, 0x3b, 0xa5, 0xf6, 0x18, 0xda, 0x97, 0x19, 0x4e, 0x5b, 0x6a, 0xc3,
+	0x6b, 0x26, 0x7b, 0x52, 0x53, 0xbe, 0xb6, 0xd6, 0xdc, 0x5b, 0xa2, 0xa6, 0x79, 0xb9, 0x56, 0x21,
+	0x29, 0xcc, 0xcd, 0x94, 0x9a, 0xaf, 0xf3, 0x70, 0x55, 0xcf, 0x46, 0x1f, 0x01, 0x2c, 0x9a, 0x52,
+	0xd1, 0xbd, 0x25, 0x84, 0xff, 0xfc, 0xba, 0x95, 0xfd, 0xff, 0xa5, 0x99, 0x60, 0xf6, 0x83, 0x37,
+	0x9f, 0xbf, 0xbf, 0x5d, 0xb9, 0x8f, 0xf6, 0xb1, 0xe1, 0xef, 0xf6, 0x89, 0x27, 0xb3, 0xf5, 0xe2,
+	0x1b, 0x8c, 0x3e, 0x01, 0x78, 0xeb, 0xaf, 0xd5, 0xa1, 0x47, 0xcb, 0x3a, 0xba, 0xec, 0xaa, 0x54,
+	0x1e, 0x5f, 0x51, 0x25, 0x8d, 0x79, 0x5b, 0xc7, 0x2c, 0xa1, 0x0d, 0xdc, 0x55, 0x02, 0x0f, 0x1b,
+	0xd8, 0x97, 0xb8, 0xcf, 0xa4, 0x6a, 0xbd, 0x9c, 0x4c, 0x2d, 0x70, 0x3e, 0xb5, 0xc0, 0xb7, 0xa9,
+	0x05, 0xce, 0x66, 0x56, 0xee, 0x7c, 0x66, 0xe5, 0xbe, 0xcc, 0xac, 0xdc, 0x8b, 0x83, 0x80, 0xa9,
+	0xde, 0xc0, 0x73, 0x7c, 0x1e, 0x2e, 0xe8, 0x66, 0xf4, 0x8f, 0xff, 0xd5, 0x2b, 0xea, 0x3b, 0xbb,
+	0xf7, 0x33, 0x00, 0x00, 0xff, 0xff, 0x0a, 0xf3, 0xb2, 0xa9, 0xd6, 0x04, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -163,6 +285,8 @@ const _ = grpc.SupportPackageIsVersion4
 type QueryClient interface {
 	// Parameters queries the parameters of the module.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
+	// ListCredentialSchemas queries a list of CredentialSchema items.
+	ListCredentialSchemas(ctx context.Context, in *QueryListCredentialSchemasRequest, opts ...grpc.CallOption) (*QueryListCredentialSchemasResponse, error)
 }
 
 type queryClient struct {
@@ -182,10 +306,21 @@ func (c *queryClient) Params(ctx context.Context, in *QueryParamsRequest, opts .
 	return out, nil
 }
 
+func (c *queryClient) ListCredentialSchemas(ctx context.Context, in *QueryListCredentialSchemasRequest, opts ...grpc.CallOption) (*QueryListCredentialSchemasResponse, error) {
+	out := new(QueryListCredentialSchemasResponse)
+	err := c.cc.Invoke(ctx, "/veranablockchain.credentialschema.Query/ListCredentialSchemas", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 type QueryServer interface {
 	// Parameters queries the parameters of the module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
+	// ListCredentialSchemas queries a list of CredentialSchema items.
+	ListCredentialSchemas(context.Context, *QueryListCredentialSchemasRequest) (*QueryListCredentialSchemasResponse, error)
 }
 
 // UnimplementedQueryServer can be embedded to have forward compatible implementations.
@@ -194,6 +329,9 @@ type UnimplementedQueryServer struct {
 
 func (*UnimplementedQueryServer) Params(ctx context.Context, req *QueryParamsRequest) (*QueryParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Params not implemented")
+}
+func (*UnimplementedQueryServer) ListCredentialSchemas(ctx context.Context, req *QueryListCredentialSchemasRequest) (*QueryListCredentialSchemasResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListCredentialSchemas not implemented")
 }
 
 func RegisterQueryServer(s grpc1.Server, srv QueryServer) {
@@ -218,6 +356,24 @@ func _Query_Params_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_ListCredentialSchemas_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryListCredentialSchemasRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).ListCredentialSchemas(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/veranablockchain.credentialschema.Query/ListCredentialSchemas",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).ListCredentialSchemas(ctx, req.(*QueryListCredentialSchemasRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var Query_serviceDesc = _Query_serviceDesc
 var _Query_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "veranablockchain.credentialschema.Query",
@@ -226,6 +382,10 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Params",
 			Handler:    _Query_Params_Handler,
+		},
+		{
+			MethodName: "ListCredentialSchemas",
+			Handler:    _Query_ListCredentialSchemas_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -288,6 +448,86 @@ func (m *QueryParamsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *QueryListCredentialSchemasRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryListCredentialSchemasRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryListCredentialSchemasRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ResponseMaxSize != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.ResponseMaxSize))
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.CreatedAfter != nil {
+		n2, err2 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(*m.CreatedAfter, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(*m.CreatedAfter):])
+		if err2 != nil {
+			return 0, err2
+		}
+		i -= n2
+		i = encodeVarintQuery(dAtA, i, uint64(n2))
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.TrId != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.TrId))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryListCredentialSchemasResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryListCredentialSchemasResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryListCredentialSchemasResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Schemas) > 0 {
+		for iNdEx := len(m.Schemas) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Schemas[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintQuery(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintQuery(dAtA []byte, offset int, v uint64) int {
 	offset -= sovQuery(v)
 	base := offset
@@ -316,6 +556,40 @@ func (m *QueryParamsResponse) Size() (n int) {
 	_ = l
 	l = m.Params.Size()
 	n += 1 + l + sovQuery(uint64(l))
+	return n
+}
+
+func (m *QueryListCredentialSchemasRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.TrId != 0 {
+		n += 1 + sovQuery(uint64(m.TrId))
+	}
+	if m.CreatedAfter != nil {
+		l = github_com_cosmos_gogoproto_types.SizeOfStdTime(*m.CreatedAfter)
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	if m.ResponseMaxSize != 0 {
+		n += 1 + sovQuery(uint64(m.ResponseMaxSize))
+	}
+	return n
+}
+
+func (m *QueryListCredentialSchemasResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Schemas) > 0 {
+		for _, e := range m.Schemas {
+			l = e.Size()
+			n += 1 + l + sovQuery(uint64(l))
+		}
+	}
 	return n
 }
 
@@ -434,6 +708,214 @@ func (m *QueryParamsResponse) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if err := m.Params.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryListCredentialSchemasRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryListCredentialSchemasRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryListCredentialSchemasRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TrId", wireType)
+			}
+			m.TrId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.TrId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CreatedAfter", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.CreatedAfter == nil {
+				m.CreatedAfter = new(time.Time)
+			}
+			if err := github_com_cosmos_gogoproto_types.StdTimeUnmarshal(m.CreatedAfter, dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ResponseMaxSize", wireType)
+			}
+			m.ResponseMaxSize = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ResponseMaxSize |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryListCredentialSchemasResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryListCredentialSchemasResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryListCredentialSchemasResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Schemas", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Schemas = append(m.Schemas, CredentialSchema{})
+			if err := m.Schemas[len(m.Schemas)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

@@ -6,6 +6,8 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "veranablockchain/credentialschema/params.proto";
+import "veranablockchain/credentialschema/types.proto";
+import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/verana-labs/verana-blockchain/x/credentialschema/types";
 
@@ -14,6 +16,10 @@ service Query {
   // Parameters queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/verana-labs/verana-blockchain/credentialschema/params";
+  }
+  // ListCredentialSchemas queries a list of CredentialSchema items.
+  rpc ListCredentialSchemas(QueryListCredentialSchemasRequest) returns (QueryListCredentialSchemasResponse) {
+    option (google.api.http).get = "/dtr/v1/cs/list";
   }
 }
 
@@ -27,4 +33,14 @@ message QueryParamsResponse {
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
+}
+
+message QueryListCredentialSchemasRequest {
+  uint64 tr_id = 1; // optional
+  google.protobuf.Timestamp created_after = 2 [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
+  uint32 response_max_size = 3;
+}
+
+message QueryListCredentialSchemasResponse {
+  repeated CredentialSchema schemas = 1 [(gogoproto.nullable) = false];
 }
