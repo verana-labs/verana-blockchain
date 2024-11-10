@@ -97,9 +97,18 @@ jobs:
           mkdir -p binaries/testnet_v1
           GOOS=darwin GOARCH=arm64 go build -ldflags="$LDFLAGS" -o binaries/${{github.event.inputs.BINARY_NAME}}-darwin-arm64 ./cmd/${{github.event.inputs.BINARY_NAME}}
 
-      - name: Generate release tag
+      - name: Generate MD5 Checksums
+          run: |
+          mkdir -p binaries/checksums
+          md5sum binaries/${{github.event.inputs.BINARY_NAME}}-linux-amd64 > binaries/checksums/md5sums.txt
+          md5sum binaries/${{github.event.inputs.BINARY_NAME}}-linux-arm64 >> binaries/checksums/md5sums.txt
+          md5sum binaries/${{github.event.inputs.BINARY_NAME}}-darwin-amd64 >> binaries/checksums/md5sums.txt
+          md5sum binaries/${{github.event.inputs.BINARY_NAME}}-darwin-arm64 >> binaries/checksums/md5sums.txt
+          cat binaries/checksums/md5sums.txt
+
+      - name: Generate timestamp tag
         id: generate_tag
-        run: echo "TAG=v$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
+        run: echo "TIMESTAMP_TAG=v$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
 
       - name: Install s3cmd
         run: sudo apt-get install s3cmd
@@ -140,5 +149,6 @@ jobs:
             binaries/${{github.event.inputs.BINARY_NAME}}-linux-arm64
             binaries/${{github.event.inputs.BINARY_NAME}}-darwin-amd64
             binaries/${{github.event.inputs.BINARY_NAME}}-darwin-arm64
+            binaries/checksums/md5sums.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}          
