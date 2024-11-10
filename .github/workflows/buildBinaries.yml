@@ -49,6 +49,10 @@ jobs:
 
       - name: Set LDFLAGS environment variable
         run: |
+          echo environment:
+          ls -al
+          echo pwd=$(pwd)
+          git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr - %an)%Creset' --abbrev-commit --date=relative --all
           echo executing: git describe --tags --exact-match
           git describe --tags --exact-match || true
           if git describe --tags --exact-match > /dev/null 2>&1; then
