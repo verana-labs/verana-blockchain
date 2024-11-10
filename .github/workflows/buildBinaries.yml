@@ -133,8 +133,8 @@ jobs:
         if: env.VERSION != 'dev'
         uses: softprops/action-gh-release@v1
         with:
-            tag_name: ${{ env.VERSION }} # Explicitly specify the tag
-            name: Release ${{ env.VERSION }} # Name the release
+          tag_name: ${{ env.VERSION }} # Explicitly specify the tag
+          name: Release ${{ env.VERSION }} # Name the release
           files: |
             binaries/${{github.event.inputs.BINARY_NAME}}-linux-amd64
             binaries/${{github.event.inputs.BINARY_NAME}}-linux-arm64
