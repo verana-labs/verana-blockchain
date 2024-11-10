@@ -98,7 +98,7 @@ jobs:
           GOOS=darwin GOARCH=arm64 go build -ldflags="$LDFLAGS" -o binaries/${{github.event.inputs.BINARY_NAME}}-darwin-arm64 ./cmd/${{github.event.inputs.BINARY_NAME}}
 
       - name: Generate MD5 Checksums
-          run: |
+        run: |
           mkdir -p binaries/checksums
           md5sum binaries/${{github.event.inputs.BINARY_NAME}}-linux-amd64 > binaries/checksums/md5sums.txt
           md5sum binaries/${{github.event.inputs.BINARY_NAME}}-linux-arm64 >> binaries/checksums/md5sums.txt
