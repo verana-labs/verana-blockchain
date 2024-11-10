@@ -2672,6 +2672,830 @@ func (x *fastReflection_QueryGetCredentialSchemaResponse) ProtoMethods() *protoi
 	}
 }
 
+var (
+	md_QueryRenderJsonSchemaRequest    protoreflect.MessageDescriptor
+	fd_QueryRenderJsonSchemaRequest_id protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_veranablockchain_credentialschema_query_proto_init()
+	md_QueryRenderJsonSchemaRequest = File_veranablockchain_credentialschema_query_proto.Messages().ByName("QueryRenderJsonSchemaRequest")
+	fd_QueryRenderJsonSchemaRequest_id = md_QueryRenderJsonSchemaRequest.Fields().ByName("id")
+}
+
+var _ protoreflect.Message = (*fastReflection_QueryRenderJsonSchemaRequest)(nil)
+
+type fastReflection_QueryRenderJsonSchemaRequest QueryRenderJsonSchemaRequest
+
+func (x *QueryRenderJsonSchemaRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryRenderJsonSchemaRequest)(x)
+}
+
+func (x *QueryRenderJsonSchemaRequest) slowProtoReflect() protoreflect.Message {
+	mi := &file_veranablockchain_credentialschema_query_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_QueryRenderJsonSchemaRequest_messageType fastReflection_QueryRenderJsonSchemaRequest_messageType
+var _ protoreflect.MessageType = fastReflection_QueryRenderJsonSchemaRequest_messageType{}
+
+type fastReflection_QueryRenderJsonSchemaRequest_messageType struct{}
+
+func (x fastReflection_QueryRenderJsonSchemaRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryRenderJsonSchemaRequest)(nil)
+}
+func (x fastReflection_QueryRenderJsonSchemaRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryRenderJsonSchemaRequest)
+}
+func (x fastReflection_QueryRenderJsonSchemaRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryRenderJsonSchemaRequest
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_QueryRenderJsonSchemaRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryRenderJsonSchemaRequest
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_QueryRenderJsonSchemaRequest) Type() protoreflect.MessageType {
+	return _fastReflection_QueryRenderJsonSchemaRequest_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_QueryRenderJsonSchemaRequest) New() protoreflect.Message {
+	return new(fastReflection_QueryRenderJsonSchemaRequest)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_QueryRenderJsonSchemaRequest) Interface() protoreflect.ProtoMessage {
+	return (*QueryRenderJsonSchemaRequest)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_QueryRenderJsonSchemaRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Id != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.Id)
+		if !f(fd_QueryRenderJsonSchemaRequest_id, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_QueryRenderJsonSchemaRequest) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "veranablockchain.credentialschema.QueryRenderJsonSchemaRequest.id":
+		return x.Id != uint64(0)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.credentialschema.QueryRenderJsonSchemaRequest"))
+		}
+		panic(fmt.Errorf("message veranablockchain.credentialschema.QueryRenderJsonSchemaRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryRenderJsonSchemaRequest) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "veranablockchain.credentialschema.QueryRenderJsonSchemaRequest.id":
+		x.Id = uint64(0)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.credentialschema.QueryRenderJsonSchemaRequest"))
+		}
+		panic(fmt.Errorf("message veranablockchain.credentialschema.QueryRenderJsonSchemaRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_QueryRenderJsonSchemaRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "veranablockchain.credentialschema.QueryRenderJsonSchemaRequest.id":
+		value := x.Id
+		return protoreflect.ValueOfUint64(value)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.credentialschema.QueryRenderJsonSchemaRequest"))
+		}
+		panic(fmt.Errorf("message veranablockchain.credentialschema.QueryRenderJsonSchemaRequest does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryRenderJsonSchemaRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "veranablockchain.credentialschema.QueryRenderJsonSchemaRequest.id":
+		x.Id = value.Uint()
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.credentialschema.QueryRenderJsonSchemaRequest"))
+		}
+		panic(fmt.Errorf("message veranablockchain.credentialschema.QueryRenderJsonSchemaRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryRenderJsonSchemaRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "veranablockchain.credentialschema.QueryRenderJsonSchemaRequest.id":
+		panic(fmt.Errorf("field id of message veranablockchain.credentialschema.QueryRenderJsonSchemaRequest is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.credentialschema.QueryRenderJsonSchemaRequest"))
+		}
+		panic(fmt.Errorf("message veranablockchain.credentialschema.QueryRenderJsonSchemaRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_QueryRenderJsonSchemaRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "veranablockchain.credentialschema.QueryRenderJsonSchemaRequest.id":
+		return protoreflect.ValueOfUint64(uint64(0))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.credentialschema.QueryRenderJsonSchemaRequest"))
+		}
+		panic(fmt.Errorf("message veranablockchain.credentialschema.QueryRenderJsonSchemaRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_QueryRenderJsonSchemaRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in veranablockchain.credentialschema.QueryRenderJsonSchemaRequest", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_QueryRenderJsonSchemaRequest) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryRenderJsonSchemaRequest) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_QueryRenderJsonSchemaRequest) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_QueryRenderJsonSchemaRequest) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*QueryRenderJsonSchemaRequest)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.Id != 0 {
+			n += 1 + runtime.Sov(uint64(x.Id))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*QueryRenderJsonSchemaRequest)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Id != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Id))
+			i--
+			dAtA[i] = 0x8
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*QueryRenderJsonSchemaRequest)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryRenderJsonSchemaRequest: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryRenderJsonSchemaRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+				}
+				x.Id = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Id |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_QueryRenderJsonSchemaResponse        protoreflect.MessageDescriptor
+	fd_QueryRenderJsonSchemaResponse_schema protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_veranablockchain_credentialschema_query_proto_init()
+	md_QueryRenderJsonSchemaResponse = File_veranablockchain_credentialschema_query_proto.Messages().ByName("QueryRenderJsonSchemaResponse")
+	fd_QueryRenderJsonSchemaResponse_schema = md_QueryRenderJsonSchemaResponse.Fields().ByName("schema")
+}
+
+var _ protoreflect.Message = (*fastReflection_QueryRenderJsonSchemaResponse)(nil)
+
+type fastReflection_QueryRenderJsonSchemaResponse QueryRenderJsonSchemaResponse
+
+func (x *QueryRenderJsonSchemaResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryRenderJsonSchemaResponse)(x)
+}
+
+func (x *QueryRenderJsonSchemaResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_veranablockchain_credentialschema_query_proto_msgTypes[7]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_QueryRenderJsonSchemaResponse_messageType fastReflection_QueryRenderJsonSchemaResponse_messageType
+var _ protoreflect.MessageType = fastReflection_QueryRenderJsonSchemaResponse_messageType{}
+
+type fastReflection_QueryRenderJsonSchemaResponse_messageType struct{}
+
+func (x fastReflection_QueryRenderJsonSchemaResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryRenderJsonSchemaResponse)(nil)
+}
+func (x fastReflection_QueryRenderJsonSchemaResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryRenderJsonSchemaResponse)
+}
+func (x fastReflection_QueryRenderJsonSchemaResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryRenderJsonSchemaResponse
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_QueryRenderJsonSchemaResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryRenderJsonSchemaResponse
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_QueryRenderJsonSchemaResponse) Type() protoreflect.MessageType {
+	return _fastReflection_QueryRenderJsonSchemaResponse_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_QueryRenderJsonSchemaResponse) New() protoreflect.Message {
+	return new(fastReflection_QueryRenderJsonSchemaResponse)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_QueryRenderJsonSchemaResponse) Interface() protoreflect.ProtoMessage {
+	return (*QueryRenderJsonSchemaResponse)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_QueryRenderJsonSchemaResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Schema != "" {
+		value := protoreflect.ValueOfString(x.Schema)
+		if !f(fd_QueryRenderJsonSchemaResponse_schema, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_QueryRenderJsonSchemaResponse) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "veranablockchain.credentialschema.QueryRenderJsonSchemaResponse.schema":
+		return x.Schema != ""
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.credentialschema.QueryRenderJsonSchemaResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.credentialschema.QueryRenderJsonSchemaResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryRenderJsonSchemaResponse) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "veranablockchain.credentialschema.QueryRenderJsonSchemaResponse.schema":
+		x.Schema = ""
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.credentialschema.QueryRenderJsonSchemaResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.credentialschema.QueryRenderJsonSchemaResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_QueryRenderJsonSchemaResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "veranablockchain.credentialschema.QueryRenderJsonSchemaResponse.schema":
+		value := x.Schema
+		return protoreflect.ValueOfString(value)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.credentialschema.QueryRenderJsonSchemaResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.credentialschema.QueryRenderJsonSchemaResponse does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryRenderJsonSchemaResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "veranablockchain.credentialschema.QueryRenderJsonSchemaResponse.schema":
+		x.Schema = value.Interface().(string)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.credentialschema.QueryRenderJsonSchemaResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.credentialschema.QueryRenderJsonSchemaResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryRenderJsonSchemaResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "veranablockchain.credentialschema.QueryRenderJsonSchemaResponse.schema":
+		panic(fmt.Errorf("field schema of message veranablockchain.credentialschema.QueryRenderJsonSchemaResponse is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.credentialschema.QueryRenderJsonSchemaResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.credentialschema.QueryRenderJsonSchemaResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_QueryRenderJsonSchemaResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "veranablockchain.credentialschema.QueryRenderJsonSchemaResponse.schema":
+		return protoreflect.ValueOfString("")
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.credentialschema.QueryRenderJsonSchemaResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.credentialschema.QueryRenderJsonSchemaResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_QueryRenderJsonSchemaResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in veranablockchain.credentialschema.QueryRenderJsonSchemaResponse", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_QueryRenderJsonSchemaResponse) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryRenderJsonSchemaResponse) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_QueryRenderJsonSchemaResponse) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_QueryRenderJsonSchemaResponse) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*QueryRenderJsonSchemaResponse)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		l = len(x.Schema)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*QueryRenderJsonSchemaResponse)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.Schema) > 0 {
+			i -= len(x.Schema)
+			copy(dAtA[i:], x.Schema)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Schema)))
+			i--
+			dAtA[i] = 0xa
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*QueryRenderJsonSchemaResponse)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryRenderJsonSchemaResponse: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryRenderJsonSchemaResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Schema", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Schema = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
 // Code generated by protoc-gen-go. DO NOT EDIT.
 // versions:
 // 	protoc-gen-go v1.27.0
@@ -2905,6 +3729,76 @@ func (x *QueryGetCredentialSchemaResponse) GetSchema() *CredentialSchema {
 	return nil
 }
 
+type QueryRenderJsonSchemaRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+}
+
+func (x *QueryRenderJsonSchemaRequest) Reset() {
+	*x = QueryRenderJsonSchemaRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_veranablockchain_credentialschema_query_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QueryRenderJsonSchemaRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QueryRenderJsonSchemaRequest) ProtoMessage() {}
+
+// Deprecated: Use QueryRenderJsonSchemaRequest.ProtoReflect.Descriptor instead.
+func (*QueryRenderJsonSchemaRequest) Descriptor() ([]byte, []int) {
+	return file_veranablockchain_credentialschema_query_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *QueryRenderJsonSchemaRequest) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+type QueryRenderJsonSchemaResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Schema string `protobuf:"bytes,1,opt,name=schema,proto3" json:"schema,omitempty"`
+}
+
+func (x *QueryRenderJsonSchemaResponse) Reset() {
+	*x = QueryRenderJsonSchemaResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_veranablockchain_credentialschema_query_proto_msgTypes[7]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QueryRenderJsonSchemaResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QueryRenderJsonSchemaResponse) ProtoMessage() {}
+
+// Deprecated: Use QueryRenderJsonSchemaResponse.ProtoReflect.Descriptor instead.
+func (*QueryRenderJsonSchemaResponse) Descriptor() ([]byte, []int) {
+	return file_veranablockchain_credentialschema_query_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *QueryRenderJsonSchemaResponse) GetSchema() string {
+	if x != nil {
+		return x.Schema
+	}
+	return ""
+}
+
 var File_veranablockchain_credentialschema_query_proto protoreflect.FileDescriptor
 
 var file_veranablockchain_credentialschema_query_proto_rawDesc = []byte{
@@ -2965,62 +3859,80 @@ var file_veranablockchain_credentialschema_query_proto_rawDesc = []byte{
 	0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x63, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69,
 	0x61, 0x6c, 0x73, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x2e, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74,
 	0x69, 0x61, 0x6c, 0x53, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52,
-	0x06, 0x73, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x32, 0xbf, 0x04, 0x0a, 0x05, 0x51, 0x75, 0x65, 0x72,
-	0x79, 0x12, 0xb7, 0x01, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x35, 0x2e, 0x76,
+	0x06, 0x73, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x22, 0x2e, 0x0a, 0x1c, 0x51, 0x75, 0x65, 0x72, 0x79,
+	0x52, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x4a, 0x73, 0x6f, 0x6e, 0x53, 0x63, 0x68, 0x65, 0x6d, 0x61,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x22, 0x37, 0x0a, 0x1d, 0x51, 0x75, 0x65, 0x72, 0x79,
+	0x52, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x4a, 0x73, 0x6f, 0x6e, 0x53, 0x63, 0x68, 0x65, 0x6d, 0x61,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x63, 0x68, 0x65,
+	0x6d, 0x61, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x63, 0x68, 0x65, 0x6d, 0x61,
+	0x32, 0xf3, 0x05, 0x0a, 0x05, 0x51, 0x75, 0x65, 0x72, 0x79, 0x12, 0xb7, 0x01, 0x0a, 0x06, 0x50,
+	0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x35, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c,
+	0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x63, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74,
+	0x69, 0x61, 0x6c, 0x73, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50,
+	0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x36, 0x2e, 0x76,
 	0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e,
 	0x63, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x63, 0x68, 0x65, 0x6d, 0x61,
-	0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x1a, 0x36, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63,
-	0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x63, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61,
-	0x6c, 0x73, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x61, 0x72,
-	0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x3e, 0x82, 0xd3, 0xe4,
-	0x93, 0x02, 0x38, 0x12, 0x36, 0x2f, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x2d, 0x6c, 0x61, 0x62,
-	0x73, 0x2f, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x2d, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68,
-	0x61, 0x69, 0x6e, 0x2f, 0x63, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x63,
-	0x68, 0x65, 0x6d, 0x61, 0x2f, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0xbd, 0x01, 0x0a, 0x15,
-	0x4c, 0x69, 0x73, 0x74, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x53, 0x63,
-	0x68, 0x65, 0x6d, 0x61, 0x73, 0x12, 0x44, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c,
-	0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x63, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74,
-	0x69, 0x61, 0x6c, 0x73, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4c,
-	0x69, 0x73, 0x74, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x53, 0x63, 0x68,
-	0x65, 0x6d, 0x61, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x45, 0x2e, 0x76, 0x65,
-	0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x63,
-	0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x2e,
-	0x51, 0x75, 0x65, 0x72, 0x79, 0x4c, 0x69, 0x73, 0x74, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74,
-	0x69, 0x61, 0x6c, 0x53, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x22, 0x17, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x11, 0x12, 0x0f, 0x2f, 0x64, 0x74, 0x72,
-	0x2f, 0x76, 0x31, 0x2f, 0x63, 0x73, 0x2f, 0x6c, 0x69, 0x73, 0x74, 0x12, 0xbb, 0x01, 0x0a, 0x13,
-	0x47, 0x65, 0x74, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x53, 0x63, 0x68,
-	0x65, 0x6d, 0x61, 0x12, 0x42, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63,
-	0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x63, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61,
-	0x6c, 0x73, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x47, 0x65, 0x74,
-	0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x53, 0x63, 0x68, 0x65, 0x6d, 0x61,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x43, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61,
+	0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x3e, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x38, 0x12, 0x36, 0x2f, 0x76,
+	0x65, 0x72, 0x61, 0x6e, 0x61, 0x2d, 0x6c, 0x61, 0x62, 0x73, 0x2f, 0x76, 0x65, 0x72, 0x61, 0x6e,
+	0x61, 0x2d, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2f, 0x63, 0x72, 0x65,
+	0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x2f, 0x70, 0x61,
+	0x72, 0x61, 0x6d, 0x73, 0x12, 0xbd, 0x01, 0x0a, 0x15, 0x4c, 0x69, 0x73, 0x74, 0x43, 0x72, 0x65,
+	0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x53, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x73, 0x12, 0x44,
+	0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69,
+	0x6e, 0x2e, 0x63, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x63, 0x68, 0x65,
+	0x6d, 0x61, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4c, 0x69, 0x73, 0x74, 0x43, 0x72, 0x65, 0x64,
+	0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x53, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x73, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x1a, 0x45, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f,
+	0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x63, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69,
+	0x61, 0x6c, 0x73, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4c, 0x69,
+	0x73, 0x74, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x53, 0x63, 0x68, 0x65,
+	0x6d, 0x61, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x17, 0x82, 0xd3, 0xe4,
+	0x93, 0x02, 0x11, 0x12, 0x0f, 0x2f, 0x64, 0x74, 0x72, 0x2f, 0x76, 0x31, 0x2f, 0x63, 0x73, 0x2f,
+	0x6c, 0x69, 0x73, 0x74, 0x12, 0xbb, 0x01, 0x0a, 0x13, 0x47, 0x65, 0x74, 0x43, 0x72, 0x65, 0x64,
+	0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x53, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x12, 0x42, 0x2e, 0x76,
+	0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e,
+	0x63, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x63, 0x68, 0x65, 0x6d, 0x61,
+	0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x47, 0x65, 0x74, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74,
+	0x69, 0x61, 0x6c, 0x53, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x1a, 0x43, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68,
+	0x61, 0x69, 0x6e, 0x2e, 0x63, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x63,
+	0x68, 0x65, 0x6d, 0x61, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x47, 0x65, 0x74, 0x43, 0x72, 0x65,
+	0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x53, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x1b, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x15, 0x12, 0x13, 0x2f,
+	0x64, 0x74, 0x72, 0x2f, 0x76, 0x31, 0x2f, 0x63, 0x73, 0x2f, 0x67, 0x65, 0x74, 0x2f, 0x7b, 0x69,
+	0x64, 0x7d, 0x12, 0xb1, 0x01, 0x0a, 0x10, 0x52, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x4a, 0x73, 0x6f,
+	0x6e, 0x53, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x12, 0x3f, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61,
 	0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x63, 0x72, 0x65, 0x64, 0x65,
 	0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x2e, 0x51, 0x75, 0x65, 0x72,
-	0x79, 0x47, 0x65, 0x74, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x53, 0x63,
-	0x68, 0x65, 0x6d, 0x61, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x1b, 0x82, 0xd3,
-	0xe4, 0x93, 0x02, 0x15, 0x12, 0x13, 0x2f, 0x64, 0x74, 0x72, 0x2f, 0x76, 0x31, 0x2f, 0x63, 0x73,
-	0x2f, 0x67, 0x65, 0x74, 0x2f, 0x7b, 0x69, 0x64, 0x7d, 0x42, 0xa8, 0x02, 0x0a, 0x25, 0x63, 0x6f,
-	0x6d, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61,
-	0x69, 0x6e, 0x2e, 0x63, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x63, 0x68,
-	0x65, 0x6d, 0x61, 0x42, 0x0a, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50,
-	0x01, 0x5a, 0x4e, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x76, 0x65,
-	0x72, 0x61, 0x6e, 0x61, 0x2d, 0x6c, 0x61, 0x62, 0x73, 0x2f, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61,
-	0x2d, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2f, 0x61, 0x70, 0x69, 0x2f,
-	0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e,
-	0x2f, 0x63, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x63, 0x68, 0x65, 0x6d,
-	0x61, 0xa2, 0x02, 0x03, 0x56, 0x43, 0x58, 0xaa, 0x02, 0x21, 0x56, 0x65, 0x72, 0x61, 0x6e, 0x61,
-	0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x43, 0x72, 0x65, 0x64, 0x65,
-	0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x63, 0x68, 0x65, 0x6d, 0x61, 0xca, 0x02, 0x21, 0x56, 0x65,
-	0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x5c, 0x43,
-	0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x63, 0x68, 0x65, 0x6d, 0x61, 0xe2,
-	0x02, 0x2d, 0x56, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61,
-	0x69, 0x6e, 0x5c, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x63, 0x68,
-	0x65, 0x6d, 0x61, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea,
-	0x02, 0x22, 0x56, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61,
-	0x69, 0x6e, 0x3a, 0x3a, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x63,
-	0x68, 0x65, 0x6d, 0x61, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x79, 0x52, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x4a, 0x73, 0x6f, 0x6e, 0x53, 0x63, 0x68, 0x65, 0x6d,
+	0x61, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x40, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e,
+	0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x63, 0x72, 0x65, 0x64,
+	0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x2e, 0x51, 0x75, 0x65,
+	0x72, 0x79, 0x52, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x4a, 0x73, 0x6f, 0x6e, 0x53, 0x63, 0x68, 0x65,
+	0x6d, 0x61, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x1a, 0x82, 0xd3, 0xe4, 0x93,
+	0x02, 0x14, 0x12, 0x12, 0x2f, 0x64, 0x74, 0x72, 0x2f, 0x76, 0x31, 0x2f, 0x63, 0x73, 0x2f, 0x6a,
+	0x73, 0x2f, 0x7b, 0x69, 0x64, 0x7d, 0x42, 0xa8, 0x02, 0x0a, 0x25, 0x63, 0x6f, 0x6d, 0x2e, 0x76,
+	0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e,
+	0x63, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x63, 0x68, 0x65, 0x6d, 0x61,
+	0x42, 0x0a, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x4e,
+	0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x76, 0x65, 0x72, 0x61, 0x6e,
+	0x61, 0x2d, 0x6c, 0x61, 0x62, 0x73, 0x2f, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x2d, 0x62, 0x6c,
+	0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x76, 0x65, 0x72,
+	0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2f, 0x63, 0x72,
+	0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x63, 0x68, 0x65, 0x6d, 0x61, 0xa2, 0x02,
+	0x03, 0x56, 0x43, 0x58, 0xaa, 0x02, 0x21, 0x56, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f,
+	0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69,
+	0x61, 0x6c, 0x73, 0x63, 0x68, 0x65, 0x6d, 0x61, 0xca, 0x02, 0x21, 0x56, 0x65, 0x72, 0x61, 0x6e,
+	0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x5c, 0x43, 0x72, 0x65, 0x64,
+	0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x63, 0x68, 0x65, 0x6d, 0x61, 0xe2, 0x02, 0x2d, 0x56,
+	0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x5c,
+	0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x63, 0x68, 0x65, 0x6d, 0x61,
+	0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x22, 0x56,
+	0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x3a,
+	0x3a, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x63, 0x68, 0x65, 0x6d,
+	0x61, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -3035,7 +3947,7 @@ func file_veranablockchain_credentialschema_query_proto_rawDescGZIP() []byte {
 	return file_veranablockchain_credentialschema_query_proto_rawDescData
 }
 
-var file_veranablockchain_credentialschema_query_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_veranablockchain_credentialschema_query_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_veranablockchain_credentialschema_query_proto_goTypes = []interface{}{
 	(*QueryParamsRequest)(nil),                 // 0: veranablockchain.credentialschema.QueryParamsRequest
 	(*QueryParamsResponse)(nil),                // 1: veranablockchain.credentialschema.QueryParamsResponse
@@ -3043,26 +3955,30 @@ var file_veranablockchain_credentialschema_query_proto_goTypes = []interface{}{
 	(*QueryListCredentialSchemasResponse)(nil), // 3: veranablockchain.credentialschema.QueryListCredentialSchemasResponse
 	(*QueryGetCredentialSchemaRequest)(nil),    // 4: veranablockchain.credentialschema.QueryGetCredentialSchemaRequest
 	(*QueryGetCredentialSchemaResponse)(nil),   // 5: veranablockchain.credentialschema.QueryGetCredentialSchemaResponse
-	(*Params)(nil),                             // 6: veranablockchain.credentialschema.Params
-	(*timestamppb.Timestamp)(nil),              // 7: google.protobuf.Timestamp
-	(*CredentialSchema)(nil),                   // 8: veranablockchain.credentialschema.CredentialSchema
+	(*QueryRenderJsonSchemaRequest)(nil),       // 6: veranablockchain.credentialschema.QueryRenderJsonSchemaRequest
+	(*QueryRenderJsonSchemaResponse)(nil),      // 7: veranablockchain.credentialschema.QueryRenderJsonSchemaResponse
+	(*Params)(nil),                             // 8: veranablockchain.credentialschema.Params
+	(*timestamppb.Timestamp)(nil),              // 9: google.protobuf.Timestamp
+	(*CredentialSchema)(nil),                   // 10: veranablockchain.credentialschema.CredentialSchema
 }
 var file_veranablockchain_credentialschema_query_proto_depIdxs = []int32{
-	6, // 0: veranablockchain.credentialschema.QueryParamsResponse.params:type_name -> veranablockchain.credentialschema.Params
-	7, // 1: veranablockchain.credentialschema.QueryListCredentialSchemasRequest.created_after:type_name -> google.protobuf.Timestamp
-	8, // 2: veranablockchain.credentialschema.QueryListCredentialSchemasResponse.schemas:type_name -> veranablockchain.credentialschema.CredentialSchema
-	8, // 3: veranablockchain.credentialschema.QueryGetCredentialSchemaResponse.schema:type_name -> veranablockchain.credentialschema.CredentialSchema
-	0, // 4: veranablockchain.credentialschema.Query.Params:input_type -> veranablockchain.credentialschema.QueryParamsRequest
-	2, // 5: veranablockchain.credentialschema.Query.ListCredentialSchemas:input_type -> veranablockchain.credentialschema.QueryListCredentialSchemasRequest
-	4, // 6: veranablockchain.credentialschema.Query.GetCredentialSchema:input_type -> veranablockchain.credentialschema.QueryGetCredentialSchemaRequest
-	1, // 7: veranablockchain.credentialschema.Query.Params:output_type -> veranablockchain.credentialschema.QueryParamsResponse
-	3, // 8: veranablockchain.credentialschema.Query.ListCredentialSchemas:output_type -> veranablockchain.credentialschema.QueryListCredentialSchemasResponse
-	5, // 9: veranablockchain.credentialschema.Query.GetCredentialSchema:output_type -> veranablockchain.credentialschema.QueryGetCredentialSchemaResponse
-	7, // [7:10] is the sub-list for method output_type
-	4, // [4:7] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	8,  // 0: veranablockchain.credentialschema.QueryParamsResponse.params:type_name -> veranablockchain.credentialschema.Params
+	9,  // 1: veranablockchain.credentialschema.QueryListCredentialSchemasRequest.created_after:type_name -> google.protobuf.Timestamp
+	10, // 2: veranablockchain.credentialschema.QueryListCredentialSchemasResponse.schemas:type_name -> veranablockchain.credentialschema.CredentialSchema
+	10, // 3: veranablockchain.credentialschema.QueryGetCredentialSchemaResponse.schema:type_name -> veranablockchain.credentialschema.CredentialSchema
+	0,  // 4: veranablockchain.credentialschema.Query.Params:input_type -> veranablockchain.credentialschema.QueryParamsRequest
+	2,  // 5: veranablockchain.credentialschema.Query.ListCredentialSchemas:input_type -> veranablockchain.credentialschema.QueryListCredentialSchemasRequest
+	4,  // 6: veranablockchain.credentialschema.Query.GetCredentialSchema:input_type -> veranablockchain.credentialschema.QueryGetCredentialSchemaRequest
+	6,  // 7: veranablockchain.credentialschema.Query.RenderJsonSchema:input_type -> veranablockchain.credentialschema.QueryRenderJsonSchemaRequest
+	1,  // 8: veranablockchain.credentialschema.Query.Params:output_type -> veranablockchain.credentialschema.QueryParamsResponse
+	3,  // 9: veranablockchain.credentialschema.Query.ListCredentialSchemas:output_type -> veranablockchain.credentialschema.QueryListCredentialSchemasResponse
+	5,  // 10: veranablockchain.credentialschema.Query.GetCredentialSchema:output_type -> veranablockchain.credentialschema.QueryGetCredentialSchemaResponse
+	7,  // 11: veranablockchain.credentialschema.Query.RenderJsonSchema:output_type -> veranablockchain.credentialschema.QueryRenderJsonSchemaResponse
+	8,  // [8:12] is the sub-list for method output_type
+	4,  // [4:8] is the sub-list for method input_type
+	4,  // [4:4] is the sub-list for extension type_name
+	4,  // [4:4] is the sub-list for extension extendee
+	0,  // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_veranablockchain_credentialschema_query_proto_init() }
@@ -3145,6 +4061,30 @@ func file_veranablockchain_credentialschema_query_proto_init() {
 				return nil
 			}
 		}
+		file_veranablockchain_credentialschema_query_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryRenderJsonSchemaRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_veranablockchain_credentialschema_query_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryRenderJsonSchemaResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -3152,7 +4092,7 @@ func file_veranablockchain_credentialschema_query_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_veranablockchain_credentialschema_query_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

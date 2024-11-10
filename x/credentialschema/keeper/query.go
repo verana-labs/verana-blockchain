@@ -71,3 +71,20 @@ func (k Keeper) GetCredentialSchema(goCtx context.Context, req *types.QueryGetCr
 		Schema: schema,
 	}, nil
 }
+
+func (k Keeper) RenderJsonSchema(goCtx context.Context, req *types.QueryRenderJsonSchemaRequest) (*types.QueryRenderJsonSchemaResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	schema, err := k.CredentialSchema.Get(ctx, req.Id)
+	if err != nil {
+		return nil, status.Error(codes.NotFound, "credential schema not found")
+	}
+
+	return &types.QueryRenderJsonSchemaResponse{
+		Schema: schema.JsonSchema,
+	}, nil
+}

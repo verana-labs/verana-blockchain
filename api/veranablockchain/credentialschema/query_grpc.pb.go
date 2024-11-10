@@ -22,6 +22,7 @@ const (
 	Query_Params_FullMethodName                = "/veranablockchain.credentialschema.Query/Params"
 	Query_ListCredentialSchemas_FullMethodName = "/veranablockchain.credentialschema.Query/ListCredentialSchemas"
 	Query_GetCredentialSchema_FullMethodName   = "/veranablockchain.credentialschema.Query/GetCredentialSchema"
+	Query_RenderJsonSchema_FullMethodName      = "/veranablockchain.credentialschema.Query/RenderJsonSchema"
 )
 
 // QueryClient is the client API for Query service.
@@ -34,6 +35,8 @@ type QueryClient interface {
 	ListCredentialSchemas(ctx context.Context, in *QueryListCredentialSchemasRequest, opts ...grpc.CallOption) (*QueryListCredentialSchemasResponse, error)
 	// GetCredentialSchema returns a credential schema by ID
 	GetCredentialSchema(ctx context.Context, in *QueryGetCredentialSchemaRequest, opts ...grpc.CallOption) (*QueryGetCredentialSchemaResponse, error)
+	// RenderJsonSchema returns the JSON schema definition
+	RenderJsonSchema(ctx context.Context, in *QueryRenderJsonSchemaRequest, opts ...grpc.CallOption) (*QueryRenderJsonSchemaResponse, error)
 }
 
 type queryClient struct {
@@ -71,6 +74,15 @@ func (c *queryClient) GetCredentialSchema(ctx context.Context, in *QueryGetCrede
 	return out, nil
 }
 
+func (c *queryClient) RenderJsonSchema(ctx context.Context, in *QueryRenderJsonSchemaRequest, opts ...grpc.CallOption) (*QueryRenderJsonSchemaResponse, error) {
+	out := new(QueryRenderJsonSchemaResponse)
+	err := c.cc.Invoke(ctx, Query_RenderJsonSchema_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -81,6 +93,8 @@ type QueryServer interface {
 	ListCredentialSchemas(context.Context, *QueryListCredentialSchemasRequest) (*QueryListCredentialSchemasResponse, error)
 	// GetCredentialSchema returns a credential schema by ID
 	GetCredentialSchema(context.Context, *QueryGetCredentialSchemaRequest) (*QueryGetCredentialSchemaResponse, error)
+	// RenderJsonSchema returns the JSON schema definition
+	RenderJsonSchema(context.Context, *QueryRenderJsonSchemaRequest) (*QueryRenderJsonSchemaResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -96,6 +110,9 @@ func (UnimplementedQueryServer) ListCredentialSchemas(context.Context, *QueryLis
 }
 func (UnimplementedQueryServer) GetCredentialSchema(context.Context, *QueryGetCredentialSchemaRequest) (*QueryGetCredentialSchemaResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCredentialSchema not implemented")
+}
+func (UnimplementedQueryServer) RenderJsonSchema(context.Context, *QueryRenderJsonSchemaRequest) (*QueryRenderJsonSchemaResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RenderJsonSchema not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -164,6 +181,24 @@ func _Query_GetCredentialSchema_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_RenderJsonSchema_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryRenderJsonSchemaRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).RenderJsonSchema(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_RenderJsonSchema_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).RenderJsonSchema(ctx, req.(*QueryRenderJsonSchemaRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -182,6 +217,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetCredentialSchema",
 			Handler:    _Query_GetCredentialSchema_Handler,
+		},
+		{
+			MethodName: "RenderJsonSchema",
+			Handler:    _Query_RenderJsonSchema_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

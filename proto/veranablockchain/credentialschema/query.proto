@@ -25,6 +25,10 @@ service Query {
   rpc GetCredentialSchema(QueryGetCredentialSchemaRequest) returns (QueryGetCredentialSchemaResponse) {
     option (google.api.http).get = "/dtr/v1/cs/get/{id}";
   }
+  // RenderJsonSchema returns the JSON schema definition
+  rpc RenderJsonSchema(QueryRenderJsonSchemaRequest) returns (QueryRenderJsonSchemaResponse) {
+    option (google.api.http).get = "/dtr/v1/cs/js/{id}";
+  }
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -55,4 +59,12 @@ message QueryGetCredentialSchemaRequest {
 
 message QueryGetCredentialSchemaResponse {
   CredentialSchema schema = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryRenderJsonSchemaRequest {
+  uint64 id = 1;
+}
+
+message QueryRenderJsonSchemaResponse {
+  string schema = 1;
 }

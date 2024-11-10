@@ -55,6 +55,21 @@ $ veranad query credentialschema get 1`,
 						{ProtoField: "id"},
 					},
 				},
+				{
+					RpcMethod: "RenderJsonSchema",
+					Use:       "schema [id]",
+					Short:     "Get the JSON schema definition",
+					Long: `Render the JSON schema definition for a credential schema.
+Response will be in application/schema+json format.
+
+Example:
+$ veranad query credentialschema schema 1`,
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "id",
+						},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},
