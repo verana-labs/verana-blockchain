@@ -49,7 +49,11 @@ jobs:
 
       - name: Set LDFLAGS environment variable
         run: |
-          VERSION=$(git describe --tags --always || echo "dev")
+          if git describe --tags --exact-match > /dev/null 2>&1; then
+            VERSION=$(git describe --tags --exact-match)
+          else
+            VERSION="dev"
+          fi
           COMMIT=$(git rev-parse --short HEAD)
           LDFLAGS="-X github.com/cosmos/cosmos-sdk/version.Name=verana \
           -X github.com/cosmos/cosmos-sdk/version.AppName=verana \
