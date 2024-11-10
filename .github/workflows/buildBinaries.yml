@@ -27,6 +27,8 @@ jobs:
 
       - name: Checkout gh-repo
         uses: actions/checkout@v3
+        with:
+            fetch-depth: 0  # Fetch all history
 
       - name: Set up Go environment
         uses: actions/setup-go@v3
