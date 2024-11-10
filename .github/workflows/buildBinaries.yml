@@ -63,22 +63,22 @@ jobs:
         run: |
           mkdir -p binaries/testnet_v1
           echo "LDFLAGS: $LDFLAGS"
-          GOOS=linux GOARCH=amd64 go build -ldflags="$LDFLAGS" -o binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-linux-amd64 ./cmd/${{github.event.inputs.BINARY_NAME}}
+          GOOS=linux GOARCH=amd64 go build -ldflags="$LDFLAGS" -o binaries/${{github.event.inputs.BINARY_NAME}}-linux-amd64 ./cmd/${{github.event.inputs.BINARY_NAME}}
 
       - name: Build binary for Linux ARM64
         run: |
           mkdir -p binaries/testnet_v1
-          GOOS=linux GOARCH=arm64 go build -ldflags="$LDFLAGS" -o binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-linux-arm64 ./cmd/${{github.event.inputs.BINARY_NAME}}
+          GOOS=linux GOARCH=arm64 go build -ldflags="$LDFLAGS" -o binaries/${{github.event.inputs.BINARY_NAME}}-linux-arm64 ./cmd/${{github.event.inputs.BINARY_NAME}}
 
       - name: Build binary for Darwin AMD64
         run: |
           mkdir -p binaries/testnet_v1
-          GOOS=darwin GOARCH=amd64 go build -ldflags="$LDFLAGS" -o binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-darwin-amd64 ./cmd/${{github.event.inputs.BINARY_NAME}}
+          GOOS=darwin GOARCH=amd64 go build -ldflags="$LDFLAGS" -o binaries/${{github.event.inputs.BINARY_NAME}}-darwin-amd64 ./cmd/${{github.event.inputs.BINARY_NAME}}
 
       - name: Build binary for Darwin ARM64
         run: |
           mkdir -p binaries/testnet_v1
-          GOOS=darwin GOARCH=arm64 go build -ldflags="$LDFLAGS" -o binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-darwin-arm64 ./cmd/${{github.event.inputs.BINARY_NAME}}
+          GOOS=darwin GOARCH=arm64 go build -ldflags="$LDFLAGS" -o binaries/${{github.event.inputs.BINARY_NAME}}-darwin-arm64 ./cmd/${{github.event.inputs.BINARY_NAME}}
 
       - name: Generate release tag
         id: generate_tag
@@ -102,10 +102,10 @@ jobs:
           # Create or update manifest.json
           cat > manifest.json <<EOL
           {
-            "linux-amd64": "${{github.event.inputs.BINARY_NAME}}-${{ env.TAG }}-linux-amd64",
-            "linux-arm64": "${{github.event.inputs.BINARY_NAME}}-${{ env.TAG }}-linux-arm64",
-            "darwin-amd64": "${{github.event.inputs.BINARY_NAME}}-${{ env.TAG }}-darwin-amd64",
-            "darwin-arm64": "${{github.event.inputs.BINARY_NAME}}-${{ env.TAG }}-darwin-arm64"
+            "linux-amd64": "${{github.event.inputs.BINARY_NAME}}-${{ env.VERSION }}-${{ env.COMMIT }}-linux-amd64",
+            "linux-arm64": "${{github.event.inputs.BINARY_NAME}}-${{ env.VERSION }}-${{ env.COMMIT }}-linux-arm64",
+            "darwin-amd64": "${{github.event.inputs.BINARY_NAME}}-${{ env.VERSION }}-${{ env.COMMIT }}-darwin-amd64",
+            "darwin-arm64": "${{github.event.inputs.BINARY_NAME}}-${{ env.VERSION }}-${{ env.COMMIT }}-darwin-arm64"
           }
           EOL
 
