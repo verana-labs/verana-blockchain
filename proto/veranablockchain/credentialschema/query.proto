@@ -21,6 +21,10 @@ service Query {
   rpc ListCredentialSchemas(QueryListCredentialSchemasRequest) returns (QueryListCredentialSchemasResponse) {
     option (google.api.http).get = "/dtr/v1/cs/list";
   }
+  // GetCredentialSchema returns a credential schema by ID
+  rpc GetCredentialSchema(QueryGetCredentialSchemaRequest) returns (QueryGetCredentialSchemaResponse) {
+    option (google.api.http).get = "/dtr/v1/cs/get/{id}";
+  }
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -43,4 +47,12 @@ message QueryListCredentialSchemasRequest {
 
 message QueryListCredentialSchemasResponse {
   repeated CredentialSchema schemas = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryGetCredentialSchemaRequest {
+  uint64 id = 1;
+}
+
+message QueryGetCredentialSchemaResponse {
+  CredentialSchema schema = 1 [(gogoproto.nullable) = false];
 }

@@ -83,7 +83,7 @@ func (k Keeper) Logger() log.Logger {
 }
 
 // GetCredentialSchema returns a credential schema by ID
-func (k Keeper) GetCredentialSchema(ctx sdk.Context, id uint64) (types.CredentialSchema, error) {
+func (k Keeper) GetCredentialSchemaById(ctx sdk.Context, id uint64) (types.CredentialSchema, error) {
 	return k.CredentialSchema.Get(ctx, id)
 }
 

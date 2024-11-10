@@ -43,6 +43,18 @@ $ veranad query credentialschema list-schemas --tr_id 1 --created_after 2024-01-
 						},
 					},
 				},
+				{
+					RpcMethod: "GetCredentialSchema",
+					Use:       "get [id]",
+					Short:     "Get a credential schema by ID",
+					Long: `Get a credential schema by its ID.
+
+Example:
+$ veranad query credentialschema get 1`,
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "id"},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},

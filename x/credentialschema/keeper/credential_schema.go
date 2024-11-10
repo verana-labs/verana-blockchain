@@ -10,7 +10,7 @@ func (ms msgServer) validateCreateCredentialSchemaParams(ctx sdk.Context, msg *t
 	params := ms.GetParams(ctx)
 
 	// Check if schema already exists
-	_, err := ms.GetCredentialSchema(ctx, msg.Id)
+	_, err := ms.GetCredentialSchemaById(ctx, msg.Id)
 	if err == nil {
 		return fmt.Errorf("credential schema with id %d already exists", msg.Id)
 	}

@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	Query_Params_FullMethodName                = "/veranablockchain.credentialschema.Query/Params"
 	Query_ListCredentialSchemas_FullMethodName = "/veranablockchain.credentialschema.Query/ListCredentialSchemas"
+	Query_GetCredentialSchema_FullMethodName   = "/veranablockchain.credentialschema.Query/GetCredentialSchema"
 )
 
 // QueryClient is the client API for Query service.
@@ -31,6 +32,8 @@ type QueryClient interface {
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
 	// ListCredentialSchemas queries a list of CredentialSchema items.
 	ListCredentialSchemas(ctx context.Context, in *QueryListCredentialSchemasRequest, opts ...grpc.CallOption) (*QueryListCredentialSchemasResponse, error)
+	// GetCredentialSchema returns a credential schema by ID
+	GetCredentialSchema(ctx context.Context, in *QueryGetCredentialSchemaRequest, opts ...grpc.CallOption) (*QueryGetCredentialSchemaResponse, error)
 }
 
 type queryClient struct {
@@ -59,6 +62,15 @@ func (c *queryClient) ListCredentialSchemas(ctx context.Context, in *QueryListCr
 	return out, nil
 }
 
+func (c *queryClient) GetCredentialSchema(ctx context.Context, in *QueryGetCredentialSchemaRequest, opts ...grpc.CallOption) (*QueryGetCredentialSchemaResponse, error) {
+	out := new(QueryGetCredentialSchemaResponse)
+	err := c.cc.Invoke(ctx, Query_GetCredentialSchema_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -67,6 +79,8 @@ type QueryServer interface {
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
 	// ListCredentialSchemas queries a list of CredentialSchema items.
 	ListCredentialSchemas(context.Context, *QueryListCredentialSchemasRequest) (*QueryListCredentialSchemasResponse, error)
+	// GetCredentialSchema returns a credential schema by ID
+	GetCredentialSchema(context.Context, *QueryGetCredentialSchemaRequest) (*QueryGetCredentialSchemaResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -79,6 +93,9 @@ func (UnimplementedQueryServer) Params(context.Context, *QueryParamsRequest) (*Q
 }
 func (UnimplementedQueryServer) ListCredentialSchemas(context.Context, *QueryListCredentialSchemasRequest) (*QueryListCredentialSchemasResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListCredentialSchemas not implemented")
+}
+func (UnimplementedQueryServer) GetCredentialSchema(context.Context, *QueryGetCredentialSchemaRequest) (*QueryGetCredentialSchemaResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCredentialSchema not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -129,6 +146,24 @@ func _Query_ListCredentialSchemas_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_GetCredentialSchema_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryGetCredentialSchemaRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).GetCredentialSchema(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_GetCredentialSchema_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).GetCredentialSchema(ctx, req.(*QueryGetCredentialSchemaRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -143,6 +178,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListCredentialSchemas",
 			Handler:    _Query_ListCredentialSchemas_Handler,
+		},
+		{
+			MethodName: "GetCredentialSchema",
+			Handler:    _Query_GetCredentialSchema_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

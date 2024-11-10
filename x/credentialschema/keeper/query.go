@@ -54,3 +54,20 @@ func (k Keeper) ListCredentialSchemas(goCtx context.Context, req *types.QueryLis
 		Schemas: schemas,
 	}, nil
 }
+
+func (k Keeper) GetCredentialSchema(goCtx context.Context, req *types.QueryGetCredentialSchemaRequest) (*types.QueryGetCredentialSchemaResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	schema, err := k.CredentialSchema.Get(ctx, req.Id)
+	if err != nil {
+		return nil, status.Error(codes.NotFound, "credential schema not found")
+	}
+
+	return &types.QueryGetCredentialSchemaResponse{
+		Schema: schema,
+	}, nil
+}
