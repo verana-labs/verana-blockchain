@@ -111,3 +111,15 @@ jobs:
 
           # Upload manifest.json to S3
           s3cmd put manifest.json s3://$BUCKET_NAME/binaries/manifest.json --acl-public --force
+
+      - name: Create GitHub Release and Upload Assets
+        if: env.VERSION != 'dev'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            binaries/${{github.event.inputs.BINARY_NAME}}-linux-amd64
+            binaries/${{github.event.inputs.BINARY_NAME}}-linux-arm64
+            binaries/${{github.event.inputs.BINARY_NAME}}-darwin-amd64
+            binaries/${{github.event.inputs.BINARY_NAME}}-darwin-arm64
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}          
