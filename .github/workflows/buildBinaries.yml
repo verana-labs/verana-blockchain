@@ -154,7 +154,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ env.VERSION }} # Explicitly specify the tag
-          name: Release ${{ env.VERSION }} # Name the release
+          name: Release ${{ env.VERSION }} # Name the release 
           files: |
             binaries/${{env.BINARY_NAME}}-linux-amd64
             binaries/${{env.BINARY_NAME}}-linux-arm64
