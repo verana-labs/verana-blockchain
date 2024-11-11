@@ -28,11 +28,11 @@ clean:
 
 test:
 	@echo "Running tests..."
-	@go test ./x/trustregistry/keeper/...
+	@go test ./x/trustregistry/keeper/... ./x/diddirectory/keeper/...
 
 test-verbose:
 	@echo "Running tests with verbose output..."
-	@go test -v ./x/trustregistry/keeper/...
+	@go test -v ./x/trustregistry/keeper/... ./x/diddirectory/keeper/...
 
 test-coverage:
 	@echo "Running tests with coverage..."
