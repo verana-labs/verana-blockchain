@@ -292,7 +292,6 @@ Note: Replace `cooluser`, chain ID, gas prices, and other parameters according t
 
 1. Create a Credential Schema:
    ```bash
-   # First create a schema.json file
    echo '{
        "$schema": "https://json-schema.org/draft/2020-12/schema",
        "$id": "/dtr/v1/cs/js/1",
@@ -307,18 +306,17 @@ Note: Replace `cooluser`, chain ID, gas prices, and other parameters according t
        "additionalProperties": false
    }' > schema.json
 
-   # Create the credential schema
    veranad tx credentialschema create-credential-schema \
-   1 \                                               # id
-   1 \                                               # tr-id
-   "$(cat schema.json)" \                           # json-schema content
-   365 \                                            # issuer-grantor-period
-   365 \                                            # verifier-grantor-period
-   180 \                                            # issuer-period
-   180 \                                            # verifier-period
-   180 \                                            # holder-period
-   2 \                                              # issuer-mode (2=GRANTOR_VALIDATION)
-   2 \                                              # verifier-mode (2=GRANTOR_VALIDATION)
+   1 \
+   1 \
+   "$(cat schema.json)" \
+   365 \
+   365 \
+   180 \
+   180 \
+   180 \
+   2 \
+   2 \
    --from cooluser \
    --keyring-backend test \
    --chain-id test-1 \
