@@ -4,6 +4,7 @@ on:
   push:
       tags:
       - '*' # Trigger on tag creation
+  workflow_dispatch:
 
 
 env:
