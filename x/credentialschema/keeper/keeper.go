@@ -82,7 +82,7 @@ func (k Keeper) Logger() log.Logger {
 	return k.logger.With("module", fmt.Sprintf("x/%s", types.ModuleName))
 }
 
-// GetCredentialSchema returns a credential schema by ID
+// GetCredentialSchemaById GetCredentialSchema returns a credential schema by ID
 func (k Keeper) GetCredentialSchemaById(ctx sdk.Context, id uint64) (types.CredentialSchema, error) {
 	return k.CredentialSchema.Get(ctx, id)
 }
