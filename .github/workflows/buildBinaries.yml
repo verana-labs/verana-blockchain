@@ -1,12 +1,9 @@
 name: 1.Build Binaries
 
 on:
-  workflow_dispatch:
-    inputs:
-      BINARY_NAME:
-        description: 'The CMD binary name; veranad ,utctestchaind'
-        required: true
-        default: 'veranad'
+  push:
+      tags:
+      - '*' # Trigger on tag creation
 
 
 env:
@@ -18,7 +15,7 @@ env:
   VERANA_CODE_REPO_KEY: ${{ secrets.VERANA_DEPLOY_KEY }}
   VERANA_BLOCKCHAIN_CODE_REPO_KEY: ${{ secrets.VERANA_BLOCKCHAIN_DEPLOY_KEY }}
   VERANA_DEPLOY_PATH: 'verana-deploy'
-  BINARY_NAME: ${{ github.event.inputs.BINARY_NAME}}
+  BINARY_NAME: 'veranad'
 
 
 jobs:
