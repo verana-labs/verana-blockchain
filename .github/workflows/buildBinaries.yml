@@ -131,7 +131,11 @@ jobs:
           s3cmd put binaries/${{env.BINARY_NAME}}-darwin-amd64 s3://$BUCKET_NAME/binaries/${{ env.VERSION }}/${{env.BINARY_NAME}}-${{ env.COMMIT }}-darwin-amd64 --acl-public
           s3cmd put binaries/${{env.BINARY_NAME}}-darwin-arm64 s3://$BUCKET_NAME/binaries/${{ env.VERSION }}/${{env.BINARY_NAME}}-${{ env.COMMIT }}-darwin-arm64 --acl-public
           s3cmd put binaries/checksums/commit.sha1 s3://$BUCKET_NAME/binaries/${{ env.VERSION }}/${{ env.COMMIT }}.sha1 --acl-public
-          s3cmd put binaries/checksums/md5sums.txt s3://$BUCKET_NAME/binaries/${{ env.VERSION }}/md5sums.txt --acl-public
+          if [[ "${{ env.VERSION }}" == "dev" ]]; then
+            s3cmd put binaries/checksums/md5sums.txt s3://$BUCKET_NAME/binaries/${{ env.VERSION }}/md5sums-${{ env.COMMIT }}.txt --acl-public
+          else
+            s3cmd put binaries/checksums/md5sums.txt s3://$BUCKET_NAME/binaries/${{ env.VERSION }}/md5sums.txt --acl-public
+          fi
 
       - name: Update manifest.json
         run: |
