@@ -25,3 +25,7 @@ vendor/
 .vscode/
 *.swp
 *.swo
+
+.s3cfg
+.secrets*
+.env
