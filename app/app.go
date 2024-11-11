@@ -1,10 +1,11 @@
 package app
 
 import (
-	upgradetypes "cosmossdk.io/x/upgrade/types"
 	"fmt"
-	"github.com/verana-labs/verana-blockchain/app/upgrades"
 	"io"
+
+	upgradetypes "cosmossdk.io/x/upgrade/types"
+	"github.com/verana-labs/verana-blockchain/app/upgrades"
 
 	"cosmossdk.io/x/evidence"
 	"cosmossdk.io/x/upgrade"
@@ -98,6 +99,7 @@ import (
 	diddirectorymodulekeeper "github.com/verana-labs/verana-blockchain/x/diddirectory/keeper"
 	trustregistrymodulekeeper "github.com/verana-labs/verana-blockchain/x/trustregistry/keeper"
 
+	credentialschemamodulekeeper "github.com/verana-labs/verana-blockchain/x/credentialschema/keeper"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 	authzmodule "github.com/cosmos/cosmos-sdk/x/authz/module"
 
@@ -188,8 +190,9 @@ type App struct {
 	ScopedICAHostKeeper       capabilitykeeper.ScopedKeeper
 	ScopedKeepers             map[string]capabilitykeeper.ScopedKeeper
 
-	TrustregistryKeeper trustregistrymodulekeeper.Keeper
-	DiddirectoryKeeper  diddirectorymodulekeeper.Keeper
+	TrustregistryKeeper    trustregistrymodulekeeper.Keeper
+	DiddirectoryKeeper     diddirectorymodulekeeper.Keeper
+	CredentialschemaKeeper credentialschemamodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -299,6 +302,7 @@ func New(
 		&app.CircuitBreakerKeeper,
 		&app.TrustregistryKeeper,
 		&app.DiddirectoryKeeper,
+		&app.CredentialschemaKeeper,
 		// this line is used by starport scaffolding # stargate/app/keeperDefinition
 	); err != nil {
 		panic(err)

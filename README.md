@@ -285,3 +285,79 @@ Note: Replace `cooluser`, chain ID, gas prices, and other parameters according t
 - `expired`: Show expired DIDs
 - `over-grace`: Show DIDs that are past grace period
 - `max-results`: Maximum number of results to return (1-1024, default 64)
+
+## Interacting with the Credential Schema Module
+
+### Using CLI
+
+1. Create a Credential Schema:
+   ```bash
+   echo '{
+       "$schema": "https://json-schema.org/draft/2020-12/schema",
+       "$id": "/dtr/v1/cs/js/1",
+       "type": "object",
+       "$defs": {},
+       "properties": {
+           "name": {
+               "type": "string"
+           }
+       },
+       "required": ["name"],
+       "additionalProperties": false
+   }' > schema.json
+
+   veranad tx credentialschema create-credential-schema \
+   1 \
+   1 \
+   "$(cat schema.json)" \
+   365 \
+   365 \
+   180 \
+   180 \
+   180 \
+   2 \
+   2 \
+   --from cooluser \
+   --keyring-backend test \
+   --chain-id test-1 \
+   --gas 800000 \
+   --gas-adjustment 1.3 \
+   --gas-prices 1.1uvna
+   ```
+
+### Queries
+
+1. List Credential Schemas:
+   ```bash
+   veranad q credentialschema list-schemas \
+   --tr_id 1 \
+   --created_after "2024-01-01T00:00:00Z" \
+   --response_max_size 100 \
+   --output json
+   ```
+
+2. Get Credential Schema:
+   ```bash
+   veranad q credentialschema get 1 \
+   --output json
+   ```
+
+3. Get JSON Schema Definition:
+   ```bash
+   veranad q credentialschema schema 1 \
+   --output json
+   ```
+
+### Query Parameters
+
+- `tr_id`: Filter schemas by trust registry ID
+- `created_after`: Show schemas created after this datetime (RFC3339 format)
+- `response_max_size`: Maximum number of results (1-1024, default 64)
+
+Note:
+- The issuer and verifier mode values are:
+   - 1: OPEN
+   - 2: GRANTOR_VALIDATION
+   - 3: TRUST_REGISTRY_VALIDATION
+- A trust registry must exist before creating a credential schema
+- The schema creator must be the controller of the referenced trust registry

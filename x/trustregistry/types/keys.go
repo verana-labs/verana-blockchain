@@ -1,6 +1,8 @@
 package types
 
-import "cosmossdk.io/collections"
+import (
+	"cosmossdk.io/collections"
+)
 
 const (
 	// ModuleName defines the module name

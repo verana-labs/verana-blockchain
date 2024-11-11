@@ -91,6 +91,10 @@ func (k Keeper) GetTrustRegistryByDID(ctx sdk.Context, did string) (types.TrustR
 	return k.TrustRegistry.Get(ctx, id)
 }
 
+func (k Keeper) GetTrustRegistry(ctx sdk.Context, id uint64) (types.TrustRegistry, error) {
+	return k.TrustRegistry.Get(ctx, id)
+}
+
 func (k Keeper) GetNextID(ctx sdk.Context, entityType string) (uint64, error) {
 	currentID, err := k.Counter.Get(ctx, entityType)
 	if err != nil {
