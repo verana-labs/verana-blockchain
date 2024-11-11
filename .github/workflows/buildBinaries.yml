@@ -1,12 +1,10 @@
 name: 1.Build Binaries
 
 on:
+  push:
+      tags:
+      - '*' # Trigger on tag creation
   workflow_dispatch:
-    inputs:
-      BINARY_NAME:
-        description: 'The CMD binary name; veranad ,utctestchaind'
-        required: true
-        default: 'veranad'
 
 
 env:
@@ -18,6 +16,7 @@ env:
   VERANA_CODE_REPO_KEY: ${{ secrets.VERANA_DEPLOY_KEY }}
   VERANA_BLOCKCHAIN_CODE_REPO_KEY: ${{ secrets.VERANA_BLOCKCHAIN_DEPLOY_KEY }}
   VERANA_DEPLOY_PATH: 'verana-deploy'
+  BINARY_NAME: 'veranad'
 
 
 jobs:
@@ -25,13 +24,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - name: Checkout Dockerfiles from verana-deploy
+      - name: Checkout gh-repo
         uses: actions/checkout@v3
         with:
-          repository: verana-labs/verana-deploy
-          ref: ${{ github.ref_name }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-          path: ${{ env.VERANA_DEPLOY_PATH }}
+            fetch-depth: 0  # Fetch all history
 
       - name: Set up Go environment
         uses: actions/setup-go@v3
@@ -54,38 +50,71 @@ jobs:
 
       - name: Set LDFLAGS environment variable
         run: |
-          VERSION=$(git describe --tags)
+          echo environment:
+          ls -al
+          echo pwd=$(pwd)
+          git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr - %an)%Creset' --abbrev-commit --date=relative --all
+          echo executing: git describe --tags --exact-match
+          git describe --tags --exact-match || true
+          if git describe --tags --exact-match > /dev/null 2>&1; then
+            VERSION=$(git describe --tags --exact-match)
+            echo "then VERSION=${VERSION}"
+          else
+            VERSION="dev"
+            echo "else VERSION=${VERSION}"
+          fi
           COMMIT=$(git rev-parse --short HEAD)
           LDFLAGS="-X github.com/cosmos/cosmos-sdk/version.Name=verana \
           -X github.com/cosmos/cosmos-sdk/version.AppName=verana \
           -X github.com/cosmos/cosmos-sdk/version.Version=${VERSION} \
           -X github.com/cosmos/cosmos-sdk/version.Commit=${COMMIT}"
+          echo "LDFLAGS=${LDFLAGS}"
+          echo "VERSION=${VERSION}"
+          echo "COMMIT=${COMMIT}"
           echo "LDFLAGS=${LDFLAGS}" >> $GITHUB_ENV
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+          echo "COMMIT=${COMMIT}" >> $GITHUB_ENV          
 
       - name: Build binary for Linux AMD64
         run: |
           mkdir -p binaries/testnet_v1
           echo "LDFLAGS: $LDFLAGS"
-          GOOS=linux GOARCH=amd64 go build -ldflags="$LDFLAGS" -o binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-testnet_v1-linux-amd64 ./cmd/${{github.event.inputs.BINARY_NAME}}
+          GOOS=linux GOARCH=amd64 go build -ldflags="$LDFLAGS" -o binaries/${{env.BINARY_NAME}}-linux-amd64 ./cmd/${{env.BINARY_NAME}}
 
       - name: Build binary for Linux ARM64
         run: |
           mkdir -p binaries/testnet_v1
-          GOOS=linux GOARCH=arm64 go build -ldflags="$LDFLAGS" -o binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-testnet_v1-linux-arm64 ./cmd/${{github.event.inputs.BINARY_NAME}}
+          GOOS=linux GOARCH=arm64 go build -ldflags="$LDFLAGS" -o binaries/${{env.BINARY_NAME}}-linux-arm64 ./cmd/${{env.BINARY_NAME}}
 
       - name: Build binary for Darwin AMD64
         run: |
           mkdir -p binaries/testnet_v1
-          GOOS=darwin GOARCH=amd64 go build -ldflags="$LDFLAGS" -o binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-testnet_v1-darwin-amd64 ./cmd/${{github.event.inputs.BINARY_NAME}}
+          GOOS=darwin GOARCH=amd64 go build -ldflags="$LDFLAGS" -o binaries/${{env.BINARY_NAME}}-darwin-amd64 ./cmd/${{env.BINARY_NAME}}
 
       - name: Build binary for Darwin ARM64
         run: |
           mkdir -p binaries/testnet_v1
-          GOOS=darwin GOARCH=arm64 go build -ldflags="$LDFLAGS" -o binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-testnet_v1-darwin-arm64 ./cmd/${{github.event.inputs.BINARY_NAME}}
+          GOOS=darwin GOARCH=arm64 go build -ldflags="$LDFLAGS" -o binaries/${{env.BINARY_NAME}}-darwin-arm64 ./cmd/${{env.BINARY_NAME}}
 
-      - name: Generate release tag
+      - name: Generate MD5 Checksums
+        run: |
+          mkdir -p binaries/checksums
+          md5sum binaries/${{env.BINARY_NAME}}-linux-amd64 > binaries/checksums/md5sums.txt
+          md5sum binaries/${{env.BINARY_NAME}}-linux-arm64 >> binaries/checksums/md5sums.txt
+          md5sum binaries/${{env.BINARY_NAME}}-darwin-amd64 >> binaries/checksums/md5sums.txt
+          md5sum binaries/${{env.BINARY_NAME}}-darwin-arm64 >> binaries/checksums/md5sums.txt
+          cat binaries/checksums/md5sums.txt
+
+      - name: Generate COMMIT info
+        run: |
+          mkdir -p binaries/checksums
+          echo VERSION=$VERSION >> binaries/checksums/commit.sha1
+          echo COMMIT=$(git rev-parse --long HEAD) >> binaries/checksums/commit.sha1
+          cat binaries/checksums/commit.sha1          
+
+      - name: Generate timestamp tag
         id: generate_tag
-        run: echo "TAG=v$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
+        run: echo "TIMESTAMP_TAG=v$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
 
       - name: Install s3cmd
         run: sudo apt-get install s3cmd
@@ -95,22 +124,43 @@ jobs:
 
       - name: Upload binaries to OVH
         run: |
-          s3cmd put binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-testnet_v1-linux-amd64 s3://$BUCKET_NAME/${{ env.BRANCH_NAME }}/binaries/${{github.event.inputs.BINARY_NAME}}-testnet_v1-${{ env.TAG }}-linux-amd64 --acl-public
-          s3cmd put binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-testnet_v1-linux-arm64 s3://$BUCKET_NAME/${{ env.BRANCH_NAME }}/binaries/${{github.event.inputs.BINARY_NAME}}-testnet_v1-${{ env.TAG }}-linux-arm64 --acl-public
-          s3cmd put binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-testnet_v1-darwin-amd64 s3://$BUCKET_NAME/${{ env.BRANCH_NAME }}/binaries/${{github.event.inputs.BINARY_NAME}}-testnet_v1-${{ env.TAG }}-darwin-amd64 --acl-public
-          s3cmd put binaries/testnet_v1/${{github.event.inputs.BINARY_NAME}}-testnet_v1-darwin-arm64 s3://$BUCKET_NAME/${{ env.BRANCH_NAME }}/binaries/${{github.event.inputs.BINARY_NAME}}-testnet_v1-${{ env.TAG }}-darwin-arm64 --acl-public
+          s3cmd put binaries/${{env.BINARY_NAME}}-linux-amd64 s3://$BUCKET_NAME/binaries/${{ env.VERSION }}/${{env.BINARY_NAME}}-${{ env.COMMIT }}-linux-amd64 --acl-public
+          s3cmd put binaries/${{env.BINARY_NAME}}-linux-arm64 s3://$BUCKET_NAME/binaries/${{ env.VERSION }}/${{env.BINARY_NAME}}-${{ env.COMMIT }}-linux-arm64 --acl-public
+          s3cmd put binaries/${{env.BINARY_NAME}}-darwin-amd64 s3://$BUCKET_NAME/binaries/${{ env.VERSION }}/${{env.BINARY_NAME}}-${{ env.COMMIT }}-darwin-amd64 --acl-public
+          s3cmd put binaries/${{env.BINARY_NAME}}-darwin-arm64 s3://$BUCKET_NAME/binaries/${{ env.VERSION }}/${{env.BINARY_NAME}}-${{ env.COMMIT }}-darwin-arm64 --acl-public
+          s3cmd put binaries/checksums/commit.sha1 s3://$BUCKET_NAME/binaries/${{ env.VERSION }}/${{ env.COMMIT }}.sha1 --acl-public
+          if [[ "${{ env.VERSION }}" == "dev" ]]; then
+            s3cmd put binaries/checksums/md5sums.txt s3://$BUCKET_NAME/binaries/${{ env.VERSION }}/md5sums-${{ env.COMMIT }}.txt --acl-public
+          else
+            s3cmd put binaries/checksums/md5sums.txt s3://$BUCKET_NAME/binaries/${{ env.VERSION }}/md5sums.txt --acl-public
+          fi
 
       - name: Update manifest.json
         run: |
           # Create or update manifest.json
           cat > manifest.json <<EOL
           {
-            "linux-amd64": "${{github.event.inputs.BINARY_NAME}}-testnet_v1-${{ env.TAG }}-linux-amd64",
-            "linux-arm64": "${{github.event.inputs.BINARY_NAME}}-testnet_v1-${{ env.TAG }}-linux-arm64",
-            "darwin-amd64": "${{github.event.inputs.BINARY_NAME}}-testnet_v1-${{ env.TAG }}-darwin-amd64",
-            "darwin-arm64": "${{github.event.inputs.BINARY_NAME}}-testnet_v1-${{ env.TAG }}-darwin-arm64"
+            "linux-amd64": "${{env.BINARY_NAME}}-${{ env.VERSION }}-${{ env.COMMIT }}-linux-amd64",
+            "linux-arm64": "${{env.BINARY_NAME}}-${{ env.VERSION }}-${{ env.COMMIT }}-linux-arm64",
+            "darwin-amd64": "${{env.BINARY_NAME}}-${{ env.VERSION }}-${{ env.COMMIT }}-darwin-amd64",
+            "darwin-arm64": "${{env.BINARY_NAME}}-${{ env.VERSION }}-${{ env.COMMIT }}-darwin-arm64"
           }
           EOL
 
           # Upload manifest.json to S3
-          s3cmd put manifest.json s3://$BUCKET_NAME/${{ env.BRANCH_NAME }}/binaries/manifest.json --acl-public --force
+          s3cmd put manifest.json s3://$BUCKET_NAME/binaries/manifest.json --acl-public --force
+
+      - name: Create GitHub Release and Upload Assets
+        if: env.VERSION != 'dev'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.VERSION }} # Explicitly specify the tag
+          name: Release ${{ env.VERSION }} # Name the release 
+          files: |
+            binaries/${{env.BINARY_NAME}}-linux-amd64
+            binaries/${{env.BINARY_NAME}}-linux-arm64
+            binaries/${{env.BINARY_NAME}}-darwin-amd64
+            binaries/${{env.BINARY_NAME}}-darwin-arm64
+            binaries/checksums/md5sums.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}          
