@@ -49,7 +49,6 @@ func TestMsgServerCreateCredentialSchema(t *testing.T) {
 			name: "Valid Create Credential Schema",
 			msg: &types.MsgCreateCredentialSchema{
 				Creator:                                 creator,
-				Id:                                      1,
 				TrId:                                    trID, // Use the ID from trust registry response
 				JsonSchema:                              validJsonSchema,
 				IssuerGrantorValidationValidityPeriod:   365,
@@ -66,7 +65,6 @@ func TestMsgServerCreateCredentialSchema(t *testing.T) {
 			name: "Non-existent Trust Registry",
 			msg: &types.MsgCreateCredentialSchema{
 				Creator:                                 creator,
-				Id:                                      2,
 				TrId:                                    999, // Non-existent trust registry
 				JsonSchema:                              validJsonSchema,
 				IssuerGrantorValidationValidityPeriod:   365,
@@ -83,7 +81,6 @@ func TestMsgServerCreateCredentialSchema(t *testing.T) {
 			name: "Wrong Trust Registry Controller",
 			msg: &types.MsgCreateCredentialSchema{
 				Creator:                                 sdk.AccAddress([]byte("wrong_creator")).String(),
-				Id:                                      3,
 				TrId:                                    trID,
 				JsonSchema:                              validJsonSchema,
 				IssuerGrantorValidationValidityPeriod:   365,
@@ -98,6 +95,8 @@ func TestMsgServerCreateCredentialSchema(t *testing.T) {
 		},
 	}
 
+	var expectedID uint64 = 1 // Track expected auto-generated ID
+
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			resp, err := ms.CreateCredentialSchema(ctx, tc.msg)
@@ -105,12 +104,20 @@ func TestMsgServerCreateCredentialSchema(t *testing.T) {
 				require.NoError(t, err)
 				require.NotNil(t, resp)
 
-				// Verify schema was created
-				schema, err := k.CredentialSchema.Get(ctx, tc.msg.Id)
+				// Verify ID was auto-generated correctly
+				require.Equal(t, expectedID, resp.Id)
+
+				// Verify schema was created with correct ID
+				schema, err := k.CredentialSchema.Get(ctx, resp.Id)
 				require.NoError(t, err)
 				require.Equal(t, tc.msg.JsonSchema, schema.JsonSchema)
 				require.Equal(t, tc.msg.IssuerPermManagementMode, uint32(schema.IssuerPermManagementMode))
 				require.Equal(t, tc.msg.VerifierPermManagementMode, uint32(schema.VerifierPermManagementMode))
+
+				// Verify schema ID matches response
+				require.Equal(t, resp.Id, schema.Id)
+
+				expectedID++ // Increment expected ID for next valid creation
 			} else {
 				require.Error(t, err)
 				require.Nil(t, resp)
