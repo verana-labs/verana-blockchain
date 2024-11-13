@@ -83,10 +83,9 @@ $ veranad query credentialschema schema 1`,
 				},
 				{
 					RpcMethod: "CreateCredentialSchema",
-					Use:       "create-credential-schema [id] [tr-id] [json-schema] [issuer-grantor-period] [verifier-grantor-period] [issuer-period] [verifier-period] [holder-period] [issuer-mode] [verifier-mode]",
+					Use:       "create-credential-schema [tr-id] [json-schema] [issuer-grantor-period] [verifier-grantor-period] [issuer-period] [verifier-period] [holder-period] [issuer-mode] [verifier-mode]",
 					Short:     "Create a new credential schema",
 					Long: `Create a new credential schema with the specified parameters:
-- id: unique identifier for the schema
 - tr-id: trust registry ID
 - json-schema: path to JSON schema file or JSON string
 - issuer-grantor-period: validation period for issuer grantors (days)
@@ -94,15 +93,12 @@ $ veranad query credentialschema schema 1`,
 - issuer-period: validation period for issuers (days)
 - verifier-period: validation period for verifiers (days)
 - holder-period: validation period for holders (days)
-- issuer-mode: permission management mode for issuers (0=UNSPECIFIED, 1=OPEN, 2=GRANTOR_VALIDATION, 3=TRUST_REGISTRY_VALIDATION)
-- verifier-mode: permission management mode for verifiers (0=UNSPECIFIED, 1=OPEN, 2=GRANTOR_VALIDATION, 3=TRUST_REGISTRY_VALIDATION)
+- issuer-mode: permission management mode for issuers (1=OPEN, 2=GRANTOR_VALIDATION, 3=TRUST_REGISTRY_VALIDATION)
+- verifier-mode: permission management mode for verifiers (1=OPEN, 2=GRANTOR_VALIDATION, 3=TRUST_REGISTRY_VALIDATION)
 
 Example:
-$ veranad tx credentialschema create-credential-schema 1 1 schema.json 365 365 180 180 180 2 2`,
+$ veranad tx credentialschema create-credential-schema 1 schema.json 365 365 180 180 180 2 2`,
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
-						{
-							ProtoField: "id",
-						},
 						{
 							ProtoField: "tr_id",
 						},
