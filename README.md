@@ -308,7 +308,6 @@ Note: Replace `cooluser`, chain ID, gas prices, and other parameters according t
 
    veranad tx credentialschema create-credential-schema \
    1 \
-   1 \
    "$(cat schema.json)" \
    365 \
    365 \
