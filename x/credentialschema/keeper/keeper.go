@@ -28,6 +28,7 @@ type (
 		Schema collections.Schema
 		//Params           collections.Item[types.Params]
 		CredentialSchema collections.Map[uint64, types.CredentialSchema]
+		Counter          collections.Map[string, uint64]
 	}
 )
 
@@ -60,6 +61,13 @@ func NewKeeper(
 			"credential_schema",
 			collections.Uint64Key,
 			codec.CollValue[types.CredentialSchema](cdc),
+		),
+		Counter: collections.NewMap(
+			sb,
+			types.CounterKey,
+			"counter",
+			collections.StringKey,
+			collections.Uint64Value,
 		),
 	}
 
@@ -102,4 +110,19 @@ func (k Keeper) IterateCredentialSchemas(ctx sdk.Context, fn func(schema types.C
 	return k.CredentialSchema.Walk(ctx, nil, func(key uint64, value types.CredentialSchema) (bool, error) {
 		return fn(value), nil
 	})
+}
+
+func (k Keeper) GetNextID(ctx sdk.Context, entityType string) (uint64, error) {
+	currentID, err := k.Counter.Get(ctx, entityType)
+	if err != nil {
+		currentID = 0
+	}
+
+	nextID := currentID + 1
+	err = k.Counter.Set(ctx, entityType, nextID)
+	if err != nil {
+		return 0, fmt.Errorf("failed to set counter: %w", err)
+	}
+
+	return nextID, nil
 }

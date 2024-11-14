@@ -21,6 +21,7 @@ const (
 var (
 	ParamsKey           = []byte("p_credentialschema")
 	CredentialSchemaKey = collections.NewPrefix(1)
+	CounterKey          = collections.NewPrefix(2)
 )
 
 func KeyPrefix(p string) []byte {

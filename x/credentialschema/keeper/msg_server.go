@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/verana-labs/verana-blockchain/x/credentialschema/types"
 )
@@ -21,6 +22,12 @@ var _ types.MsgServer = msgServer{}
 func (ms msgServer) CreateCredentialSchema(goCtx context.Context, msg *types.MsgCreateCredentialSchema) (*types.MsgCreateCredentialSchemaResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
+	// Generate next ID
+	nextID, err := ms.GetNextID(ctx, "cs")
+	if err != nil {
+		return nil, fmt.Errorf("failed to generate schema ID: %w", err)
+	}
+
 	// [MOD-CS-MSG-1-2-1] Basic checks
 	if err := ms.validateCreateCredentialSchemaParams(ctx, msg); err != nil {
 		return nil, err
@@ -28,15 +35,15 @@ func (ms msgServer) CreateCredentialSchema(goCtx context.Context, msg *types.Msg
 
 	// [MOD-CS-MSG-1-2-2] Fee checks
 	//if err := ms.checkSufficientFees(ctx, msg.Creator); err != nil {
-	//	return nil, err
+	// return nil, err
 	//}
 
 	// [MOD-CS-MSG-1-3] Execution
-	if err := ms.executeCreateCredentialSchema(ctx, msg); err != nil {
+	if err := ms.executeCreateCredentialSchema(ctx, nextID, msg); err != nil {
 		return nil, err
 	}
 
 	return &types.MsgCreateCredentialSchemaResponse{
-		Id: msg.Id,
+		Id: nextID,
 	}, nil
 }

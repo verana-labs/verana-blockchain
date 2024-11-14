@@ -9,12 +9,6 @@ import (
 func (ms msgServer) validateCreateCredentialSchemaParams(ctx sdk.Context, msg *types.MsgCreateCredentialSchema) error {
 	params := ms.GetParams(ctx)
 
-	// Check if schema already exists
-	_, err := ms.GetCredentialSchemaById(ctx, msg.Id)
-	if err == nil {
-		return fmt.Errorf("credential schema with id %d already exists", msg.Id)
-	}
-
 	// Validate trust registry ownership
 	tr, err := ms.trustregistryKeeper.GetTrustRegistry(ctx, msg.TrId)
 	if err != nil {
@@ -66,7 +60,7 @@ func validateValidityPeriodsWithParams(msg *types.MsgCreateCredentialSchema, par
 	return nil
 }
 
-func (ms msgServer) executeCreateCredentialSchema(ctx sdk.Context, msg *types.MsgCreateCredentialSchema) error {
+func (ms msgServer) executeCreateCredentialSchema(ctx sdk.Context, schemaID uint64, msg *types.MsgCreateCredentialSchema) error {
 	// Get params using the getter method
 	params := ms.GetParams(ctx)
 
@@ -75,7 +69,7 @@ func (ms msgServer) executeCreateCredentialSchema(ctx sdk.Context, msg *types.Ms
 
 	// Create the credential schema
 	credentialSchema := types.CredentialSchema{
-		Id:                                      msg.Id,
+		Id:                                      schemaID, // Use the generated ID
 		TrId:                                    msg.TrId,
 		Created:                                 ctx.BlockTime(),
 		Deposit:                                 trustDeposit,
@@ -100,7 +94,7 @@ func (ms msgServer) executeCreateCredentialSchema(ctx sdk.Context, msg *types.Ms
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
 			types.EventTypeCreateCredentialSchema,
-			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", msg.Id)),
+			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", schemaID)),
 			sdk.NewAttribute(types.AttributeKeyTrId, fmt.Sprintf("%d", msg.TrId)),
 			sdk.NewAttribute(types.AttributeKeyCreator, msg.Creator),
 		),

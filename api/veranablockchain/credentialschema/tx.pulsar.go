@@ -874,7 +874,6 @@ func (x *fastReflection_MsgUpdateParamsResponse) ProtoMethods() *protoiface.Meth
 var (
 	md_MsgCreateCredentialSchema                                             protoreflect.MessageDescriptor
 	fd_MsgCreateCredentialSchema_creator                                     protoreflect.FieldDescriptor
-	fd_MsgCreateCredentialSchema_id                                          protoreflect.FieldDescriptor
 	fd_MsgCreateCredentialSchema_tr_id                                       protoreflect.FieldDescriptor
 	fd_MsgCreateCredentialSchema_json_schema                                 protoreflect.FieldDescriptor
 	fd_MsgCreateCredentialSchema_issuer_grantor_validation_validity_period   protoreflect.FieldDescriptor
@@ -890,7 +889,6 @@ func init() {
 	file_veranablockchain_credentialschema_tx_proto_init()
 	md_MsgCreateCredentialSchema = File_veranablockchain_credentialschema_tx_proto.Messages().ByName("MsgCreateCredentialSchema")
 	fd_MsgCreateCredentialSchema_creator = md_MsgCreateCredentialSchema.Fields().ByName("creator")
-	fd_MsgCreateCredentialSchema_id = md_MsgCreateCredentialSchema.Fields().ByName("id")
 	fd_MsgCreateCredentialSchema_tr_id = md_MsgCreateCredentialSchema.Fields().ByName("tr_id")
 	fd_MsgCreateCredentialSchema_json_schema = md_MsgCreateCredentialSchema.Fields().ByName("json_schema")
 	fd_MsgCreateCredentialSchema_issuer_grantor_validation_validity_period = md_MsgCreateCredentialSchema.Fields().ByName("issuer_grantor_validation_validity_period")
@@ -973,12 +971,6 @@ func (x *fastReflection_MsgCreateCredentialSchema) Range(f func(protoreflect.Fie
 			return
 		}
 	}
-	if x.Id != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.Id)
-		if !f(fd_MsgCreateCredentialSchema_id, value) {
-			return
-		}
-	}
 	if x.TrId != uint64(0) {
 		value := protoreflect.ValueOfUint64(x.TrId)
 		if !f(fd_MsgCreateCredentialSchema_tr_id, value) {
@@ -1050,8 +1042,6 @@ func (x *fastReflection_MsgCreateCredentialSchema) Has(fd protoreflect.FieldDesc
 	switch fd.FullName() {
 	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.creator":
 		return x.Creator != ""
-	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.id":
-		return x.Id != uint64(0)
 	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.tr_id":
 		return x.TrId != uint64(0)
 	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.json_schema":
@@ -1088,8 +1078,6 @@ func (x *fastReflection_MsgCreateCredentialSchema) Clear(fd protoreflect.FieldDe
 	switch fd.FullName() {
 	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.creator":
 		x.Creator = ""
-	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.id":
-		x.Id = uint64(0)
 	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.tr_id":
 		x.TrId = uint64(0)
 	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.json_schema":
@@ -1127,9 +1115,6 @@ func (x *fastReflection_MsgCreateCredentialSchema) Get(descriptor protoreflect.F
 	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.creator":
 		value := x.Creator
 		return protoreflect.ValueOfString(value)
-	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.id":
-		value := x.Id
-		return protoreflect.ValueOfUint64(value)
 	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.tr_id":
 		value := x.TrId
 		return protoreflect.ValueOfUint64(value)
@@ -1179,8 +1164,6 @@ func (x *fastReflection_MsgCreateCredentialSchema) Set(fd protoreflect.FieldDesc
 	switch fd.FullName() {
 	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.creator":
 		x.Creator = value.Interface().(string)
-	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.id":
-		x.Id = value.Uint()
 	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.tr_id":
 		x.TrId = value.Uint()
 	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.json_schema":
@@ -1221,8 +1204,6 @@ func (x *fastReflection_MsgCreateCredentialSchema) Mutable(fd protoreflect.Field
 	switch fd.FullName() {
 	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.creator":
 		panic(fmt.Errorf("field creator of message veranablockchain.credentialschema.MsgCreateCredentialSchema is not mutable"))
-	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.id":
-		panic(fmt.Errorf("field id of message veranablockchain.credentialschema.MsgCreateCredentialSchema is not mutable"))
 	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.tr_id":
 		panic(fmt.Errorf("field tr_id of message veranablockchain.credentialschema.MsgCreateCredentialSchema is not mutable"))
 	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.json_schema":
@@ -1256,8 +1237,6 @@ func (x *fastReflection_MsgCreateCredentialSchema) NewField(fd protoreflect.Fiel
 	switch fd.FullName() {
 	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.creator":
 		return protoreflect.ValueOfString("")
-	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.id":
-		return protoreflect.ValueOfUint64(uint64(0))
 	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.tr_id":
 		return protoreflect.ValueOfUint64(uint64(0))
 	case "veranablockchain.credentialschema.MsgCreateCredentialSchema.json_schema":
@@ -1349,9 +1328,6 @@ func (x *fastReflection_MsgCreateCredentialSchema) ProtoMethods() *protoiface.Me
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.Id != 0 {
-			n += 1 + runtime.Sov(uint64(x.Id))
-		}
 		if x.TrId != 0 {
 			n += 1 + runtime.Sov(uint64(x.TrId))
 		}
@@ -1412,52 +1388,47 @@ func (x *fastReflection_MsgCreateCredentialSchema) ProtoMethods() *protoiface.Me
 		if x.VerifierPermManagementMode != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.VerifierPermManagementMode))
 			i--
-			dAtA[i] = 0x58
+			dAtA[i] = 0x50
 		}
 		if x.IssuerPermManagementMode != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.IssuerPermManagementMode))
 			i--
-			dAtA[i] = 0x50
+			dAtA[i] = 0x48
 		}
 		if x.HolderValidationValidityPeriod != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.HolderValidationValidityPeriod))
 			i--
-			dAtA[i] = 0x48
+			dAtA[i] = 0x40
 		}
 		if x.VerifierValidationValidityPeriod != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.VerifierValidationValidityPeriod))
 			i--
-			dAtA[i] = 0x40
+			dAtA[i] = 0x38
 		}
 		if x.IssuerValidationValidityPeriod != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.IssuerValidationValidityPeriod))
 			i--
-			dAtA[i] = 0x38
+			dAtA[i] = 0x30
 		}
 		if x.VerifierGrantorValidationValidityPeriod != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.VerifierGrantorValidationValidityPeriod))
 			i--
-			dAtA[i] = 0x30
+			dAtA[i] = 0x28
 		}
 		if x.IssuerGrantorValidationValidityPeriod != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.IssuerGrantorValidationValidityPeriod))
 			i--
-			dAtA[i] = 0x28
+			dAtA[i] = 0x20
 		}
 		if len(x.JsonSchema) > 0 {
 			i -= len(x.JsonSchema)
 			copy(dAtA[i:], x.JsonSchema)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.JsonSchema)))
 			i--
-			dAtA[i] = 0x22
+			dAtA[i] = 0x1a
 		}
 		if x.TrId != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.TrId))
-			i--
-			dAtA[i] = 0x18
-		}
-		if x.Id != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.Id))
 			i--
 			dAtA[i] = 0x10
 		}
@@ -1551,25 +1522,6 @@ func (x *fastReflection_MsgCreateCredentialSchema) ProtoMethods() *protoiface.Me
 				iNdEx = postIndex
 			case 2:
 				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
-				}
-				x.Id = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.Id |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			case 3:
-				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TrId", wireType)
 				}
 				x.TrId = 0
@@ -1587,7 +1539,7 @@ func (x *fastReflection_MsgCreateCredentialSchema) ProtoMethods() *protoiface.Me
 						break
 					}
 				}
-			case 4:
+			case 3:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field JsonSchema", wireType)
 				}
@@ -1619,7 +1571,7 @@ func (x *fastReflection_MsgCreateCredentialSchema) ProtoMethods() *protoiface.Me
 				}
 				x.JsonSchema = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
-			case 5:
+			case 4:
 				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field IssuerGrantorValidationValidityPeriod", wireType)
 				}
@@ -1638,7 +1590,7 @@ func (x *fastReflection_MsgCreateCredentialSchema) ProtoMethods() *protoiface.Me
 						break
 					}
 				}
-			case 6:
+			case 5:
 				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field VerifierGrantorValidationValidityPeriod", wireType)
 				}
@@ -1657,7 +1609,7 @@ func (x *fastReflection_MsgCreateCredentialSchema) ProtoMethods() *protoiface.Me
 						break
 					}
 				}
-			case 7:
+			case 6:
 				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field IssuerValidationValidityPeriod", wireType)
 				}
@@ -1676,7 +1628,7 @@ func (x *fastReflection_MsgCreateCredentialSchema) ProtoMethods() *protoiface.Me
 						break
 					}
 				}
-			case 8:
+			case 7:
 				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field VerifierValidationValidityPeriod", wireType)
 				}
@@ -1695,7 +1647,7 @@ func (x *fastReflection_MsgCreateCredentialSchema) ProtoMethods() *protoiface.Me
 						break
 					}
 				}
-			case 9:
+			case 8:
 				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field HolderValidationValidityPeriod", wireType)
 				}
@@ -1714,7 +1666,7 @@ func (x *fastReflection_MsgCreateCredentialSchema) ProtoMethods() *protoiface.Me
 						break
 					}
 				}
-			case 10:
+			case 9:
 				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field IssuerPermManagementMode", wireType)
 				}
@@ -1733,7 +1685,7 @@ func (x *fastReflection_MsgCreateCredentialSchema) ProtoMethods() *protoiface.Me
 						break
 					}
 				}
-			case 11:
+			case 10:
 				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field VerifierPermManagementMode", wireType)
 				}
@@ -2286,16 +2238,15 @@ type MsgCreateCredentialSchema struct {
 	unknownFields protoimpl.UnknownFields
 
 	Creator                                 string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
-	Id                                      uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
-	TrId                                    uint64 `protobuf:"varint,3,opt,name=tr_id,json=trId,proto3" json:"tr_id,omitempty"`
-	JsonSchema                              string `protobuf:"bytes,4,opt,name=json_schema,json=jsonSchema,proto3" json:"json_schema,omitempty"`
-	IssuerGrantorValidationValidityPeriod   uint32 `protobuf:"varint,5,opt,name=issuer_grantor_validation_validity_period,json=issuerGrantorValidationValidityPeriod,proto3" json:"issuer_grantor_validation_validity_period,omitempty"`
-	VerifierGrantorValidationValidityPeriod uint32 `protobuf:"varint,6,opt,name=verifier_grantor_validation_validity_period,json=verifierGrantorValidationValidityPeriod,proto3" json:"verifier_grantor_validation_validity_period,omitempty"`
-	IssuerValidationValidityPeriod          uint32 `protobuf:"varint,7,opt,name=issuer_validation_validity_period,json=issuerValidationValidityPeriod,proto3" json:"issuer_validation_validity_period,omitempty"`
-	VerifierValidationValidityPeriod        uint32 `protobuf:"varint,8,opt,name=verifier_validation_validity_period,json=verifierValidationValidityPeriod,proto3" json:"verifier_validation_validity_period,omitempty"`
-	HolderValidationValidityPeriod          uint32 `protobuf:"varint,9,opt,name=holder_validation_validity_period,json=holderValidationValidityPeriod,proto3" json:"holder_validation_validity_period,omitempty"`
-	IssuerPermManagementMode                uint32 `protobuf:"varint,10,opt,name=issuer_perm_management_mode,json=issuerPermManagementMode,proto3" json:"issuer_perm_management_mode,omitempty"`       // Changed to uint32
-	VerifierPermManagementMode              uint32 `protobuf:"varint,11,opt,name=verifier_perm_management_mode,json=verifierPermManagementMode,proto3" json:"verifier_perm_management_mode,omitempty"` // Changed to uint32
+	TrId                                    uint64 `protobuf:"varint,2,opt,name=tr_id,json=trId,proto3" json:"tr_id,omitempty"`
+	JsonSchema                              string `protobuf:"bytes,3,opt,name=json_schema,json=jsonSchema,proto3" json:"json_schema,omitempty"`
+	IssuerGrantorValidationValidityPeriod   uint32 `protobuf:"varint,4,opt,name=issuer_grantor_validation_validity_period,json=issuerGrantorValidationValidityPeriod,proto3" json:"issuer_grantor_validation_validity_period,omitempty"`
+	VerifierGrantorValidationValidityPeriod uint32 `protobuf:"varint,5,opt,name=verifier_grantor_validation_validity_period,json=verifierGrantorValidationValidityPeriod,proto3" json:"verifier_grantor_validation_validity_period,omitempty"`
+	IssuerValidationValidityPeriod          uint32 `protobuf:"varint,6,opt,name=issuer_validation_validity_period,json=issuerValidationValidityPeriod,proto3" json:"issuer_validation_validity_period,omitempty"`
+	VerifierValidationValidityPeriod        uint32 `protobuf:"varint,7,opt,name=verifier_validation_validity_period,json=verifierValidationValidityPeriod,proto3" json:"verifier_validation_validity_period,omitempty"`
+	HolderValidationValidityPeriod          uint32 `protobuf:"varint,8,opt,name=holder_validation_validity_period,json=holderValidationValidityPeriod,proto3" json:"holder_validation_validity_period,omitempty"`
+	IssuerPermManagementMode                uint32 `protobuf:"varint,9,opt,name=issuer_perm_management_mode,json=issuerPermManagementMode,proto3" json:"issuer_perm_management_mode,omitempty"`
+	VerifierPermManagementMode              uint32 `protobuf:"varint,10,opt,name=verifier_perm_management_mode,json=verifierPermManagementMode,proto3" json:"verifier_perm_management_mode,omitempty"`
 }
 
 func (x *MsgCreateCredentialSchema) Reset() {
@@ -2323,13 +2274,6 @@ func (x *MsgCreateCredentialSchema) GetCreator() string {
 		return x.Creator
 	}
 	return ""
-}
-
-func (x *MsgCreateCredentialSchema) GetId() uint64 {
-	if x != nil {
-		return x.Id
-	}
-	return 0
 }
 
 func (x *MsgCreateCredentialSchema) GetTrId() uint64 {
@@ -2465,48 +2409,47 @@ var file_veranablockchain_credentialschema_tx_proto_rawDesc = []byte{
 	0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x2f, 0x4d, 0x73,
 	0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x22, 0x19, 0x0a,
 	0x17, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xc2, 0x05, 0x0a, 0x19, 0x4d, 0x73, 0x67,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xb2, 0x05, 0x0a, 0x19, 0x4d, 0x73, 0x67,
 	0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c,
 	0x53, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x12, 0x32, 0x0a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f,
 	0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73,
 	0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e,
-	0x67, 0x52, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64,
-	0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x12, 0x13, 0x0a, 0x05, 0x74, 0x72,
-	0x5f, 0x69, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52, 0x04, 0x74, 0x72, 0x49, 0x64, 0x12,
-	0x1f, 0x0a, 0x0b, 0x6a, 0x73, 0x6f, 0x6e, 0x5f, 0x73, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x18, 0x04,
+	0x67, 0x52, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x12, 0x13, 0x0a, 0x05, 0x74, 0x72,
+	0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x04, 0x74, 0x72, 0x49, 0x64, 0x12,
+	0x1f, 0x0a, 0x0b, 0x6a, 0x73, 0x6f, 0x6e, 0x5f, 0x73, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x18, 0x03,
 	0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x6a, 0x73, 0x6f, 0x6e, 0x53, 0x63, 0x68, 0x65, 0x6d, 0x61,
 	0x12, 0x58, 0x0a, 0x29, 0x69, 0x73, 0x73, 0x75, 0x65, 0x72, 0x5f, 0x67, 0x72, 0x61, 0x6e, 0x74,
 	0x6f, 0x72, 0x5f, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x76, 0x61,
-	0x6c, 0x69, 0x64, 0x69, 0x74, 0x79, 0x5f, 0x70, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x18, 0x05, 0x20,
+	0x6c, 0x69, 0x64, 0x69, 0x74, 0x79, 0x5f, 0x70, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x18, 0x04, 0x20,
 	0x01, 0x28, 0x0d, 0x52, 0x25, 0x69, 0x73, 0x73, 0x75, 0x65, 0x72, 0x47, 0x72, 0x61, 0x6e, 0x74,
 	0x6f, 0x72, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x56, 0x61, 0x6c, 0x69,
 	0x64, 0x69, 0x74, 0x79, 0x50, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x12, 0x5c, 0x0a, 0x2b, 0x76, 0x65,
 	0x72, 0x69, 0x66, 0x69, 0x65, 0x72, 0x5f, 0x67, 0x72, 0x61, 0x6e, 0x74, 0x6f, 0x72, 0x5f, 0x76,
 	0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x69,
-	0x74, 0x79, 0x5f, 0x70, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0d, 0x52,
+	0x74, 0x79, 0x5f, 0x70, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0d, 0x52,
 	0x27, 0x76, 0x65, 0x72, 0x69, 0x66, 0x69, 0x65, 0x72, 0x47, 0x72, 0x61, 0x6e, 0x74, 0x6f, 0x72,
 	0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x69,
 	0x74, 0x79, 0x50, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x12, 0x49, 0x0a, 0x21, 0x69, 0x73, 0x73, 0x75,
 	0x65, 0x72, 0x5f, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x76, 0x61,
-	0x6c, 0x69, 0x64, 0x69, 0x74, 0x79, 0x5f, 0x70, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x18, 0x07, 0x20,
+	0x6c, 0x69, 0x64, 0x69, 0x74, 0x79, 0x5f, 0x70, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x18, 0x06, 0x20,
 	0x01, 0x28, 0x0d, 0x52, 0x1e, 0x69, 0x73, 0x73, 0x75, 0x65, 0x72, 0x56, 0x61, 0x6c, 0x69, 0x64,
 	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x69, 0x74, 0x79, 0x50, 0x65, 0x72,
 	0x69, 0x6f, 0x64, 0x12, 0x4d, 0x0a, 0x23, 0x76, 0x65, 0x72, 0x69, 0x66, 0x69, 0x65, 0x72, 0x5f,
 	0x76, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x76, 0x61, 0x6c, 0x69, 0x64,
-	0x69, 0x74, 0x79, 0x5f, 0x70, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x18, 0x08, 0x20, 0x01, 0x28, 0x0d,
+	0x69, 0x74, 0x79, 0x5f, 0x70, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x18, 0x07, 0x20, 0x01, 0x28, 0x0d,
 	0x52, 0x20, 0x76, 0x65, 0x72, 0x69, 0x66, 0x69, 0x65, 0x72, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61,
 	0x74, 0x69, 0x6f, 0x6e, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x69, 0x74, 0x79, 0x50, 0x65, 0x72, 0x69,
 	0x6f, 0x64, 0x12, 0x49, 0x0a, 0x21, 0x68, 0x6f, 0x6c, 0x64, 0x65, 0x72, 0x5f, 0x76, 0x61, 0x6c,
 	0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x69, 0x74, 0x79,
-	0x5f, 0x70, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x18, 0x09, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x1e, 0x68,
+	0x5f, 0x70, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x18, 0x08, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x1e, 0x68,
 	0x6f, 0x6c, 0x64, 0x65, 0x72, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x56,
 	0x61, 0x6c, 0x69, 0x64, 0x69, 0x74, 0x79, 0x50, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x12, 0x3d, 0x0a,
 	0x1b, 0x69, 0x73, 0x73, 0x75, 0x65, 0x72, 0x5f, 0x70, 0x65, 0x72, 0x6d, 0x5f, 0x6d, 0x61, 0x6e,
-	0x61, 0x67, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x5f, 0x6d, 0x6f, 0x64, 0x65, 0x18, 0x0a, 0x20, 0x01,
+	0x61, 0x67, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x5f, 0x6d, 0x6f, 0x64, 0x65, 0x18, 0x09, 0x20, 0x01,
 	0x28, 0x0d, 0x52, 0x18, 0x69, 0x73, 0x73, 0x75, 0x65, 0x72, 0x50, 0x65, 0x72, 0x6d, 0x4d, 0x61,
 	0x6e, 0x61, 0x67, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x4d, 0x6f, 0x64, 0x65, 0x12, 0x41, 0x0a, 0x1d,
 	0x76, 0x65, 0x72, 0x69, 0x66, 0x69, 0x65, 0x72, 0x5f, 0x70, 0x65, 0x72, 0x6d, 0x5f, 0x6d, 0x61,
-	0x6e, 0x61, 0x67, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x5f, 0x6d, 0x6f, 0x64, 0x65, 0x18, 0x0b, 0x20,
+	0x6e, 0x61, 0x67, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x5f, 0x6d, 0x6f, 0x64, 0x65, 0x18, 0x0a, 0x20,
 	0x01, 0x28, 0x0d, 0x52, 0x1a, 0x76, 0x65, 0x72, 0x69, 0x66, 0x69, 0x65, 0x72, 0x50, 0x65, 0x72,
 	0x6d, 0x4d, 0x61, 0x6e, 0x61, 0x67, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x4d, 0x6f, 0x64, 0x65, 0x3a,
 	0x0c, 0x82, 0xe7, 0xb0, 0x2a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x22, 0x33, 0x0a,

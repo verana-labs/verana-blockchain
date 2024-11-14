@@ -7,6 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/xeipuuv/gojsonschema"
+	"regexp"
 )
 
 // Official meta-schema for Draft 2020-12
@@ -98,7 +99,6 @@ var _ sdk.Msg = &MsgCreateCredentialSchema{}
 // NewMsgCreateCredentialSchema creates a new MsgCreateCredentialSchema instance
 func NewMsgCreateCredentialSchema(
 	creator string,
-	id uint64,
 	trId uint64,
 	jsonSchema string,
 	issuerGrantorValidationValidityPeriod uint32,
@@ -111,7 +111,6 @@ func NewMsgCreateCredentialSchema(
 ) *MsgCreateCredentialSchema {
 	return &MsgCreateCredentialSchema{
 		Creator:                                 creator,
-		Id:                                      id,
 		TrId:                                    trId,
 		JsonSchema:                              jsonSchema,
 		IssuerGrantorValidationValidityPeriod:   issuerGrantorValidationValidityPeriod,
@@ -158,16 +157,12 @@ func (msg *MsgCreateCredentialSchema) ValidateBasic() error {
 	}
 
 	// Check mandatory parameters
-	if msg.Id == 0 {
-		return errors.Wrap(sdkerrors.ErrInvalidRequest, "id cannot be 0")
-	}
-
 	if msg.TrId == 0 {
 		return errors.Wrap(sdkerrors.ErrInvalidRequest, "tr_id cannot be 0")
 	}
 
-	// Validate JSON Schema
-	if err := validateJSONSchema(msg.JsonSchema, msg.Id); err != nil {
+	// Validate JSON Schema (without ID since it will be generated later)
+	if err := validateJSONSchema(msg.JsonSchema); err != nil {
 		return errors.Wrapf(ErrInvalidJSONSchema, err.Error())
 	}
 
@@ -184,7 +179,7 @@ func (msg *MsgCreateCredentialSchema) ValidateBasic() error {
 	return nil
 }
 
-func validateJSONSchema(schemaJSON string, id uint64) error {
+func validateJSONSchema(schemaJSON string) error {
 	if schemaJSON == "" {
 		return fmt.Errorf("json schema cannot be empty")
 	}
@@ -199,15 +194,15 @@ func validateJSONSchema(schemaJSON string, id uint64) error {
 		return fmt.Errorf("json schema exceeds maximum size of %d bytes", DefaultCredentialSchemaSchemaMaxSize)
 	}
 
-	// Check for $id field and print it for debugging
+	// Check for $id field
 	schemaId, ok := schemaDoc["$id"].(string)
 	if !ok {
 		return fmt.Errorf("$id must be a string")
 	}
 
-	expectedUrl := fmt.Sprintf("/dtr/v1/cs/js/%d", id) // Adjust URL pattern as per your API
-	if schemaId != expectedUrl {
-		return fmt.Errorf("$id must match the schema query URL pattern: %s", expectedUrl)
+	// Only validate that $id follows the basic pattern, actual ID will be set later
+	if !isValidSchemaIdPattern(schemaId) {
+		return fmt.Errorf("$id must match the pattern '/dtr/v1/cs/js/{number}'")
 	}
 
 	// Load the meta-schema and validate
@@ -245,6 +240,11 @@ func validateJSONSchema(schemaJSON string, id uint64) error {
 		return fmt.Errorf("schema must define non-empty properties")
 	}
 	return nil
+}
+
+func isValidSchemaIdPattern(schemaId string) bool {
+	pattern := regexp.MustCompile(`^/dtr/v1/cs/js/\d+$`)
+	return pattern.MatchString(schemaId)
 }
 
 func validateValidityPeriods(msg *MsgCreateCredentialSchema) error {
