@@ -1,4 +1,4 @@
-package credentialschema
+package cspermission
 
 import (
 	"context"
@@ -20,9 +20,9 @@ import (
 
 	// this line is used by starport scaffolding # 1
 
-	modulev1 "github.com/verana-labs/verana-blockchain/api/veranablockchain/credentialschema/module"
-	"github.com/verana-labs/verana-blockchain/x/credentialschema/keeper"
-	"github.com/verana-labs/verana-blockchain/x/credentialschema/types"
+	modulev1 "github.com/verana-labs/verana-blockchain/api/veranablockchain/cspermission/module"
+	"github.com/verana-labs/verana-blockchain/x/cspermission/keeper"
+	"github.com/verana-labs/verana-blockchain/x/cspermission/types"
 )
 
 var (
@@ -180,16 +180,15 @@ type ModuleInputs struct {
 	Config       *modulev1.Module
 	Logger       log.Logger
 
-	BankKeeper          types.BankKeeper          `optional:"true"`
-	AccountKeeper       types.AccountKeeper       `optional:"true"`
-	TrustRegistryKeeper types.TrustRegistryKeeper `optional:"true"`
+	AccountKeeper types.AccountKeeper
+	BankKeeper    types.BankKeeper
 }
 
 type ModuleOutputs struct {
 	depinject.Out
 
-	CredentialschemaKeeper keeper.Keeper
-	Module                 appmodule.AppModule
+	CspermissionKeeper keeper.Keeper
+	Module             appmodule.AppModule
 }
 
 func ProvideModule(in ModuleInputs) ModuleOutputs {
@@ -203,8 +202,6 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.StoreService,
 		in.Logger,
 		authority.String(),
-		in.BankKeeper,
-		in.TrustRegistryKeeper,
 	)
 	m := NewAppModule(
 		in.Cdc,
@@ -213,5 +210,5 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.BankKeeper,
 	)
 
-	return ModuleOutputs{CredentialschemaKeeper: k, Module: m}
+	return ModuleOutputs{CspermissionKeeper: k, Module: m}
 }
