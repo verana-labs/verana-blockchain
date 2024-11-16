@@ -11,6 +11,7 @@ import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	io "io"
 	reflect "reflect"
 	sync "sync"
@@ -871,6 +872,1420 @@ func (x *fastReflection_MsgUpdateParamsResponse) ProtoMethods() *protoiface.Meth
 	}
 }
 
+var (
+	md_MsgCreateCredentialSchemaPerm                   protoreflect.MessageDescriptor
+	fd_MsgCreateCredentialSchemaPerm_creator           protoreflect.FieldDescriptor
+	fd_MsgCreateCredentialSchemaPerm_schema_id         protoreflect.FieldDescriptor
+	fd_MsgCreateCredentialSchemaPerm_csp_type          protoreflect.FieldDescriptor
+	fd_MsgCreateCredentialSchemaPerm_did               protoreflect.FieldDescriptor
+	fd_MsgCreateCredentialSchemaPerm_grantee           protoreflect.FieldDescriptor
+	fd_MsgCreateCredentialSchemaPerm_effective_from    protoreflect.FieldDescriptor
+	fd_MsgCreateCredentialSchemaPerm_effective_until   protoreflect.FieldDescriptor
+	fd_MsgCreateCredentialSchemaPerm_country           protoreflect.FieldDescriptor
+	fd_MsgCreateCredentialSchemaPerm_validation_id     protoreflect.FieldDescriptor
+	fd_MsgCreateCredentialSchemaPerm_validation_fees   protoreflect.FieldDescriptor
+	fd_MsgCreateCredentialSchemaPerm_issuance_fees     protoreflect.FieldDescriptor
+	fd_MsgCreateCredentialSchemaPerm_verification_fees protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_veranablockchain_cspermission_tx_proto_init()
+	md_MsgCreateCredentialSchemaPerm = File_veranablockchain_cspermission_tx_proto.Messages().ByName("MsgCreateCredentialSchemaPerm")
+	fd_MsgCreateCredentialSchemaPerm_creator = md_MsgCreateCredentialSchemaPerm.Fields().ByName("creator")
+	fd_MsgCreateCredentialSchemaPerm_schema_id = md_MsgCreateCredentialSchemaPerm.Fields().ByName("schema_id")
+	fd_MsgCreateCredentialSchemaPerm_csp_type = md_MsgCreateCredentialSchemaPerm.Fields().ByName("csp_type")
+	fd_MsgCreateCredentialSchemaPerm_did = md_MsgCreateCredentialSchemaPerm.Fields().ByName("did")
+	fd_MsgCreateCredentialSchemaPerm_grantee = md_MsgCreateCredentialSchemaPerm.Fields().ByName("grantee")
+	fd_MsgCreateCredentialSchemaPerm_effective_from = md_MsgCreateCredentialSchemaPerm.Fields().ByName("effective_from")
+	fd_MsgCreateCredentialSchemaPerm_effective_until = md_MsgCreateCredentialSchemaPerm.Fields().ByName("effective_until")
+	fd_MsgCreateCredentialSchemaPerm_country = md_MsgCreateCredentialSchemaPerm.Fields().ByName("country")
+	fd_MsgCreateCredentialSchemaPerm_validation_id = md_MsgCreateCredentialSchemaPerm.Fields().ByName("validation_id")
+	fd_MsgCreateCredentialSchemaPerm_validation_fees = md_MsgCreateCredentialSchemaPerm.Fields().ByName("validation_fees")
+	fd_MsgCreateCredentialSchemaPerm_issuance_fees = md_MsgCreateCredentialSchemaPerm.Fields().ByName("issuance_fees")
+	fd_MsgCreateCredentialSchemaPerm_verification_fees = md_MsgCreateCredentialSchemaPerm.Fields().ByName("verification_fees")
+}
+
+var _ protoreflect.Message = (*fastReflection_MsgCreateCredentialSchemaPerm)(nil)
+
+type fastReflection_MsgCreateCredentialSchemaPerm MsgCreateCredentialSchemaPerm
+
+func (x *MsgCreateCredentialSchemaPerm) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgCreateCredentialSchemaPerm)(x)
+}
+
+func (x *MsgCreateCredentialSchemaPerm) slowProtoReflect() protoreflect.Message {
+	mi := &file_veranablockchain_cspermission_tx_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_MsgCreateCredentialSchemaPerm_messageType fastReflection_MsgCreateCredentialSchemaPerm_messageType
+var _ protoreflect.MessageType = fastReflection_MsgCreateCredentialSchemaPerm_messageType{}
+
+type fastReflection_MsgCreateCredentialSchemaPerm_messageType struct{}
+
+func (x fastReflection_MsgCreateCredentialSchemaPerm_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgCreateCredentialSchemaPerm)(nil)
+}
+func (x fastReflection_MsgCreateCredentialSchemaPerm_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgCreateCredentialSchemaPerm)
+}
+func (x fastReflection_MsgCreateCredentialSchemaPerm_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgCreateCredentialSchemaPerm
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_MsgCreateCredentialSchemaPerm) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgCreateCredentialSchemaPerm
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_MsgCreateCredentialSchemaPerm) Type() protoreflect.MessageType {
+	return _fastReflection_MsgCreateCredentialSchemaPerm_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_MsgCreateCredentialSchemaPerm) New() protoreflect.Message {
+	return new(fastReflection_MsgCreateCredentialSchemaPerm)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_MsgCreateCredentialSchemaPerm) Interface() protoreflect.ProtoMessage {
+	return (*MsgCreateCredentialSchemaPerm)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_MsgCreateCredentialSchemaPerm) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Creator != "" {
+		value := protoreflect.ValueOfString(x.Creator)
+		if !f(fd_MsgCreateCredentialSchemaPerm_creator, value) {
+			return
+		}
+	}
+	if x.SchemaId != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.SchemaId)
+		if !f(fd_MsgCreateCredentialSchemaPerm_schema_id, value) {
+			return
+		}
+	}
+	if x.CspType != 0 {
+		value := protoreflect.ValueOfEnum((protoreflect.EnumNumber)(x.CspType))
+		if !f(fd_MsgCreateCredentialSchemaPerm_csp_type, value) {
+			return
+		}
+	}
+	if x.Did != "" {
+		value := protoreflect.ValueOfString(x.Did)
+		if !f(fd_MsgCreateCredentialSchemaPerm_did, value) {
+			return
+		}
+	}
+	if x.Grantee != "" {
+		value := protoreflect.ValueOfString(x.Grantee)
+		if !f(fd_MsgCreateCredentialSchemaPerm_grantee, value) {
+			return
+		}
+	}
+	if x.EffectiveFrom != nil {
+		value := protoreflect.ValueOfMessage(x.EffectiveFrom.ProtoReflect())
+		if !f(fd_MsgCreateCredentialSchemaPerm_effective_from, value) {
+			return
+		}
+	}
+	if x.EffectiveUntil != nil {
+		value := protoreflect.ValueOfMessage(x.EffectiveUntil.ProtoReflect())
+		if !f(fd_MsgCreateCredentialSchemaPerm_effective_until, value) {
+			return
+		}
+	}
+	if x.Country != "" {
+		value := protoreflect.ValueOfString(x.Country)
+		if !f(fd_MsgCreateCredentialSchemaPerm_country, value) {
+			return
+		}
+	}
+	if x.ValidationId != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.ValidationId)
+		if !f(fd_MsgCreateCredentialSchemaPerm_validation_id, value) {
+			return
+		}
+	}
+	if x.ValidationFees != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.ValidationFees)
+		if !f(fd_MsgCreateCredentialSchemaPerm_validation_fees, value) {
+			return
+		}
+	}
+	if x.IssuanceFees != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.IssuanceFees)
+		if !f(fd_MsgCreateCredentialSchemaPerm_issuance_fees, value) {
+			return
+		}
+	}
+	if x.VerificationFees != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.VerificationFees)
+		if !f(fd_MsgCreateCredentialSchemaPerm_verification_fees, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_MsgCreateCredentialSchemaPerm) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.creator":
+		return x.Creator != ""
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.schema_id":
+		return x.SchemaId != uint64(0)
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.csp_type":
+		return x.CspType != 0
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.did":
+		return x.Did != ""
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.grantee":
+		return x.Grantee != ""
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.effective_from":
+		return x.EffectiveFrom != nil
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.effective_until":
+		return x.EffectiveUntil != nil
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.country":
+		return x.Country != ""
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.validation_id":
+		return x.ValidationId != uint64(0)
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.validation_fees":
+		return x.ValidationFees != uint64(0)
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.issuance_fees":
+		return x.IssuanceFees != uint64(0)
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.verification_fees":
+		return x.VerificationFees != uint64(0)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.cspermission.MsgCreateCredentialSchemaPerm"))
+		}
+		panic(fmt.Errorf("message veranablockchain.cspermission.MsgCreateCredentialSchemaPerm does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgCreateCredentialSchemaPerm) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.creator":
+		x.Creator = ""
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.schema_id":
+		x.SchemaId = uint64(0)
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.csp_type":
+		x.CspType = 0
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.did":
+		x.Did = ""
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.grantee":
+		x.Grantee = ""
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.effective_from":
+		x.EffectiveFrom = nil
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.effective_until":
+		x.EffectiveUntil = nil
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.country":
+		x.Country = ""
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.validation_id":
+		x.ValidationId = uint64(0)
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.validation_fees":
+		x.ValidationFees = uint64(0)
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.issuance_fees":
+		x.IssuanceFees = uint64(0)
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.verification_fees":
+		x.VerificationFees = uint64(0)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.cspermission.MsgCreateCredentialSchemaPerm"))
+		}
+		panic(fmt.Errorf("message veranablockchain.cspermission.MsgCreateCredentialSchemaPerm does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_MsgCreateCredentialSchemaPerm) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.creator":
+		value := x.Creator
+		return protoreflect.ValueOfString(value)
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.schema_id":
+		value := x.SchemaId
+		return protoreflect.ValueOfUint64(value)
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.csp_type":
+		value := x.CspType
+		return protoreflect.ValueOfEnum((protoreflect.EnumNumber)(value))
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.did":
+		value := x.Did
+		return protoreflect.ValueOfString(value)
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.grantee":
+		value := x.Grantee
+		return protoreflect.ValueOfString(value)
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.effective_from":
+		value := x.EffectiveFrom
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.effective_until":
+		value := x.EffectiveUntil
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.country":
+		value := x.Country
+		return protoreflect.ValueOfString(value)
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.validation_id":
+		value := x.ValidationId
+		return protoreflect.ValueOfUint64(value)
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.validation_fees":
+		value := x.ValidationFees
+		return protoreflect.ValueOfUint64(value)
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.issuance_fees":
+		value := x.IssuanceFees
+		return protoreflect.ValueOfUint64(value)
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.verification_fees":
+		value := x.VerificationFees
+		return protoreflect.ValueOfUint64(value)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.cspermission.MsgCreateCredentialSchemaPerm"))
+		}
+		panic(fmt.Errorf("message veranablockchain.cspermission.MsgCreateCredentialSchemaPerm does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgCreateCredentialSchemaPerm) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.creator":
+		x.Creator = value.Interface().(string)
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.schema_id":
+		x.SchemaId = value.Uint()
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.csp_type":
+		x.CspType = (CredentialSchemaPermType)(value.Enum())
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.did":
+		x.Did = value.Interface().(string)
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.grantee":
+		x.Grantee = value.Interface().(string)
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.effective_from":
+		x.EffectiveFrom = value.Message().Interface().(*timestamppb.Timestamp)
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.effective_until":
+		x.EffectiveUntil = value.Message().Interface().(*timestamppb.Timestamp)
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.country":
+		x.Country = value.Interface().(string)
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.validation_id":
+		x.ValidationId = value.Uint()
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.validation_fees":
+		x.ValidationFees = value.Uint()
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.issuance_fees":
+		x.IssuanceFees = value.Uint()
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.verification_fees":
+		x.VerificationFees = value.Uint()
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.cspermission.MsgCreateCredentialSchemaPerm"))
+		}
+		panic(fmt.Errorf("message veranablockchain.cspermission.MsgCreateCredentialSchemaPerm does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgCreateCredentialSchemaPerm) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.effective_from":
+		if x.EffectiveFrom == nil {
+			x.EffectiveFrom = new(timestamppb.Timestamp)
+		}
+		return protoreflect.ValueOfMessage(x.EffectiveFrom.ProtoReflect())
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.effective_until":
+		if x.EffectiveUntil == nil {
+			x.EffectiveUntil = new(timestamppb.Timestamp)
+		}
+		return protoreflect.ValueOfMessage(x.EffectiveUntil.ProtoReflect())
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.creator":
+		panic(fmt.Errorf("field creator of message veranablockchain.cspermission.MsgCreateCredentialSchemaPerm is not mutable"))
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.schema_id":
+		panic(fmt.Errorf("field schema_id of message veranablockchain.cspermission.MsgCreateCredentialSchemaPerm is not mutable"))
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.csp_type":
+		panic(fmt.Errorf("field csp_type of message veranablockchain.cspermission.MsgCreateCredentialSchemaPerm is not mutable"))
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.did":
+		panic(fmt.Errorf("field did of message veranablockchain.cspermission.MsgCreateCredentialSchemaPerm is not mutable"))
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.grantee":
+		panic(fmt.Errorf("field grantee of message veranablockchain.cspermission.MsgCreateCredentialSchemaPerm is not mutable"))
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.country":
+		panic(fmt.Errorf("field country of message veranablockchain.cspermission.MsgCreateCredentialSchemaPerm is not mutable"))
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.validation_id":
+		panic(fmt.Errorf("field validation_id of message veranablockchain.cspermission.MsgCreateCredentialSchemaPerm is not mutable"))
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.validation_fees":
+		panic(fmt.Errorf("field validation_fees of message veranablockchain.cspermission.MsgCreateCredentialSchemaPerm is not mutable"))
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.issuance_fees":
+		panic(fmt.Errorf("field issuance_fees of message veranablockchain.cspermission.MsgCreateCredentialSchemaPerm is not mutable"))
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.verification_fees":
+		panic(fmt.Errorf("field verification_fees of message veranablockchain.cspermission.MsgCreateCredentialSchemaPerm is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.cspermission.MsgCreateCredentialSchemaPerm"))
+		}
+		panic(fmt.Errorf("message veranablockchain.cspermission.MsgCreateCredentialSchemaPerm does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_MsgCreateCredentialSchemaPerm) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.creator":
+		return protoreflect.ValueOfString("")
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.schema_id":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.csp_type":
+		return protoreflect.ValueOfEnum(0)
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.did":
+		return protoreflect.ValueOfString("")
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.grantee":
+		return protoreflect.ValueOfString("")
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.effective_from":
+		m := new(timestamppb.Timestamp)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.effective_until":
+		m := new(timestamppb.Timestamp)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.country":
+		return protoreflect.ValueOfString("")
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.validation_id":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.validation_fees":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.issuance_fees":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.verification_fees":
+		return protoreflect.ValueOfUint64(uint64(0))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.cspermission.MsgCreateCredentialSchemaPerm"))
+		}
+		panic(fmt.Errorf("message veranablockchain.cspermission.MsgCreateCredentialSchemaPerm does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_MsgCreateCredentialSchemaPerm) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in veranablockchain.cspermission.MsgCreateCredentialSchemaPerm", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_MsgCreateCredentialSchemaPerm) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgCreateCredentialSchemaPerm) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_MsgCreateCredentialSchemaPerm) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_MsgCreateCredentialSchemaPerm) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*MsgCreateCredentialSchemaPerm)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		l = len(x.Creator)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.SchemaId != 0 {
+			n += 1 + runtime.Sov(uint64(x.SchemaId))
+		}
+		if x.CspType != 0 {
+			n += 1 + runtime.Sov(uint64(x.CspType))
+		}
+		l = len(x.Did)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.Grantee)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.EffectiveFrom != nil {
+			l = options.Size(x.EffectiveFrom)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.EffectiveUntil != nil {
+			l = options.Size(x.EffectiveUntil)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.Country)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.ValidationId != 0 {
+			n += 1 + runtime.Sov(uint64(x.ValidationId))
+		}
+		if x.ValidationFees != 0 {
+			n += 1 + runtime.Sov(uint64(x.ValidationFees))
+		}
+		if x.IssuanceFees != 0 {
+			n += 1 + runtime.Sov(uint64(x.IssuanceFees))
+		}
+		if x.VerificationFees != 0 {
+			n += 1 + runtime.Sov(uint64(x.VerificationFees))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*MsgCreateCredentialSchemaPerm)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.VerificationFees != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.VerificationFees))
+			i--
+			dAtA[i] = 0x60
+		}
+		if x.IssuanceFees != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.IssuanceFees))
+			i--
+			dAtA[i] = 0x58
+		}
+		if x.ValidationFees != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.ValidationFees))
+			i--
+			dAtA[i] = 0x50
+		}
+		if x.ValidationId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.ValidationId))
+			i--
+			dAtA[i] = 0x48
+		}
+		if len(x.Country) > 0 {
+			i -= len(x.Country)
+			copy(dAtA[i:], x.Country)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Country)))
+			i--
+			dAtA[i] = 0x42
+		}
+		if x.EffectiveUntil != nil {
+			encoded, err := options.Marshal(x.EffectiveUntil)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x3a
+		}
+		if x.EffectiveFrom != nil {
+			encoded, err := options.Marshal(x.EffectiveFrom)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x32
+		}
+		if len(x.Grantee) > 0 {
+			i -= len(x.Grantee)
+			copy(dAtA[i:], x.Grantee)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Grantee)))
+			i--
+			dAtA[i] = 0x2a
+		}
+		if len(x.Did) > 0 {
+			i -= len(x.Did)
+			copy(dAtA[i:], x.Did)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Did)))
+			i--
+			dAtA[i] = 0x22
+		}
+		if x.CspType != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.CspType))
+			i--
+			dAtA[i] = 0x18
+		}
+		if x.SchemaId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.SchemaId))
+			i--
+			dAtA[i] = 0x10
+		}
+		if len(x.Creator) > 0 {
+			i -= len(x.Creator)
+			copy(dAtA[i:], x.Creator)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Creator)))
+			i--
+			dAtA[i] = 0xa
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*MsgCreateCredentialSchemaPerm)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgCreateCredentialSchemaPerm: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgCreateCredentialSchemaPerm: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Creator", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Creator = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 2:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field SchemaId", wireType)
+				}
+				x.SchemaId = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.SchemaId |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 3:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field CspType", wireType)
+				}
+				x.CspType = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.CspType |= CredentialSchemaPermType(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 4:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Did", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Did = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 5:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Grantee", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Grantee = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 6:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field EffectiveFrom", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.EffectiveFrom == nil {
+					x.EffectiveFrom = &timestamppb.Timestamp{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.EffectiveFrom); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 7:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field EffectiveUntil", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.EffectiveUntil == nil {
+					x.EffectiveUntil = &timestamppb.Timestamp{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.EffectiveUntil); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 8:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Country", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Country = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 9:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ValidationId", wireType)
+				}
+				x.ValidationId = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.ValidationId |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 10:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ValidationFees", wireType)
+				}
+				x.ValidationFees = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.ValidationFees |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 11:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field IssuanceFees", wireType)
+				}
+				x.IssuanceFees = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.IssuanceFees |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 12:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field VerificationFees", wireType)
+				}
+				x.VerificationFees = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.VerificationFees |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_MsgCreateCredentialSchemaPermResponse protoreflect.MessageDescriptor
+)
+
+func init() {
+	file_veranablockchain_cspermission_tx_proto_init()
+	md_MsgCreateCredentialSchemaPermResponse = File_veranablockchain_cspermission_tx_proto.Messages().ByName("MsgCreateCredentialSchemaPermResponse")
+}
+
+var _ protoreflect.Message = (*fastReflection_MsgCreateCredentialSchemaPermResponse)(nil)
+
+type fastReflection_MsgCreateCredentialSchemaPermResponse MsgCreateCredentialSchemaPermResponse
+
+func (x *MsgCreateCredentialSchemaPermResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgCreateCredentialSchemaPermResponse)(x)
+}
+
+func (x *MsgCreateCredentialSchemaPermResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_veranablockchain_cspermission_tx_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_MsgCreateCredentialSchemaPermResponse_messageType fastReflection_MsgCreateCredentialSchemaPermResponse_messageType
+var _ protoreflect.MessageType = fastReflection_MsgCreateCredentialSchemaPermResponse_messageType{}
+
+type fastReflection_MsgCreateCredentialSchemaPermResponse_messageType struct{}
+
+func (x fastReflection_MsgCreateCredentialSchemaPermResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgCreateCredentialSchemaPermResponse)(nil)
+}
+func (x fastReflection_MsgCreateCredentialSchemaPermResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgCreateCredentialSchemaPermResponse)
+}
+func (x fastReflection_MsgCreateCredentialSchemaPermResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgCreateCredentialSchemaPermResponse
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_MsgCreateCredentialSchemaPermResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgCreateCredentialSchemaPermResponse
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_MsgCreateCredentialSchemaPermResponse) Type() protoreflect.MessageType {
+	return _fastReflection_MsgCreateCredentialSchemaPermResponse_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_MsgCreateCredentialSchemaPermResponse) New() protoreflect.Message {
+	return new(fastReflection_MsgCreateCredentialSchemaPermResponse)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_MsgCreateCredentialSchemaPermResponse) Interface() protoreflect.ProtoMessage {
+	return (*MsgCreateCredentialSchemaPermResponse)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_MsgCreateCredentialSchemaPermResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_MsgCreateCredentialSchemaPermResponse) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.cspermission.MsgCreateCredentialSchemaPermResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.cspermission.MsgCreateCredentialSchemaPermResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgCreateCredentialSchemaPermResponse) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.cspermission.MsgCreateCredentialSchemaPermResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.cspermission.MsgCreateCredentialSchemaPermResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_MsgCreateCredentialSchemaPermResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.cspermission.MsgCreateCredentialSchemaPermResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.cspermission.MsgCreateCredentialSchemaPermResponse does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgCreateCredentialSchemaPermResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.cspermission.MsgCreateCredentialSchemaPermResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.cspermission.MsgCreateCredentialSchemaPermResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgCreateCredentialSchemaPermResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.cspermission.MsgCreateCredentialSchemaPermResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.cspermission.MsgCreateCredentialSchemaPermResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_MsgCreateCredentialSchemaPermResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.cspermission.MsgCreateCredentialSchemaPermResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.cspermission.MsgCreateCredentialSchemaPermResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_MsgCreateCredentialSchemaPermResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in veranablockchain.cspermission.MsgCreateCredentialSchemaPermResponse", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_MsgCreateCredentialSchemaPermResponse) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgCreateCredentialSchemaPermResponse) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_MsgCreateCredentialSchemaPermResponse) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_MsgCreateCredentialSchemaPermResponse) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*MsgCreateCredentialSchemaPermResponse)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*MsgCreateCredentialSchemaPermResponse)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*MsgCreateCredentialSchemaPermResponse)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgCreateCredentialSchemaPermResponse: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgCreateCredentialSchemaPermResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
 // Code generated by protoc-gen-go. DO NOT EDIT.
 // versions:
 // 	protoc-gen-go v1.27.0
@@ -960,6 +2375,157 @@ func (*MsgUpdateParamsResponse) Descriptor() ([]byte, []int) {
 	return file_veranablockchain_cspermission_tx_proto_rawDescGZIP(), []int{1}
 }
 
+type MsgCreateCredentialSchemaPerm struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Creator  string                   `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	SchemaId uint64                   `protobuf:"varint,2,opt,name=schema_id,json=schemaId,proto3" json:"schema_id,omitempty"`
+	CspType  CredentialSchemaPermType `protobuf:"varint,3,opt,name=csp_type,json=cspType,proto3,enum=veranablockchain.cspermission.CredentialSchemaPermType" json:"csp_type,omitempty"`
+	Did      string                   `protobuf:"bytes,4,opt,name=did,proto3" json:"did,omitempty"`
+	Grantee  string                   `protobuf:"bytes,5,opt,name=grantee,proto3" json:"grantee,omitempty"`
+	// Required fields should be marked as non-nullable
+	EffectiveFrom *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=effective_from,json=effectiveFrom,proto3" json:"effective_from,omitempty"`
+	// Optional fields should be nullable
+	EffectiveUntil   *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=effective_until,json=effectiveUntil,proto3" json:"effective_until,omitempty"`
+	Country          string                 `protobuf:"bytes,8,opt,name=country,proto3" json:"country,omitempty"`
+	ValidationId     uint64                 `protobuf:"varint,9,opt,name=validation_id,json=validationId,proto3" json:"validation_id,omitempty"`
+	ValidationFees   uint64                 `protobuf:"varint,10,opt,name=validation_fees,json=validationFees,proto3" json:"validation_fees,omitempty"`
+	IssuanceFees     uint64                 `protobuf:"varint,11,opt,name=issuance_fees,json=issuanceFees,proto3" json:"issuance_fees,omitempty"`
+	VerificationFees uint64                 `protobuf:"varint,12,opt,name=verification_fees,json=verificationFees,proto3" json:"verification_fees,omitempty"`
+}
+
+func (x *MsgCreateCredentialSchemaPerm) Reset() {
+	*x = MsgCreateCredentialSchemaPerm{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_veranablockchain_cspermission_tx_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *MsgCreateCredentialSchemaPerm) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MsgCreateCredentialSchemaPerm) ProtoMessage() {}
+
+// Deprecated: Use MsgCreateCredentialSchemaPerm.ProtoReflect.Descriptor instead.
+func (*MsgCreateCredentialSchemaPerm) Descriptor() ([]byte, []int) {
+	return file_veranablockchain_cspermission_tx_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *MsgCreateCredentialSchemaPerm) GetCreator() string {
+	if x != nil {
+		return x.Creator
+	}
+	return ""
+}
+
+func (x *MsgCreateCredentialSchemaPerm) GetSchemaId() uint64 {
+	if x != nil {
+		return x.SchemaId
+	}
+	return 0
+}
+
+func (x *MsgCreateCredentialSchemaPerm) GetCspType() CredentialSchemaPermType {
+	if x != nil {
+		return x.CspType
+	}
+	return CredentialSchemaPermType_UNSPECIFIED
+}
+
+func (x *MsgCreateCredentialSchemaPerm) GetDid() string {
+	if x != nil {
+		return x.Did
+	}
+	return ""
+}
+
+func (x *MsgCreateCredentialSchemaPerm) GetGrantee() string {
+	if x != nil {
+		return x.Grantee
+	}
+	return ""
+}
+
+func (x *MsgCreateCredentialSchemaPerm) GetEffectiveFrom() *timestamppb.Timestamp {
+	if x != nil {
+		return x.EffectiveFrom
+	}
+	return nil
+}
+
+func (x *MsgCreateCredentialSchemaPerm) GetEffectiveUntil() *timestamppb.Timestamp {
+	if x != nil {
+		return x.EffectiveUntil
+	}
+	return nil
+}
+
+func (x *MsgCreateCredentialSchemaPerm) GetCountry() string {
+	if x != nil {
+		return x.Country
+	}
+	return ""
+}
+
+func (x *MsgCreateCredentialSchemaPerm) GetValidationId() uint64 {
+	if x != nil {
+		return x.ValidationId
+	}
+	return 0
+}
+
+func (x *MsgCreateCredentialSchemaPerm) GetValidationFees() uint64 {
+	if x != nil {
+		return x.ValidationFees
+	}
+	return 0
+}
+
+func (x *MsgCreateCredentialSchemaPerm) GetIssuanceFees() uint64 {
+	if x != nil {
+		return x.IssuanceFees
+	}
+	return 0
+}
+
+func (x *MsgCreateCredentialSchemaPerm) GetVerificationFees() uint64 {
+	if x != nil {
+		return x.VerificationFees
+	}
+	return 0
+}
+
+type MsgCreateCredentialSchemaPermResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *MsgCreateCredentialSchemaPermResponse) Reset() {
+	*x = MsgCreateCredentialSchemaPermResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_veranablockchain_cspermission_tx_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *MsgCreateCredentialSchemaPermResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MsgCreateCredentialSchemaPermResponse) ProtoMessage() {}
+
+// Deprecated: Use MsgCreateCredentialSchemaPermResponse.ProtoReflect.Descriptor instead.
+func (*MsgCreateCredentialSchemaPermResponse) Descriptor() ([]byte, []int) {
+	return file_veranablockchain_cspermission_tx_proto_rawDescGZIP(), []int{3}
+}
+
 var File_veranablockchain_cspermission_tx_proto protoreflect.FileDescriptor
 
 var file_veranablockchain_cspermission_tx_proto_rawDesc = []byte{
@@ -973,51 +2539,108 @@ var file_veranablockchain_cspermission_tx_proto_rawDesc = []byte{
 	0x6f, 0x74, 0x6f, 0x1a, 0x19, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x5f, 0x70, 0x72, 0x6f, 0x74,
 	0x6f, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x14,
 	0x67, 0x6f, 0x67, 0x6f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x2a, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63,
-	0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2f, 0x63, 0x73, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73,
-	0x69, 0x6f, 0x6e, 0x2f, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x22, 0xd7, 0x01, 0x0a, 0x0f, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61,
-	0x72, 0x61, 0x6d, 0x73, 0x12, 0x36, 0x0a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74,
-	0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73,
-	0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e,
-	0x67, 0x52, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x12, 0x48, 0x0a, 0x06,
-	0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x25, 0x2e, 0x76,
-	0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e,
-	0x63, 0x73, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2e, 0x50, 0x61, 0x72,
-	0x61, 0x6d, 0x73, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x06,
-	0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x3a, 0x42, 0x82, 0xe7, 0xb0, 0x2a, 0x09, 0x61, 0x75, 0x74,
-	0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x8a, 0xe7, 0xb0, 0x2a, 0x2f, 0x76, 0x65, 0x72, 0x61, 0x6e,
-	0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2f, 0x78, 0x2f, 0x63, 0x73,
-	0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2f, 0x4d, 0x73, 0x67, 0x55, 0x70,
-	0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x22, 0x19, 0x0a, 0x17, 0x4d, 0x73,
-	0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0x84, 0x01, 0x0a, 0x03, 0x4d, 0x73, 0x67, 0x12, 0x76, 0x0a,
-	0x0c, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x2e, 0x2e,
-	0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e,
-	0x2e, 0x63, 0x73, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2e, 0x4d, 0x73,
-	0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x1a, 0x36, 0x2e,
-	0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e,
-	0x2e, 0x63, 0x73, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2e, 0x4d, 0x73,
-	0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05, 0x80, 0xe7, 0xb0, 0x2a, 0x01, 0x42, 0x8d, 0x02, 0x0a,
-	0x21, 0x63, 0x6f, 0x6d, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b,
-	0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x63, 0x73, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69,
-	0x6f, 0x6e, 0x42, 0x07, 0x54, 0x78, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x4a, 0x67,
-	0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61,
-	0x2d, 0x6c, 0x61, 0x62, 0x73, 0x2f, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x2d, 0x62, 0x6c, 0x6f,
-	0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x76, 0x65, 0x72, 0x61,
-	0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2f, 0x63, 0x73, 0x70,
-	0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0xa2, 0x02, 0x03, 0x56, 0x43, 0x58, 0xaa,
-	0x02, 0x1d, 0x56, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61,
-	0x69, 0x6e, 0x2e, 0x43, 0x73, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0xca,
-	0x02, 0x1d, 0x56, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61,
-	0x69, 0x6e, 0x5c, 0x43, 0x73, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0xe2,
-	0x02, 0x29, 0x56, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61,
-	0x69, 0x6e, 0x5c, 0x43, 0x73, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5c,
-	0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x1e, 0x56, 0x65,
-	0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x3a, 0x3a,
-	0x43, 0x73, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x62, 0x06, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x33,
+	0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x1f, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x74, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x2e,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x2a, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f,
+	0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2f, 0x63, 0x73, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73,
+	0x73, 0x69, 0x6f, 0x6e, 0x2f, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x1a, 0x29, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68,
+	0x61, 0x69, 0x6e, 0x2f, 0x63, 0x73, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e,
+	0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xd7, 0x01, 0x0a,
+	0x0f, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73,
+	0x12, 0x36, 0x0a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e,
+	0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x09, 0x61,
+	0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x12, 0x48, 0x0a, 0x06, 0x70, 0x61, 0x72, 0x61,
+	0x6d, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x25, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e,
+	0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x63, 0x73, 0x70, 0x65,
+	0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42,
+	0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x06, 0x70, 0x61, 0x72, 0x61,
+	0x6d, 0x73, 0x3a, 0x42, 0x82, 0xe7, 0xb0, 0x2a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69,
+	0x74, 0x79, 0x8a, 0xe7, 0xb0, 0x2a, 0x2f, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f,
+	0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2f, 0x78, 0x2f, 0x63, 0x73, 0x70, 0x65, 0x72, 0x6d,
+	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2f, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65,
+	0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x22, 0x19, 0x0a, 0x17, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64,
+	0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x22, 0xfa, 0x04, 0x0a, 0x1d, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x43,
+	0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x53, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x50,
+	0x65, 0x72, 0x6d, 0x12, 0x32, 0x0a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
+	0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x07,
+	0x63, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x12, 0x1b, 0x0a, 0x09, 0x73, 0x63, 0x68, 0x65, 0x6d,
+	0x61, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x08, 0x73, 0x63, 0x68, 0x65,
+	0x6d, 0x61, 0x49, 0x64, 0x12, 0x52, 0x0a, 0x08, 0x63, 0x73, 0x70, 0x5f, 0x74, 0x79, 0x70, 0x65,
+	0x18, 0x03, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x37, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62,
+	0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x63, 0x73, 0x70, 0x65, 0x72, 0x6d,
+	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2e, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61,
+	0x6c, 0x53, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x50, 0x65, 0x72, 0x6d, 0x54, 0x79, 0x70, 0x65, 0x52,
+	0x07, 0x63, 0x73, 0x70, 0x54, 0x79, 0x70, 0x65, 0x12, 0x10, 0x0a, 0x03, 0x64, 0x69, 0x64, 0x18,
+	0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x64, 0x69, 0x64, 0x12, 0x32, 0x0a, 0x07, 0x67, 0x72,
+	0x61, 0x6e, 0x74, 0x65, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d,
+	0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53,
+	0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x07, 0x67, 0x72, 0x61, 0x6e, 0x74, 0x65, 0x65, 0x12, 0x4b,
+	0x0a, 0x0e, 0x65, 0x66, 0x66, 0x65, 0x63, 0x74, 0x69, 0x76, 0x65, 0x5f, 0x66, 0x72, 0x6f, 0x6d,
+	0x18, 0x06, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61,
+	0x6d, 0x70, 0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01, 0x52, 0x0d, 0x65, 0x66,
+	0x66, 0x65, 0x63, 0x74, 0x69, 0x76, 0x65, 0x46, 0x72, 0x6f, 0x6d, 0x12, 0x4d, 0x0a, 0x0f, 0x65,
+	0x66, 0x66, 0x65, 0x63, 0x74, 0x69, 0x76, 0x65, 0x5f, 0x75, 0x6e, 0x74, 0x69, 0x6c, 0x18, 0x07,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70,
+	0x42, 0x08, 0xc8, 0xde, 0x1f, 0x01, 0x90, 0xdf, 0x1f, 0x01, 0x52, 0x0e, 0x65, 0x66, 0x66, 0x65,
+	0x63, 0x74, 0x69, 0x76, 0x65, 0x55, 0x6e, 0x74, 0x69, 0x6c, 0x12, 0x1e, 0x0a, 0x07, 0x63, 0x6f,
+	0x75, 0x6e, 0x74, 0x72, 0x79, 0x18, 0x08, 0x20, 0x01, 0x28, 0x09, 0x42, 0x04, 0xc8, 0xde, 0x1f,
+	0x01, 0x52, 0x07, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x72, 0x79, 0x12, 0x29, 0x0a, 0x0d, 0x76, 0x61,
+	0x6c, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x09, 0x20, 0x01, 0x28,
+	0x04, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x01, 0x52, 0x0c, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x49, 0x64, 0x12, 0x27, 0x0a, 0x0f, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x5f, 0x66, 0x65, 0x65, 0x73, 0x18, 0x0a, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0e,
+	0x76, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x46, 0x65, 0x65, 0x73, 0x12, 0x23,
+	0x0a, 0x0d, 0x69, 0x73, 0x73, 0x75, 0x61, 0x6e, 0x63, 0x65, 0x5f, 0x66, 0x65, 0x65, 0x73, 0x18,
+	0x0b, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0c, 0x69, 0x73, 0x73, 0x75, 0x61, 0x6e, 0x63, 0x65, 0x46,
+	0x65, 0x65, 0x73, 0x12, 0x2b, 0x0a, 0x11, 0x76, 0x65, 0x72, 0x69, 0x66, 0x69, 0x63, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x5f, 0x66, 0x65, 0x65, 0x73, 0x18, 0x0c, 0x20, 0x01, 0x28, 0x04, 0x52, 0x10,
+	0x76, 0x65, 0x72, 0x69, 0x66, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x46, 0x65, 0x65, 0x73,
+	0x3a, 0x0c, 0x82, 0xe7, 0xb0, 0x2a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x22, 0x27,
+	0x0a, 0x25, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x43, 0x72, 0x65, 0x64, 0x65,
+	0x6e, 0x74, 0x69, 0x61, 0x6c, 0x53, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x50, 0x65, 0x72, 0x6d, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0xa7, 0x02, 0x0a, 0x03, 0x4d, 0x73, 0x67, 0x12,
+	0x76, 0x0a, 0x0c, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12,
+	0x2e, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61,
+	0x69, 0x6e, 0x2e, 0x63, 0x73, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2e,
+	0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x1a,
+	0x36, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61,
+	0x69, 0x6e, 0x2e, 0x63, 0x73, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2e,
+	0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0xa0, 0x01, 0x0a, 0x1a, 0x43, 0x72, 0x65, 0x61,
+	0x74, 0x65, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x53, 0x63, 0x68, 0x65,
+	0x6d, 0x61, 0x50, 0x65, 0x72, 0x6d, 0x12, 0x3c, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62,
+	0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x63, 0x73, 0x70, 0x65, 0x72, 0x6d,
+	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65,
+	0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x53, 0x63, 0x68, 0x65, 0x6d, 0x61,
+	0x50, 0x65, 0x72, 0x6d, 0x1a, 0x44, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f,
+	0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x63, 0x73, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73,
+	0x73, 0x69, 0x6f, 0x6e, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x43, 0x72,
+	0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x53, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x50, 0x65,
+	0x72, 0x6d, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05, 0x80, 0xe7, 0xb0, 0x2a,
+	0x01, 0x42, 0x8d, 0x02, 0x0a, 0x21, 0x63, 0x6f, 0x6d, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61,
+	0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x63, 0x73, 0x70, 0x65, 0x72,
+	0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x42, 0x07, 0x54, 0x78, 0x50, 0x72, 0x6f, 0x74, 0x6f,
+	0x50, 0x01, 0x5a, 0x4a, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x76,
+	0x65, 0x72, 0x61, 0x6e, 0x61, 0x2d, 0x6c, 0x61, 0x62, 0x73, 0x2f, 0x76, 0x65, 0x72, 0x61, 0x6e,
+	0x61, 0x2d, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2f, 0x61, 0x70, 0x69,
+	0x2f, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69,
+	0x6e, 0x2f, 0x63, 0x73, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0xa2, 0x02,
+	0x03, 0x56, 0x43, 0x58, 0xaa, 0x02, 0x1d, 0x56, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f,
+	0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x43, 0x73, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73,
+	0x73, 0x69, 0x6f, 0x6e, 0xca, 0x02, 0x1d, 0x56, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f,
+	0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x5c, 0x43, 0x73, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73,
+	0x73, 0x69, 0x6f, 0x6e, 0xe2, 0x02, 0x29, 0x56, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f,
+	0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x5c, 0x43, 0x73, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73,
+	0x73, 0x69, 0x6f, 0x6e, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61,
+	0xea, 0x02, 0x1e, 0x56, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68,
+	0x61, 0x69, 0x6e, 0x3a, 0x3a, 0x43, 0x73, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f,
+	0x6e, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1032,21 +2655,30 @@ func file_veranablockchain_cspermission_tx_proto_rawDescGZIP() []byte {
 	return file_veranablockchain_cspermission_tx_proto_rawDescData
 }
 
-var file_veranablockchain_cspermission_tx_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_veranablockchain_cspermission_tx_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_veranablockchain_cspermission_tx_proto_goTypes = []interface{}{
-	(*MsgUpdateParams)(nil),         // 0: veranablockchain.cspermission.MsgUpdateParams
-	(*MsgUpdateParamsResponse)(nil), // 1: veranablockchain.cspermission.MsgUpdateParamsResponse
-	(*Params)(nil),                  // 2: veranablockchain.cspermission.Params
+	(*MsgUpdateParams)(nil),                       // 0: veranablockchain.cspermission.MsgUpdateParams
+	(*MsgUpdateParamsResponse)(nil),               // 1: veranablockchain.cspermission.MsgUpdateParamsResponse
+	(*MsgCreateCredentialSchemaPerm)(nil),         // 2: veranablockchain.cspermission.MsgCreateCredentialSchemaPerm
+	(*MsgCreateCredentialSchemaPermResponse)(nil), // 3: veranablockchain.cspermission.MsgCreateCredentialSchemaPermResponse
+	(*Params)(nil),                                // 4: veranablockchain.cspermission.Params
+	(CredentialSchemaPermType)(0),                 // 5: veranablockchain.cspermission.CredentialSchemaPermType
+	(*timestamppb.Timestamp)(nil),                 // 6: google.protobuf.Timestamp
 }
 var file_veranablockchain_cspermission_tx_proto_depIdxs = []int32{
-	2, // 0: veranablockchain.cspermission.MsgUpdateParams.params:type_name -> veranablockchain.cspermission.Params
-	0, // 1: veranablockchain.cspermission.Msg.UpdateParams:input_type -> veranablockchain.cspermission.MsgUpdateParams
-	1, // 2: veranablockchain.cspermission.Msg.UpdateParams:output_type -> veranablockchain.cspermission.MsgUpdateParamsResponse
-	2, // [2:3] is the sub-list for method output_type
-	1, // [1:2] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	4, // 0: veranablockchain.cspermission.MsgUpdateParams.params:type_name -> veranablockchain.cspermission.Params
+	5, // 1: veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.csp_type:type_name -> veranablockchain.cspermission.CredentialSchemaPermType
+	6, // 2: veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.effective_from:type_name -> google.protobuf.Timestamp
+	6, // 3: veranablockchain.cspermission.MsgCreateCredentialSchemaPerm.effective_until:type_name -> google.protobuf.Timestamp
+	0, // 4: veranablockchain.cspermission.Msg.UpdateParams:input_type -> veranablockchain.cspermission.MsgUpdateParams
+	2, // 5: veranablockchain.cspermission.Msg.CreateCredentialSchemaPerm:input_type -> veranablockchain.cspermission.MsgCreateCredentialSchemaPerm
+	1, // 6: veranablockchain.cspermission.Msg.UpdateParams:output_type -> veranablockchain.cspermission.MsgUpdateParamsResponse
+	3, // 7: veranablockchain.cspermission.Msg.CreateCredentialSchemaPerm:output_type -> veranablockchain.cspermission.MsgCreateCredentialSchemaPermResponse
+	6, // [6:8] is the sub-list for method output_type
+	4, // [4:6] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for extension type_name
+	4, // [4:4] is the sub-list for extension extendee
+	0, // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_veranablockchain_cspermission_tx_proto_init() }
@@ -1055,6 +2687,7 @@ func file_veranablockchain_cspermission_tx_proto_init() {
 		return
 	}
 	file_veranablockchain_cspermission_params_proto_init()
+	file_veranablockchain_cspermission_types_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_veranablockchain_cspermission_tx_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*MsgUpdateParams); i {
@@ -1080,6 +2713,30 @@ func file_veranablockchain_cspermission_tx_proto_init() {
 				return nil
 			}
 		}
+		file_veranablockchain_cspermission_tx_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MsgCreateCredentialSchemaPerm); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_veranablockchain_cspermission_tx_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MsgCreateCredentialSchemaPermResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -1087,7 +2744,7 @@ func file_veranablockchain_cspermission_tx_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_veranablockchain_cspermission_tx_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

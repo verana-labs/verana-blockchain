@@ -2,6 +2,8 @@ package types
 
 import (
 	"context"
+	credentialschematypes "github.com/verana-labs/verana-blockchain/x/credentialschema/types"
+	trustregistrytypes "github.com/verana-labs/verana-blockchain/x/trustregistry/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
@@ -22,4 +24,14 @@ type BankKeeper interface {
 type ParamSubspace interface {
 	Get(context.Context, []byte, interface{})
 	Set(context.Context, []byte, interface{})
+}
+
+// TrustRegistryKeeper defines the expected trust registry keeper
+type TrustRegistryKeeper interface {
+	GetTrustRegistry(ctx sdk.Context, id uint64) (trustregistrytypes.TrustRegistry, error)
+}
+
+// CredentialSchemaKeeper defines the expected credential schema keeper
+type CredentialSchemaKeeper interface {
+	GetCredentialSchema(ctx sdk.Context, id uint64) (credentialschematypes.CredentialSchema, error)
 }
