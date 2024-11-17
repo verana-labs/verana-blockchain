@@ -9,13 +9,13 @@ import "cosmos_proto/cosmos.proto";
 option go_package = "github.com/verana-labs/verana-blockchain/x/cspermission/types";
 
 enum CredentialSchemaPermType {
-  UNSPECIFIED = 0;
-  ISSUER = 1;
-  VERIFIER = 2;
-  ISSUER_GRANTOR = 3;
-  VERIFIER_GRANTOR = 4;
-  TRUST_REGISTRY = 5;
-  HOLDER = 6;
+  CREDENTIAL_SCHEMA_PERM_TYPE_UNSPECIFIED = 0;
+  CREDENTIAL_SCHEMA_PERM_TYPE_ISSUER = 1;
+  CREDENTIAL_SCHEMA_PERM_TYPE_VERIFIER = 2;
+  CREDENTIAL_SCHEMA_PERM_TYPE_ISSUER_GRANTOR = 3;
+  CREDENTIAL_SCHEMA_PERM_TYPE_VERIFIER_GRANTOR = 4;
+  CREDENTIAL_SCHEMA_PERM_TYPE_TRUST_REGISTRY = 5;
+  CREDENTIAL_SCHEMA_PERM_TYPE_HOLDER = 6;
 }
 
 message CredentialSchemaPerm {

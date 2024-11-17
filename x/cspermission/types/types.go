@@ -23,7 +23,7 @@ var _ sdk.Msg = &MsgCreateCredentialSchemaPerm{}
 func NewMsgCreateCredentialSchemaPerm(
 	creator string,
 	schemaId uint64,
-	permType CredentialSchemaPermType,
+	permType uint32,
 	did string,
 	grantee string,
 	effectiveFrom time.Time,
@@ -88,8 +88,21 @@ func (msg *MsgCreateCredentialSchemaPerm) ValidateBasic() error {
 		return errors.Wrap(sdkerrors.ErrInvalidRequest, "schema_id cannot be 0")
 	}
 
-	if msg.CspType == CredentialSchemaPermType_UNSPECIFIED {
-		return errors.Wrap(sdkerrors.ErrInvalidRequest, "credential schema permission type must be specified")
+	if msg.CspType < 1 || msg.CspType > 6 {
+		return errors.Wrap(sdkerrors.ErrInvalidRequest, "csp_type must be between 1 and 6")
+	}
+
+	permType := CredentialSchemaPermType(msg.CspType)
+	switch permType {
+	case CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_ISSUER,
+		CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_VERIFIER,
+		CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_ISSUER_GRANTOR,
+		CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_VERIFIER_GRANTOR,
+		CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_TRUST_REGISTRY,
+		CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_HOLDER:
+		// Valid types
+	default:
+		return errors.Wrap(sdkerrors.ErrInvalidRequest, "invalid credential schema permission type")
 	}
 
 	// Validate DID

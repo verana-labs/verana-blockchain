@@ -33,5 +33,5 @@ type TrustRegistryKeeper interface {
 
 // CredentialSchemaKeeper defines the expected credential schema keeper
 type CredentialSchemaKeeper interface {
-	GetCredentialSchema(ctx sdk.Context, id uint64) (credentialschematypes.CredentialSchema, error)
+	GetCredentialSchemaById(ctx sdk.Context, id uint64) (credentialschematypes.CredentialSchema, error)
 }

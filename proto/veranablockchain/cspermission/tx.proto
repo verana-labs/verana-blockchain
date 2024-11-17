@@ -47,7 +47,7 @@ message MsgCreateCredentialSchemaPerm {
 
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   uint64 schema_id = 2;
-  CredentialSchemaPermType csp_type = 3;
+  uint32 csp_type = 3;
   string did = 4;
   string grantee = 5 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   // Required fields should be marked as non-nullable

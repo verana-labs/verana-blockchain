@@ -10,16 +10,18 @@ import (
 )
 
 func (ms msgServer) validatePermissions(ctx sdk.Context, msg *types.MsgCreateCredentialSchemaPerm, cs credentialschematypes.CredentialSchema, tr trustregistrytypes.TrustRegistry) error {
-	switch msg.CspType {
-	case types.CredentialSchemaPermType_TRUST_REGISTRY:
+	permType := types.CredentialSchemaPermType(msg.CspType)
+
+	switch permType {
+	case types.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_TRUST_REGISTRY:
 		return ms.validateTrustRegistryPerm(msg, tr)
-	case types.CredentialSchemaPermType_ISSUER,
-		types.CredentialSchemaPermType_ISSUER_GRANTOR:
+	case types.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_ISSUER,
+		types.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_ISSUER_GRANTOR:
 		return ms.validateIssuerPerm(ctx, msg, cs)
-	case types.CredentialSchemaPermType_VERIFIER,
-		types.CredentialSchemaPermType_VERIFIER_GRANTOR:
+	case types.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_VERIFIER,
+		types.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_VERIFIER_GRANTOR:
 		return ms.validateVerifierPerm(ctx, msg, cs)
-	case types.CredentialSchemaPermType_HOLDER:
+	case types.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_HOLDER:
 		return ms.validateHolderPerm(ctx, msg, cs)
 	default:
 		return errors.Wrap(sdkerrors.ErrInvalidRequest, "invalid permission type")
@@ -45,7 +47,7 @@ func (ms msgServer) validateIssuerPerm(ctx sdk.Context, msg *types.MsgCreateCred
 		return errors.Wrap(sdkerrors.ErrInvalidRequest, "validation_id is required for ISSUER permissions")
 	}
 
-	return ms.validateValidationPermission(ctx, msg, cs, types.CredentialSchemaPermType_ISSUER)
+	return ms.validateValidationPermission(ctx, msg, cs, types.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_ISSUER)
 }
 
 func (ms msgServer) validateVerifierPerm(ctx sdk.Context, msg *types.MsgCreateCredentialSchemaPerm, cs credentialschematypes.CredentialSchema) error {
@@ -57,7 +59,7 @@ func (ms msgServer) validateVerifierPerm(ctx sdk.Context, msg *types.MsgCreateCr
 		return errors.Wrap(sdkerrors.ErrInvalidRequest, "validation_id is required for VERIFIER permissions")
 	}
 
-	return ms.validateValidationPermission(ctx, msg, cs, types.CredentialSchemaPermType_VERIFIER)
+	return ms.validateValidationPermission(ctx, msg, cs, types.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_VERIFIER)
 }
 
 func (ms msgServer) validateHolderPerm(ctx sdk.Context, msg *types.MsgCreateCredentialSchemaPerm, cs credentialschematypes.CredentialSchema) error {
@@ -69,7 +71,7 @@ func (ms msgServer) validateHolderPerm(ctx sdk.Context, msg *types.MsgCreateCred
 		return errors.Wrap(sdkerrors.ErrInvalidRequest, "validation_id is required for HOLDER permissions")
 	}
 
-	return ms.validateValidationPermission(ctx, msg, cs, types.CredentialSchemaPermType_HOLDER)
+	return ms.validateValidationPermission(ctx, msg, cs, types.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_HOLDER)
 }
 
 func (ms msgServer) validateValidationPermission(ctx sdk.Context, msg *types.MsgCreateCredentialSchemaPerm, cs credentialschematypes.CredentialSchema, validatorKind types.CredentialSchemaPermType) error {
@@ -112,10 +114,12 @@ func (ms msgServer) createPermission(ctx sdk.Context, msg *types.MsgCreateCreden
 		return errors.Wrap(sdkerrors.ErrInvalidRequest, "failed to generate ID")
 	}
 
+	permType := types.CredentialSchemaPermType(msg.CspType)
+
 	perm := types.CredentialSchemaPerm{
 		Id:               id,
 		SchemaId:         msg.SchemaId,
-		CspType:          msg.CspType,
+		CspType:          permType,
 		Did:              msg.Did,
 		Grantee:          msg.Grantee,
 		Created:          ctx.BlockTime(),
@@ -135,8 +139,9 @@ func (ms msgServer) createPermission(ctx sdk.Context, msg *types.MsgCreateCreden
 
 // Helper function to check if a permission overlaps with a new request
 func isOverlapping(perm types.CredentialSchemaPerm, msg *types.MsgCreateCredentialSchemaPerm) bool {
+	permType := types.CredentialSchemaPermType(msg.CspType)
 	return perm.SchemaId == msg.SchemaId &&
-		perm.CspType == msg.CspType &&
+		perm.CspType == permType &&
 		perm.Country == msg.Country &&
 		perm.Grantee == msg.Grantee &&
 		perm.Revoked == nil &&

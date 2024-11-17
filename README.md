@@ -360,3 +360,37 @@ Note:
    - 3: TRUST_REGISTRY_VALIDATION
 - A trust registry must exist before creating a credential schema
 - The schema creator must be the controller of the referenced trust registry
+
+## Interacting with the Credential Schema Permission Module
+
+### Using CLI
+
+1. Create a Credential Schema Permission:
+```bash
+veranad tx cspermission create-credential-schema-perm \
+1 \
+1 \
+"did:example:123" \
+verana1mda3hc2z8jnmk86zkvm9wlfgfmxwg2msf2a3ka \
+"2024-03-16T15:00:00Z" \
+100 \
+200 \
+300 \
+--effective-until "2025-03-16T15:00:00Z" \
+--country US \
+--validation-id 123 \
+--from cooluser \
+--keyring-backend test \
+--chain-id test-1 \
+--gas 800000 \
+--gas-adjustment 1.3 \
+--gas-prices 1.1uvna
+```
+
+The permission types are:
+- 1 = ISSUER
+- 2 = VERIFIER
+- 3 = ISSUER_GRANTOR
+- 4 = VERIFIER_GRANTOR
+- 5 = TRUST_REGISTRY
+- 6 = HOLDER

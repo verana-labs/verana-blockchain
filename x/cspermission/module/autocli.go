@@ -35,17 +35,23 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Long: `Create a new credential schema permission with the specified parameters.
 
 Parameters:
-  [schema-id]        : ID of the credential schema (uint64)
-  [csp-type]         : Permission type (ISSUER, VERIFIER, ISSUER_GRANTOR, VERIFIER_GRANTOR, TRUST_REGISTRY, HOLDER)
+  [schema-id]         : ID of the credential schema (uint64)
+  [csp-type]         : Permission type:
+                       1 = ISSUER
+                       2 = VERIFIER
+                       3 = ISSUER_GRANTOR
+                       4 = VERIFIER_GRANTOR
+                       5 = TRUST_REGISTRY
+                       6 = HOLDER
   [did]              : DID of the grantee service
   [grantee]          : Account address of the grantee
-  [effective-from]   : Start date (format: yyyyMMddHHmm)
+  [effective-from]   : Start date (RFC3339 format, e.g., 2024-03-16T15:00:00Z)
   [validation-fees]  : Fees for validation process
-  [issuance-fees]    : Fees for credential issuance
+  [issuance-fees]   : Fees for credential issuance
   [verification-fees]: Fees for credential verification
 
 Optional Flags:
-  --effective-until  : End date (format: yyyyMMddHHmm)
+  --effective-until  : End date (RFC3339 format, e.g., 2025-03-16T15:00:00Z)
   --country         : ISO 3166-1 alpha-2 country code
   --validation-id   : ID of the validation entry required for non-trust-registry controllers`,
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
@@ -78,7 +84,7 @@ Optional Flags:
 						"effective_until": {
 							Name:         "effective-until",
 							DefaultValue: "",
-							Usage:        "End date (format: yyyyMMddHHmm)",
+							Usage:        "End date (RFC3339 format)",
 						},
 						"country": {
 							Name:         "country",

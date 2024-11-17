@@ -21,16 +21,6 @@ GENTX_AMOUNT="1000000000uvna"
 
 log "Starting Verana blockchain setup..."
 
-# Ensure the binary is in the correct location
-if [ ! -f "/usr/local/bin/$BINARY" ]; then
-    log "Moving $BINARY to /usr/local/bin..."
-    sudo mv ~/go/bin/$BINARY /usr/local/bin/
-    if [ $? -ne 0 ]; then
-        log "Error: Failed to move $BINARY to /usr/local/bin. Please check permissions."
-        exit 1
-    fi
-fi
-
 # Initialize the chain
 log "Initializing the chain..."
 $BINARY init $MONIKER --chain-id $CHAIN_ID

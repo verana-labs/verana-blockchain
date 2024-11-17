@@ -24,7 +24,7 @@ func (ms msgServer) CreateCredentialSchemaPerm(goCtx context.Context, msg *types
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Get the credential schema
-	cs, err := ms.credentialSchemaKeeper.GetCredentialSchema(ctx, msg.SchemaId)
+	cs, err := ms.credentialSchemaKeeper.GetCredentialSchemaById(ctx, msg.SchemaId)
 	if err != nil {
 		return nil, errors.Wrapf(sdkerrors.ErrNotFound, "credential schema not found: %d", msg.SchemaId)
 	}
