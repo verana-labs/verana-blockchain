@@ -100,12 +100,23 @@ func (ms msgServer) checkOverlappingPermissions(ctx sdk.Context, msg *types.MsgC
 		if p.EffectiveUntil.After(msg.EffectiveFrom) {
 			return errors.Wrap(sdkerrors.ErrInvalidRequest, "overlapping permission exists with later expiration")
 		}
-		if msg.EffectiveUntil != nil && p.EffectiveFrom.Before(*msg.EffectiveUntil) {
+		if p.EffectiveFrom.Before(*msg.EffectiveUntil) {
 			return errors.Wrap(sdkerrors.ErrInvalidRequest, "overlapping permission exists with earlier start")
 		}
 	}
 
 	return nil
+}
+
+// Helper function to check if a permission overlaps with a new request
+func isOverlapping(perm types.CredentialSchemaPerm, msg *types.MsgCreateCredentialSchemaPerm) bool {
+	permType := types.CredentialSchemaPermType(msg.CspType)
+	return perm.SchemaId == msg.SchemaId &&
+		perm.CspType == permType &&
+		perm.Country == msg.Country &&
+		perm.Grantee == msg.Grantee &&
+		perm.Revoked == nil &&
+		perm.Terminated == nil
 }
 
 func (ms msgServer) createPermission(ctx sdk.Context, msg *types.MsgCreateCredentialSchemaPerm) error {
@@ -135,15 +146,4 @@ func (ms msgServer) createPermission(ctx sdk.Context, msg *types.MsgCreateCreden
 	}
 
 	return ms.CredentialSchemaPerm.Set(ctx, id, perm)
-}
-
-// Helper function to check if a permission overlaps with a new request
-func isOverlapping(perm types.CredentialSchemaPerm, msg *types.MsgCreateCredentialSchemaPerm) bool {
-	permType := types.CredentialSchemaPermType(msg.CspType)
-	return perm.SchemaId == msg.SchemaId &&
-		perm.CspType == permType &&
-		perm.Country == msg.Country &&
-		perm.Grantee == msg.Grantee &&
-		perm.Revoked == nil &&
-		perm.Terminated == nil
 }

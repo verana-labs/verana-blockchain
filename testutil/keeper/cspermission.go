@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	credentialschematypes "github.com/verana-labs/verana-blockchain/x/credentialschema/types"
 	"testing"
 
 	"cosmossdk.io/log"
@@ -21,7 +22,43 @@ import (
 	"github.com/verana-labs/verana-blockchain/x/cspermission/types"
 )
 
-func CspermissionKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
+type MockCredentialSchemaKeeper struct {
+	credentialschemas map[uint64]credentialschematypes.CredentialSchema
+}
+
+func NewMockCredentialSchemaKeeper() *MockCredentialSchemaKeeper {
+	return &MockCredentialSchemaKeeper{
+		credentialschemas: make(map[uint64]credentialschematypes.CredentialSchema),
+	}
+}
+
+func (m *MockCredentialSchemaKeeper) CreateMockCredentialSchema(trId uint64) uint64 {
+	// Generate next ID based on map length
+	id := uint64(len(m.credentialschemas) + 1)
+
+	// Create mock credential schema
+	m.credentialschemas[id] = credentialschematypes.CredentialSchema{
+		Id:                         id,
+		TrId:                       trId,
+		IssuerPermManagementMode:   credentialschematypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION,
+		VerifierPermManagementMode: credentialschematypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION,
+	}
+
+	return id
+}
+
+func (m *MockCredentialSchemaKeeper) GetCredentialSchemaById(ctx sdk.Context, id uint64) (credentialschematypes.CredentialSchema, error) {
+	return m.GetCredentialSchema(ctx, id)
+}
+
+func (m *MockCredentialSchemaKeeper) GetCredentialSchema(ctx sdk.Context, id uint64) (credentialschematypes.CredentialSchema, error) {
+	if schema, ok := m.credentialschemas[id]; ok {
+		return schema, nil
+	}
+	return credentialschematypes.CredentialSchema{}, credentialschematypes.ErrCredentialSchemaNotFound
+}
+
+func CspermissionKeeper(t testing.TB) (keeper.Keeper, *MockTrustRegistryKeeper, *MockCredentialSchemaKeeper, sdk.Context) {
 	storeKey := storetypes.NewKVStoreKey(types.StoreKey)
 
 	db := dbm.NewMemDB()
@@ -32,12 +69,16 @@ func CspermissionKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
 	registry := codectypes.NewInterfaceRegistry()
 	cdc := codec.NewProtoCodec(registry)
 	authority := authtypes.NewModuleAddress(govtypes.ModuleName)
+	trustRegistryKeeper := NewMockTrustRegistryKeeper()
+	credentialSchemaKeeper := NewMockCredentialSchemaKeeper()
 
 	k := keeper.NewKeeper(
 		cdc,
 		runtime.NewKVStoreService(storeKey),
 		log.NewNopLogger(),
 		authority.String(),
+		trustRegistryKeeper,
+		credentialSchemaKeeper,
 	)
 
 	ctx := sdk.NewContext(stateStore, cmtproto.Header{}, false, log.NewNopLogger())
@@ -47,5 +88,5 @@ func CspermissionKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
 		panic(err)
 	}
 
-	return k, ctx
+	return k, trustRegistryKeeper, credentialSchemaKeeper, ctx
 }
