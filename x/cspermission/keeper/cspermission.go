@@ -94,14 +94,14 @@ func (ms msgServer) checkOverlappingPermissions(ctx sdk.Context, msg *types.MsgC
 	}
 
 	for _, p := range overlappingPerms {
-		if p.EffectiveUntil == nil {
-			return errors.Wrap(sdkerrors.ErrInvalidRequest, "overlapping permission exists with no expiration")
+		// Check for any kind of overlap
+		if msg.EffectiveFrom.Before(*p.EffectiveUntil) && p.EffectiveFrom.Before(*msg.EffectiveUntil) {
+			return errors.Wrap(sdkerrors.ErrInvalidRequest, "permissions cannot overlap")
 		}
-		if p.EffectiveUntil.After(msg.EffectiveFrom) {
-			return errors.Wrap(sdkerrors.ErrInvalidRequest, "overlapping permission exists with later expiration")
-		}
-		if p.EffectiveFrom.Before(*msg.EffectiveUntil) {
-			return errors.Wrap(sdkerrors.ErrInvalidRequest, "overlapping permission exists with earlier start")
+
+		// Handle never-expiring permissions
+		if p.EffectiveUntil == nil && msg.EffectiveUntil != nil && msg.EffectiveUntil.After(p.EffectiveFrom) {
+			return errors.Wrap(sdkerrors.ErrInvalidRequest, "existing permission never expires")
 		}
 	}
 

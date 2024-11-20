@@ -3,7 +3,6 @@ package keeper
 import (
 	"context"
 	"cosmossdk.io/errors"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/verana-labs/verana-blockchain/x/cspermission/types"
 )
@@ -13,16 +12,6 @@ var _ types.QueryServer = Keeper{}
 func (k Keeper) ListCSP(ctx context.Context, req *types.QueryListCSPRequest) (*types.QueryListCSPResponse, error) {
 	if err := req.ValidateRequest(); err != nil {
 		return nil, err
-	}
-
-	if req.Grantee != "" {
-		if _, err := sdk.AccAddressFromBech32(req.Grantee); err != nil {
-			return nil, errors.Wrap(sdkerrors.ErrInvalidAddress, "invalid grantee address")
-		}
-	}
-
-	if req.Did != "" && !isValidDID(req.Did) {
-		return nil, errors.Wrap(sdkerrors.ErrInvalidRequest, "invalid DID format")
 	}
 
 	var perms []types.CredentialSchemaPerm

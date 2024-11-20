@@ -199,8 +199,8 @@ func TestCreateCredentialSchemaPermWithOverlap(t *testing.T) {
 		{
 			name: "Overlapping Time Period",
 			msg: func() *types.MsgCreateCredentialSchemaPerm {
-				overlapFrom := baseTime.Add(4 * time.Hour)  // Starts before first perm
-				overlapUntil := baseTime.Add(7 * time.Hour) // Ends after first perm
+				overlapFrom := baseTime.Add(5 * time.Hour)  // During first permission's period
+				overlapUntil := baseTime.Add(7 * time.Hour) // After first permission ends
 				return &types.MsgCreateCredentialSchemaPerm{
 					Creator:          creator,
 					SchemaId:         schemaId,
@@ -221,8 +221,8 @@ func TestCreateCredentialSchemaPermWithOverlap(t *testing.T) {
 			name: "Non-overlapping Time Period",
 			msg: func() *types.MsgCreateCredentialSchemaPerm {
 				// Per spec, new permission must end before existing permission starts
-				nonOverlapFrom := baseTime.Add(2 * time.Hour)   // Starts at +2h
-				nonOverlapUntil := baseTime.Add(13 * time.Hour) // Ends at +13h (before first perm starts at +5h)
+				nonOverlapFrom := baseTime.Add(12 * time.Hour)  // Starts at +12h
+				nonOverlapUntil := baseTime.Add(13 * time.Hour) // Ends at +13h
 
 				t.Logf("\nBase time: %v", baseTime)
 				t.Logf("First permission: %v to %v", effectiveFrom1, effectiveUntil1)

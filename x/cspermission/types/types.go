@@ -83,6 +83,10 @@ func (msg *MsgCreateCredentialSchemaPerm) ValidateBasic() error {
 		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
 
+	if !msg.EffectiveFrom.After(time.Now()) {
+		return errors.Wrap(sdkerrors.ErrInvalidRequest, "effective_from must be in the future")
+	}
+	
 	// Validate mandatory parameters
 	if msg.SchemaId == 0 {
 		return errors.Wrap(sdkerrors.ErrInvalidRequest, "schema_id cannot be 0")
