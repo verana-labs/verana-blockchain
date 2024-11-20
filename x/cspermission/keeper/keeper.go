@@ -2,10 +2,9 @@ package keeper
 
 import (
 	"cosmossdk.io/collections"
-	"fmt"
-
 	"cosmossdk.io/core/store"
 	"cosmossdk.io/log"
+	"fmt"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 

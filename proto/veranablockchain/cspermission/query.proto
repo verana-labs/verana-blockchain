@@ -5,7 +5,9 @@ import "amino/amino.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
+import "cosmos_proto/cosmos.proto";
 import "veranablockchain/cspermission/params.proto";
+import "veranablockchain/cspermission/types.proto";
 
 option go_package = "github.com/verana-labs/verana-blockchain/x/cspermission/types";
 
@@ -14,6 +16,10 @@ service Query {
   // Parameters queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/verana-labs/verana-blockchain/cspermission/params";
+  }
+  // ListCSP returns the list of credential schema permissions.
+  rpc ListCSP(QueryListCSPRequest) returns (QueryListCSPResponse) {
+    option (google.api.http).get = "/dtr/v1/csp/list";
   }
 }
 
@@ -27,4 +33,19 @@ message QueryParamsResponse {
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
+}
+
+// QueryListCSPRequest is the request type for Query/ListCSP method.
+message QueryListCSPRequest {
+  uint64 schema_id = 1;
+  string creator = 2 [(cosmos_proto.scalar) = "cosmos.AddressString", (gogoproto.nullable) = true];
+  string grantee = 3 [(cosmos_proto.scalar) = "cosmos.AddressString", (gogoproto.nullable) = true];
+  string did = 4 [(gogoproto.nullable) = true];
+  CredentialSchemaPermType type = 5 [(gogoproto.nullable) = true];
+  uint32 response_max_size = 6;
+}
+
+// QueryListCSPResponse is the response type for Query/ListCSP method.
+message QueryListCSPResponse {
+  repeated CredentialSchemaPerm permissions = 1 [(gogoproto.nullable) = false];
 }

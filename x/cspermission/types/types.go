@@ -137,3 +137,40 @@ func (msg *MsgCreateCredentialSchemaPerm) ValidateBasic() error {
 
 	return nil
 }
+
+func (q *QueryListCSPRequest) ValidateRequest() error {
+	if q.SchemaId == 0 {
+		return sdkerrors.ErrInvalidRequest.Wrap("schema_id is required")
+	}
+
+	if q.Creator != "" {
+		if _, err := sdk.AccAddressFromBech32(q.Creator); err != nil {
+			return sdkerrors.ErrInvalidAddress.Wrap(err.Error())
+		}
+	}
+
+	if q.Grantee != "" {
+		if _, err := sdk.AccAddressFromBech32(q.Grantee); err != nil {
+			return sdkerrors.ErrInvalidAddress.Wrap(err.Error())
+		}
+	}
+
+	if q.Did != "" && !isValidDID(q.Did) {
+		return sdkerrors.ErrInvalidRequest.Wrap("invalid DID format")
+	}
+
+	if q.ResponseMaxSize == 0 {
+		q.ResponseMaxSize = 64
+	} else if q.ResponseMaxSize > 1024 {
+		return sdkerrors.ErrInvalidRequest.Wrap("response_max_size must be between 1 and 1024")
+	}
+
+	return nil
+}
+
+func isValidDID(did string) bool {
+	// Basic DID validation regex
+	// This is a simplified version and may need to be expanded based on specific DID method requirements
+	didRegex := regexp.MustCompile(`^did:[a-zA-Z0-9]+:[a-zA-Z0-9._-]+$`)
+	return didRegex.MatchString(did)
+}

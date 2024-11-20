@@ -17,6 +17,53 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Use:       "params",
 					Short:     "Shows the parameters of the module",
 				},
+				{
+					RpcMethod: "ListCSP",
+					Use:       "list-csp [schema-id]",
+					Short:     "List credential schema permissions",
+					Long: `List credential schema permissions filtered by various parameters.
+Mandatory:
+  schema-id: ID of the credential schema
+
+Optional flags:
+  --creator: Filter by creator address
+  --grantee: Filter by grantee address
+  --did: Filter by grantee DID
+  --type: Filter by permission type (1-6)
+  --response-max-size: Maximum number of results (1-1024, default 64)`,
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "schema_id",
+						},
+					},
+					FlagOptions: map[string]*autocliv1.FlagOptions{
+						"creator": {
+							Name:         "creator",
+							Usage:        "Filter by creator address",
+							DefaultValue: "",
+						},
+						"grantee": {
+							Name:         "grantee",
+							Usage:        "Filter by grantee address",
+							DefaultValue: "",
+						},
+						"did": {
+							Name:         "did",
+							Usage:        "Filter by grantee DID",
+							DefaultValue: "",
+						},
+						"type": {
+							Name:         "type",
+							Usage:        "Filter by permission type",
+							DefaultValue: "0",
+						},
+						"response_max_size": {
+							Name:         "response-max-size",
+							Usage:        "Maximum number of results",
+							DefaultValue: "64",
+						},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},
