@@ -110,9 +110,9 @@ fi
 
 # Update app.toml
 log "Updating app.toml..."
-sed -i '' 's/enable = false/enable = true/' "$APP_TOML_PATH"
-sed -i '' 's/swagger = false/swagger = true/' "$APP_TOML_PATH"
-sed -i '' 's/enabled-unsafe-cors = false/enabled-unsafe-cors = true/' "$APP_TOML_PATH"
+sed_inplace 's/enable = false/enable = true/' "$APP_TOML_PATH"
+sed_inplace 's/swagger = false/swagger = true/' "$APP_TOML_PATH"
+sed_inplace 's/enabled-unsafe-cors = false/enabled-unsafe-cors = true/' "$APP_TOML_PATH"
 if [ $? -ne 0 ]; then
     log "Error: Failed to update app.toml."
     exit 1
@@ -120,7 +120,7 @@ fi
 
 # Update config.toml CORS settings
 log "Updating CORS settings in config.toml..."
-sed -i '' 's/cors_allowed_origins = \[\]/cors_allowed_origins = \["*"\]/' "$CONFIG_TOML_PATH"
+sed_inplace 's/cors_allowed_origins = \[\]/cors_allowed_origins = \["*"\]/' "$CONFIG_TOML_PATH"
 if [ $? -ne 0 ]; then
     log "Error: Failed to update CORS settings in config.toml."
     exit 1
