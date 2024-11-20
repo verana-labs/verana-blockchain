@@ -64,6 +64,16 @@ Optional flags:
 						},
 					},
 				},
+				{
+					RpcMethod: "GetCSP",
+					Use:       "get-csp [id]",
+					Short:     "Get credential schema permission by ID",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "id",
+						},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},

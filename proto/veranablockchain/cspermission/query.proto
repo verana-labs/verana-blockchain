@@ -21,6 +21,10 @@ service Query {
   rpc ListCSP(QueryListCSPRequest) returns (QueryListCSPResponse) {
     option (google.api.http).get = "/dtr/v1/csp/list";
   }
+  // GetCSP returns credential schema permission by ID
+  rpc GetCSP(QueryGetCSPRequest) returns (QueryGetCSPResponse) {
+    option (google.api.http).get = "/dtr/v1/csp/get{id}";
+  }
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -48,4 +52,14 @@ message QueryListCSPRequest {
 // QueryListCSPResponse is the response type for Query/ListCSP method.
 message QueryListCSPResponse {
   repeated CredentialSchemaPerm permissions = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryGetCSPRequest is request type for Query/GetCSP
+message QueryGetCSPRequest {
+  uint64 id = 1;
+}
+
+// QueryGetCSPResponse is response type for Query/GetCSP
+message QueryGetCSPResponse {
+  CredentialSchemaPerm permission = 1 [(gogoproto.nullable) = false];
 }

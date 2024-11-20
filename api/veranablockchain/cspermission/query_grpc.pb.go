@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	Query_Params_FullMethodName  = "/veranablockchain.cspermission.Query/Params"
 	Query_ListCSP_FullMethodName = "/veranablockchain.cspermission.Query/ListCSP"
+	Query_GetCSP_FullMethodName  = "/veranablockchain.cspermission.Query/GetCSP"
 )
 
 // QueryClient is the client API for Query service.
@@ -31,6 +32,8 @@ type QueryClient interface {
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
 	// ListCSP returns the list of credential schema permissions.
 	ListCSP(ctx context.Context, in *QueryListCSPRequest, opts ...grpc.CallOption) (*QueryListCSPResponse, error)
+	// GetCSP returns credential schema permission by ID
+	GetCSP(ctx context.Context, in *QueryGetCSPRequest, opts ...grpc.CallOption) (*QueryGetCSPResponse, error)
 }
 
 type queryClient struct {
@@ -59,6 +62,15 @@ func (c *queryClient) ListCSP(ctx context.Context, in *QueryListCSPRequest, opts
 	return out, nil
 }
 
+func (c *queryClient) GetCSP(ctx context.Context, in *QueryGetCSPRequest, opts ...grpc.CallOption) (*QueryGetCSPResponse, error) {
+	out := new(QueryGetCSPResponse)
+	err := c.cc.Invoke(ctx, Query_GetCSP_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -67,6 +79,8 @@ type QueryServer interface {
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
 	// ListCSP returns the list of credential schema permissions.
 	ListCSP(context.Context, *QueryListCSPRequest) (*QueryListCSPResponse, error)
+	// GetCSP returns credential schema permission by ID
+	GetCSP(context.Context, *QueryGetCSPRequest) (*QueryGetCSPResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -79,6 +93,9 @@ func (UnimplementedQueryServer) Params(context.Context, *QueryParamsRequest) (*Q
 }
 func (UnimplementedQueryServer) ListCSP(context.Context, *QueryListCSPRequest) (*QueryListCSPResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListCSP not implemented")
+}
+func (UnimplementedQueryServer) GetCSP(context.Context, *QueryGetCSPRequest) (*QueryGetCSPResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCSP not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -129,6 +146,24 @@ func _Query_ListCSP_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_GetCSP_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryGetCSPRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).GetCSP(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_GetCSP_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).GetCSP(ctx, req.(*QueryGetCSPRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -143,6 +178,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListCSP",
 			Handler:    _Query_ListCSP_Handler,
+		},
+		{
+			MethodName: "GetCSP",
+			Handler:    _Query_GetCSP_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

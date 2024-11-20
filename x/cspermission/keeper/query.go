@@ -44,3 +44,18 @@ func (k Keeper) ListCSP(ctx context.Context, req *types.QueryListCSPRequest) (*t
 		Permissions: perms,
 	}, nil
 }
+
+func (k Keeper) GetCSP(ctx context.Context, req *types.QueryGetCSPRequest) (*types.QueryGetCSPResponse, error) {
+	if req.Id == 0 {
+		return nil, errors.Wrap(sdkerrors.ErrInvalidRequest, "id must be provided")
+	}
+
+	perm, err := k.CredentialSchemaPerm.Get(ctx, req.Id)
+	if err != nil {
+		return nil, errors.Wrapf(sdkerrors.ErrKeyNotFound, "credential schema permission not found: %d", req.Id)
+	}
+
+	return &types.QueryGetCSPResponse{
+		Permission: perm,
+	}, nil
+}
