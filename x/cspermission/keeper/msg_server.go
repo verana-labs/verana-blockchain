@@ -57,3 +57,41 @@ func (ms msgServer) CreateCredentialSchemaPerm(goCtx context.Context, msg *types
 
 	return &types.MsgCreateCredentialSchemaPermResponse{}, nil
 }
+
+func (ms msgServer) RevokeCredentialSchemaPerm(ctx context.Context, msg *types.MsgRevokeCredentialSchemaPerm) (*types.MsgRevokeCredentialSchemaPermResponse, error) {
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+
+	csp, err := ms.CredentialSchemaPerm.Get(sdkCtx, msg.Id)
+	if err != nil {
+		return nil, errors.Wrapf(sdkerrors.ErrNotFound, "permission not found: %d", msg.Id)
+	}
+
+	cs, err := ms.credentialSchemaKeeper.GetCredentialSchemaById(sdkCtx, csp.SchemaId)
+	if err != nil {
+		return nil, errors.Wrapf(sdkerrors.ErrNotFound, "credential schema not found: %d", csp.SchemaId)
+	}
+
+	tr, err := ms.trustRegistryKeeper.GetTrustRegistry(sdkCtx, cs.TrId)
+	if err != nil {
+		return nil, errors.Wrapf(sdkerrors.ErrNotFound, "trust registry not found: %d", cs.TrId)
+	}
+
+	if err := ms.validateRevokePermissions(sdkCtx, msg.Creator, &csp, cs, tr); err != nil {
+		return nil, err
+	}
+
+	revokedTime := sdkCtx.BlockTime()
+	csp.Revoked = &revokedTime
+	csp.RevokedBy = msg.Creator
+
+	if csp.Deposit > 0 {
+		// Handle deposit decrease - implement after trust deposit module
+		csp.Deposit = 0
+	}
+
+	if err := ms.CredentialSchemaPerm.Set(sdkCtx, msg.Id, csp); err != nil {
+		return nil, errors.Wrap(sdkerrors.ErrInvalidRequest, "failed to update permission")
+	}
+
+	return &types.MsgRevokeCredentialSchemaPermResponse{}, nil
+}

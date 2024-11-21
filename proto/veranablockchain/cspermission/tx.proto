@@ -19,6 +19,7 @@ service Msg {
   // parameters. The authority defaults to the x/gov module account.
   rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
   rpc CreateCredentialSchemaPerm(MsgCreateCredentialSchemaPerm) returns (MsgCreateCredentialSchemaPermResponse);
+  rpc RevokeCredentialSchemaPerm(MsgRevokeCredentialSchemaPerm) returns (MsgRevokeCredentialSchemaPermResponse);
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
@@ -62,3 +63,11 @@ message MsgCreateCredentialSchemaPerm {
 }
 
 message MsgCreateCredentialSchemaPermResponse {}
+
+message MsgRevokeCredentialSchemaPerm {
+  option (cosmos.msg.v1.signer) = "creator";
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint64 id = 2;
+}
+
+message MsgRevokeCredentialSchemaPermResponse {}

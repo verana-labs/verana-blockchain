@@ -23,7 +23,7 @@ service Query {
   }
   // GetCSP returns credential schema permission by ID
   rpc GetCSP(QueryGetCSPRequest) returns (QueryGetCSPResponse) {
-    option (google.api.http).get = "/dtr/v1/csp/get{id}";
+    option (google.api.http).get = "/dtr/v1/csp/get/{id}";
   }
 }
 

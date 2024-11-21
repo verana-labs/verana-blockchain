@@ -155,6 +155,20 @@ Optional Flags:
 						},
 					},
 				},
+				{
+					RpcMethod: "RevokeCSP",
+					Use:       "revoke-csp [id]",
+					Short:     "Revoke a credential schema permission by ID",
+					Long: `Revoke a credential schema permission specified by ID.
+					
+Parameters:
+  [id]			  : ID of the credential schema permission to be revoked`,
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "id",
+						},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},
