@@ -156,7 +156,7 @@ Optional Flags:
 					},
 				},
 				{
-					RpcMethod: "RevokeCSP",
+					RpcMethod: "RevokeCredentialSchemaPerm",
 					Use:       "revoke-csp [id]",
 					Short:     "Revoke a credential schema permission by ID",
 					Long: `Revoke a credential schema permission specified by ID.

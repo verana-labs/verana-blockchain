@@ -264,3 +264,206 @@ func TestCreateCredentialSchemaPermWithOverlap(t *testing.T) {
 		})
 	}
 }
+
+func TestRevokeCredentialSchemaPerm(t *testing.T) {
+	k, ms, trKeeper, csKeeper, ctx := setupMsgServer(t)
+	creator := "verana1creator"
+
+	// Create mock trust registry
+	trId := trKeeper.CreateMockTrustRegistry(creator, "did:example:123")
+
+	// Create mock credential schema
+	schemaId := csKeeper.CreateMockCredentialSchema(trId)
+
+	// First create a permission that we'll try to revoke
+	baseTime := time.Now().UTC()
+	effectiveFrom := baseTime.Add(time.Hour)
+	effectiveUntil := baseTime.Add(2 * time.Hour)
+
+	createMsg := &types.MsgCreateCredentialSchemaPerm{
+		Creator:          creator,
+		SchemaId:         schemaId,
+		CspType:          uint32(types.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_TRUST_REGISTRY),
+		Did:              "did:example:123",
+		Grantee:          "verana1grantee",
+		EffectiveFrom:    effectiveFrom,
+		EffectiveUntil:   &effectiveUntil,
+		ValidationFees:   100,
+		IssuanceFees:     200,
+		VerificationFees: 300,
+	}
+
+	resp, err := ms.CreateCredentialSchemaPerm(ctx, createMsg)
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+
+	testCases := []struct {
+		name    string
+		msg     *types.MsgRevokeCredentialSchemaPerm
+		expPass bool
+	}{
+		{
+			name: "Valid Revocation By Controller",
+			msg: &types.MsgRevokeCredentialSchemaPerm{
+				Creator: creator,
+				Id:      1, // First created permission
+			},
+			expPass: true,
+		},
+		{
+			name: "Non-existent Permission ID",
+			msg: &types.MsgRevokeCredentialSchemaPerm{
+				Creator: creator,
+				Id:      99,
+			},
+			expPass: false,
+		},
+		{
+			name: "Unauthorized Revocation Attempt",
+			msg: &types.MsgRevokeCredentialSchemaPerm{
+				Creator: "verana1unauthorized",
+				Id:      1,
+			},
+			expPass: false,
+		},
+		{
+			name: "Already Revoked Permission",
+			msg: &types.MsgRevokeCredentialSchemaPerm{
+				Creator: creator,
+				Id:      1, // Try to revoke the same permission again
+			},
+			expPass: false,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			resp, err := ms.RevokeCredentialSchemaPerm(ctx, tc.msg)
+			if tc.expPass {
+				require.NoError(t, err)
+				require.NotNil(t, resp)
+
+				// Verify the permission was actually revoked
+				perm, err := k.CredentialSchemaPerm.Get(ctx, tc.msg.Id)
+				require.NoError(t, err)
+				require.NotNil(t, perm.Revoked)
+				require.Equal(t, tc.msg.Creator, perm.RevokedBy)
+				require.Zero(t, perm.Deposit)
+			} else {
+				require.Error(t, err)
+				require.Nil(t, resp)
+			}
+		})
+	}
+}
+
+// Test revocation for different permission types
+func TestRevokeCredentialSchemaPermTypes(t *testing.T) {
+	k, ms, trKeeper, csKeeper, ctx := setupMsgServer(t)
+	creator := "verana1creator"
+
+	trId := trKeeper.CreateMockTrustRegistry(creator, "did:example:123")
+	schemaId := csKeeper.CreateMockCredentialSchema(trId)
+
+	baseTime := time.Now().UTC()
+	effectiveFrom := baseTime.Add(time.Hour)
+	effectiveUntil := baseTime.Add(2 * time.Hour)
+
+	// Keep track of permission IDs
+	var currentId uint64 = 1
+
+	testCases := []struct {
+		name          string
+		setupMsg      *types.MsgCreateCredentialSchemaPerm
+		revokeCreator string
+		expPass       bool
+	}{
+		{
+			name: "Revoke ISSUER Permission",
+			setupMsg: &types.MsgCreateCredentialSchemaPerm{
+				Creator:          creator,
+				SchemaId:         schemaId,
+				CspType:          uint32(types.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_ISSUER),
+				Did:              "did:example:123",
+				Grantee:          "verana1grantee",
+				EffectiveFrom:    effectiveFrom,
+				EffectiveUntil:   &effectiveUntil,
+				ValidationId:     1,
+				ValidationFees:   100,
+				IssuanceFees:     200,
+				VerificationFees: 300,
+			},
+			revokeCreator: creator,
+			expPass:       true,
+		},
+		{
+			name: "Revoke VERIFIER Permission",
+			setupMsg: &types.MsgCreateCredentialSchemaPerm{
+				Creator:          creator,
+				SchemaId:         schemaId,
+				CspType:          uint32(types.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_VERIFIER),
+				Did:              "did:example:123",
+				Grantee:          "verana1grantee",
+				EffectiveFrom:    effectiveFrom,
+				EffectiveUntil:   &effectiveUntil,
+				ValidationId:     1,
+				ValidationFees:   100,
+				IssuanceFees:     200,
+				VerificationFees: 300,
+			},
+			revokeCreator: creator,
+			expPass:       true,
+		},
+		{
+			name: "Revoke HOLDER Permission",
+			setupMsg: &types.MsgCreateCredentialSchemaPerm{
+				Creator:          creator,
+				SchemaId:         schemaId,
+				CspType:          uint32(types.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_HOLDER),
+				Did:              "did:example:123",
+				Grantee:          "verana1grantee",
+				EffectiveFrom:    effectiveFrom,
+				EffectiveUntil:   &effectiveUntil,
+				ValidationId:     1,
+				ValidationFees:   100,
+				IssuanceFees:     200,
+				VerificationFees: 300,
+			},
+			revokeCreator: creator,
+			expPass:       true,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			// Create permission
+			resp, err := ms.CreateCredentialSchemaPerm(ctx, tc.setupMsg)
+			require.NoError(t, err)
+			require.NotNil(t, resp)
+
+			// Try to revoke it using current ID
+			revokeMsg := &types.MsgRevokeCredentialSchemaPerm{
+				Creator: tc.revokeCreator,
+				Id:      currentId,
+			}
+
+			revokeResp, err := ms.RevokeCredentialSchemaPerm(ctx, revokeMsg)
+			if tc.expPass {
+				require.NoError(t, err)
+				require.NotNil(t, revokeResp)
+
+				// Verify revocation
+				perm, err := k.CredentialSchemaPerm.Get(ctx, currentId)
+				require.NoError(t, err)
+				require.NotNil(t, perm.Revoked)
+				require.Equal(t, tc.revokeCreator, perm.RevokedBy)
+			} else {
+				require.Error(t, err)
+				require.Nil(t, revokeResp)
+			}
+
+			// Increment ID for next test case
+			currentId++
+		})
+	}
+}

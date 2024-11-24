@@ -66,6 +66,10 @@ func (ms msgServer) RevokeCredentialSchemaPerm(ctx context.Context, msg *types.M
 		return nil, errors.Wrapf(sdkerrors.ErrNotFound, "permission not found: %d", msg.Id)
 	}
 
+	if csp.Revoked != nil {
+		return nil, errors.Wrap(sdkerrors.ErrInvalidRequest, "permission is already revoked")
+	}
+
 	cs, err := ms.credentialSchemaKeeper.GetCredentialSchemaById(sdkCtx, csp.SchemaId)
 	if err != nil {
 		return nil, errors.Wrapf(sdkerrors.ErrNotFound, "credential schema not found: %d", csp.SchemaId)
