@@ -99,3 +99,43 @@ func (ms msgServer) RevokeCredentialSchemaPerm(ctx context.Context, msg *types.M
 
 	return &types.MsgRevokeCredentialSchemaPermResponse{}, nil
 }
+
+func (ms msgServer) TerminateCredentialSchemaPerm(ctx context.Context, msg *types.MsgTerminateCredentialSchemaPerm) (*types.MsgTerminateCredentialSchemaPermResponse, error) {
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+
+	// Get the permission
+	csp, err := ms.CredentialSchemaPerm.Get(sdkCtx, msg.Id)
+	if err != nil {
+		return nil, errors.Wrapf(sdkerrors.ErrNotFound, "permission not found: %d", msg.Id)
+	}
+
+	// Check if already terminated
+	if csp.Terminated != nil {
+		return nil, errors.Wrap(sdkerrors.ErrInvalidRequest, "permission is already terminated")
+	}
+
+	// Check grantee is the one terminating
+	if csp.Grantee != msg.Creator {
+		return nil, errors.Wrap(sdkerrors.ErrUnauthorized, "only grantee can terminate permission")
+	}
+
+	// TODO: Check validation state if validation exists
+
+	// Set termination details
+	terminatedTime := sdkCtx.BlockTime()
+	csp.Terminated = &terminatedTime
+	csp.TerminatedBy = msg.Creator
+
+	// Handle deposit
+	if csp.Deposit > 0 {
+		// TODO: Implement trust deposit decrease
+		csp.Deposit = 0
+	}
+
+	// Update permission
+	if err := ms.CredentialSchemaPerm.Set(sdkCtx, msg.Id, csp); err != nil {
+		return nil, errors.Wrap(sdkerrors.ErrInvalidRequest, "failed to update permission")
+	}
+
+	return &types.MsgTerminateCredentialSchemaPermResponse{}, nil
+}

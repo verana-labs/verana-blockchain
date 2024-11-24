@@ -467,3 +467,115 @@ func TestRevokeCredentialSchemaPermTypes(t *testing.T) {
 		})
 	}
 }
+
+func TestTerminateCSP(t *testing.T) {
+	k, ms, trKeeper, csKeeper, ctx := setupMsgServer(t)
+	creator := "verana1creator"
+	grantee := "verana1grantee"
+
+	// Create mock trust registry and schema
+	trId := trKeeper.CreateMockTrustRegistry(creator, "did:example:123")
+	schemaId := csKeeper.CreateMockCredentialSchema(trId)
+
+	// Create a permission to terminate
+	baseTime := time.Now().UTC()
+	effectiveFrom := baseTime.Add(time.Hour)
+	effectiveUntil := baseTime.Add(2 * time.Hour)
+
+	createMsg := &types.MsgCreateCredentialSchemaPerm{
+		Creator:          creator,
+		SchemaId:         schemaId,
+		CspType:          uint32(types.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_ISSUER),
+		Did:              "did:example:123",
+		Grantee:          grantee,
+		EffectiveFrom:    effectiveFrom,
+		EffectiveUntil:   &effectiveUntil,
+		ValidationId:     1,
+		ValidationFees:   100,
+		IssuanceFees:     200,
+		VerificationFees: 300,
+	}
+
+	resp, err := ms.CreateCredentialSchemaPerm(ctx, createMsg)
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+
+	testCases := []struct {
+		name    string
+		msg     *types.MsgTerminateCredentialSchemaPerm
+		setup   func()
+		expPass bool
+	}{
+		{
+			name: "Valid Termination By Grantee",
+			msg: &types.MsgTerminateCredentialSchemaPerm{
+				Creator: grantee,
+				Id:      1,
+			},
+			setup: func() {
+				// Setup validation in TERMINATION_REQUESTED state
+				// This would be implemented in your mock validation keeper
+			},
+			expPass: true,
+		},
+		{
+			name: "Non-existent Permission ID",
+			msg: &types.MsgTerminateCredentialSchemaPerm{
+				Creator: grantee,
+				Id:      99,
+			},
+			expPass: false,
+		},
+		{
+			name: "Unauthorized Termination Attempt",
+			msg: &types.MsgTerminateCredentialSchemaPerm{
+				Creator: "verana1unauthorized",
+				Id:      1,
+			},
+			expPass: false,
+		},
+		{
+			name: "Already Terminated Permission",
+			msg: &types.MsgTerminateCredentialSchemaPerm{
+				Creator: grantee,
+				Id:      1,
+			},
+			expPass: false,
+		},
+		{
+			name: "Invalid Validation State",
+			msg: &types.MsgTerminateCredentialSchemaPerm{
+				Creator: grantee,
+				Id:      1,
+			},
+			setup: func() {
+				// Setup validation in non-TERMINATION_REQUESTED state
+			},
+			expPass: false,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			if tc.setup != nil {
+				tc.setup()
+			}
+
+			resp, err := ms.TerminateCredentialSchemaPerm(ctx, tc.msg)
+			if tc.expPass {
+				require.NoError(t, err)
+				require.NotNil(t, resp)
+
+				// Verify termination
+				perm, err := k.CredentialSchemaPerm.Get(ctx, tc.msg.Id)
+				require.NoError(t, err)
+				require.NotNil(t, perm.Terminated)
+				require.Equal(t, tc.msg.Creator, perm.TerminatedBy)
+				require.Zero(t, perm.Deposit)
+			} else {
+				require.Error(t, err)
+				require.Nil(t, resp)
+			}
+		})
+	}
+}

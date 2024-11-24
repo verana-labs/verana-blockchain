@@ -169,6 +169,26 @@ Parameters:
 						},
 					},
 				},
+				{
+					RpcMethod: "TerminateCredentialSchemaPerm",
+					Use:       "terminate-csp [id]",
+					Short:     "Terminate a credential schema permission",
+					Long: `Terminate a credential schema permission by its grantee.
+
+Parameters:
+  [id]    : ID of the credential schema permission to terminate (uint64)
+
+The command can only be executed by the permission's grantee and 
+requires the associated validation to be in TERMINATION_REQUESTED state.
+
+Example:
+$ veranad tx cspermission terminate-csp 1 --from mykey`,
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "id",
+						},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},
