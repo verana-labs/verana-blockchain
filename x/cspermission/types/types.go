@@ -86,7 +86,7 @@ func (msg *MsgCreateCredentialSchemaPerm) ValidateBasic() error {
 	if !msg.EffectiveFrom.After(time.Now()) {
 		return errors.Wrap(sdkerrors.ErrInvalidRequest, "effective_from must be in the future")
 	}
-	
+
 	// Validate mandatory parameters
 	if msg.SchemaId == 0 {
 		return errors.Wrap(sdkerrors.ErrInvalidRequest, "schema_id cannot be 0")
@@ -159,7 +159,7 @@ func (q *QueryListCSPRequest) ValidateRequest() error {
 		}
 	}
 
-	if q.Did != "" && !isValidDID(q.Did) {
+	if q.Did != "" && !IsValidDID(q.Did) {
 		return sdkerrors.ErrInvalidRequest.Wrap("invalid DID format")
 	}
 
@@ -172,7 +172,7 @@ func (q *QueryListCSPRequest) ValidateRequest() error {
 	return nil
 }
 
-func isValidDID(did string) bool {
+func IsValidDID(did string) bool {
 	// Basic DID validation regex
 	// This is a simplified version and may need to be expanded based on specific DID method requirements
 	didRegex := regexp.MustCompile(`^did:[a-zA-Z0-9]+:[a-zA-Z0-9._-]+$`)

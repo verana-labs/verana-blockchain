@@ -4,6 +4,7 @@ package veranablockchain.cspermission;
 import "amino/amino.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "cosmos_proto/cosmos.proto";
 import "veranablockchain/cspermission/params.proto";
@@ -24,6 +25,10 @@ service Query {
   // GetCSP returns credential schema permission by ID
   rpc GetCSP(QueryGetCSPRequest) returns (QueryGetCSPResponse) {
     option (google.api.http).get = "/dtr/v1/csp/get/{id}";
+  }
+  // IsAuthorizedIssuer checks if a DID is authorized to issue credentials
+  rpc IsAuthorizedIssuer(QueryIsAuthorizedIssuerRequest) returns (QueryIsAuthorizedIssuerResponse) {
+    option (google.api.http).get = "/dtr/v1/csp/authorized_issuer";
   }
 }
 
@@ -62,4 +67,28 @@ message QueryGetCSPRequest {
 // QueryGetCSPResponse is response type for Query/GetCSP
 message QueryGetCSPResponse {
   CredentialSchemaPerm permission = 1 [(gogoproto.nullable) = false];
+}
+
+// Authorization status enum
+enum AuthorizationStatus {
+  UNSPECIFIED = 0;
+  AUTHORIZED = 1;
+  FORBIDDEN = 2;
+  SESSION_REQUIRED = 3;
+}
+
+// QueryIsAuthorizedIssuerRequest is request type for Query/IsAuthorizedIssuer method
+message QueryIsAuthorizedIssuerRequest {
+  string issuer_did = 1;
+  string user_agent_did = 2;
+  string wallet_user_agent_did = 3;
+  uint64 schema_id = 4;
+  string country = 5 [(gogoproto.nullable) = true];
+  google.protobuf.Timestamp when = 6 [(gogoproto.nullable) = true, (gogoproto.stdtime) = true];
+  uint64 session_id = 7 [(gogoproto.nullable) = true];
+}
+
+// QueryIsAuthorizedIssuerResponse is response type for Query/IsAuthorizedIssuer method
+message QueryIsAuthorizedIssuerResponse {
+  AuthorizationStatus status = 1;
 }

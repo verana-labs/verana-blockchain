@@ -19,9 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Query_Params_FullMethodName  = "/veranablockchain.cspermission.Query/Params"
-	Query_ListCSP_FullMethodName = "/veranablockchain.cspermission.Query/ListCSP"
-	Query_GetCSP_FullMethodName  = "/veranablockchain.cspermission.Query/GetCSP"
+	Query_Params_FullMethodName             = "/veranablockchain.cspermission.Query/Params"
+	Query_ListCSP_FullMethodName            = "/veranablockchain.cspermission.Query/ListCSP"
+	Query_GetCSP_FullMethodName             = "/veranablockchain.cspermission.Query/GetCSP"
+	Query_IsAuthorizedIssuer_FullMethodName = "/veranablockchain.cspermission.Query/IsAuthorizedIssuer"
 )
 
 // QueryClient is the client API for Query service.
@@ -34,6 +35,8 @@ type QueryClient interface {
 	ListCSP(ctx context.Context, in *QueryListCSPRequest, opts ...grpc.CallOption) (*QueryListCSPResponse, error)
 	// GetCSP returns credential schema permission by ID
 	GetCSP(ctx context.Context, in *QueryGetCSPRequest, opts ...grpc.CallOption) (*QueryGetCSPResponse, error)
+	// IsAuthorizedIssuer checks if a DID is authorized to issue credentials
+	IsAuthorizedIssuer(ctx context.Context, in *QueryIsAuthorizedIssuerRequest, opts ...grpc.CallOption) (*QueryIsAuthorizedIssuerResponse, error)
 }
 
 type queryClient struct {
@@ -71,6 +74,15 @@ func (c *queryClient) GetCSP(ctx context.Context, in *QueryGetCSPRequest, opts .
 	return out, nil
 }
 
+func (c *queryClient) IsAuthorizedIssuer(ctx context.Context, in *QueryIsAuthorizedIssuerRequest, opts ...grpc.CallOption) (*QueryIsAuthorizedIssuerResponse, error) {
+	out := new(QueryIsAuthorizedIssuerResponse)
+	err := c.cc.Invoke(ctx, Query_IsAuthorizedIssuer_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -81,6 +93,8 @@ type QueryServer interface {
 	ListCSP(context.Context, *QueryListCSPRequest) (*QueryListCSPResponse, error)
 	// GetCSP returns credential schema permission by ID
 	GetCSP(context.Context, *QueryGetCSPRequest) (*QueryGetCSPResponse, error)
+	// IsAuthorizedIssuer checks if a DID is authorized to issue credentials
+	IsAuthorizedIssuer(context.Context, *QueryIsAuthorizedIssuerRequest) (*QueryIsAuthorizedIssuerResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -96,6 +110,9 @@ func (UnimplementedQueryServer) ListCSP(context.Context, *QueryListCSPRequest) (
 }
 func (UnimplementedQueryServer) GetCSP(context.Context, *QueryGetCSPRequest) (*QueryGetCSPResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCSP not implemented")
+}
+func (UnimplementedQueryServer) IsAuthorizedIssuer(context.Context, *QueryIsAuthorizedIssuerRequest) (*QueryIsAuthorizedIssuerResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method IsAuthorizedIssuer not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -164,6 +181,24 @@ func _Query_GetCSP_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_IsAuthorizedIssuer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryIsAuthorizedIssuerRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).IsAuthorizedIssuer(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_IsAuthorizedIssuer_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).IsAuthorizedIssuer(ctx, req.(*QueryIsAuthorizedIssuerRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -182,6 +217,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetCSP",
 			Handler:    _Query_GetCSP_Handler,
+		},
+		{
+			MethodName: "IsAuthorizedIssuer",
+			Handler:    _Query_IsAuthorizedIssuer_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

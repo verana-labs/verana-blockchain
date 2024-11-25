@@ -74,6 +74,56 @@ Optional flags:
 						},
 					},
 				},
+				{
+					RpcMethod: "IsAuthorizedIssuer",
+					Use:       "is-authorized-issuer [issuer-did] [user-agent-did] [wallet-user-agent-did] [schema-id]",
+					Short:     "Check if a DID is authorized to issue credentials",
+					Long: `Check if a DID is authorized to issue credentials of a given schema.
+
+Parameters:
+  [issuer-did]           : DID of the service that wants to issue a credential
+  [user-agent-did]       : DID of the user agent that received the presentation request
+  [wallet-user-agent-did]: DID of the user agent wallet where the credential is stored
+  [schema-id]            : ID of the credential schema
+
+Optional Flags:
+  --country     : ISO 3166-1 alpha-2 country code
+  --when        : Check authorization at specific time (RFC3339 format)
+  --session-id  : Session ID (required if fees need to be paid)
+
+Returns: AUTHORIZED, FORBIDDEN, or SESSION_REQUIRED`,
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "issuer_did",
+						},
+						{
+							ProtoField: "user_agent_did",
+						},
+						{
+							ProtoField: "wallet_user_agent_did",
+						},
+						{
+							ProtoField: "schema_id",
+						},
+					},
+					FlagOptions: map[string]*autocliv1.FlagOptions{
+						"country": {
+							Name:         "country",
+							Usage:        "ISO 3166-1 alpha-2 country code",
+							DefaultValue: "",
+						},
+						"when": {
+							Name:         "when",
+							Usage:        "Check authorization at specific time (RFC3339 format)",
+							DefaultValue: "",
+						},
+						"session_id": {
+							Name:         "session-id",
+							Usage:        "Session ID (required if fees need to be paid)",
+							DefaultValue: "0",
+						},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},
