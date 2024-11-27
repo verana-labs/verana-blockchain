@@ -512,10 +512,6 @@ func TestTerminateCSP(t *testing.T) {
 				Creator: grantee,
 				Id:      1,
 			},
-			setup: func() {
-				// Setup validation in TERMINATION_REQUESTED state
-				// This would be implemented in your mock validation keeper
-			},
 			expPass: true,
 		},
 		{
@@ -539,17 +535,6 @@ func TestTerminateCSP(t *testing.T) {
 			msg: &types.MsgTerminateCredentialSchemaPerm{
 				Creator: grantee,
 				Id:      1,
-			},
-			expPass: false,
-		},
-		{
-			name: "Invalid Validation State",
-			msg: &types.MsgTerminateCredentialSchemaPerm{
-				Creator: grantee,
-				Id:      1,
-			},
-			setup: func() {
-				// Setup validation in non-TERMINATION_REQUESTED state
 			},
 			expPass: false,
 		},

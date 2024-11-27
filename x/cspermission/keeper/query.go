@@ -10,15 +10,23 @@ import (
 	"time"
 )
 
-var _ types.QueryServer = Keeper{}
+var _ types.QueryServer = queryServer{}
 
-func (k Keeper) ListCSP(ctx context.Context, req *types.QueryListCSPRequest) (*types.QueryListCSPResponse, error) {
+func NewQueryServerImpl(k Keeper) types.QueryServer {
+	return queryServer{k}
+}
+
+type queryServer struct {
+	k Keeper
+}
+
+func (qs queryServer) ListCSP(ctx context.Context, req *types.QueryListCSPRequest) (*types.QueryListCSPResponse, error) {
 	if err := req.ValidateRequest(); err != nil {
 		return nil, err
 	}
 
 	var perms []types.CredentialSchemaPerm
-	err := k.CredentialSchemaPerm.Walk(ctx, nil, func(key uint64, perm types.CredentialSchemaPerm) (bool, error) {
+	err := qs.k.CredentialSchemaPerm.Walk(ctx, nil, func(key uint64, perm types.CredentialSchemaPerm) (bool, error) {
 		if perm.SchemaId != req.SchemaId {
 			return false, nil
 		}
@@ -48,12 +56,12 @@ func (k Keeper) ListCSP(ctx context.Context, req *types.QueryListCSPRequest) (*t
 	}, nil
 }
 
-func (k Keeper) GetCSP(ctx context.Context, req *types.QueryGetCSPRequest) (*types.QueryGetCSPResponse, error) {
+func (qs queryServer) GetCSP(ctx context.Context, req *types.QueryGetCSPRequest) (*types.QueryGetCSPResponse, error) {
 	if req.Id == 0 {
 		return nil, errors.Wrap(sdkerrors.ErrInvalidRequest, "id must be provided")
 	}
 
-	perm, err := k.CredentialSchemaPerm.Get(ctx, req.Id)
+	perm, err := qs.k.CredentialSchemaPerm.Get(ctx, req.Id)
 	if err != nil {
 		return nil, errors.Wrapf(sdkerrors.ErrKeyNotFound, "credential schema permission not found: %d", req.Id)
 	}
@@ -63,14 +71,14 @@ func (k Keeper) GetCSP(ctx context.Context, req *types.QueryGetCSPRequest) (*typ
 	}, nil
 }
 
-func (k Keeper) IsAuthorizedIssuer(ctx context.Context, req *types.QueryIsAuthorizedIssuerRequest) (*types.QueryIsAuthorizedIssuerResponse, error) {
+func (qs queryServer) IsAuthorizedIssuer(ctx context.Context, req *types.QueryIsAuthorizedIssuerRequest) (*types.QueryIsAuthorizedIssuerResponse, error) {
 	// Validate request
 	if err := validateIsAuthorizedIssuerRequest(req); err != nil {
 		return nil, err
 	}
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	// Get the credential schema
-	cs, err := k.credentialSchemaKeeper.GetCredentialSchemaById(sdkCtx, req.SchemaId)
+	cs, err := qs.k.credentialSchemaKeeper.GetCredentialSchemaById(sdkCtx, req.SchemaId)
 	if err != nil {
 		return nil, errors.Wrapf(sdkerrors.ErrNotFound, "credential schema not found: %d", req.SchemaId)
 	}
@@ -90,7 +98,7 @@ func (k Keeper) IsAuthorizedIssuer(ctx context.Context, req *types.QueryIsAuthor
 
 	// Find matching issuer permission
 	var issuerPerm *types.CredentialSchemaPerm
-	err = k.CredentialSchemaPerm.Walk(ctx, nil, func(key uint64, perm types.CredentialSchemaPerm) (bool, error) {
+	err = qs.k.CredentialSchemaPerm.Walk(ctx, nil, func(key uint64, perm types.CredentialSchemaPerm) (bool, error) {
 		if perm.Did == req.IssuerDid &&
 			perm.SchemaId == req.SchemaId &&
 			perm.CspType == types.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_ISSUER &&
