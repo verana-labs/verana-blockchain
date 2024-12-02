@@ -30,6 +30,9 @@ service Query {
   rpc IsAuthorizedIssuer(QueryIsAuthorizedIssuerRequest) returns (QueryIsAuthorizedIssuerResponse) {
     option (google.api.http).get = "/dtr/v1/csp/authorized_issuer";
   }
+  rpc IsAuthorizedVerifier(QueryIsAuthorizedVerifierRequest) returns (QueryIsAuthorizedVerifierResponse) {
+    option (google.api.http).get = "/dtr/v1/csp/authorized_verifier";
+  }
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -71,10 +74,9 @@ message QueryGetCSPResponse {
 
 // Authorization status enum
 enum AuthorizationStatus {
-  UNSPECIFIED = 0;
-  AUTHORIZED = 1;
-  FORBIDDEN = 2;
-  SESSION_REQUIRED = 3;
+  AUTHORIZED = 0;
+  FORBIDDEN = 1;
+  SESSION_REQUIRED = 2;
 }
 
 // QueryIsAuthorizedIssuerRequest is request type for Query/IsAuthorizedIssuer method
@@ -90,5 +92,20 @@ message QueryIsAuthorizedIssuerRequest {
 
 // QueryIsAuthorizedIssuerResponse is response type for Query/IsAuthorizedIssuer method
 message QueryIsAuthorizedIssuerResponse {
+  AuthorizationStatus status = 1;
+}
+
+message QueryIsAuthorizedVerifierRequest {
+  string verifier_did = 1;
+  string issuer_did = 2;
+  string user_agent_did = 3;
+  string wallet_user_agent_did = 4;
+  uint64 schema_id = 5;
+  string country = 6 [(gogoproto.nullable) = true];
+  google.protobuf.Timestamp when = 7 [(gogoproto.nullable) = true, (gogoproto.stdtime) = true];
+  uint64 session_id = 8;
+}
+
+message QueryIsAuthorizedVerifierResponse {
   AuthorizationStatus status = 1;
 }

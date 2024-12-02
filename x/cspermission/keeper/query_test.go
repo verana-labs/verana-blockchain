@@ -145,6 +145,9 @@ func TestListCSP(t *testing.T) {
 				ResponseMaxSize: 10,
 			},
 			expectedError: false,
+			check: func(t *testing.T, response *types.QueryListCSPResponse) {
+				require.Len(t, response.Permissions, 2)
+			},
 		},
 		{
 			name: "Filter by Creator",
@@ -154,6 +157,12 @@ func TestListCSP(t *testing.T) {
 				ResponseMaxSize: 10,
 			},
 			expectedError: false,
+			check: func(t *testing.T, response *types.QueryListCSPResponse) {
+				require.Len(t, response.Permissions, 2)
+				for _, perm := range response.Permissions {
+					require.Equal(t, creator, perm.CreatedBy)
+				}
+			},
 		},
 		{
 			name: "Filter by DID",
@@ -163,6 +172,10 @@ func TestListCSP(t *testing.T) {
 				ResponseMaxSize: 10,
 			},
 			expectedError: false,
+			check: func(t *testing.T, response *types.QueryListCSPResponse) {
+				require.Len(t, response.Permissions, 1)
+				require.Equal(t, "did:example:123", response.Permissions[0].Did)
+			},
 		},
 		{
 			name: "Invalid Schema ID",
@@ -179,6 +192,11 @@ func TestListCSP(t *testing.T) {
 				ResponseMaxSize: 10,
 			},
 			expectedError: false,
+			check: func(t *testing.T, response *types.QueryListCSPResponse) {
+				require.Len(t, response.Permissions, 1)
+				require.Equal(t, types.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_VERIFIER, response.Permissions[0].CspType)
+				require.Equal(t, response.Permissions[0].Id, uint64(2))
+			},
 		},
 		{
 			name: "Response Size Limit",
@@ -187,6 +205,9 @@ func TestListCSP(t *testing.T) {
 				ResponseMaxSize: 1,
 			},
 			expectedError: false,
+			check: func(t *testing.T, response *types.QueryListCSPResponse) {
+				require.Len(t, response.Permissions, 1) // Should only return one even though we have two
+			},
 		},
 		{
 			name: "Combined Filters",
@@ -198,6 +219,11 @@ func TestListCSP(t *testing.T) {
 				ResponseMaxSize: 10,
 			},
 			expectedError: false,
+			check: func(t *testing.T, response *types.QueryListCSPResponse) {
+				require.Len(t, response.Permissions, 1)
+				require.Equal(t, "did:example:123", response.Permissions[0].Did)
+				require.Equal(t, types.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_ISSUER, response.Permissions[0].CspType)
+			},
 		},
 	}
 
@@ -267,8 +293,7 @@ func TestIsAuthorizedIssuer(t *testing.T) {
 				WalletUserAgentDid: "did:example:wallet",
 				SchemaId:           99999,
 			},
-			expectedError:  true,
-			expectedStatus: types.AuthorizationStatus_UNSPECIFIED,
+			expectedError: true,
 		},
 		{
 			name: "Permission Not Yet Effective",
@@ -305,8 +330,7 @@ func TestIsAuthorizedIssuer(t *testing.T) {
 				Country:            "USA", // Invalid format, should be 2 letters
 				When:               timePtr(time.Now().Add(2 * time.Hour)),
 			},
-			expectedError:  true,
-			expectedStatus: types.AuthorizationStatus_UNSPECIFIED,
+			expectedError: true,
 		},
 	}
 
@@ -322,6 +346,132 @@ func TestIsAuthorizedIssuer(t *testing.T) {
 			fmt.Println("t", t)
 			fmt.Println("tc.expectedStatus", tc.expectedStatus)
 			fmt.Println("response.Status", response.Status)
+			require.Equal(t, tc.expectedStatus, response.Status)
+		})
+	}
+}
+
+func TestIsAuthorizedVerifier(t *testing.T) {
+	qs, _, ms, trKeeper, csKeeper, ctx := setupQueryServer(t)
+	creator := "verana1creator"
+
+	// Create prerequisite data
+	trId := trKeeper.CreateMockTrustRegistry(creator, "did:example:123")
+	schemaId := csKeeper.CreateMockCredentialSchema(trId)
+
+	// Create verifier permission
+	verifierPermMsg := &types.MsgCreateCredentialSchemaPerm{
+		Creator:          creator,
+		SchemaId:         schemaId,
+		CspType:          uint32(types.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_VERIFIER),
+		Did:              "did:example:verifier",
+		Grantee:          "verana1grantee",
+		EffectiveFrom:    time.Now().Add(time.Hour),
+		ValidationId:     1,
+		ValidationFees:   0,
+		IssuanceFees:     0,
+		VerificationFees: 0,
+	}
+	_, err := ms.CreateCredentialSchemaPerm(ctx, verifierPermMsg)
+	require.NoError(t, err)
+
+	// Create issuer permission
+	issuerPermMsg := &types.MsgCreateCredentialSchemaPerm{
+		Creator:          creator,
+		SchemaId:         schemaId,
+		CspType:          uint32(types.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_ISSUER),
+		Did:              "did:example:issuer",
+		Grantee:          "verana1grantee",
+		EffectiveFrom:    time.Now().Add(time.Hour),
+		ValidationId:     1,
+		ValidationFees:   0,
+		IssuanceFees:     0,
+		VerificationFees: 0,
+	}
+	_, err = ms.CreateCredentialSchemaPerm(ctx, issuerPermMsg)
+	require.NoError(t, err)
+
+	testCases := []struct {
+		name           string
+		request        *types.QueryIsAuthorizedVerifierRequest
+		expectedError  bool
+		expectedStatus types.AuthorizationStatus
+	}{
+		{
+			name: "Valid Authorization Check",
+			request: &types.QueryIsAuthorizedVerifierRequest{
+				VerifierDid:        "did:example:verifier",
+				IssuerDid:          "did:example:issuer",
+				UserAgentDid:       "did:example:agent",
+				WalletUserAgentDid: "did:example:wallet",
+				SchemaId:           schemaId,
+				When:               timePtr(time.Now().Add(2 * time.Hour)),
+			},
+			expectedError:  false,
+			expectedStatus: types.AuthorizationStatus_AUTHORIZED,
+		},
+		{
+			name: "Invalid Schema ID",
+			request: &types.QueryIsAuthorizedVerifierRequest{
+				VerifierDid:        "did:example:verifier",
+				IssuerDid:          "did:example:issuer",
+				UserAgentDid:       "did:example:agent",
+				WalletUserAgentDid: "did:example:wallet",
+				SchemaId:           99999,
+			},
+			expectedError: true,
+		},
+		{
+			name: "Permission Not Yet Effective",
+			request: &types.QueryIsAuthorizedVerifierRequest{
+				VerifierDid:        "did:example:verifier",
+				IssuerDid:          "did:example:issuer",
+				UserAgentDid:       "did:example:agent",
+				WalletUserAgentDid: "did:example:wallet",
+				SchemaId:           schemaId,
+				When:               timePtr(time.Now()), // Before effective_from
+			},
+			expectedError:  false,
+			expectedStatus: types.AuthorizationStatus_FORBIDDEN,
+		},
+		{
+			name: "Non-matching Country Filter",
+			request: &types.QueryIsAuthorizedVerifierRequest{
+				VerifierDid:        "did:example:verifier",
+				IssuerDid:          "did:example:issuer",
+				UserAgentDid:       "did:example:agent",
+				WalletUserAgentDid: "did:example:wallet",
+				SchemaId:           schemaId,
+				Country:            "GB",
+				When:               timePtr(time.Now().Add(2 * time.Hour)),
+			},
+			expectedError:  false,
+			expectedStatus: types.AuthorizationStatus_AUTHORIZED,
+		},
+		{
+			name: "Invalid Country Code Format",
+			request: &types.QueryIsAuthorizedVerifierRequest{
+				VerifierDid:        "did:example:verifier",
+				IssuerDid:          "did:example:issuer",
+				UserAgentDid:       "did:example:agent",
+				WalletUserAgentDid: "did:example:wallet",
+				SchemaId:           schemaId,
+				Country:            "USA", // Invalid format, should be 2 letters
+				When:               timePtr(time.Now().Add(2 * time.Hour)),
+			},
+			expectedError: true,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			response, err := qs.IsAuthorizedVerifier(ctx, tc.request)
+			if tc.expectedError {
+				require.Error(t, err)
+				return
+			}
+			require.NoError(t, err)
+			require.NotNil(t, response)
 			require.Equal(t, tc.expectedStatus, response.Status)
 		})
 	}
