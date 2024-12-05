@@ -42,3 +42,18 @@ message CredentialSchemaPerm {
   string terminated_by = 18 [(cosmos_proto.scalar) = "cosmos.AddressString", (gogoproto.nullable) = true];
   string country = 19 [(gogoproto.nullable) = true];
 }
+
+// SessionAuthz represents a permission triple in the session
+message SessionAuthz {
+  uint64 executor_perm_id = 1;
+  uint64 beneficiary_perm_id = 2;
+  string wallet_user_agent_did = 3;
+}
+
+// CredentialSchemaPermSession represents a session for credential schema permissions
+message CredentialSchemaPermSession {
+  string id = 1;
+  string controller = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string user_agent_did = 3;
+  repeated SessionAuthz session_authz = 4;
+}

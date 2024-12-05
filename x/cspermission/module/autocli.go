@@ -293,6 +293,42 @@ $ veranad tx cspermission terminate-csp 1 --from mykey`,
 						},
 					},
 				},
+				{
+					RpcMethod: "CreateOrUpdateCSPS",
+					Use:       "create-or-update-csps [id] [executor-perm-id] [user-agent-did] [wallet-user-agent-did]",
+					Short:     "Create or update a credential schema permission session",
+					Long: `Create or update a credential schema permission session.
+
+Parameters:
+  [id]                  : Session ID (UUID)
+  [executor-perm-id]    : ID of the executor permission
+  [user-agent-did]      : DID of the user agent
+  [wallet-user-agent-did]: DID of the wallet user agent
+
+Optional Flags:
+  --beneficiary-perm-id : ID of the beneficiary permission (required for VERIFIER)`,
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "id",
+						},
+						{
+							ProtoField: "executor_perm_id",
+						},
+						{
+							ProtoField: "user_agent_did",
+						},
+						{
+							ProtoField: "wallet_user_agent_did",
+						},
+					},
+					FlagOptions: map[string]*autocliv1.FlagOptions{
+						"beneficiary_perm_id": {
+							Name:         "beneficiary-perm-id",
+							Usage:        "ID of the beneficiary permission (required for VERIFIER)",
+							DefaultValue: "0",
+						},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},

@@ -23,6 +23,7 @@ const (
 	Msg_CreateCredentialSchemaPerm_FullMethodName    = "/veranablockchain.cspermission.Msg/CreateCredentialSchemaPerm"
 	Msg_RevokeCredentialSchemaPerm_FullMethodName    = "/veranablockchain.cspermission.Msg/RevokeCredentialSchemaPerm"
 	Msg_TerminateCredentialSchemaPerm_FullMethodName = "/veranablockchain.cspermission.Msg/TerminateCredentialSchemaPerm"
+	Msg_CreateOrUpdateCSPS_FullMethodName            = "/veranablockchain.cspermission.Msg/CreateOrUpdateCSPS"
 )
 
 // MsgClient is the client API for Msg service.
@@ -35,6 +36,7 @@ type MsgClient interface {
 	CreateCredentialSchemaPerm(ctx context.Context, in *MsgCreateCredentialSchemaPerm, opts ...grpc.CallOption) (*MsgCreateCredentialSchemaPermResponse, error)
 	RevokeCredentialSchemaPerm(ctx context.Context, in *MsgRevokeCredentialSchemaPerm, opts ...grpc.CallOption) (*MsgRevokeCredentialSchemaPermResponse, error)
 	TerminateCredentialSchemaPerm(ctx context.Context, in *MsgTerminateCredentialSchemaPerm, opts ...grpc.CallOption) (*MsgTerminateCredentialSchemaPermResponse, error)
+	CreateOrUpdateCSPS(ctx context.Context, in *MsgCreateOrUpdateCSPS, opts ...grpc.CallOption) (*MsgCreateOrUpdateCSPSResponse, error)
 }
 
 type msgClient struct {
@@ -81,6 +83,15 @@ func (c *msgClient) TerminateCredentialSchemaPerm(ctx context.Context, in *MsgTe
 	return out, nil
 }
 
+func (c *msgClient) CreateOrUpdateCSPS(ctx context.Context, in *MsgCreateOrUpdateCSPS, opts ...grpc.CallOption) (*MsgCreateOrUpdateCSPSResponse, error) {
+	out := new(MsgCreateOrUpdateCSPSResponse)
+	err := c.cc.Invoke(ctx, Msg_CreateOrUpdateCSPS_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
@@ -91,6 +102,7 @@ type MsgServer interface {
 	CreateCredentialSchemaPerm(context.Context, *MsgCreateCredentialSchemaPerm) (*MsgCreateCredentialSchemaPermResponse, error)
 	RevokeCredentialSchemaPerm(context.Context, *MsgRevokeCredentialSchemaPerm) (*MsgRevokeCredentialSchemaPermResponse, error)
 	TerminateCredentialSchemaPerm(context.Context, *MsgTerminateCredentialSchemaPerm) (*MsgTerminateCredentialSchemaPermResponse, error)
+	CreateOrUpdateCSPS(context.Context, *MsgCreateOrUpdateCSPS) (*MsgCreateOrUpdateCSPSResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -109,6 +121,9 @@ func (UnimplementedMsgServer) RevokeCredentialSchemaPerm(context.Context, *MsgRe
 }
 func (UnimplementedMsgServer) TerminateCredentialSchemaPerm(context.Context, *MsgTerminateCredentialSchemaPerm) (*MsgTerminateCredentialSchemaPermResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method TerminateCredentialSchemaPerm not implemented")
+}
+func (UnimplementedMsgServer) CreateOrUpdateCSPS(context.Context, *MsgCreateOrUpdateCSPS) (*MsgCreateOrUpdateCSPSResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateOrUpdateCSPS not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -195,6 +210,24 @@ func _Msg_TerminateCredentialSchemaPerm_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_CreateOrUpdateCSPS_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgCreateOrUpdateCSPS)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).CreateOrUpdateCSPS(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_CreateOrUpdateCSPS_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).CreateOrUpdateCSPS(ctx, req.(*MsgCreateOrUpdateCSPS))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -217,6 +250,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "TerminateCredentialSchemaPerm",
 			Handler:    _Msg_TerminateCredentialSchemaPerm_Handler,
+		},
+		{
+			MethodName: "CreateOrUpdateCSPS",
+			Handler:    _Msg_CreateOrUpdateCSPS_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

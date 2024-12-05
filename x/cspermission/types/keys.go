@@ -16,9 +16,10 @@ const (
 )
 
 var (
-	ParamsKey               = []byte("p_cspermission")
-	CredentialSchemaPermKey = collections.NewPrefix(1)
-	CounterKey              = collections.NewPrefix(2)
+	ParamsKey                      = []byte("p_cspermission")
+	CredentialSchemaPermKey        = collections.NewPrefix(1)
+	CounterKey                     = collections.NewPrefix(2)
+	CredentialSchemaPermSessionKey = collections.NewPrefix(3)
 )
 
 func KeyPrefix(p string) []byte {

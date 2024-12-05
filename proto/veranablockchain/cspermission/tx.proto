@@ -21,6 +21,7 @@ service Msg {
   rpc CreateCredentialSchemaPerm(MsgCreateCredentialSchemaPerm) returns (MsgCreateCredentialSchemaPermResponse);
   rpc RevokeCredentialSchemaPerm(MsgRevokeCredentialSchemaPerm) returns (MsgRevokeCredentialSchemaPermResponse);
   rpc TerminateCredentialSchemaPerm(MsgTerminateCredentialSchemaPerm) returns (MsgTerminateCredentialSchemaPermResponse);
+  rpc CreateOrUpdateCSPS(MsgCreateOrUpdateCSPS) returns (MsgCreateOrUpdateCSPSResponse);
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
@@ -80,3 +81,16 @@ message MsgTerminateCredentialSchemaPerm {
 }
 
 message MsgTerminateCredentialSchemaPermResponse {}
+
+message MsgCreateOrUpdateCSPS {
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string id = 2;
+  uint64 executor_perm_id = 3;
+  uint64 beneficiary_perm_id = 4 [(gogoproto.nullable) = true];  // optional based on type
+  string user_agent_did = 5;
+  string wallet_user_agent_did = 6;
+}
+
+message MsgCreateOrUpdateCSPSResponse {}

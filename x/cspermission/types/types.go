@@ -1,6 +1,7 @@
 package types
 
 import (
+	"github.com/google/uuid"
 	"regexp"
 	"time"
 
@@ -167,6 +168,39 @@ func (q *QueryListCSPRequest) ValidateRequest() error {
 		q.ResponseMaxSize = 64
 	} else if q.ResponseMaxSize > 1024 {
 		return sdkerrors.ErrInvalidRequest.Wrap("response_max_size must be between 1 and 1024")
+	}
+
+	return nil
+}
+func (msg *MsgCreateOrUpdateCSPS) GetSigners() []sdk.AccAddress {
+	creator, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{creator}
+}
+
+func (msg *MsgCreateOrUpdateCSPS) ValidateBasic() error {
+	// Check mandatory fields
+	if msg.Id == "" {
+		return errors.Wrap(sdkerrors.ErrInvalidRequest, "id cannot be empty")
+	}
+
+	// Validate UUID format
+	if _, err := uuid.Parse(msg.Id); err != nil {
+		return errors.Wrap(sdkerrors.ErrInvalidRequest, "invalid UUID format")
+	}
+
+	if msg.ExecutorPermId == 0 {
+		return errors.Wrap(sdkerrors.ErrInvalidRequest, "executor_perm_id cannot be 0")
+	}
+
+	if msg.UserAgentDid == "" || !IsValidDID(msg.UserAgentDid) {
+		return errors.Wrap(sdkerrors.ErrInvalidRequest, "user_agent_did cannot be empty")
+	}
+
+	if msg.WalletUserAgentDid == "" || !IsValidDID(msg.WalletUserAgentDid) {
+		return errors.Wrap(sdkerrors.ErrInvalidRequest, "wallet_user_agent_did cannot be empty")
 	}
 
 	return nil

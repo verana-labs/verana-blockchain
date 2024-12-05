@@ -23,8 +23,9 @@ type (
 		Schema    collections.Schema
 
 		// State
-		CredentialSchemaPerm collections.Map[uint64, types.CredentialSchemaPerm]
-		Counter              collections.Map[string, uint64]
+		CredentialSchemaPerm        collections.Map[uint64, types.CredentialSchemaPerm]
+		Counter                     collections.Map[string, uint64]
+		CredentialSchemaPermSession collections.Map[string, types.CredentialSchemaPermSession]
 
 		// External keepers
 		trustRegistryKeeper    types.TrustRegistryKeeper
@@ -48,14 +49,15 @@ func NewKeeper(
 	}
 	sb := collections.NewSchemaBuilder(storeService)
 	return Keeper{
-		cdc:                    cdc,
-		storeService:           storeService,
-		authority:              authority,
-		logger:                 logger,
-		CredentialSchemaPerm:   collections.NewMap(sb, types.CredentialSchemaPermKey, "credential_schema_perm", collections.Uint64Key, codec.CollValue[types.CredentialSchemaPerm](cdc)),
-		Counter:                collections.NewMap(sb, types.CounterKey, "counter", collections.StringKey, collections.Uint64Value),
-		trustRegistryKeeper:    trustRegistryKeeper,
-		credentialSchemaKeeper: credentialSchemaKeeper,
+		cdc:                         cdc,
+		storeService:                storeService,
+		authority:                   authority,
+		logger:                      logger,
+		CredentialSchemaPerm:        collections.NewMap(sb, types.CredentialSchemaPermKey, "credential_schema_perm", collections.Uint64Key, codec.CollValue[types.CredentialSchemaPerm](cdc)),
+		Counter:                     collections.NewMap(sb, types.CounterKey, "counter", collections.StringKey, collections.Uint64Value),
+		CredentialSchemaPermSession: collections.NewMap(sb, types.CredentialSchemaPermSessionKey, "credential_schema_perm_session", collections.StringKey, codec.CollValue[types.CredentialSchemaPermSession](cdc)),
+		trustRegistryKeeper:         trustRegistryKeeper,
+		credentialSchemaKeeper:      credentialSchemaKeeper,
 		//validationKeeper:       validationKeeper,
 	}
 }
@@ -83,4 +85,12 @@ func (k Keeper) GetNextID(ctx sdk.Context, entityType string) (uint64, error) {
 	}
 
 	return nextID, nil
+}
+
+func (k Keeper) GetCSPS(ctx sdk.Context, id string) (*types.CredentialSchemaPermSession, error) {
+	csps, err := k.CredentialSchemaPermSession.Get(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return &csps, nil
 }
