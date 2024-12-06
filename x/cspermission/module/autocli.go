@@ -329,6 +329,20 @@ Optional Flags:
 						},
 					},
 				},
+				{
+					RpcMethod: "GetCSPS",
+					Use:       "get-csps [id]",
+					Short:     "Get a credential schema permission session",
+					Long: `Get a credential schema permission session by its ID.
+
+Parameters:
+  [id] : Session ID (UUID)`,
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "id",
+						},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},

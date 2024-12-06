@@ -24,6 +24,7 @@ const (
 	Query_GetCSP_FullMethodName               = "/veranablockchain.cspermission.Query/GetCSP"
 	Query_IsAuthorizedIssuer_FullMethodName   = "/veranablockchain.cspermission.Query/IsAuthorizedIssuer"
 	Query_IsAuthorizedVerifier_FullMethodName = "/veranablockchain.cspermission.Query/IsAuthorizedVerifier"
+	Query_GetCSPS_FullMethodName              = "/veranablockchain.cspermission.Query/GetCSPS"
 )
 
 // QueryClient is the client API for Query service.
@@ -39,6 +40,7 @@ type QueryClient interface {
 	// IsAuthorizedIssuer checks if a DID is authorized to issue credentials
 	IsAuthorizedIssuer(ctx context.Context, in *QueryIsAuthorizedIssuerRequest, opts ...grpc.CallOption) (*QueryIsAuthorizedIssuerResponse, error)
 	IsAuthorizedVerifier(ctx context.Context, in *QueryIsAuthorizedVerifierRequest, opts ...grpc.CallOption) (*QueryIsAuthorizedVerifierResponse, error)
+	GetCSPS(ctx context.Context, in *QueryGetCSPSRequest, opts ...grpc.CallOption) (*QueryGetCSPSResponse, error)
 }
 
 type queryClient struct {
@@ -94,6 +96,15 @@ func (c *queryClient) IsAuthorizedVerifier(ctx context.Context, in *QueryIsAutho
 	return out, nil
 }
 
+func (c *queryClient) GetCSPS(ctx context.Context, in *QueryGetCSPSRequest, opts ...grpc.CallOption) (*QueryGetCSPSResponse, error) {
+	out := new(QueryGetCSPSResponse)
+	err := c.cc.Invoke(ctx, Query_GetCSPS_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -107,6 +118,7 @@ type QueryServer interface {
 	// IsAuthorizedIssuer checks if a DID is authorized to issue credentials
 	IsAuthorizedIssuer(context.Context, *QueryIsAuthorizedIssuerRequest) (*QueryIsAuthorizedIssuerResponse, error)
 	IsAuthorizedVerifier(context.Context, *QueryIsAuthorizedVerifierRequest) (*QueryIsAuthorizedVerifierResponse, error)
+	GetCSPS(context.Context, *QueryGetCSPSRequest) (*QueryGetCSPSResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -128,6 +140,9 @@ func (UnimplementedQueryServer) IsAuthorizedIssuer(context.Context, *QueryIsAuth
 }
 func (UnimplementedQueryServer) IsAuthorizedVerifier(context.Context, *QueryIsAuthorizedVerifierRequest) (*QueryIsAuthorizedVerifierResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method IsAuthorizedVerifier not implemented")
+}
+func (UnimplementedQueryServer) GetCSPS(context.Context, *QueryGetCSPSRequest) (*QueryGetCSPSResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCSPS not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -232,6 +247,24 @@ func _Query_IsAuthorizedVerifier_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_GetCSPS_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryGetCSPSRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).GetCSPS(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_GetCSPS_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).GetCSPS(ctx, req.(*QueryGetCSPSRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -258,6 +291,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "IsAuthorizedVerifier",
 			Handler:    _Query_IsAuthorizedVerifier_Handler,
+		},
+		{
+			MethodName: "GetCSPS",
+			Handler:    _Query_GetCSPS_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -2,11 +2,16 @@ package keeper
 
 import (
 	"context"
+	"cosmossdk.io/collections"
 	"cosmossdk.io/errors"
+	error2 "errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"github.com/google/uuid"
 	credentialschematypes "github.com/verana-labs/verana-blockchain/x/credentialschema/types"
 	"github.com/verana-labs/verana-blockchain/x/cspermission/types"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"time"
 )
 
@@ -338,4 +343,27 @@ func validateIsAuthorizedVerifierRequest(req *types.QueryIsAuthorizedVerifierReq
 	}
 
 	return nil
+}
+
+func (qs queryServer) GetCSPS(ctx context.Context, req *types.QueryGetCSPSRequest) (*types.QueryGetCSPSResponse, error) {
+	if req.Id == "" {
+		return nil, sdkerrors.ErrInvalidRequest.Wrap("id cannot be empty")
+	}
+
+	// Parse UUID to validate format
+	if _, err := uuid.Parse(req.Id); err != nil {
+		return nil, sdkerrors.ErrInvalidRequest.Wrap("invalid UUID format")
+	}
+
+	csps, err := qs.k.CredentialSchemaPermSession.Get(ctx, req.Id)
+	if err != nil {
+		if error2.Is(err, collections.ErrNotFound) {
+			return nil, status.Error(codes.NotFound, "credential schema permission session not found")
+		}
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &types.QueryGetCSPSResponse{
+		Csps: &csps,
+	}, nil
 }

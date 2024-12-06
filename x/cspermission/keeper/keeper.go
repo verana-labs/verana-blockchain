@@ -87,7 +87,7 @@ func (k Keeper) GetNextID(ctx sdk.Context, entityType string) (uint64, error) {
 	return nextID, nil
 }
 
-func (k Keeper) GetCSPS(ctx sdk.Context, id string) (*types.CredentialSchemaPermSession, error) {
+func (k Keeper) GetCSPSession(ctx sdk.Context, id string) (*types.CredentialSchemaPermSession, error) {
 	csps, err := k.CredentialSchemaPermSession.Get(ctx, id)
 	if err != nil {
 		return nil, err

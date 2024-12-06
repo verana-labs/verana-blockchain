@@ -33,6 +33,9 @@ service Query {
   rpc IsAuthorizedVerifier(QueryIsAuthorizedVerifierRequest) returns (QueryIsAuthorizedVerifierResponse) {
     option (google.api.http).get = "/dtr/v1/csp/authorized_verifier";
   }
+  rpc GetCSPS(QueryGetCSPSRequest) returns (QueryGetCSPSResponse) {
+    option (google.api.http).get = "/dtr/v1/csp/get_session/{id}";
+  }
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -108,4 +111,12 @@ message QueryIsAuthorizedVerifierRequest {
 
 message QueryIsAuthorizedVerifierResponse {
   AuthorizationStatus status = 1;
+}
+
+message QueryGetCSPSRequest {
+  string id = 1;  // UUID
+}
+
+message QueryGetCSPSResponse {
+  CredentialSchemaPermSession csps = 1;
 }

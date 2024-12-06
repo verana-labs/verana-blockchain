@@ -9,7 +9,7 @@ import (
 )
 
 func (ms msgServer) validateSessionAccess(ctx sdk.Context, msg *types.MsgCreateOrUpdateCSPS) error {
-	existingSession, err := ms.GetCSPS(ctx, msg.Id)
+	existingSession, err := ms.GetCSPSession(ctx, msg.Id)
 	if err != nil && !errors.Is(err, collections.ErrNotFound) {
 		return err
 	}
@@ -85,7 +85,7 @@ func (ms msgServer) createOrUpdateSession(ctx sdk.Context, msg *types.MsgCreateO
 		UserAgentDid: msg.UserAgentDid,
 	}
 
-	existingSession, err := ms.GetCSPS(ctx, msg.Id)
+	existingSession, err := ms.GetCSPSession(ctx, msg.Id)
 	if err == nil {
 		session = existingSession
 	}
