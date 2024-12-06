@@ -94,6 +94,8 @@ func (ms msgServer) checkOverlappingPermissions(ctx sdk.Context, msg *types.MsgC
 	}
 
 	for _, p := range overlappingPerms {
+		//TODO: handle nil pointer dereference
+
 		// Check for any kind of overlap
 		if msg.EffectiveFrom.Before(*p.EffectiveUntil) && p.EffectiveFrom.Before(*msg.EffectiveUntil) {
 			return errors.Wrap(sdkerrors.ErrInvalidRequest, "permissions cannot overlap")

@@ -564,3 +564,184 @@ func TestTerminateCSP(t *testing.T) {
 		})
 	}
 }
+
+func TestCreateOrUpdateCSPS(t *testing.T) {
+	_, ms, trKeeper, csKeeper, ctx := setupMsgServer(t)
+	creator := "verana1creator"
+
+	// Create prerequisite data
+	trId := trKeeper.CreateMockTrustRegistry(creator, "did:example:123")
+	schemaId := csKeeper.CreateMockCredentialSchema(trId)
+
+	// Create test permission for executor
+	baseTime := time.Now().UTC()
+	effectiveUntil := baseTime.Add(2 * time.Hour)
+
+	createPermMsg := &types.MsgCreateCredentialSchemaPerm{
+		Creator:          creator,
+		SchemaId:         schemaId,
+		CspType:          uint32(types.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_ISSUER),
+		Did:              "did:example:123",
+		Grantee:          "verana1grantee",
+		EffectiveFrom:    baseTime.Add(time.Hour),
+		EffectiveUntil:   &effectiveUntil, // Set expiry time
+		ValidationId:     1,
+		ValidationFees:   0,
+		IssuanceFees:     0,
+		VerificationFees: 0,
+	}
+
+	_, err := ms.CreateCredentialSchemaPerm(ctx, createPermMsg)
+	require.NoError(t, err)
+
+	// Create another permission for update test
+	effectiveUntil2 := baseTime.Add(4 * time.Hour)
+
+	createPermMsg2 := &types.MsgCreateCredentialSchemaPerm{
+		Creator:          creator,
+		SchemaId:         schemaId,
+		CspType:          uint32(types.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_ISSUER),
+		Did:              "did:example:234",
+		Grantee:          "verana1grantee",
+		EffectiveFrom:    baseTime.Add(3 * time.Hour), // Start after first permission ends
+		EffectiveUntil:   &effectiveUntil2,
+		ValidationId:     1,
+		ValidationFees:   0,
+		IssuanceFees:     0,
+		VerificationFees: 0,
+	}
+	_, err = ms.CreateCredentialSchemaPerm(ctx, createPermMsg2)
+	require.NoError(t, err)
+
+	testCases := []struct {
+		name    string
+		msg     *types.MsgCreateOrUpdateCSPS
+		setup   func() // Additional setup for specific test cases
+		expPass bool
+	}{
+		{
+			name: "Valid ISSUER CSPS Creation",
+			msg: &types.MsgCreateOrUpdateCSPS{
+				Creator:            "verana1grantee",
+				Id:                 "123e4567-e89b-12d3-a456-426614174000",
+				ExecutorPermId:     1,
+				UserAgentDid:       "did:example:agent",
+				WalletUserAgentDid: "did:example:wallet",
+			},
+
+			expPass: true,
+		},
+		{
+			name: "Invalid UUID Format",
+			msg: &types.MsgCreateOrUpdateCSPS{
+				Id:                 "invalid-uuid",
+				ExecutorPermId:     1,
+				UserAgentDid:       "did:example:agent",
+				WalletUserAgentDid: "did:example:wallet",
+			},
+			expPass: false,
+		},
+		{
+			name: "Non-existent Executor Permission",
+			msg: &types.MsgCreateOrUpdateCSPS{
+				Id:                 "123e4567-e89b-12d3-a456-426614174001",
+				ExecutorPermId:     99,
+				UserAgentDid:       "did:example:agent",
+				WalletUserAgentDid: "did:example:wallet",
+			},
+			expPass: false,
+		},
+		{
+			name: "Invalid Beneficiary for ISSUER",
+			msg: &types.MsgCreateOrUpdateCSPS{
+				Id:                 "123e4567-e89b-12d3-a456-426614174002",
+				ExecutorPermId:     1,
+				BeneficiaryPermId:  2, // ISSUER type should not have beneficiary
+				UserAgentDid:       "did:example:agent",
+				WalletUserAgentDid: "did:example:wallet",
+			},
+			expPass: false,
+		},
+		{
+			name: "Missing User Agent DID",
+			msg: &types.MsgCreateOrUpdateCSPS{
+				Id:                 "123e4567-e89b-12d3-a456-426614174003",
+				ExecutorPermId:     1,
+				WalletUserAgentDid: "did:example:wallet",
+			},
+			expPass: false,
+		},
+		{
+			name: "Missing Wallet User Agent DID",
+			msg: &types.MsgCreateOrUpdateCSPS{
+				Id:             "123e4567-e89b-12d3-a456-426614174004",
+				ExecutorPermId: 1,
+				UserAgentDid:   "did:example:agent",
+			},
+			expPass: false,
+		},
+		{
+			name: "Duplicate Permission Pair",
+			setup: func() {
+				initialMsg := &types.MsgCreateOrUpdateCSPS{
+					Creator:            "verana1grantee",
+					Id:                 "123e4567-e89b-12d3-a456-426614174004",
+					ExecutorPermId:     1,
+					UserAgentDid:       "did:example:agent",
+					WalletUserAgentDid: "did:example:wallet",
+				}
+				_, err := ms.CreateOrUpdateCSPS(ctx, initialMsg)
+				require.NoError(t, err)
+			},
+			msg: &types.MsgCreateOrUpdateCSPS{
+				Creator:            "verana1grantee",
+				Id:                 "123e4567-e89b-12d3-a456-426614174004",
+				ExecutorPermId:     1, // Same executor_perm_id
+				UserAgentDid:       "did:example:agent",
+				WalletUserAgentDid: "did:example:wallet",
+			},
+			expPass: false,
+		},
+		{
+			name: "Valid Update Existing Session",
+			setup: func() {
+
+				// Create initial session
+				initialMsg := &types.MsgCreateOrUpdateCSPS{
+					Creator:            "verana1grantee",
+					Id:                 "123e4567-e89b-12d3-a456-426614174005",
+					ExecutorPermId:     1,
+					UserAgentDid:       "did:example:agent",
+					WalletUserAgentDid: "did:example:wallet",
+				}
+				_, err = ms.CreateOrUpdateCSPS(ctx, initialMsg)
+				require.NoError(t, err)
+			},
+			msg: &types.MsgCreateOrUpdateCSPS{
+				Creator:            "verana1grantee",
+				Id:                 "123e4567-e89b-12d3-a456-426614174005",
+				ExecutorPermId:     2, // Different executor permission
+				UserAgentDid:       "did:example:agent",
+				WalletUserAgentDid: "did:example:wallet",
+			},
+			expPass: true,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			if tc.setup != nil {
+				tc.setup()
+			}
+
+			resp, err := ms.CreateOrUpdateCSPS(ctx, tc.msg)
+			if tc.expPass {
+				require.NoError(t, err)
+				require.NotNil(t, resp)
+			} else {
+				require.Error(t, err)
+				require.Nil(t, resp)
+			}
+		})
+	}
+}
