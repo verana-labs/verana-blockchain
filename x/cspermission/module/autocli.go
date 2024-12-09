@@ -178,6 +178,20 @@ Returns: AUTHORIZED, FORBIDDEN, or SESSION_REQUIRED`,
 						},
 					},
 				},
+				{
+					RpcMethod: "GetCSPS",
+					Use:       "get-csps [id]",
+					Short:     "Get a credential schema permission session",
+					Long: `Get a credential schema permission session by its ID.
+
+Parameters:
+  [id] : Session ID (UUID)`,
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "id",
+						},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},
@@ -326,20 +340,6 @@ Optional Flags:
 							Name:         "beneficiary-perm-id",
 							Usage:        "ID of the beneficiary permission (required for VERIFIER)",
 							DefaultValue: "0",
-						},
-					},
-				},
-				{
-					RpcMethod: "GetCSPS",
-					Use:       "get-csps [id]",
-					Short:     "Get a credential schema permission session",
-					Long: `Get a credential schema permission session by its ID.
-
-Parameters:
-  [id] : Session ID (UUID)`,
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
-						{
-							ProtoField: "id",
 						},
 					},
 				},
