@@ -143,12 +143,6 @@ func (msg *MsgCreateCredentialSchema) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{creator}
 }
 
-// GetSignBytes implements sdk.Msg
-func (msg *MsgCreateCredentialSchema) GetSignBytes() []byte {
-	bz := ModuleCdc.MustMarshalJSON(msg)
-	return sdk.MustSortJSON(bz)
-}
-
 // ValidateBasic implements sdk.Msg
 func (msg *MsgCreateCredentialSchema) ValidateBasic() error {
 	// Validate creator address

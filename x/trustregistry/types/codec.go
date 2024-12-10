@@ -1,17 +1,29 @@
 package types
 
 import (
+	"github.com/cosmos/cosmos-sdk/codec"
+	"github.com/cosmos/cosmos-sdk/codec/legacy"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/msgservice"
 	// this line is used by starport scaffolding # 1
 )
 
+func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
+	legacy.RegisterAminoMsg(cdc, &MsgCreateTrustRegistry{}, "/dtr/v1/tr/create-trust-registry")
+	legacy.RegisterAminoMsg(cdc, &MsgAddGovernanceFrameworkDocument{}, "/dtr/v1/tr/add-governance-framework-document")
+	legacy.RegisterAminoMsg(cdc, &MsgIncreaseActiveGovernanceFrameworkVersion{}, "/dtr/v1/tr/increase-active-gf-version")
+}
+
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 	// this line is used by starport scaffolding # 3
 
-	registry.RegisterImplementations((*sdk.Msg)(nil),
+	registry.RegisterImplementations(
+		(*sdk.Msg)(nil),
 		&MsgUpdateParams{},
+		&MsgCreateTrustRegistry{},
+		&MsgAddGovernanceFrameworkDocument{},
+		&MsgIncreaseActiveGovernanceFrameworkVersion{},
 	)
 	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)
 }

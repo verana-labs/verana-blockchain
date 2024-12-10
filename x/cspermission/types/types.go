@@ -70,12 +70,6 @@ func (msg *MsgCreateCredentialSchemaPerm) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{creator}
 }
 
-// GetSignBytes implements sdk.Msg
-func (msg *MsgCreateCredentialSchemaPerm) GetSignBytes() []byte {
-	bz := Amino.MustMarshalJSON(msg)
-	return sdk.MustSortJSON(bz)
-}
-
 // ValidateBasic implements sdk.Msg
 func (msg *MsgCreateCredentialSchemaPerm) ValidateBasic() error {
 	// Validate creator address
