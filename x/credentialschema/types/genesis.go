@@ -29,7 +29,7 @@ func (gs GenesisState) Validate() error {
 	for _, cs := range gs.CredentialSchemas {
 		// Check for duplicate CSs
 		if seenCredentialSchemas[cs.Id] {
-			return fmt.Errorf("duplicate Credential Schema found in genesis state: %s", cs.Id)
+			return fmt.Errorf("duplicate Credential Schema found in genesis state: %d", cs.Id)
 		}
 		seenCredentialSchemas[cs.Id] = true
 	}

@@ -17,7 +17,7 @@ func TestGenesis(t *testing.T) {
 		// this line is used by starport scaffolding # genesis/test/state
 	}
 
-	k, ctx := keepertest.CredentialschemaKeeper(t)
+	k, _, ctx := keepertest.CredentialschemaKeeper(t)
 	credentialschema.InitGenesis(ctx, k, genesisState)
 	got := credentialschema.ExportGenesis(ctx, k)
 	require.NotNil(t, got)
