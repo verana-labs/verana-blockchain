@@ -241,8 +241,16 @@ func AppConfig() depinject.Config {
 	)
 }
 
-func (app *App) GetDiddirectoryKeeper() diddirectorymodulekeeper.Keeper {
+func (app *App) GetDidDirectoryKeeper() diddirectorymodulekeeper.Keeper {
 	return app.DiddirectoryKeeper
+}
+
+func (app *App) GetCredentialSchemaKeeper() credentialschemamodulekeeper.Keeper {
+	return app.CredentialschemaKeeper
+}
+
+func (app *App) GetCsPermissionKeeper() cspermissionmodulekeeper.Keeper {
+	return app.CspermissionKeeper
 }
 
 // New returns a reference to an initialized App.

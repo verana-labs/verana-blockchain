@@ -1,14 +1,16 @@
-package v2
+package v3
 
 import (
 	"context"
+	cspermission "github.com/verana-labs/verana-blockchain/x/cspermission/module"
+	cspermissiontypes "github.com/verana-labs/verana-blockchain/x/cspermission/types"
 
 	upgradetypes "cosmossdk.io/x/upgrade/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/verana-labs/verana-blockchain/app/upgrades/types"
-	diddirectory "github.com/verana-labs/verana-blockchain/x/diddirectory/module"
-	didtypes "github.com/verana-labs/verana-blockchain/x/diddirectory/types"
+	credentialschema "github.com/verana-labs/verana-blockchain/x/credentialschema/module"
+	credentialschematypes "github.com/verana-labs/verana-blockchain/x/credentialschema/types"
 )
 
 func CreateUpgradeHandler(
@@ -24,7 +26,8 @@ func CreateUpgradeHandler(
 			return nil, err
 		}
 
-		diddirectory.InitGenesis(ctx, keepers.GetDidDirectoryKeeper(), *didtypes.DefaultGenesis())
+		credentialschema.InitGenesis(ctx, keepers.GetCredentialSchemaKeeper(), *credentialschematypes.DefaultGenesis())
+		cspermission.InitGenesis(ctx, keepers.GetCsPermissionKeeper(), *cspermissiontypes.DefaultGenesis())
 		return migrations, nil
 	}
 }
