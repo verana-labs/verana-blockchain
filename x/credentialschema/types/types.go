@@ -1,13 +1,14 @@
 package types
 
 import (
-	"cosmossdk.io/errors"
 	"encoding/json"
 	"fmt"
+	"regexp"
+
+	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/xeipuuv/gojsonschema"
-	"regexp"
 )
 
 // Official meta-schema for Draft 2020-12
@@ -140,12 +141,6 @@ func (msg *MsgCreateCredentialSchema) GetSigners() []sdk.AccAddress {
 		panic(err)
 	}
 	return []sdk.AccAddress{creator}
-}
-
-// GetSignBytes implements sdk.Msg
-func (msg *MsgCreateCredentialSchema) GetSignBytes() []byte {
-	bz := ModuleCdc.MustMarshalJSON(msg)
-	return sdk.MustSortJSON(bz)
 }
 
 // ValidateBasic implements sdk.Msg

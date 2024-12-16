@@ -2,6 +2,7 @@ package credentialschema
 
 import (
 	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/verana-labs/verana-blockchain/x/credentialschema/keeper"

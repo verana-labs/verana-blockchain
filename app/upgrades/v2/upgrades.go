@@ -24,7 +24,7 @@ func CreateUpgradeHandler(
 			return nil, err
 		}
 
-		diddirectory.InitGenesis(ctx, keepers.GetDiddirectoryKeeper(), *didtypes.DefaultGenesis())
+		diddirectory.InitGenesis(ctx, keepers.GetDidDirectoryKeeper(), *didtypes.DefaultGenesis())
 		return migrations, nil
 	}
 }

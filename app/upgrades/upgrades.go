@@ -2,9 +2,9 @@ package upgrades
 
 import (
 	"github.com/verana-labs/verana-blockchain/app/upgrades/types"
-	v2 "github.com/verana-labs/verana-blockchain/app/upgrades/v2"
+	v3 "github.com/verana-labs/verana-blockchain/app/upgrades/v3"
 )
 
 var Upgrades = []types.Upgrade{
-	v2.Upgrade,
+	v3.Upgrade,
 }

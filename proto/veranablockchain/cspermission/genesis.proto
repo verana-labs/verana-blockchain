@@ -1,0 +1,26 @@
+syntax = "proto3";
+package veranablockchain.cspermission;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "veranablockchain/cspermission/params.proto";
+import "veranablockchain/cspermission/types.proto";
+
+option go_package = "github.com/verana-labs/verana-blockchain/x/cspermission/types";
+
+// GenesisState defines the cspermission module's genesis state.
+message GenesisState {
+  // params defines all the parameters of the module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+  // All active credential schema permissions
+  repeated CredentialSchemaPerm credential_schema_perms = 2 [(gogoproto.nullable) = false];
+
+  // All active credential schema permission sessions
+  repeated CredentialSchemaPermSession credential_schema_perm_sessions = 3 [(gogoproto.nullable) = false];
+
+  // Counter for next credential schema permission ID
+  uint64 next_csp_id = 4;
+}
