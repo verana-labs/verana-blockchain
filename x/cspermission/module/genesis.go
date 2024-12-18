@@ -2,6 +2,7 @@ package cspermission
 
 import (
 	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/verana-labs/verana-blockchain/x/cspermission/keeper"
@@ -61,7 +62,7 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	genesis.CredentialSchemaPermSessions = sessions
 
 	// Export the next CSP ID
-	nextID, err := k.Counter.Get(ctx, "counter")
+	nextID, err := k.GetNextID(ctx, "csp")
 	if err != nil {
 		nextID = 1 // Default to 1 if counter doesn't exist
 	}

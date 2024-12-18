@@ -1,9 +1,10 @@
 package types
 
 import (
-	"github.com/google/uuid"
 	"regexp"
 	"time"
+
+	"github.com/google/uuid"
 
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"

@@ -57,6 +57,7 @@ import (
 	cspermissionmodulev1 "github.com/verana-labs/verana-blockchain/api/veranablockchain/cspermission/module"
 	diddirectorymodulev1 "github.com/verana-labs/verana-blockchain/api/veranablockchain/diddirectory/module"
 	trustregistrymodulev1 "github.com/verana-labs/verana-blockchain/api/veranablockchain/trustregistry/module"
+	validationmodulev1 "github.com/verana-labs/verana-blockchain/api/veranablockchain/validation/module"
 	_ "github.com/verana-labs/verana-blockchain/x/credentialschema/module" // import for side-effects
 	credentialschemamoduletypes "github.com/verana-labs/verana-blockchain/x/credentialschema/types"
 	_ "github.com/verana-labs/verana-blockchain/x/cspermission/module" // import for side-effects
@@ -65,6 +66,8 @@ import (
 	diddirectorymoduletypes "github.com/verana-labs/verana-blockchain/x/diddirectory/types"
 	_ "github.com/verana-labs/verana-blockchain/x/trustregistry/module" // import for side-effects
 	trustregistrymoduletypes "github.com/verana-labs/verana-blockchain/x/trustregistry/types"
+	_ "github.com/verana-labs/verana-blockchain/x/validation/module" // import for side-effects
+	validationmoduletypes "github.com/verana-labs/verana-blockchain/x/validation/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 )
 
@@ -106,6 +109,7 @@ var (
 		diddirectorymoduletypes.ModuleName,
 		credentialschemamoduletypes.ModuleName,
 		cspermissionmoduletypes.ModuleName,
+		validationmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 
@@ -134,6 +138,7 @@ var (
 		diddirectorymoduletypes.ModuleName,
 		credentialschemamoduletypes.ModuleName,
 		cspermissionmoduletypes.ModuleName,
+		validationmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	}
 
@@ -156,6 +161,7 @@ var (
 		diddirectorymoduletypes.ModuleName,
 		credentialschemamoduletypes.ModuleName,
 		cspermissionmoduletypes.ModuleName,
+		validationmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	}
 
@@ -326,6 +332,10 @@ var (
 			{
 				Name:   cspermissionmoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&cspermissionmodulev1.Module{}),
+			},
+			{
+				Name:   validationmoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&validationmodulev1.Module{}),
 			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},

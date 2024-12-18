@@ -1,8 +1,9 @@
 package keeper
 
 import (
-	credentialschematypes "github.com/verana-labs/verana-blockchain/x/credentialschema/types"
 	"testing"
+
+	credentialschematypes "github.com/verana-labs/verana-blockchain/x/credentialschema/types"
 
 	"cosmossdk.io/log"
 	"cosmossdk.io/store"

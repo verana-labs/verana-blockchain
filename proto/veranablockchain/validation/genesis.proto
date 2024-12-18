@@ -1,0 +1,17 @@
+syntax = "proto3";
+package veranablockchain.validation;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "veranablockchain/validation/params.proto";
+
+option go_package = "github.com/verana-labs/verana-blockchain/x/validation/types";
+
+// GenesisState defines the validation module's genesis state.
+message GenesisState {
+  // params defines all the parameters of the module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}

@@ -2,9 +2,11 @@ package keeper
 
 import (
 	"context"
+	error2 "errors"
+	"time"
+
 	"cosmossdk.io/collections"
 	"cosmossdk.io/errors"
-	error2 "errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/google/uuid"
@@ -12,7 +14,6 @@ import (
 	"github.com/verana-labs/verana-blockchain/x/cspermission/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"time"
 )
 
 var _ types.QueryServer = queryServer{}
