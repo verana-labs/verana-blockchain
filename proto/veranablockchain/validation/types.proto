@@ -1,0 +1,47 @@
+syntax = "proto3";
+package veranablockchain.validation;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/verana-labs/verana-blockchain/x/validation/types";
+
+enum ValidationType {
+  TYPE_UNSPECIFIED = 0;
+  ISSUER_GRANTOR = 1;
+  VERIFIER_GRANTOR = 2;
+  ISSUER = 3;
+  VERIFIER = 4;
+  HOLDER = 5;
+}
+
+enum ValidationState {
+  STATE_UNSPECIFIED = 0;
+  PENDING = 1;
+  VALIDATED = 2;
+  TERMINATED = 3;
+}
+
+message ValidatorDeposit {
+  uint64 validator_perm_id = 1;
+  int64 amount = 2;
+}
+
+message Validation {
+  uint64 id = 1;
+  string applicant = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  ValidationType type = 3;
+  google.protobuf.Timestamp created = 4 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+  uint64 validator_perm_id = 5;
+  ValidationState state = 6;
+  google.protobuf.Timestamp exp = 7 [(gogoproto.nullable) = true, (gogoproto.stdtime) = true];
+  google.protobuf.Timestamp last_state_change = 8 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+  int64 applicant_deposit = 9;
+  repeated ValidatorDeposit validator_deposits = 10 [(gogoproto.nullable) = false];
+  int64 current_fees = 11;
+  int64 current_deposit = 12;
+  string summary_hash = 13;
+  google.protobuf.Timestamp term_requested = 14 [(gogoproto.nullable) = true, (gogoproto.stdtime) = true];
+}

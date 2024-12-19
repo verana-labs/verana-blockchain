@@ -95,3 +95,11 @@ func (k Keeper) GetCSPSession(ctx sdk.Context, id string) (*types.CredentialSche
 	}
 	return &csps, nil
 }
+
+func (k Keeper) GetCSPermission(ctx sdk.Context, id uint64) (*types.CredentialSchemaPerm, error) {
+	csp, err := k.CredentialSchemaPerm.Get(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return &csp, nil
+}

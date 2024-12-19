@@ -6,10 +6,6 @@ package types
 import (
 	context "context"
 	fmt "fmt"
-	io "io"
-	math "math"
-	math_bits "math/bits"
-
 	_ "github.com/cosmos/cosmos-proto"
 	_ "github.com/cosmos/cosmos-sdk/types/msgservice"
 	_ "github.com/cosmos/cosmos-sdk/types/tx/amino"
@@ -19,6 +15,9 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	io "io"
+	math "math"
+	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -127,9 +126,123 @@ func (m *MsgUpdateParamsResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgUpdateParamsResponse proto.InternalMessageInfo
 
+type MsgCreateValidation struct {
+	Creator         string         `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	ValidationType  ValidationType `protobuf:"varint,2,opt,name=validation_type,json=validationType,proto3,enum=veranablockchain.validation.ValidationType" json:"validation_type,omitempty"`
+	ValidatorPermId uint64         `protobuf:"varint,3,opt,name=validator_perm_id,json=validatorPermId,proto3" json:"validator_perm_id,omitempty"`
+	Country         string         `protobuf:"bytes,4,opt,name=country,proto3" json:"country,omitempty"`
+}
+
+func (m *MsgCreateValidation) Reset()         { *m = MsgCreateValidation{} }
+func (m *MsgCreateValidation) String() string { return proto.CompactTextString(m) }
+func (*MsgCreateValidation) ProtoMessage()    {}
+func (*MsgCreateValidation) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0a851d3d87dae51c, []int{2}
+}
+func (m *MsgCreateValidation) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgCreateValidation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgCreateValidation.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgCreateValidation) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgCreateValidation.Merge(m, src)
+}
+func (m *MsgCreateValidation) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgCreateValidation) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgCreateValidation.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgCreateValidation proto.InternalMessageInfo
+
+func (m *MsgCreateValidation) GetCreator() string {
+	if m != nil {
+		return m.Creator
+	}
+	return ""
+}
+
+func (m *MsgCreateValidation) GetValidationType() ValidationType {
+	if m != nil {
+		return m.ValidationType
+	}
+	return ValidationType_TYPE_UNSPECIFIED
+}
+
+func (m *MsgCreateValidation) GetValidatorPermId() uint64 {
+	if m != nil {
+		return m.ValidatorPermId
+	}
+	return 0
+}
+
+func (m *MsgCreateValidation) GetCountry() string {
+	if m != nil {
+		return m.Country
+	}
+	return ""
+}
+
+type MsgCreateValidationResponse struct {
+	ValidationId uint64 `protobuf:"varint,1,opt,name=validation_id,json=validationId,proto3" json:"validation_id,omitempty"`
+}
+
+func (m *MsgCreateValidationResponse) Reset()         { *m = MsgCreateValidationResponse{} }
+func (m *MsgCreateValidationResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgCreateValidationResponse) ProtoMessage()    {}
+func (*MsgCreateValidationResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0a851d3d87dae51c, []int{3}
+}
+func (m *MsgCreateValidationResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgCreateValidationResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgCreateValidationResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgCreateValidationResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgCreateValidationResponse.Merge(m, src)
+}
+func (m *MsgCreateValidationResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgCreateValidationResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgCreateValidationResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgCreateValidationResponse proto.InternalMessageInfo
+
+func (m *MsgCreateValidationResponse) GetValidationId() uint64 {
+	if m != nil {
+		return m.ValidationId
+	}
+	return 0
+}
+
 func init() {
 	proto.RegisterType((*MsgUpdateParams)(nil), "veranablockchain.validation.MsgUpdateParams")
 	proto.RegisterType((*MsgUpdateParamsResponse)(nil), "veranablockchain.validation.MsgUpdateParamsResponse")
+	proto.RegisterType((*MsgCreateValidation)(nil), "veranablockchain.validation.MsgCreateValidation")
+	proto.RegisterType((*MsgCreateValidationResponse)(nil), "veranablockchain.validation.MsgCreateValidationResponse")
 }
 
 func init() {
@@ -137,30 +250,40 @@ func init() {
 }
 
 var fileDescriptor_0a851d3d87dae51c = []byte{
-	// 356 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x52, 0x29, 0x4b, 0x2d, 0x4a,
-	0xcc, 0x4b, 0x4c, 0xca, 0xc9, 0x4f, 0xce, 0x4e, 0xce, 0x48, 0xcc, 0xcc, 0xd3, 0x2f, 0x4b, 0xcc,
-	0xc9, 0x4c, 0x49, 0x2c, 0xc9, 0xcc, 0xcf, 0xd3, 0x2f, 0xa9, 0xd0, 0x2b, 0x28, 0xca, 0x2f, 0xc9,
-	0x17, 0x92, 0x46, 0x57, 0xa5, 0x87, 0x50, 0x25, 0x25, 0x98, 0x98, 0x9b, 0x99, 0x97, 0xaf, 0x0f,
-	0x26, 0x21, 0xea, 0xa5, 0xc4, 0x93, 0xf3, 0x8b, 0x73, 0xf3, 0x8b, 0xf5, 0x73, 0x8b, 0xd3, 0xf5,
-	0xcb, 0x0c, 0x41, 0x14, 0x54, 0x42, 0x12, 0x22, 0x11, 0x0f, 0xe6, 0xe9, 0x43, 0x38, 0x50, 0x29,
-	0x91, 0xf4, 0xfc, 0xf4, 0x7c, 0x88, 0x38, 0x88, 0x05, 0x15, 0xd5, 0xc0, 0xe7, 0xbe, 0x82, 0xc4,
-	0xa2, 0xc4, 0x5c, 0xa8, 0x7e, 0xa5, 0xcb, 0x8c, 0x5c, 0xfc, 0xbe, 0xc5, 0xe9, 0xa1, 0x05, 0x29,
-	0x89, 0x25, 0xa9, 0x01, 0x60, 0x19, 0x21, 0x33, 0x2e, 0xce, 0xc4, 0xd2, 0x92, 0x8c, 0xfc, 0xa2,
-	0xcc, 0x92, 0x4a, 0x09, 0x46, 0x05, 0x46, 0x0d, 0x4e, 0x27, 0x89, 0x4b, 0x5b, 0x74, 0x45, 0xa0,
-	0x16, 0x3b, 0xa6, 0xa4, 0x14, 0xa5, 0x16, 0x17, 0x07, 0x97, 0x14, 0x65, 0xe6, 0xa5, 0x07, 0x21,
-	0x94, 0x0a, 0xb9, 0x71, 0xb1, 0x41, 0xcc, 0x96, 0x60, 0x52, 0x60, 0xd4, 0xe0, 0x36, 0x52, 0xd6,
-	0xc3, 0x13, 0x00, 0x7a, 0x10, 0xcb, 0x9c, 0x38, 0x4f, 0xdc, 0x93, 0x67, 0x58, 0xf1, 0x7c, 0x83,
-	0x16, 0x63, 0x10, 0x54, 0xb7, 0x95, 0x43, 0xd3, 0xf3, 0x0d, 0x5a, 0x08, 0x73, 0xbb, 0x9e, 0x6f,
-	0xd0, 0xd2, 0xc5, 0xf0, 0x50, 0x05, 0xb2, 0x97, 0xd0, 0x7c, 0xa0, 0x24, 0xc9, 0x25, 0x8e, 0x26,
-	0x14, 0x94, 0x5a, 0x5c, 0x90, 0x9f, 0x57, 0x9c, 0x6a, 0xd4, 0xc0, 0xc8, 0xc5, 0xec, 0x5b, 0x9c,
-	0x2e, 0x54, 0xc4, 0xc5, 0x83, 0xe2, 0x69, 0x1d, 0xbc, 0x8e, 0x45, 0x33, 0x4d, 0xca, 0x84, 0x14,
-	0xd5, 0x30, 0xbb, 0xa5, 0x58, 0x1b, 0x40, 0xfe, 0x74, 0x0a, 0x3d, 0xf1, 0x48, 0x8e, 0xf1, 0xc2,
-	0x23, 0x39, 0xc6, 0x07, 0x8f, 0xe4, 0x18, 0x27, 0x3c, 0x96, 0x63, 0xb8, 0xf0, 0x58, 0x8e, 0xe1,
-	0xc6, 0x63, 0x39, 0x86, 0x28, 0xeb, 0xf4, 0xcc, 0x92, 0x8c, 0xd2, 0x24, 0xbd, 0xe4, 0xfc, 0x5c,
-	0x7d, 0x88, 0x05, 0xba, 0x39, 0x89, 0x49, 0xc5, 0x30, 0x36, 0x2e, 0xef, 0x97, 0x54, 0x16, 0xa4,
-	0x16, 0x27, 0xb1, 0x81, 0x63, 0xd4, 0x18, 0x10, 0x00, 0x00, 0xff, 0xff, 0x91, 0x89, 0xec, 0x1f,
-	0x9d, 0x02, 0x00, 0x00,
+	// 523 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x53, 0xcd, 0x6e, 0xd3, 0x40,
+	0x10, 0xce, 0xb6, 0xa1, 0x55, 0x96, 0xd0, 0xd0, 0xa5, 0x52, 0x5d, 0x57, 0x32, 0x51, 0x8a, 0x44,
+	0x14, 0x88, 0x0d, 0x01, 0x21, 0x54, 0x2e, 0x10, 0x24, 0xa4, 0x1e, 0x22, 0x55, 0xa6, 0xe5, 0xc0,
+	0x25, 0xda, 0xd8, 0x2b, 0x67, 0x45, 0xec, 0xb5, 0x76, 0x37, 0x51, 0x73, 0x41, 0x15, 0x47, 0x4e,
+	0x3c, 0x06, 0xc7, 0x1c, 0x78, 0x88, 0x1e, 0x2b, 0xb8, 0x70, 0x42, 0x28, 0x39, 0xe4, 0x01, 0x78,
+	0x01, 0xe4, 0xbf, 0xb8, 0x75, 0xc1, 0x55, 0x2e, 0xf6, 0xce, 0xcc, 0x37, 0x33, 0xdf, 0x37, 0x3b,
+	0x0b, 0xef, 0x8d, 0x08, 0xc7, 0x1e, 0xee, 0x0d, 0x98, 0xf5, 0xc1, 0xea, 0x63, 0xea, 0x19, 0x23,
+	0x3c, 0xa0, 0x36, 0x96, 0x94, 0x79, 0x86, 0x3c, 0xd1, 0x7d, 0xce, 0x24, 0x43, 0xbb, 0x59, 0x94,
+	0x9e, 0xa2, 0xd4, 0x4d, 0xec, 0x52, 0x8f, 0x19, 0xe1, 0x37, 0xc2, 0xab, 0xdb, 0x16, 0x13, 0x2e,
+	0x13, 0x86, 0x2b, 0x1c, 0x63, 0xf4, 0x38, 0xf8, 0xc5, 0x81, 0x9d, 0x28, 0xd0, 0x0d, 0x2d, 0x23,
+	0x32, 0xe2, 0xd0, 0x96, 0xc3, 0x1c, 0x16, 0xf9, 0x83, 0x53, 0xec, 0xad, 0xe7, 0xf1, 0xf3, 0x31,
+	0xc7, 0x6e, 0x92, 0x7f, 0x3f, 0x57, 0xc9, 0xd8, 0x27, 0x31, 0xb0, 0xf6, 0x03, 0xc0, 0x4a, 0x47,
+	0x38, 0xc7, 0xbe, 0x8d, 0x25, 0x39, 0x0c, 0x4b, 0xa0, 0x67, 0xb0, 0x84, 0x87, 0xb2, 0xcf, 0x38,
+	0x95, 0x63, 0x05, 0x54, 0x41, 0xbd, 0xd4, 0x56, 0xbe, 0x7f, 0x6b, 0x6e, 0xc5, 0x0c, 0x5f, 0xd9,
+	0x36, 0x27, 0x42, 0xbc, 0x95, 0x9c, 0x7a, 0x8e, 0x99, 0x42, 0xd1, 0x1b, 0xb8, 0x16, 0x91, 0x50,
+	0x56, 0xaa, 0xa0, 0x7e, 0xb3, 0xb5, 0xa7, 0xe7, 0x4c, 0x4a, 0x8f, 0x9a, 0xb5, 0x4b, 0x67, 0xbf,
+	0xee, 0x16, 0xbe, 0xce, 0x27, 0x0d, 0x60, 0xc6, 0xd9, 0xfb, 0x2f, 0x3f, 0xcd, 0x27, 0x8d, 0xb4,
+	0xee, 0xe7, 0xf9, 0xa4, 0xd1, 0xbc, 0xa2, 0xe7, 0xe4, 0xa2, 0xa2, 0x8c, 0x82, 0xda, 0x0e, 0xdc,
+	0xce, 0xb8, 0x4c, 0x22, 0x7c, 0xe6, 0x09, 0x52, 0xfb, 0x03, 0xe0, 0x9d, 0x8e, 0x70, 0x5e, 0x73,
+	0x82, 0x25, 0x79, 0xb7, 0x28, 0x81, 0x5a, 0x70, 0xdd, 0x0a, 0x7c, 0x8c, 0x5f, 0x2b, 0x39, 0x01,
+	0xa2, 0x23, 0x58, 0x49, 0x49, 0x74, 0x83, 0xb1, 0x86, 0xca, 0x37, 0x5a, 0x0f, 0x72, 0x95, 0xa7,
+	0x5d, 0x8f, 0xc6, 0x3e, 0x31, 0x37, 0x46, 0x97, 0x6c, 0xd4, 0x80, 0x9b, 0xb1, 0x87, 0xf1, 0xae,
+	0x4f, 0xb8, 0xdb, 0xa5, 0xb6, 0xb2, 0x5a, 0x05, 0xf5, 0xa2, 0x59, 0x59, 0x04, 0x0e, 0x09, 0x77,
+	0x0f, 0x6c, 0xa4, 0xc0, 0x75, 0x8b, 0x0d, 0x3d, 0xc9, 0xc7, 0x4a, 0x31, 0x60, 0x6d, 0x26, 0xe6,
+	0x7e, 0x39, 0x18, 0x62, 0xc2, 0xb4, 0xd6, 0x86, 0xbb, 0xff, 0x10, 0x9d, 0x0c, 0x05, 0xed, 0xc1,
+	0x5b, 0x17, 0x84, 0x50, 0x3b, 0x1c, 0x41, 0xd1, 0x2c, 0xa7, 0xce, 0x03, 0xbb, 0x75, 0xba, 0x02,
+	0x57, 0x3b, 0xc2, 0x41, 0x1c, 0x96, 0x2f, 0xad, 0xcb, 0xc3, 0x5c, 0xb1, 0x99, 0x7b, 0x50, 0x9f,
+	0x2e, 0x83, 0x5e, 0x10, 0xfc, 0x08, 0x6f, 0x5f, 0xb9, 0xb1, 0x47, 0xd7, 0x55, 0xca, 0x66, 0xa8,
+	0xcf, 0x97, 0xcd, 0x48, 0xfa, 0xab, 0x37, 0x4e, 0x83, 0x0d, 0x6d, 0x1f, 0x9f, 0x4d, 0x35, 0x70,
+	0x3e, 0xd5, 0xc0, 0xef, 0xa9, 0x06, 0xbe, 0xcc, 0xb4, 0xc2, 0xf9, 0x4c, 0x2b, 0xfc, 0x9c, 0x69,
+	0x85, 0xf7, 0x2f, 0x1c, 0x2a, 0xfb, 0xc3, 0x9e, 0x6e, 0x31, 0xd7, 0x88, 0x9a, 0x34, 0x07, 0xb8,
+	0x27, 0x92, 0xf3, 0xff, 0x16, 0x37, 0x7c, 0x8a, 0xbd, 0xb5, 0xf0, 0x2d, 0x3e, 0xf9, 0x1b, 0x00,
+	0x00, 0xff, 0xff, 0x23, 0x18, 0x12, 0x7d, 0x80, 0x04, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -178,6 +301,7 @@ type MsgClient interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
+	CreateValidation(ctx context.Context, in *MsgCreateValidation, opts ...grpc.CallOption) (*MsgCreateValidationResponse, error)
 }
 
 type msgClient struct {
@@ -197,11 +321,21 @@ func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts 
 	return out, nil
 }
 
+func (c *msgClient) CreateValidation(ctx context.Context, in *MsgCreateValidation, opts ...grpc.CallOption) (*MsgCreateValidationResponse, error) {
+	out := new(MsgCreateValidationResponse)
+	err := c.cc.Invoke(ctx, "/veranablockchain.validation.Msg/CreateValidation", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
+	CreateValidation(context.Context, *MsgCreateValidation) (*MsgCreateValidationResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -210,6 +344,9 @@ type UnimplementedMsgServer struct {
 
 func (*UnimplementedMsgServer) UpdateParams(ctx context.Context, req *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
+}
+func (*UnimplementedMsgServer) CreateValidation(ctx context.Context, req *MsgCreateValidation) (*MsgCreateValidationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateValidation not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
@@ -234,6 +371,24 @@ func _Msg_UpdateParams_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_CreateValidation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgCreateValidation)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).CreateValidation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/veranablockchain.validation.Msg/CreateValidation",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).CreateValidation(ctx, req.(*MsgCreateValidation))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var Msg_serviceDesc = _Msg_serviceDesc
 var _Msg_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "veranablockchain.validation.Msg",
@@ -242,6 +397,10 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateParams",
 			Handler:    _Msg_UpdateParams_Handler,
+		},
+		{
+			MethodName: "CreateValidation",
+			Handler:    _Msg_CreateValidation_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -311,6 +470,81 @@ func (m *MsgUpdateParamsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	return len(dAtA) - i, nil
 }
 
+func (m *MsgCreateValidation) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgCreateValidation) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgCreateValidation) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Country) > 0 {
+		i -= len(m.Country)
+		copy(dAtA[i:], m.Country)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Country)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.ValidatorPermId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.ValidatorPermId))
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.ValidationType != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.ValidationType))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Creator) > 0 {
+		i -= len(m.Creator)
+		copy(dAtA[i:], m.Creator)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Creator)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgCreateValidationResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgCreateValidationResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgCreateValidationResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ValidationId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.ValidationId))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTx(v)
 	base := offset
@@ -343,6 +577,41 @@ func (m *MsgUpdateParamsResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
+	return n
+}
+
+func (m *MsgCreateValidation) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Creator)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.ValidationType != 0 {
+		n += 1 + sovTx(uint64(m.ValidationType))
+	}
+	if m.ValidatorPermId != 0 {
+		n += 1 + sovTx(uint64(m.ValidatorPermId))
+	}
+	l = len(m.Country)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgCreateValidationResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ValidationId != 0 {
+		n += 1 + sovTx(uint64(m.ValidationId))
+	}
 	return n
 }
 
@@ -496,6 +765,227 @@ func (m *MsgUpdateParamsResponse) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: MsgUpdateParamsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgCreateValidation) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgCreateValidation: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgCreateValidation: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Creator", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Creator = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ValidationType", wireType)
+			}
+			m.ValidationType = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ValidationType |= ValidationType(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ValidatorPermId", wireType)
+			}
+			m.ValidatorPermId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ValidatorPermId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Country", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Country = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgCreateValidationResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgCreateValidationResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgCreateValidationResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ValidationId", wireType)
+			}
+			m.ValidationId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ValidationId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTx(dAtA[iNdEx:])

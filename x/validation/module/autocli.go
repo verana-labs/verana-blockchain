@@ -28,6 +28,26 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					RpcMethod: "UpdateParams",
 					Skip:      true, // skipped because authority gated
 				},
+				{
+					RpcMethod: "CreateValidation",
+					Use:       "create-validation [validation-type] [validator-perm-id] [country]",
+					Short:     "Create a new validation entry",
+					Long: `Create a new validation entry with the specified parameters:
+- type: ISSUER_GRANTOR, VERIFIER_GRANTOR, ISSUER, VERIFIER, HOLDER
+- validator-perm-id: ID of the validator's permission
+- country: Alpha-2 country code (ISO 3166)`,
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "validation_type",
+						},
+						{
+							ProtoField: "validator_perm_id",
+						},
+						{
+							ProtoField: "country",
+						},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},

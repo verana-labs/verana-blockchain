@@ -58,7 +58,9 @@ func (AppModuleBasic) Name() string {
 
 // RegisterLegacyAminoCodec registers the amino codec for the module, which is used
 // to marshal and unmarshal structs to/from []byte in order to persist them in the module's KVStore.
-func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {}
+func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
+	types.RegisterLegacyAminoCodec(cdc)
+}
 
 // RegisterInterfaces registers a module's interface types and their concrete implementations as proto.Message.
 func (a AppModuleBasic) RegisterInterfaces(reg cdctypes.InterfaceRegistry) {
@@ -180,8 +182,10 @@ type ModuleInputs struct {
 	Config       *modulev1.Module
 	Logger       log.Logger
 
-	AccountKeeper types.AccountKeeper
-	BankKeeper    types.BankKeeper
+	AccountKeeper          types.AccountKeeper
+	BankKeeper             types.BankKeeper
+	CsPermissionKeeper     types.CsPermissionKeeper     `optional:"true"`
+	CredentialSchemaKeeper types.CredentialSchemaKeeper `optional:"true"`
 }
 
 type ModuleOutputs struct {
@@ -202,6 +206,8 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.StoreService,
 		in.Logger,
 		authority.String(),
+		in.CsPermissionKeeper,
+		in.CredentialSchemaKeeper,
 	)
 	m := NewAppModule(
 		in.Cdc,
