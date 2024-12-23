@@ -4,8 +4,9 @@ import (
 	"errors"
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	cstypes "github.com/verana-labs/verana-blockchain/x/credentialschema/types"
+	csptypes "github.com/verana-labs/verana-blockchain/x/cspermission/types"
 	"github.com/verana-labs/verana-blockchain/x/validation/types"
-	"regexp"
 )
 
 // validatePermissions implements [MOD-V-MSG-1-2-2] permission checks
@@ -27,12 +28,17 @@ func (ms msgServer) validatePermissions(ctx sdk.Context, msg *types.MsgCreateVal
 
 	switch msg.ValidationType {
 	case types.ValidationType_ISSUER:
-		if cs.IssuerPermManagementMode.String() == "GRANTOR_VALIDATION" {
-			if perm.CspType.String() != "ISSUER_GRANTOR" {
+		// For debugging
+		fmt.Printf("IssuerPermManagementMode Type: %T\n", cs.IssuerPermManagementMode)
+		fmt.Printf("PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION Type: %T\n",
+			cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION)
+
+		if cs.IssuerPermManagementMode == cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION {
+			if perm.CspType != csptypes.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_ISSUER_GRANTOR {
 				return errors.New("invalid validator permission type for issuer validation")
 			}
-		} else if cs.IssuerPermManagementMode.String() == "TRUST_REGISTRY" {
-			if perm.CspType.String() != "TRUST_REGISTRY" {
+		} else if cs.IssuerPermManagementMode == cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_TRUST_REGISTRY_VALIDATION {
+			if perm.CspType != csptypes.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_TRUST_REGISTRY {
 				return errors.New("invalid validator permission type for issuer validation")
 			}
 		} else {
@@ -40,8 +46,8 @@ func (ms msgServer) validatePermissions(ctx sdk.Context, msg *types.MsgCreateVal
 		}
 
 	case types.ValidationType_ISSUER_GRANTOR:
-		if cs.IssuerPermManagementMode.String() == "GRANTOR_VALIDATION" {
-			if perm.CspType.String() != "TRUST_REGISTRY" {
+		if cs.IssuerPermManagementMode == cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION {
+			if perm.CspType != csptypes.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_TRUST_REGISTRY {
 				return errors.New("invalid validator permission type for issuer grantor validation")
 			}
 		} else {
@@ -49,12 +55,12 @@ func (ms msgServer) validatePermissions(ctx sdk.Context, msg *types.MsgCreateVal
 		}
 
 	case types.ValidationType_VERIFIER:
-		if cs.VerifierPermManagementMode.String() == "GRANTOR_VALIDATION" {
-			if perm.CspType.String() != "VERIFIER_GRANTOR" {
+		if cs.VerifierPermManagementMode == cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION {
+			if perm.CspType != csptypes.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_VERIFIER_GRANTOR {
 				return errors.New("invalid validator permission type for verifier validation")
 			}
-		} else if cs.VerifierPermManagementMode.String() == "TRUST_REGISTRY" {
-			if perm.CspType.String() != "TRUST_REGISTRY" {
+		} else if cs.VerifierPermManagementMode == cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_TRUST_REGISTRY_VALIDATION {
+			if perm.CspType != csptypes.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_TRUST_REGISTRY {
 				return errors.New("invalid validator permission type for verifier validation")
 			}
 		} else {
@@ -62,8 +68,8 @@ func (ms msgServer) validatePermissions(ctx sdk.Context, msg *types.MsgCreateVal
 		}
 
 	case types.ValidationType_VERIFIER_GRANTOR:
-		if cs.VerifierPermManagementMode.String() == "GRANTOR_VALIDATION" {
-			if perm.CspType.String() != "TRUST_REGISTRY" {
+		if cs.VerifierPermManagementMode == cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION {
+			if perm.CspType != csptypes.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_TRUST_REGISTRY {
 				return errors.New("invalid validator permission type for verifier grantor validation")
 			}
 		} else {
@@ -71,9 +77,9 @@ func (ms msgServer) validatePermissions(ctx sdk.Context, msg *types.MsgCreateVal
 		}
 
 	case types.ValidationType_HOLDER:
-		if cs.VerifierPermManagementMode.String() == "GRANTOR_VALIDATION" ||
-			cs.VerifierPermManagementMode.String() == "TRUST_REGISTRY" {
-			if perm.CspType.String() != "ISSUER" {
+		if cs.VerifierPermManagementMode == cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION ||
+			cs.VerifierPermManagementMode == cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_TRUST_REGISTRY_VALIDATION {
+			if perm.CspType != csptypes.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_ISSUER {
 				return errors.New("invalid validator permission type for holder validation")
 			}
 		} else {
@@ -137,10 +143,4 @@ func (ms msgServer) executeCreateValidation(ctx sdk.Context, msg *types.MsgCreat
 	}
 
 	return validation, nil
-}
-
-// Helper function to validate ISO 3166-1 alpha-2 country codes
-func isValidCountryCode(country string) bool {
-	match, _ := regexp.MatchString(`^[A-Z]{2}$`, country)
-	return match
 }
