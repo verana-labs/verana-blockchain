@@ -17,6 +17,55 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Use:       "params",
 					Short:     "Shows the parameters of the module",
 				},
+				{
+					RpcMethod: "ListValidations",
+					Use:       "list-validations",
+					Short:     "List validations with optional filters",
+					Long:      "List validations with optional filters: controller, validator permission ID, type, state, and expiration",
+					FlagOptions: map[string]*autocliv1.FlagOptions{
+						"controller": {
+							Name:         "controller",
+							Usage:        "Filter by controller account address",
+							DefaultValue: "",
+						},
+						"validator_perm_id": {
+							Name:         "validator-perm-id",
+							Usage:        "Filter by validator permission ID",
+							DefaultValue: "0",
+						},
+						"type": {
+							Name:         "type",
+							Usage:        "Filter by validation type (ISSUER_GRANTOR, VERIFIER_GRANTOR, ISSUER, VERIFIER, HOLDER)",
+							DefaultValue: "",
+						},
+						"state": {
+							Name:         "state",
+							Usage:        "Filter by validation state (PENDING, VALIDATED, TERMINATED)",
+							DefaultValue: "",
+						},
+						"response_max_size": {
+							Name:         "response-max-size",
+							Usage:        "Maximum number of results (1-1024)",
+							DefaultValue: "64",
+						},
+						"exp_before": {
+							Name:         "exp-before",
+							Usage:        "Filter by expiration before timestamp (RFC3339 format)",
+							DefaultValue: "",
+						},
+					},
+				},
+				{
+					RpcMethod: "GetValidation",
+					Use:       "get-validation [id]",
+					Short:     "Get validation by ID",
+					Long:      "Get the validation information for a given validation ID",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "id",
+						},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},

@@ -4,8 +4,11 @@ package veranablockchain.validation;
 import "amino/amino.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
+import "cosmos_proto/cosmos.proto";
 import "veranablockchain/validation/params.proto";
+import "veranablockchain/validation/types.proto";
 
 option go_package = "github.com/verana-labs/verana-blockchain/x/validation/types";
 
@@ -14,6 +17,12 @@ service Query {
   // Parameters queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/verana-labs/verana-blockchain/validation/params";
+  }
+  rpc ListValidations(QueryListValidationsRequest) returns (QueryListValidationsResponse) {
+    option (google.api.http).get = "/dtr/v1/val/list";
+  }
+  rpc GetValidation(QueryGetValidationRequest) returns (QueryGetValidationResponse) {
+    option (google.api.http).get = "/dtr/v1/val/get/{id}";
   }
 }
 
@@ -27,4 +36,26 @@ message QueryParamsResponse {
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
+}
+
+message QueryListValidationsRequest {
+  // Optional filters
+  string controller = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint64 validator_perm_id = 2;
+  ValidationType type = 3;
+  ValidationState state = 4;
+  uint32 response_max_size = 5;
+  google.protobuf.Timestamp exp_before = 6 [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
+}
+
+message QueryListValidationsResponse {
+  repeated Validation validations = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryGetValidationRequest {
+  uint64 id = 1;
+}
+
+message QueryGetValidationResponse {
+  Validation validation = 1 [(gogoproto.nullable) = false];
 }

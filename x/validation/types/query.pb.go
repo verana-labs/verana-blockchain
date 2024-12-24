@@ -6,24 +6,29 @@ package types
 import (
 	context "context"
 	fmt "fmt"
+	_ "github.com/cosmos/cosmos-proto"
 	_ "github.com/cosmos/cosmos-sdk/types/query"
 	_ "github.com/cosmos/cosmos-sdk/types/tx/amino"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	grpc1 "github.com/cosmos/gogoproto/grpc"
 	proto "github.com/cosmos/gogoproto/proto"
+	github_com_cosmos_gogoproto_types "github.com/cosmos/gogoproto/types"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	_ "google.golang.org/protobuf/types/known/timestamppb"
 	io "io"
 	math "math"
 	math_bits "math/bits"
+	time "time"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+var _ = time.Kitchen
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the proto package it is being compiled against.
@@ -114,9 +119,230 @@ func (m *QueryParamsResponse) GetParams() Params {
 	return Params{}
 }
 
+type QueryListValidationsRequest struct {
+	// Optional filters
+	Controller      string          `protobuf:"bytes,1,opt,name=controller,proto3" json:"controller,omitempty"`
+	ValidatorPermId uint64          `protobuf:"varint,2,opt,name=validator_perm_id,json=validatorPermId,proto3" json:"validator_perm_id,omitempty"`
+	Type            ValidationType  `protobuf:"varint,3,opt,name=type,proto3,enum=veranablockchain.validation.ValidationType" json:"type,omitempty"`
+	State           ValidationState `protobuf:"varint,4,opt,name=state,proto3,enum=veranablockchain.validation.ValidationState" json:"state,omitempty"`
+	ResponseMaxSize uint32          `protobuf:"varint,5,opt,name=response_max_size,json=responseMaxSize,proto3" json:"response_max_size,omitempty"`
+	ExpBefore       *time.Time      `protobuf:"bytes,6,opt,name=exp_before,json=expBefore,proto3,stdtime" json:"exp_before,omitempty"`
+}
+
+func (m *QueryListValidationsRequest) Reset()         { *m = QueryListValidationsRequest{} }
+func (m *QueryListValidationsRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryListValidationsRequest) ProtoMessage()    {}
+func (*QueryListValidationsRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_9399344ef2a18602, []int{2}
+}
+func (m *QueryListValidationsRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryListValidationsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryListValidationsRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryListValidationsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryListValidationsRequest.Merge(m, src)
+}
+func (m *QueryListValidationsRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryListValidationsRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryListValidationsRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryListValidationsRequest proto.InternalMessageInfo
+
+func (m *QueryListValidationsRequest) GetController() string {
+	if m != nil {
+		return m.Controller
+	}
+	return ""
+}
+
+func (m *QueryListValidationsRequest) GetValidatorPermId() uint64 {
+	if m != nil {
+		return m.ValidatorPermId
+	}
+	return 0
+}
+
+func (m *QueryListValidationsRequest) GetType() ValidationType {
+	if m != nil {
+		return m.Type
+	}
+	return ValidationType_TYPE_UNSPECIFIED
+}
+
+func (m *QueryListValidationsRequest) GetState() ValidationState {
+	if m != nil {
+		return m.State
+	}
+	return ValidationState_STATE_UNSPECIFIED
+}
+
+func (m *QueryListValidationsRequest) GetResponseMaxSize() uint32 {
+	if m != nil {
+		return m.ResponseMaxSize
+	}
+	return 0
+}
+
+func (m *QueryListValidationsRequest) GetExpBefore() *time.Time {
+	if m != nil {
+		return m.ExpBefore
+	}
+	return nil
+}
+
+type QueryListValidationsResponse struct {
+	Validations []Validation `protobuf:"bytes,1,rep,name=validations,proto3" json:"validations"`
+}
+
+func (m *QueryListValidationsResponse) Reset()         { *m = QueryListValidationsResponse{} }
+func (m *QueryListValidationsResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryListValidationsResponse) ProtoMessage()    {}
+func (*QueryListValidationsResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_9399344ef2a18602, []int{3}
+}
+func (m *QueryListValidationsResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryListValidationsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryListValidationsResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryListValidationsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryListValidationsResponse.Merge(m, src)
+}
+func (m *QueryListValidationsResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryListValidationsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryListValidationsResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryListValidationsResponse proto.InternalMessageInfo
+
+func (m *QueryListValidationsResponse) GetValidations() []Validation {
+	if m != nil {
+		return m.Validations
+	}
+	return nil
+}
+
+type QueryGetValidationRequest struct {
+	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+}
+
+func (m *QueryGetValidationRequest) Reset()         { *m = QueryGetValidationRequest{} }
+func (m *QueryGetValidationRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryGetValidationRequest) ProtoMessage()    {}
+func (*QueryGetValidationRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_9399344ef2a18602, []int{4}
+}
+func (m *QueryGetValidationRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryGetValidationRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryGetValidationRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryGetValidationRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryGetValidationRequest.Merge(m, src)
+}
+func (m *QueryGetValidationRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryGetValidationRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryGetValidationRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryGetValidationRequest proto.InternalMessageInfo
+
+func (m *QueryGetValidationRequest) GetId() uint64 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
+type QueryGetValidationResponse struct {
+	Validation Validation `protobuf:"bytes,1,opt,name=validation,proto3" json:"validation"`
+}
+
+func (m *QueryGetValidationResponse) Reset()         { *m = QueryGetValidationResponse{} }
+func (m *QueryGetValidationResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryGetValidationResponse) ProtoMessage()    {}
+func (*QueryGetValidationResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_9399344ef2a18602, []int{5}
+}
+func (m *QueryGetValidationResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryGetValidationResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryGetValidationResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryGetValidationResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryGetValidationResponse.Merge(m, src)
+}
+func (m *QueryGetValidationResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryGetValidationResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryGetValidationResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryGetValidationResponse proto.InternalMessageInfo
+
+func (m *QueryGetValidationResponse) GetValidation() Validation {
+	if m != nil {
+		return m.Validation
+	}
+	return Validation{}
+}
+
 func init() {
 	proto.RegisterType((*QueryParamsRequest)(nil), "veranablockchain.validation.QueryParamsRequest")
 	proto.RegisterType((*QueryParamsResponse)(nil), "veranablockchain.validation.QueryParamsResponse")
+	proto.RegisterType((*QueryListValidationsRequest)(nil), "veranablockchain.validation.QueryListValidationsRequest")
+	proto.RegisterType((*QueryListValidationsResponse)(nil), "veranablockchain.validation.QueryListValidationsResponse")
+	proto.RegisterType((*QueryGetValidationRequest)(nil), "veranablockchain.validation.QueryGetValidationRequest")
+	proto.RegisterType((*QueryGetValidationResponse)(nil), "veranablockchain.validation.QueryGetValidationResponse")
 }
 
 func init() {
@@ -124,28 +350,52 @@ func init() {
 }
 
 var fileDescriptor_9399344ef2a18602 = []byte{
-	// 331 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x52, 0x2f, 0x4b, 0x2d, 0x4a,
-	0xcc, 0x4b, 0x4c, 0xca, 0xc9, 0x4f, 0xce, 0x4e, 0xce, 0x48, 0xcc, 0xcc, 0xd3, 0x2f, 0x4b, 0xcc,
-	0xc9, 0x4c, 0x49, 0x2c, 0xc9, 0xcc, 0xcf, 0xd3, 0x2f, 0x2c, 0x4d, 0x2d, 0xaa, 0xd4, 0x2b, 0x28,
-	0xca, 0x2f, 0xc9, 0x17, 0x92, 0x46, 0x57, 0xa8, 0x87, 0x50, 0x28, 0x25, 0x98, 0x98, 0x9b, 0x99,
-	0x97, 0xaf, 0x0f, 0x26, 0x21, 0xea, 0xa5, 0x44, 0xd2, 0xf3, 0xd3, 0xf3, 0xc1, 0x4c, 0x7d, 0x10,
-	0x0b, 0x2a, 0x2a, 0x93, 0x9e, 0x9f, 0x9f, 0x9e, 0x93, 0xaa, 0x9f, 0x58, 0x90, 0xa9, 0x9f, 0x98,
-	0x97, 0x97, 0x5f, 0x02, 0xd6, 0x5f, 0x0c, 0x95, 0xd5, 0x4a, 0xce, 0x2f, 0xce, 0xcd, 0x2f, 0xd6,
-	0x4f, 0x4a, 0x2c, 0x4e, 0x85, 0x58, 0xae, 0x5f, 0x66, 0x98, 0x94, 0x5a, 0x92, 0x68, 0xa8, 0x5f,
-	0x90, 0x98, 0x9e, 0x99, 0x07, 0x56, 0x0c, 0x55, 0xab, 0x81, 0xcf, 0xe1, 0x05, 0x89, 0x45, 0x89,
-	0xb9, 0x50, 0x53, 0x95, 0x44, 0xb8, 0x84, 0x02, 0x41, 0x66, 0x05, 0x80, 0x05, 0x83, 0x52, 0x0b,
-	0x4b, 0x53, 0x8b, 0x4b, 0x94, 0x62, 0xb9, 0x84, 0x51, 0x44, 0x8b, 0x0b, 0xf2, 0xf3, 0x8a, 0x53,
-	0x85, 0xdc, 0xb8, 0xd8, 0x20, 0x9a, 0x25, 0x18, 0x15, 0x18, 0x35, 0xb8, 0x8d, 0x94, 0xf5, 0xf0,
-	0xf8, 0x5b, 0x0f, 0xa2, 0xd9, 0x89, 0xf3, 0xc4, 0x3d, 0x79, 0x86, 0x15, 0xcf, 0x37, 0x68, 0x31,
-	0x06, 0x41, 0x75, 0x1b, 0xad, 0x67, 0xe4, 0x62, 0x05, 0x9b, 0x2f, 0xb4, 0x94, 0x91, 0x8b, 0x0d,
-	0xa2, 0x4e, 0x48, 0x1f, 0xaf, 0x61, 0x98, 0x8e, 0x94, 0x32, 0x20, 0x5e, 0x03, 0xc4, 0xfd, 0x4a,
-	0x16, 0x4d, 0x97, 0x9f, 0x4c, 0x66, 0x32, 0x12, 0x32, 0xd0, 0x87, 0xe8, 0xd4, 0xcd, 0x49, 0x4c,
-	0x2a, 0x86, 0xb1, 0xf1, 0x05, 0x96, 0x53, 0xe8, 0x89, 0x47, 0x72, 0x8c, 0x17, 0x1e, 0xc9, 0x31,
-	0x3e, 0x78, 0x24, 0xc7, 0x38, 0xe1, 0xb1, 0x1c, 0xc3, 0x85, 0xc7, 0x72, 0x0c, 0x37, 0x1e, 0xcb,
-	0x31, 0x44, 0x59, 0xa7, 0x67, 0x96, 0x64, 0x94, 0x26, 0xe9, 0x25, 0xe7, 0xe7, 0x12, 0x30, 0xb5,
-	0x02, 0xd9, 0xdc, 0x92, 0xca, 0x82, 0xd4, 0xe2, 0x24, 0x36, 0x70, 0x24, 0x18, 0x03, 0x02, 0x00,
-	0x00, 0xff, 0xff, 0xa7, 0x96, 0x8f, 0x23, 0x69, 0x02, 0x00, 0x00,
+	// 711 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x54, 0x41, 0x4f, 0x13, 0x4d,
+	0x18, 0xee, 0x96, 0xd2, 0x7c, 0x0c, 0x01, 0x3e, 0xe6, 0x6b, 0xbe, 0x2c, 0x85, 0xb4, 0x4d, 0xbf,
+	0x03, 0x0d, 0x7c, 0xec, 0x40, 0x4d, 0x14, 0xe3, 0xc1, 0x58, 0x13, 0x8d, 0x89, 0x44, 0x5c, 0xd0,
+	0x83, 0x89, 0x69, 0x66, 0xbb, 0xc3, 0x32, 0xa1, 0xbb, 0xb3, 0xcc, 0x4c, 0x9b, 0x82, 0xf1, 0xe2,
+	0x2f, 0x20, 0xf1, 0x6e, 0xbc, 0x98, 0x78, 0xf4, 0xe0, 0x8f, 0xe0, 0x48, 0xf4, 0xe2, 0x09, 0x0d,
+	0x98, 0xf8, 0x03, 0x3c, 0x79, 0x33, 0x3b, 0x3b, 0x4b, 0x0b, 0x34, 0x05, 0xbc, 0x34, 0xb3, 0xf3,
+	0x3e, 0xcf, 0xfb, 0x3e, 0xef, 0xfb, 0xbc, 0x53, 0x30, 0xdb, 0x26, 0x1c, 0x07, 0xd8, 0x69, 0xb2,
+	0xc6, 0x56, 0x63, 0x13, 0xd3, 0x00, 0xb5, 0x71, 0x93, 0xba, 0x58, 0x52, 0x16, 0xa0, 0xed, 0x16,
+	0xe1, 0x3b, 0x56, 0xc8, 0x99, 0x64, 0x70, 0xfa, 0x2c, 0xd0, 0xea, 0x02, 0xf3, 0x93, 0xd8, 0xa7,
+	0x01, 0x43, 0xea, 0x37, 0xc6, 0xe7, 0x73, 0x1e, 0xf3, 0x98, 0x3a, 0xa2, 0xe8, 0xa4, 0x6f, 0x67,
+	0x3c, 0xc6, 0xbc, 0x26, 0x41, 0x38, 0xa4, 0x08, 0x07, 0x01, 0x93, 0x8a, 0x2f, 0x74, 0xb4, 0xa8,
+	0xa3, 0xea, 0xcb, 0x69, 0x6d, 0x20, 0x49, 0x7d, 0x22, 0x24, 0xf6, 0x43, 0x0d, 0x98, 0x6b, 0x30,
+	0xe1, 0x33, 0x81, 0x1c, 0x2c, 0x48, 0xac, 0x0e, 0xb5, 0x97, 0x1c, 0x22, 0xf1, 0x12, 0x0a, 0xb1,
+	0x47, 0x03, 0x95, 0x4d, 0x63, 0xa7, 0x62, 0x6c, 0x3d, 0xd6, 0x10, 0x7f, 0xe8, 0x50, 0x65, 0x50,
+	0xd3, 0x21, 0xe6, 0xd8, 0x4f, 0x90, 0x03, 0xc7, 0x23, 0x77, 0x42, 0xa2, 0x81, 0xe5, 0x1c, 0x80,
+	0x8f, 0x23, 0x3d, 0xab, 0x8a, 0x6d, 0x93, 0xed, 0x16, 0x11, 0xb2, 0xfc, 0x1c, 0xfc, 0x73, 0xea,
+	0x56, 0x84, 0x2c, 0x10, 0x04, 0xde, 0x03, 0xd9, 0xb8, 0x8a, 0x69, 0x94, 0x8c, 0xca, 0x68, 0xf5,
+	0x3f, 0x6b, 0xc0, 0x70, 0xad, 0x98, 0x5c, 0x1b, 0xd9, 0x3f, 0x2c, 0xa6, 0xde, 0xff, 0xf8, 0x30,
+	0x67, 0xd8, 0x9a, 0x5d, 0xfe, 0x95, 0x06, 0xd3, 0x2a, 0xff, 0x43, 0x2a, 0xe4, 0xd3, 0x13, 0x46,
+	0x52, 0x1e, 0x2e, 0x03, 0xd0, 0x60, 0x81, 0xe4, 0xac, 0xd9, 0x24, 0x5c, 0xd5, 0x1a, 0xa9, 0x99,
+	0x9f, 0x3e, 0x2e, 0xe4, 0xf4, 0x34, 0xee, 0xb8, 0x2e, 0x27, 0x42, 0xac, 0x49, 0x4e, 0x03, 0xcf,
+	0xee, 0xc1, 0xc2, 0x39, 0x30, 0xa9, 0x15, 0x30, 0x5e, 0x0f, 0x09, 0xf7, 0xeb, 0xd4, 0x35, 0xd3,
+	0x25, 0xa3, 0x92, 0xb1, 0x27, 0x4e, 0x02, 0xab, 0x84, 0xfb, 0x0f, 0x5c, 0x78, 0x1b, 0x64, 0xa2,
+	0x49, 0x98, 0x43, 0x25, 0xa3, 0x32, 0x5e, 0x9d, 0x1f, 0xd8, 0x4b, 0x57, 0xe4, 0xfa, 0x4e, 0x48,
+	0x6c, 0x45, 0x84, 0x35, 0x30, 0x2c, 0x24, 0x96, 0xc4, 0xcc, 0xa8, 0x0c, 0xff, 0x5f, 0x32, 0xc3,
+	0x5a, 0xc4, 0xb1, 0x63, 0x6a, 0x24, 0x98, 0xeb, 0xf1, 0xd6, 0x7d, 0xdc, 0xa9, 0x0b, 0xba, 0x4b,
+	0xcc, 0xe1, 0x92, 0x51, 0x19, 0xb3, 0x27, 0x92, 0xc0, 0x0a, 0xee, 0xac, 0xd1, 0x5d, 0x02, 0xef,
+	0x02, 0x40, 0x3a, 0x61, 0xdd, 0x21, 0x1b, 0x8c, 0x13, 0x33, 0xab, 0x2c, 0xc8, 0x5b, 0xf1, 0xee,
+	0x59, 0xc9, 0xee, 0x59, 0xeb, 0xc9, 0xee, 0xd5, 0xfe, 0xda, 0x3f, 0x2c, 0x1a, 0x7b, 0x5f, 0x8b,
+	0x86, 0x3d, 0x42, 0x3a, 0x61, 0x4d, 0xd1, 0xca, 0x0c, 0xcc, 0xf4, 0x1f, 0xbd, 0xf6, 0xf8, 0x11,
+	0x18, 0xed, 0xaa, 0x8e, 0x8c, 0x1e, 0xaa, 0x8c, 0x56, 0x67, 0x2f, 0xd9, 0x5a, 0x2d, 0x13, 0x99,
+	0x6d, 0xf7, 0x66, 0x28, 0xcf, 0x83, 0x29, 0x55, 0xf0, 0x3e, 0xe9, 0xa9, 0x97, 0x38, 0x3d, 0x0e,
+	0xd2, 0xd4, 0x55, 0x0e, 0x67, 0xec, 0x34, 0x75, 0xcb, 0x5b, 0x20, 0xdf, 0x0f, 0xac, 0xb5, 0xad,
+	0x00, 0xd0, 0xcd, 0xac, 0x77, 0xf0, 0x8a, 0xd2, 0x7a, 0x12, 0x54, 0x7f, 0x0e, 0x81, 0x61, 0x55,
+	0x0d, 0xbe, 0x33, 0x40, 0x36, 0x5e, 0x57, 0x88, 0x06, 0xe6, 0x3b, 0xff, 0x56, 0xf2, 0x8b, 0x97,
+	0x27, 0xc4, 0x6d, 0x94, 0x97, 0x5f, 0x7d, 0xfe, 0xfe, 0x3a, 0x5d, 0x85, 0x8b, 0x28, 0x66, 0x2e,
+	0x34, 0xb1, 0x23, 0x92, 0xf3, 0xa0, 0xc7, 0x0d, 0xdf, 0x1a, 0x60, 0xe2, 0x8c, 0x71, 0x70, 0xf9,
+	0xe2, 0xfa, 0xfd, 0x9f, 0x59, 0xfe, 0xe6, 0x1f, 0x30, 0x75, 0x0b, 0xa6, 0x6a, 0x01, 0xc2, 0xbf,
+	0x91, 0x2b, 0x39, 0x6a, 0x2f, 0x45, 0x5a, 0x51, 0x93, 0x0a, 0x09, 0xdf, 0x18, 0x60, 0xec, 0x94,
+	0x7b, 0xf0, 0xfa, 0xc5, 0x65, 0xfa, 0xed, 0x46, 0xfe, 0xc6, 0x95, 0x79, 0x5a, 0xdc, 0x8c, 0x12,
+	0xf7, 0x2f, 0xcc, 0xf5, 0x8a, 0xf3, 0x88, 0x44, 0x2f, 0xa8, 0xfb, 0xb2, 0xf6, 0x64, 0xff, 0xa8,
+	0x60, 0x1c, 0x1c, 0x15, 0x8c, 0x6f, 0x47, 0x05, 0x63, 0xef, 0xb8, 0x90, 0x3a, 0x38, 0x2e, 0xa4,
+	0xbe, 0x1c, 0x17, 0x52, 0xcf, 0x6e, 0x79, 0x54, 0x6e, 0xb6, 0x1c, 0xab, 0xc1, 0xfc, 0x0b, 0x9c,
+	0xe9, 0x9c, 0xfb, 0x3b, 0x75, 0xb2, 0xea, 0x01, 0x5e, 0xfb, 0x1d, 0x00, 0x00, 0xff, 0xff, 0x69,
+	0xd7, 0xea, 0x3f, 0x99, 0x06, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -162,6 +412,8 @@ const _ = grpc.SupportPackageIsVersion4
 type QueryClient interface {
 	// Parameters queries the parameters of the module.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
+	ListValidations(ctx context.Context, in *QueryListValidationsRequest, opts ...grpc.CallOption) (*QueryListValidationsResponse, error)
+	GetValidation(ctx context.Context, in *QueryGetValidationRequest, opts ...grpc.CallOption) (*QueryGetValidationResponse, error)
 }
 
 type queryClient struct {
@@ -181,10 +433,30 @@ func (c *queryClient) Params(ctx context.Context, in *QueryParamsRequest, opts .
 	return out, nil
 }
 
+func (c *queryClient) ListValidations(ctx context.Context, in *QueryListValidationsRequest, opts ...grpc.CallOption) (*QueryListValidationsResponse, error) {
+	out := new(QueryListValidationsResponse)
+	err := c.cc.Invoke(ctx, "/veranablockchain.validation.Query/ListValidations", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) GetValidation(ctx context.Context, in *QueryGetValidationRequest, opts ...grpc.CallOption) (*QueryGetValidationResponse, error) {
+	out := new(QueryGetValidationResponse)
+	err := c.cc.Invoke(ctx, "/veranablockchain.validation.Query/GetValidation", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 type QueryServer interface {
 	// Parameters queries the parameters of the module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
+	ListValidations(context.Context, *QueryListValidationsRequest) (*QueryListValidationsResponse, error)
+	GetValidation(context.Context, *QueryGetValidationRequest) (*QueryGetValidationResponse, error)
 }
 
 // UnimplementedQueryServer can be embedded to have forward compatible implementations.
@@ -193,6 +465,12 @@ type UnimplementedQueryServer struct {
 
 func (*UnimplementedQueryServer) Params(ctx context.Context, req *QueryParamsRequest) (*QueryParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Params not implemented")
+}
+func (*UnimplementedQueryServer) ListValidations(ctx context.Context, req *QueryListValidationsRequest) (*QueryListValidationsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListValidations not implemented")
+}
+func (*UnimplementedQueryServer) GetValidation(ctx context.Context, req *QueryGetValidationRequest) (*QueryGetValidationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetValidation not implemented")
 }
 
 func RegisterQueryServer(s grpc1.Server, srv QueryServer) {
@@ -217,6 +495,42 @@ func _Query_Params_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_ListValidations_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryListValidationsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).ListValidations(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/veranablockchain.validation.Query/ListValidations",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).ListValidations(ctx, req.(*QueryListValidationsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_GetValidation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryGetValidationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).GetValidation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/veranablockchain.validation.Query/GetValidation",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).GetValidation(ctx, req.(*QueryGetValidationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var Query_serviceDesc = _Query_serviceDesc
 var _Query_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "veranablockchain.validation.Query",
@@ -225,6 +539,14 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Params",
 			Handler:    _Query_Params_Handler,
+		},
+		{
+			MethodName: "ListValidations",
+			Handler:    _Query_ListValidations_Handler,
+		},
+		{
+			MethodName: "GetValidation",
+			Handler:    _Query_GetValidation_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -287,6 +609,164 @@ func (m *QueryParamsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *QueryListValidationsRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryListValidationsRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryListValidationsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ExpBefore != nil {
+		n2, err2 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(*m.ExpBefore, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(*m.ExpBefore):])
+		if err2 != nil {
+			return 0, err2
+		}
+		i -= n2
+		i = encodeVarintQuery(dAtA, i, uint64(n2))
+		i--
+		dAtA[i] = 0x32
+	}
+	if m.ResponseMaxSize != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.ResponseMaxSize))
+		i--
+		dAtA[i] = 0x28
+	}
+	if m.State != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.State))
+		i--
+		dAtA[i] = 0x20
+	}
+	if m.Type != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.Type))
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.ValidatorPermId != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.ValidatorPermId))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Controller) > 0 {
+		i -= len(m.Controller)
+		copy(dAtA[i:], m.Controller)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.Controller)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryListValidationsResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryListValidationsResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryListValidationsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Validations) > 0 {
+		for iNdEx := len(m.Validations) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Validations[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintQuery(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryGetValidationRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryGetValidationRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryGetValidationRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Id != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.Id))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryGetValidationResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryGetValidationResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryGetValidationResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	{
+		size, err := m.Validation.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintQuery(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintQuery(dAtA []byte, offset int, v uint64) int {
 	offset -= sovQuery(v)
 	base := offset
@@ -314,6 +794,73 @@ func (m *QueryParamsResponse) Size() (n int) {
 	var l int
 	_ = l
 	l = m.Params.Size()
+	n += 1 + l + sovQuery(uint64(l))
+	return n
+}
+
+func (m *QueryListValidationsRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Controller)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	if m.ValidatorPermId != 0 {
+		n += 1 + sovQuery(uint64(m.ValidatorPermId))
+	}
+	if m.Type != 0 {
+		n += 1 + sovQuery(uint64(m.Type))
+	}
+	if m.State != 0 {
+		n += 1 + sovQuery(uint64(m.State))
+	}
+	if m.ResponseMaxSize != 0 {
+		n += 1 + sovQuery(uint64(m.ResponseMaxSize))
+	}
+	if m.ExpBefore != nil {
+		l = github_com_cosmos_gogoproto_types.SizeOfStdTime(*m.ExpBefore)
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryListValidationsResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Validations) > 0 {
+		for _, e := range m.Validations {
+			l = e.Size()
+			n += 1 + l + sovQuery(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *QueryGetValidationRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Id != 0 {
+		n += 1 + sovQuery(uint64(m.Id))
+	}
+	return n
+}
+
+func (m *QueryGetValidationResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = m.Validation.Size()
 	n += 1 + l + sovQuery(uint64(l))
 	return n
 }
@@ -433,6 +980,436 @@ func (m *QueryParamsResponse) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if err := m.Params.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryListValidationsRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryListValidationsRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryListValidationsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Controller", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Controller = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ValidatorPermId", wireType)
+			}
+			m.ValidatorPermId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ValidatorPermId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Type", wireType)
+			}
+			m.Type = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Type |= ValidationType(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field State", wireType)
+			}
+			m.State = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.State |= ValidationState(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ResponseMaxSize", wireType)
+			}
+			m.ResponseMaxSize = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ResponseMaxSize |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ExpBefore", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ExpBefore == nil {
+				m.ExpBefore = new(time.Time)
+			}
+			if err := github_com_cosmos_gogoproto_types.StdTimeUnmarshal(m.ExpBefore, dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryListValidationsResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryListValidationsResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryListValidationsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Validations", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Validations = append(m.Validations, Validation{})
+			if err := m.Validations[len(m.Validations)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryGetValidationRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryGetValidationRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryGetValidationRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Id |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryGetValidationResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryGetValidationResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryGetValidationResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Validation", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Validation.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

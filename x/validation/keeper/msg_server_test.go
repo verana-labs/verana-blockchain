@@ -3,13 +3,13 @@ package keeper_test
 import (
 	"context"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/verana-labs/verana-blockchain/x/validation/keeper"
 	"testing"
 
 	"github.com/stretchr/testify/require"
 
 	keepertest "github.com/verana-labs/verana-blockchain/testutil/keeper"
 	csptypes "github.com/verana-labs/verana-blockchain/x/cspermission/types"
-	"github.com/verana-labs/verana-blockchain/x/validation/keeper"
 	"github.com/verana-labs/verana-blockchain/x/validation/types"
 )
 

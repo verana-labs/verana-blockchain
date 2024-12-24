@@ -19,7 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Query_Params_FullMethodName = "/veranablockchain.validation.Query/Params"
+	Query_Params_FullMethodName          = "/veranablockchain.validation.Query/Params"
+	Query_ListValidations_FullMethodName = "/veranablockchain.validation.Query/ListValidations"
+	Query_GetValidation_FullMethodName   = "/veranablockchain.validation.Query/GetValidation"
 )
 
 // QueryClient is the client API for Query service.
@@ -28,6 +30,8 @@ const (
 type QueryClient interface {
 	// Parameters queries the parameters of the module.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
+	ListValidations(ctx context.Context, in *QueryListValidationsRequest, opts ...grpc.CallOption) (*QueryListValidationsResponse, error)
+	GetValidation(ctx context.Context, in *QueryGetValidationRequest, opts ...grpc.CallOption) (*QueryGetValidationResponse, error)
 }
 
 type queryClient struct {
@@ -47,12 +51,32 @@ func (c *queryClient) Params(ctx context.Context, in *QueryParamsRequest, opts .
 	return out, nil
 }
 
+func (c *queryClient) ListValidations(ctx context.Context, in *QueryListValidationsRequest, opts ...grpc.CallOption) (*QueryListValidationsResponse, error) {
+	out := new(QueryListValidationsResponse)
+	err := c.cc.Invoke(ctx, Query_ListValidations_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) GetValidation(ctx context.Context, in *QueryGetValidationRequest, opts ...grpc.CallOption) (*QueryGetValidationResponse, error) {
+	out := new(QueryGetValidationResponse)
+	err := c.cc.Invoke(ctx, Query_GetValidation_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
 type QueryServer interface {
 	// Parameters queries the parameters of the module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
+	ListValidations(context.Context, *QueryListValidationsRequest) (*QueryListValidationsResponse, error)
+	GetValidation(context.Context, *QueryGetValidationRequest) (*QueryGetValidationResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -62,6 +86,12 @@ type UnimplementedQueryServer struct {
 
 func (UnimplementedQueryServer) Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Params not implemented")
+}
+func (UnimplementedQueryServer) ListValidations(context.Context, *QueryListValidationsRequest) (*QueryListValidationsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListValidations not implemented")
+}
+func (UnimplementedQueryServer) GetValidation(context.Context, *QueryGetValidationRequest) (*QueryGetValidationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetValidation not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -94,6 +124,42 @@ func _Query_Params_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_ListValidations_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryListValidationsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).ListValidations(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_ListValidations_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).ListValidations(ctx, req.(*QueryListValidationsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_GetValidation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryGetValidationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).GetValidation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_GetValidation_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).GetValidation(ctx, req.(*QueryGetValidationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -104,6 +170,14 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Params",
 			Handler:    _Query_Params_Handler,
+		},
+		{
+			MethodName: "ListValidations",
+			Handler:    _Query_ListValidations_Handler,
+		},
+		{
+			MethodName: "GetValidation",
+			Handler:    _Query_GetValidation_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
