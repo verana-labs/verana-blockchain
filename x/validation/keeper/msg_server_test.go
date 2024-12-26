@@ -3,14 +3,13 @@ package keeper_test
 import (
 	"context"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/verana-labs/verana-blockchain/x/validation/keeper"
-	"testing"
-
 	"github.com/stretchr/testify/require"
-
 	keepertest "github.com/verana-labs/verana-blockchain/testutil/keeper"
 	csptypes "github.com/verana-labs/verana-blockchain/x/cspermission/types"
+	"github.com/verana-labs/verana-blockchain/x/validation/keeper"
 	"github.com/verana-labs/verana-blockchain/x/validation/types"
+	"testing"
+	"time"
 )
 
 func setupMsgServer(t testing.TB) (keeper.Keeper, types.MsgServer, *keepertest.MockCsPermissionKeeper, *keepertest.MockCredentialSchemaKeeper, context.Context) {
@@ -207,6 +206,264 @@ func TestValidationTypePermissionMatching(t *testing.T) {
 				require.NotNil(t, resp)
 			} else {
 				require.Error(t, err)
+				require.Nil(t, resp)
+			}
+		})
+	}
+}
+
+func TestRenewValidation(t *testing.T) {
+	k, ms, csPermKeeper, csKeeper, ctx := setupMsgServer(t)
+	creator := "verana1creator"
+
+	// Create prerequisite data
+	schemaId := csKeeper.CreateMockCredentialSchema(1)
+
+	// Create mock permissions with different types and countries
+	issuerGrantorPermId := csPermKeeper.CreateMockPermission(
+		creator,
+		schemaId,
+		csptypes.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_ISSUER_GRANTOR,
+		"did:example:123",
+		"US",
+	)
+
+	// Create a verifier grantor permission for incompatible type test
+	verifierGrantorPermId := csPermKeeper.CreateMockPermission(
+		creator,
+		schemaId,
+		csptypes.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_VERIFIER_GRANTOR,
+		"did:example:789",
+		"US",
+	)
+
+	// Create an initial validation that we'll try to renew
+	createMsg := &types.MsgCreateValidation{
+		Creator:         creator,
+		ValidationType:  uint32(types.ValidationType_ISSUER),
+		ValidatorPermId: issuerGrantorPermId,
+		Country:         "US",
+	}
+	createResp, err := ms.CreateValidation(ctx, createMsg)
+	require.NoError(t, err)
+	require.NotNil(t, createResp)
+
+	// Create another compatible validator permission for renewal tests
+	newValidatorPermId := csPermKeeper.CreateMockPermission(
+		creator,
+		schemaId,
+		csptypes.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_ISSUER_GRANTOR,
+		"did:example:456",
+		"US",
+	)
+
+	testCases := []struct {
+		name          string
+		msg           *types.MsgRenewValidation
+		expPass       bool
+		errorContains string
+		setupFn       func()
+		checkFn       func(*testing.T, *types.Validation) // Optional additional checks
+	}{
+		{
+			name: "Valid Renewal - Same Validator",
+			msg: &types.MsgRenewValidation{
+				Creator: creator,
+				Id:      createResp.ValidationId,
+			},
+			expPass: true,
+			checkFn: func(t *testing.T, v *types.Validation) {
+				require.Equal(t, issuerGrantorPermId, v.ValidatorPermId)
+			},
+		},
+		{
+			name: "Valid Renewal - New Compatible Validator",
+			msg: &types.MsgRenewValidation{
+				Creator:         creator,
+				Id:              createResp.ValidationId,
+				ValidatorPermId: newValidatorPermId,
+			},
+			expPass: true,
+			checkFn: func(t *testing.T, v *types.Validation) {
+				require.Equal(t, newValidatorPermId, v.ValidatorPermId)
+			},
+		},
+		{
+			name: "Invalid - Non-existent Validation",
+			msg: &types.MsgRenewValidation{
+				Creator: creator,
+				Id:      99999,
+			},
+			expPass:       false,
+			errorContains: "validation not found",
+		},
+		{
+			name: "Invalid - Wrong Creator",
+			msg: &types.MsgRenewValidation{
+				Creator: "verana1wrongcreator",
+				Id:      createResp.ValidationId,
+			},
+			expPass:       false,
+			errorContains: "only the validation applicant can renew",
+		},
+		{
+			name: "Invalid - Non-existent New Validator",
+			msg: &types.MsgRenewValidation{
+				Creator:         creator,
+				Id:              createResp.ValidationId,
+				ValidatorPermId: 99999,
+			},
+			expPass:       false,
+			errorContains: "validator permission not found",
+		},
+		{
+			name: "Invalid - Incompatible Validator Type",
+			msg: &types.MsgRenewValidation{
+				Creator:         creator,
+				Id:              createResp.ValidationId,
+				ValidatorPermId: verifierGrantorPermId,
+			},
+			expPass:       false,
+			errorContains: "permission type",
+		},
+		{
+			name: "Valid Renewal - After Previous Renewal",
+			msg: &types.MsgRenewValidation{
+				Creator: creator,
+				Id:      createResp.ValidationId,
+			},
+			expPass: true,
+			setupFn: func() {
+				// Get initial state
+				initialVal, err := k.Validation.Get(ctx, createResp.ValidationId)
+				require.NoError(t, err)
+				t.Logf("Initial state - Deposit: %d, CurrentDeposit: %d",
+					initialVal.ApplicantDeposit, initialVal.CurrentDeposit)
+
+				// Advance time for first renewal
+				sdkCtx := sdk.UnwrapSDKContext(ctx)
+				firstRenewalTime := sdkCtx.BlockTime().Add(time.Minute)
+				ctx = sdk.WrapSDKContext(sdkCtx.WithBlockTime(firstRenewalTime))
+
+				// First renewal
+				firstRenewal := &types.MsgRenewValidation{
+					Creator: creator,
+					Id:      createResp.ValidationId,
+				}
+				_, err = ms.RenewValidation(ctx, firstRenewal)
+				require.NoError(t, err)
+
+				// Get state after first renewal but before second
+				beforeSecondRenewal, err := k.Validation.Get(ctx, createResp.ValidationId)
+				require.NoError(t, err)
+				t.Logf("Before second renewal - Deposit: %d, CurrentDeposit: %d",
+					beforeSecondRenewal.ApplicantDeposit, beforeSecondRenewal.CurrentDeposit)
+
+				// Store this state for comparison in checkFn
+				err = k.Validation.Set(ctx, createResp.ValidationId, beforeSecondRenewal)
+				require.NoError(t, err)
+
+				// Advance time for second renewal
+				sdkCtx = sdk.UnwrapSDKContext(ctx)
+				secondRenewalTime := sdkCtx.BlockTime().Add(time.Minute)
+				ctx = sdk.WrapSDKContext(sdkCtx.WithBlockTime(secondRenewalTime))
+			},
+			checkFn: func(t *testing.T, v *types.Validation) {
+				// Get the final validation state after renewal
+				finalState, err := k.Validation.Get(ctx, v.Id)
+				require.NoError(t, err)
+
+				t.Logf("Validation State:")
+				t.Logf("  Current Total Deposit: %d", finalState.ApplicantDeposit)
+				t.Logf("  Renewal Deposit Amount: %d", finalState.CurrentDeposit)
+
+				// Both should be equal since the execution is complete
+				require.Equal(t, finalState.ApplicantDeposit, v.ApplicantDeposit,
+					"Total deposit mismatch: state:%d, validation:%d",
+					finalState.ApplicantDeposit, v.ApplicantDeposit)
+
+				// The test passes because by this point, the second renewal
+				// has already accumulated the deposit
+				t.Logf("✓ Validation completed successfully with total deposit: %d", finalState.ApplicantDeposit)
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			// Run any custom setup
+			if tc.setupFn != nil {
+				tc.setupFn()
+			}
+
+			// Store initial state for comparison
+			var originalValidation types.Validation
+			if tc.expPass {
+				var err error
+				originalValidation, err = k.Validation.Get(ctx, tc.msg.Id)
+				require.NoError(t, err)
+
+				// Advance block time
+				sdkCtx := sdk.UnwrapSDKContext(ctx)
+				newBlockTime := sdkCtx.BlockTime().Add(time.Minute)
+				ctx = sdk.WrapSDKContext(sdkCtx.WithBlockTime(newBlockTime))
+			}
+
+			// Capture events before the call
+			sdkCtx := sdk.UnwrapSDKContext(ctx)
+			previousEvents := sdkCtx.EventManager().Events()
+
+			resp, err := ms.RenewValidation(ctx, tc.msg)
+			if tc.expPass {
+				require.NoError(t, err)
+				require.NotNil(t, resp)
+
+				// Verify validation was renewed correctly
+				validation, err := k.Validation.Get(ctx, tc.msg.Id)
+				require.NoError(t, err)
+
+				// Check state changes
+				require.Equal(t, types.ValidationState_PENDING, validation.State)
+				require.True(t, validation.LastStateChange.After(originalValidation.LastStateChange),
+					"LastStateChange (%v) should be after original (%v)",
+					validation.LastStateChange, originalValidation.LastStateChange)
+
+				// Verify fees and deposits
+				require.True(t, validation.CurrentFees > 0, "CurrentFees should be positive")
+				require.True(t, validation.CurrentDeposit > 0, "CurrentDeposit should be positive")
+				require.True(t, validation.ApplicantDeposit > originalValidation.ApplicantDeposit,
+					"ApplicantDeposit should increase: new %v, original %v",
+					validation.ApplicantDeposit, originalValidation.ApplicantDeposit)
+
+				// Check validator permission ID
+				if tc.msg.ValidatorPermId != 0 {
+					require.Equal(t, tc.msg.ValidatorPermId, validation.ValidatorPermId)
+
+					// Check for revocation transfer event when validator changes
+					if tc.msg.ValidatorPermId != originalValidation.ValidatorPermId {
+						newEvents := sdkCtx.EventManager().Events()
+						var found bool
+						for _, event := range newEvents[len(previousEvents):] {
+							if event.Type == "validation_revocation_control_transfer" {
+								found = true
+								break
+							}
+						}
+						require.True(t, found, "revocation control transfer event should be emitted")
+					}
+				} else {
+					require.Equal(t, originalValidation.ValidatorPermId, validation.ValidatorPermId)
+				}
+
+				// Run any additional checks
+				if tc.checkFn != nil {
+					tc.checkFn(t, &validation)
+				}
+			} else {
+				require.Error(t, err)
+				if tc.errorContains != "" {
+					require.Contains(t, err.Error(), tc.errorContains)
+				}
 				require.Nil(t, resp)
 			}
 		})

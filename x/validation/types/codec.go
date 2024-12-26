@@ -15,10 +15,12 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgUpdateParams{},
 		&MsgCreateValidation{},
+		&MsgRenewValidation{},
 	)
 	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)
 }
 
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	legacy.RegisterAminoMsg(cdc, &MsgCreateValidation{}, "/dtr/v1/v/create-validation")
+	legacy.RegisterAminoMsg(cdc, &MsgRenewValidation{}, "/dtr/v1/v/renew-validation")
 }

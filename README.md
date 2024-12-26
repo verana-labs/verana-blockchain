@@ -486,6 +486,21 @@ The permission types are:
    --gas-prices 1.1uvna
    ```
 
+2. Renew a Validation:
+   ```bash
+   veranad tx validation renew-validation \
+   1 \
+   1 \
+   --from cooluser \
+   --keyring-backend test \
+   --chain-id test-1 \
+   --gas 800000 \
+   --gas-adjustment 1.3 \
+   --gas-prices 1.1uvna
+   ```
+
+   Note: Starting a renewal process with a different validator implicitly transfers revocation control of existing permissions to the new validator.
+
 ### Queries
 
 1. List Validations:

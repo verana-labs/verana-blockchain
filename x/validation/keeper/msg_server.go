@@ -43,3 +43,33 @@ func (ms msgServer) CreateValidation(goCtx context.Context, msg *types.MsgCreate
 		ValidationId: validation.Id,
 	}, nil
 }
+
+func (ms msgServer) RenewValidation(goCtx context.Context, msg *types.MsgRenewValidation) (*types.MsgRenewValidationResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// [MOD-V-MSG-2-2-1] Basic checks and load validation
+	val, validatorPermID, err := ms.validateRenewalBasics(ctx, msg)
+	if err != nil {
+		return nil, fmt.Errorf("basic validation check failed: %w", err)
+	}
+
+	// [MOD-V-MSG-2-2-2] Revocation and permission checks
+	if err := ms.validateRenewalPermissions(ctx, msg, val, validatorPermID); err != nil {
+		return nil, fmt.Errorf("permission check failed: %w", err)
+	}
+
+	// [MOD-V-MSG-2-2-3] Fee checks
+	fees, deposit, err := ms.checkAndCalculateRenewalFees(ctx, validatorPermID)
+	if err != nil {
+		return nil, fmt.Errorf("fee check failed: %w", err)
+	}
+
+	// [MOD-V-MSG-2-3] Execute renewal
+	if err := ms.executeRenewalValidation(ctx, val, validatorPermID, fees, deposit); err != nil {
+		return nil, fmt.Errorf("failed to execute renewal: %w", err)
+	}
+
+	return &types.MsgRenewValidationResponse{
+		ValidationId: msg.Id,
+	}, nil
+}

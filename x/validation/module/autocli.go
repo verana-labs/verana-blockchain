@@ -97,6 +97,23 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 						},
 					},
 				},
+				{
+					RpcMethod: "RenewValidation",
+					Use:       "renew-validation [id] [validator-perm-id]",
+					Short:     "Renew an existing validation",
+					Long: `Renew an existing validation with optional new validator:
+- id: ID of the validation to renew
+- validator-perm-id: Optional new validator permission ID (if not specified, uses current validator)`,
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "id",
+						},
+						{
+							ProtoField: "validator_perm_id",
+							Optional:   true,
+						},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},

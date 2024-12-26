@@ -38,10 +38,10 @@ message Validation {
   ValidationState state = 6;
   google.protobuf.Timestamp exp = 7 [(gogoproto.nullable) = true, (gogoproto.stdtime) = true];
   google.protobuf.Timestamp last_state_change = 8 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-  int64 applicant_deposit = 9;
+  uint64 applicant_deposit = 9;
   repeated ValidatorDeposit validator_deposits = 10 [(gogoproto.nullable) = false];
-  int64 current_fees = 11;
-  int64 current_deposit = 12;
+  uint64 current_fees = 11;
+  uint64 current_deposit = 12;
   string summary_hash = 13;
   google.protobuf.Timestamp term_requested = 14 [(gogoproto.nullable) = true, (gogoproto.stdtime) = true];
 }

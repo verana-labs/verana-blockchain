@@ -8,8 +8,10 @@ import (
 )
 
 const TypeMsgCreateValidation = "create_validation"
+const TypeMsgRenewValidation = "renew_validation"
 
 var _ sdk.Msg = &MsgCreateValidation{}
+var _ sdk.Msg = &MsgRenewValidation{}
 
 // NewMsgCreateValidation creates a new MsgCreateValidation instance
 func NewMsgCreateValidation(
@@ -90,4 +92,52 @@ func isValidCountryCode(country string) bool {
 func isValidValidationType(vType ValidationType) bool {
 	// Check if type is within valid range (excluding UNSPECIFIED)
 	return vType > ValidationType_TYPE_UNSPECIFIED && vType <= ValidationType_HOLDER
+}
+
+func NewMsgRenewValidation(
+	creator string,
+	id uint64,
+	validatorPermId uint64,
+) *MsgRenewValidation {
+	return &MsgRenewValidation{
+		Creator:         creator,
+		Id:              id,
+		ValidatorPermId: validatorPermId,
+	}
+}
+
+// Route implements sdk.Msg
+func (msg *MsgRenewValidation) Route() string {
+	return RouterKey
+}
+
+// Type implements sdk.Msg
+func (msg *MsgRenewValidation) Type() string {
+	return TypeMsgRenewValidation
+}
+
+// GetSigners implements sdk.Msg
+func (msg *MsgRenewValidation) GetSigners() []sdk.AccAddress {
+	creator, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{creator}
+}
+
+// ValidateBasic implements sdk.Msg
+func (msg *MsgRenewValidation) ValidateBasic() error {
+	if msg.Creator == "" {
+		return errors.Wrap(sdkerrors.ErrInvalidAddress, "creator address is required")
+	}
+
+	if _, err := sdk.AccAddressFromBech32(msg.Creator); err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+	}
+
+	if msg.Id == 0 {
+		return errors.Wrap(sdkerrors.ErrInvalidRequest, "validation id is required")
+	}
+
+	return nil
 }

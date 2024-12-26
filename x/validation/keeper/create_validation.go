@@ -94,7 +94,7 @@ func (ms msgServer) validatePermissions(ctx sdk.Context, msg *types.MsgCreateVal
 }
 
 // checkAndCalculateFees implements [MOD-V-MSG-1-2-3] fee checks
-func (ms msgServer) checkAndCalculateFees(ctx sdk.Context, msg *types.MsgCreateValidation) (int64, int64, error) {
+func (ms msgServer) checkAndCalculateFees(ctx sdk.Context, msg *types.MsgCreateValidation) (uint64, uint64, error) {
 	perm, err := ms.csPermissionKeeper.GetCSPermission(ctx, msg.ValidatorPermId)
 	if err != nil {
 		return 0, 0, fmt.Errorf("failed to get validator permission: %w", err)
@@ -107,11 +107,11 @@ func (ms msgServer) checkAndCalculateFees(ctx sdk.Context, msg *types.MsgCreateV
 
 	//TODO: send validation fees to validation module account
 
-	return int64(validationFees), int64(validationDeposit), nil
+	return validationFees, validationDeposit, nil
 }
 
 // executeCreateValidation implements [MOD-V-MSG-1-3] execution
-func (ms msgServer) executeCreateValidation(ctx sdk.Context, msg *types.MsgCreateValidation, fees, deposit int64) (*types.Validation, error) {
+func (ms msgServer) executeCreateValidation(ctx sdk.Context, msg *types.MsgCreateValidation, fees, deposit uint64) (*types.Validation, error) {
 	// Generate new validation ID
 	id, err := ms.Keeper.GetNextID(ctx)
 	if err != nil {

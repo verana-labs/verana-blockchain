@@ -669,8 +669,8 @@ func (x *fastReflection_Validation) Range(f func(protoreflect.FieldDescriptor, p
 			return
 		}
 	}
-	if x.ApplicantDeposit != int64(0) {
-		value := protoreflect.ValueOfInt64(x.ApplicantDeposit)
+	if x.ApplicantDeposit != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.ApplicantDeposit)
 		if !f(fd_Validation_applicant_deposit, value) {
 			return
 		}
@@ -681,14 +681,14 @@ func (x *fastReflection_Validation) Range(f func(protoreflect.FieldDescriptor, p
 			return
 		}
 	}
-	if x.CurrentFees != int64(0) {
-		value := protoreflect.ValueOfInt64(x.CurrentFees)
+	if x.CurrentFees != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.CurrentFees)
 		if !f(fd_Validation_current_fees, value) {
 			return
 		}
 	}
-	if x.CurrentDeposit != int64(0) {
-		value := protoreflect.ValueOfInt64(x.CurrentDeposit)
+	if x.CurrentDeposit != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.CurrentDeposit)
 		if !f(fd_Validation_current_deposit, value) {
 			return
 		}
@@ -737,13 +737,13 @@ func (x *fastReflection_Validation) Has(fd protoreflect.FieldDescriptor) bool {
 	case "veranablockchain.validation.Validation.last_state_change":
 		return x.LastStateChange != nil
 	case "veranablockchain.validation.Validation.applicant_deposit":
-		return x.ApplicantDeposit != int64(0)
+		return x.ApplicantDeposit != uint64(0)
 	case "veranablockchain.validation.Validation.validator_deposits":
 		return len(x.ValidatorDeposits) != 0
 	case "veranablockchain.validation.Validation.current_fees":
-		return x.CurrentFees != int64(0)
+		return x.CurrentFees != uint64(0)
 	case "veranablockchain.validation.Validation.current_deposit":
-		return x.CurrentDeposit != int64(0)
+		return x.CurrentDeposit != uint64(0)
 	case "veranablockchain.validation.Validation.summary_hash":
 		return x.SummaryHash != ""
 	case "veranablockchain.validation.Validation.term_requested":
@@ -781,13 +781,13 @@ func (x *fastReflection_Validation) Clear(fd protoreflect.FieldDescriptor) {
 	case "veranablockchain.validation.Validation.last_state_change":
 		x.LastStateChange = nil
 	case "veranablockchain.validation.Validation.applicant_deposit":
-		x.ApplicantDeposit = int64(0)
+		x.ApplicantDeposit = uint64(0)
 	case "veranablockchain.validation.Validation.validator_deposits":
 		x.ValidatorDeposits = nil
 	case "veranablockchain.validation.Validation.current_fees":
-		x.CurrentFees = int64(0)
+		x.CurrentFees = uint64(0)
 	case "veranablockchain.validation.Validation.current_deposit":
-		x.CurrentDeposit = int64(0)
+		x.CurrentDeposit = uint64(0)
 	case "veranablockchain.validation.Validation.summary_hash":
 		x.SummaryHash = ""
 	case "veranablockchain.validation.Validation.term_requested":
@@ -834,7 +834,7 @@ func (x *fastReflection_Validation) Get(descriptor protoreflect.FieldDescriptor)
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	case "veranablockchain.validation.Validation.applicant_deposit":
 		value := x.ApplicantDeposit
-		return protoreflect.ValueOfInt64(value)
+		return protoreflect.ValueOfUint64(value)
 	case "veranablockchain.validation.Validation.validator_deposits":
 		if len(x.ValidatorDeposits) == 0 {
 			return protoreflect.ValueOfList(&_Validation_10_list{})
@@ -843,10 +843,10 @@ func (x *fastReflection_Validation) Get(descriptor protoreflect.FieldDescriptor)
 		return protoreflect.ValueOfList(listValue)
 	case "veranablockchain.validation.Validation.current_fees":
 		value := x.CurrentFees
-		return protoreflect.ValueOfInt64(value)
+		return protoreflect.ValueOfUint64(value)
 	case "veranablockchain.validation.Validation.current_deposit":
 		value := x.CurrentDeposit
-		return protoreflect.ValueOfInt64(value)
+		return protoreflect.ValueOfUint64(value)
 	case "veranablockchain.validation.Validation.summary_hash":
 		value := x.SummaryHash
 		return protoreflect.ValueOfString(value)
@@ -890,15 +890,15 @@ func (x *fastReflection_Validation) Set(fd protoreflect.FieldDescriptor, value p
 	case "veranablockchain.validation.Validation.last_state_change":
 		x.LastStateChange = value.Message().Interface().(*timestamppb.Timestamp)
 	case "veranablockchain.validation.Validation.applicant_deposit":
-		x.ApplicantDeposit = value.Int()
+		x.ApplicantDeposit = value.Uint()
 	case "veranablockchain.validation.Validation.validator_deposits":
 		lv := value.List()
 		clv := lv.(*_Validation_10_list)
 		x.ValidatorDeposits = *clv.list
 	case "veranablockchain.validation.Validation.current_fees":
-		x.CurrentFees = value.Int()
+		x.CurrentFees = value.Uint()
 	case "veranablockchain.validation.Validation.current_deposit":
-		x.CurrentDeposit = value.Int()
+		x.CurrentDeposit = value.Uint()
 	case "veranablockchain.validation.Validation.summary_hash":
 		x.SummaryHash = value.Interface().(string)
 	case "veranablockchain.validation.Validation.term_requested":
@@ -1000,14 +1000,14 @@ func (x *fastReflection_Validation) NewField(fd protoreflect.FieldDescriptor) pr
 		m := new(timestamppb.Timestamp)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "veranablockchain.validation.Validation.applicant_deposit":
-		return protoreflect.ValueOfInt64(int64(0))
+		return protoreflect.ValueOfUint64(uint64(0))
 	case "veranablockchain.validation.Validation.validator_deposits":
 		list := []*ValidatorDeposit{}
 		return protoreflect.ValueOfList(&_Validation_10_list{list: &list})
 	case "veranablockchain.validation.Validation.current_fees":
-		return protoreflect.ValueOfInt64(int64(0))
+		return protoreflect.ValueOfUint64(uint64(0))
 	case "veranablockchain.validation.Validation.current_deposit":
-		return protoreflect.ValueOfInt64(int64(0))
+		return protoreflect.ValueOfUint64(uint64(0))
 	case "veranablockchain.validation.Validation.summary_hash":
 		return protoreflect.ValueOfString("")
 	case "veranablockchain.validation.Validation.term_requested":
@@ -1562,7 +1562,7 @@ func (x *fastReflection_Validation) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.ApplicantDeposit |= int64(b&0x7F) << shift
+					x.ApplicantDeposit |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -1615,7 +1615,7 @@ func (x *fastReflection_Validation) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.CurrentFees |= int64(b&0x7F) << shift
+					x.CurrentFees |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -1634,7 +1634,7 @@ func (x *fastReflection_Validation) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.CurrentDeposit |= int64(b&0x7F) << shift
+					x.CurrentDeposit |= uint64(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -1921,10 +1921,10 @@ type Validation struct {
 	State             ValidationState        `protobuf:"varint,6,opt,name=state,proto3,enum=veranablockchain.validation.ValidationState" json:"state,omitempty"`
 	Exp               *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=exp,proto3" json:"exp,omitempty"`
 	LastStateChange   *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=last_state_change,json=lastStateChange,proto3" json:"last_state_change,omitempty"`
-	ApplicantDeposit  int64                  `protobuf:"varint,9,opt,name=applicant_deposit,json=applicantDeposit,proto3" json:"applicant_deposit,omitempty"`
+	ApplicantDeposit  uint64                 `protobuf:"varint,9,opt,name=applicant_deposit,json=applicantDeposit,proto3" json:"applicant_deposit,omitempty"`
 	ValidatorDeposits []*ValidatorDeposit    `protobuf:"bytes,10,rep,name=validator_deposits,json=validatorDeposits,proto3" json:"validator_deposits,omitempty"`
-	CurrentFees       int64                  `protobuf:"varint,11,opt,name=current_fees,json=currentFees,proto3" json:"current_fees,omitempty"`
-	CurrentDeposit    int64                  `protobuf:"varint,12,opt,name=current_deposit,json=currentDeposit,proto3" json:"current_deposit,omitempty"`
+	CurrentFees       uint64                 `protobuf:"varint,11,opt,name=current_fees,json=currentFees,proto3" json:"current_fees,omitempty"`
+	CurrentDeposit    uint64                 `protobuf:"varint,12,opt,name=current_deposit,json=currentDeposit,proto3" json:"current_deposit,omitempty"`
 	SummaryHash       string                 `protobuf:"bytes,13,opt,name=summary_hash,json=summaryHash,proto3" json:"summary_hash,omitempty"`
 	TermRequested     *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=term_requested,json=termRequested,proto3" json:"term_requested,omitempty"`
 }
@@ -2005,7 +2005,7 @@ func (x *Validation) GetLastStateChange() *timestamppb.Timestamp {
 	return nil
 }
 
-func (x *Validation) GetApplicantDeposit() int64 {
+func (x *Validation) GetApplicantDeposit() uint64 {
 	if x != nil {
 		return x.ApplicantDeposit
 	}
@@ -2019,14 +2019,14 @@ func (x *Validation) GetValidatorDeposits() []*ValidatorDeposit {
 	return nil
 }
 
-func (x *Validation) GetCurrentFees() int64 {
+func (x *Validation) GetCurrentFees() uint64 {
 	if x != nil {
 		return x.CurrentFees
 	}
 	return 0
 }
 
-func (x *Validation) GetCurrentDeposit() int64 {
+func (x *Validation) GetCurrentDeposit() uint64 {
 	if x != nil {
 		return x.CurrentDeposit
 	}
@@ -2096,7 +2096,7 @@ var file_veranablockchain_validation_types_proto_rawDesc = []byte{
 	0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x42, 0x08, 0xc8, 0xde, 0x1f, 0x00,
 	0x90, 0xdf, 0x1f, 0x01, 0x52, 0x0f, 0x6c, 0x61, 0x73, 0x74, 0x53, 0x74, 0x61, 0x74, 0x65, 0x43,
 	0x68, 0x61, 0x6e, 0x67, 0x65, 0x12, 0x2b, 0x0a, 0x11, 0x61, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61,
-	0x6e, 0x74, 0x5f, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x18, 0x09, 0x20, 0x01, 0x28, 0x03,
+	0x6e, 0x74, 0x5f, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x18, 0x09, 0x20, 0x01, 0x28, 0x04,
 	0x52, 0x10, 0x61, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x6e, 0x74, 0x44, 0x65, 0x70, 0x6f, 0x73,
 	0x69, 0x74, 0x12, 0x62, 0x0a, 0x12, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x6f, 0x72, 0x5f,
 	0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x73, 0x18, 0x0a, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x2d,
@@ -2105,10 +2105,10 @@ var file_veranablockchain_validation_types_proto_rawDesc = []byte{
 	0x69, 0x64, 0x61, 0x74, 0x6f, 0x72, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x42, 0x04, 0xc8,
 	0xde, 0x1f, 0x00, 0x52, 0x11, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x6f, 0x72, 0x44, 0x65,
 	0x70, 0x6f, 0x73, 0x69, 0x74, 0x73, 0x12, 0x21, 0x0a, 0x0c, 0x63, 0x75, 0x72, 0x72, 0x65, 0x6e,
-	0x74, 0x5f, 0x66, 0x65, 0x65, 0x73, 0x18, 0x0b, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0b, 0x63, 0x75,
+	0x74, 0x5f, 0x66, 0x65, 0x65, 0x73, 0x18, 0x0b, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0b, 0x63, 0x75,
 	0x72, 0x72, 0x65, 0x6e, 0x74, 0x46, 0x65, 0x65, 0x73, 0x12, 0x27, 0x0a, 0x0f, 0x63, 0x75, 0x72,
 	0x72, 0x65, 0x6e, 0x74, 0x5f, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x18, 0x0c, 0x20, 0x01,
-	0x28, 0x03, 0x52, 0x0e, 0x63, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x44, 0x65, 0x70, 0x6f, 0x73,
+	0x28, 0x04, 0x52, 0x0e, 0x63, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x44, 0x65, 0x70, 0x6f, 0x73,
 	0x69, 0x74, 0x12, 0x21, 0x0a, 0x0c, 0x73, 0x75, 0x6d, 0x6d, 0x61, 0x72, 0x79, 0x5f, 0x68, 0x61,
 	0x73, 0x68, 0x18, 0x0d, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x73, 0x75, 0x6d, 0x6d, 0x61, 0x72,
 	0x79, 0x48, 0x61, 0x73, 0x68, 0x12, 0x4b, 0x0a, 0x0e, 0x74, 0x65, 0x72, 0x6d, 0x5f, 0x72, 0x65,
