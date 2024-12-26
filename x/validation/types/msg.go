@@ -20,7 +20,7 @@ func NewMsgCreateValidation(
 ) *MsgCreateValidation {
 	return &MsgCreateValidation{
 		Creator:         creator,
-		ValidationType:  validationType,
+		ValidationType:  uint32(validationType),
 		ValidatorPermId: validatorPermId,
 		Country:         country,
 	}
@@ -69,12 +69,12 @@ func (msg *MsgCreateValidation) ValidateBasic() error {
 		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid country code format: must be ISO 3166-1 alpha-2")
 	}
 
-	// Validate validation type
-	if msg.ValidationType == ValidationType_TYPE_UNSPECIFIED {
+	//Validate validation type
+	if msg.ValidationType == uint32(ValidationType_TYPE_UNSPECIFIED) {
 		return errors.Wrap(sdkerrors.ErrInvalidRequest, "validation type must be specified")
 	}
-	if !isValidValidationType(msg.ValidationType) {
-		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid validation type: %s", msg.ValidationType.String())
+	if !isValidValidationType(ValidationType(msg.ValidationType)) {
+		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid validation type: %d", msg.ValidationType)
 	}
 
 	return nil

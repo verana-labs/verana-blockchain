@@ -44,7 +44,7 @@ message MsgUpdateParamsResponse {}
 message MsgCreateValidation {
   option (cosmos.msg.v1.signer) = "creator";
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-  ValidationType validation_type = 2;
+  uint32 validation_type = 2;
   uint64 validator_perm_id = 3;
   string country = 4;
 }

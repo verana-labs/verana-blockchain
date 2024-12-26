@@ -367,24 +367,24 @@ Note:
 
 1. Create a Credential Schema Permission:
 ```bash
-veranad tx cspermission create-credential-schema-perm \
-1 \
-1 \
-"did:example:123" \
-verana1mda3hc2z8jnmk86zkvm9wlfgfmxwg2msf2a3ka \
-"2024-03-16T15:00:00Z" \
-100 \
-200 \
-300 \
---effective-until "2025-03-16T15:00:00Z" \
---country US \
---validation-id 123 \
---from cooluser \
---keyring-backend test \
---chain-id test-1 \
---gas 800000 \
---gas-adjustment 1.3 \
---gas-prices 1.1uvna
+   veranad tx cspermission create-credential-schema-perm \
+   1 \
+   1 \
+   "did:example:123" \
+   verana1mda3hc2z8jnmk86zkvm9wlfgfmxwg2msf2a3ka \
+   "2024-03-16T15:00:00Z" \
+   100 \
+   200 \
+   300 \
+   --effective-until "2025-03-16T15:00:00Z" \
+   --country US \
+   --validation-id 123 \
+   --from cooluser \
+   --keyring-backend test \
+   --chain-id test-1 \
+   --gas 800000 \
+   --gas-adjustment 1.3 \
+   --gas-prices 1.1uvna
 ```
 
 The permission types are:
@@ -394,3 +394,140 @@ The permission types are:
 - 4 = VERIFIER_GRANTOR
 - 5 = TRUST_REGISTRY
 - 6 = HOLDER
+
+## Interacting with the Validation Module
+
+### Prerequisites
+
+1. First create a Trust Registry (will need the ID):
+   ```bash
+   veranad tx trustregistry create-trust-registry \
+   did:example:123456789abcdefghi \
+   "http://example-aka.com" \
+   en \
+   https://example.com/governance-framework.pdf \
+   e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 \
+   --from cooluser \
+   --keyring-backend test \
+   --chain-id test-1 \
+   --gas auto \
+   --gas-adjustment 1.3 \
+   --gas-prices 1.1uvna
+   ```
+
+2. Create a Credential Schema (using Trust Registry ID from step 1):
+   ```bash
+   echo '{
+       "$schema": "https://json-schema.org/draft/2020-12/schema",
+       "$id": "/dtr/v1/cs/js/1",
+       "type": "object",
+       "properties": {
+           "name": {
+               "type": "string"
+           }
+       },
+       "required": ["name"],
+       "additionalProperties": false
+   }' > schema.json
+
+   veranad tx credentialschema create-credential-schema \
+   1 \
+   "$(cat schema.json)" \
+   365 \
+   365 \
+   180 \
+   180 \
+   180 \
+   2 \
+   2 \
+   --from cooluser \
+   --keyring-backend test \
+   --chain-id test-1 \
+   --gas auto \
+   --gas-adjustment 1.3 \
+   --gas-prices 1.1uvna
+   ```
+
+3. Create necessary Permissions (e.g., ISSUER_GRANTOR permission for validating ISSUER requests):
+   ```bash
+   veranad tx cspermission create-credential-schema-perm \                      
+   1 \
+   3 \
+   "did:example:123" \
+   verana1mda3hc2z8jnmk86zkvm9wlfgfmxwg2msf2a3ka \
+   "2024-12-29T15:00:00Z" \
+   100 \
+   200 \
+   300 \
+   --effective-until "2025-03-16T15:00:00Z" \
+   --country US \
+   --validation-id 123 \
+   --from cooluser \
+   --keyring-backend test \
+   --chain-id test-1 \
+   --gas 800000 \
+   --gas-adjustment 1.3 \
+   --gas-prices 1.1uvna
+   ```
+
+### Transactions
+
+1. Create a Validation:
+   ```bash
+   veranad tx validation create-validation \    
+   3 \          
+   1 \
+   US \
+   --from cooluser \
+   --keyring-backend test \
+   --chain-id test-1 \
+   --gas 800000 \
+   --gas-adjustment 1.3 \
+   --gas-prices 1.1uvna
+   ```
+
+### Queries
+
+1. List Validations:
+   ```bash
+   veranad q validation list-validations \
+   --controller <account_address> \
+   --validator-perm-id 1 \
+   --type ISSUER \
+   --state PENDING \
+   --response-max-size 64 \
+   --exp-before "2024-12-31T00:00:00Z" \
+   --output json
+   ```
+
+2. Get Validation by ID:
+   ```bash
+   veranad q validation get-validation <validation_id> \
+   --output json
+   ```
+
+### Query Parameters
+
+- `controller`: Filter by controller account address
+- `validator-perm-id`: Filter by validator permission ID
+- `type`: Filter by validation type (ISSUER_GRANTOR, VERIFIER_GRANTOR, ISSUER, VERIFIER, HOLDER)
+- `state`: Filter by validation state (PENDING, VALIDATED, TERMINATED)
+- `response-max-size`: Maximum number of results (1-1024, default 64)
+- `exp-before`: Filter validations expiring before timestamp (RFC3339 format)
+
+### Validation Types
+- `ISSUER`: For becoming an issuer of credentials
+- `VERIFIER`: For becoming a verifier of credentials
+- `ISSUER_GRANTOR`: For becoming an issuer grantor
+- `VERIFIER_GRANTOR`: For becoming a verifier grantor
+- `HOLDER`: For getting issued a credential
+
+### Permission Types
+- 1 = ISSUER
+- 2 = VERIFIER
+- 3 = ISSUER_GRANTOR
+- 4 = VERIFIER_GRANTOR
+- 5 = TRUST_REGISTRY
+- 6 = HOLDER
+
+Note: The validation flow depends on the credential schema's permission management modes. For example, to become an ISSUER when the schema's issuer_perm_management_mode is GRANTOR_VALIDATION, you need to get validated by an ISSUER_GRANTOR.

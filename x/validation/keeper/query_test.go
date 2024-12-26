@@ -59,7 +59,7 @@ func TestListValidations(t *testing.T) {
 	createValidation := func(applicant string, vType types.ValidationType, state types.ValidationState, expTime *time.Time) uint64 {
 		msg := &types.MsgCreateValidation{
 			Creator:         applicant,
-			ValidationType:  vType,
+			ValidationType:  uint32(vType),
 			ValidatorPermId: getPermId(vType),
 			Country:         "US",
 		}
@@ -192,7 +192,7 @@ func TestGetValidation(t *testing.T) {
 	// Create a test validation
 	msg := &types.MsgCreateValidation{
 		Creator:         creator,
-		ValidationType:  types.ValidationType_ISSUER,
+		ValidationType:  uint32(types.ValidationType_ISSUER),
 		ValidatorPermId: issuerGrantorPermId,
 		Country:         "US",
 	}

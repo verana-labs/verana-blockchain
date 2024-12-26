@@ -51,7 +51,7 @@ func TestCreateValidation(t *testing.T) {
 			name: "Valid ISSUER Validation Request",
 			msg: &types.MsgCreateValidation{
 				Creator:         creator,
-				ValidationType:  types.ValidationType_ISSUER,
+				ValidationType:  uint32(types.ValidationType_ISSUER),
 				ValidatorPermId: issuerGrantorPermId,
 				Country:         "US",
 			},
@@ -61,7 +61,7 @@ func TestCreateValidation(t *testing.T) {
 			name: "Valid VERIFIER Validation Request",
 			msg: &types.MsgCreateValidation{
 				Creator:         creator,
-				ValidationType:  types.ValidationType_VERIFIER,
+				ValidationType:  uint32(types.ValidationType_VERIFIER),
 				ValidatorPermId: verifierGrantorPermId,
 				Country:         "US",
 			},
@@ -71,7 +71,7 @@ func TestCreateValidation(t *testing.T) {
 			name: "Invalid Country Code",
 			msg: &types.MsgCreateValidation{
 				Creator:         creator,
-				ValidationType:  types.ValidationType_ISSUER,
+				ValidationType:  uint32(types.ValidationType_ISSUER),
 				ValidatorPermId: issuerGrantorPermId,
 				Country:         "USA", // Invalid format
 			},
@@ -81,7 +81,7 @@ func TestCreateValidation(t *testing.T) {
 			name: "Non-existent Validator Permission",
 			msg: &types.MsgCreateValidation{
 				Creator:         creator,
-				ValidationType:  types.ValidationType_ISSUER,
+				ValidationType:  uint32(types.ValidationType_ISSUER),
 				ValidatorPermId: 99999,
 				Country:         "US",
 			},
@@ -91,7 +91,7 @@ func TestCreateValidation(t *testing.T) {
 			name: "Country Mismatch",
 			msg: &types.MsgCreateValidation{
 				Creator:         creator,
-				ValidationType:  types.ValidationType_ISSUER,
+				ValidationType:  uint32(types.ValidationType_ISSUER),
 				ValidatorPermId: issuerGrantorPermId,
 				Country:         "GB", // Different from validator's country
 			},
@@ -101,7 +101,7 @@ func TestCreateValidation(t *testing.T) {
 			name: "Missing Country",
 			msg: &types.MsgCreateValidation{
 				Creator:         creator,
-				ValidationType:  types.ValidationType_ISSUER,
+				ValidationType:  uint32(types.ValidationType_ISSUER),
 				ValidatorPermId: issuerGrantorPermId,
 			},
 			expPass: false,
@@ -128,7 +128,7 @@ func TestCreateValidation(t *testing.T) {
 				validation, err := k.Validation.Get(sdk.UnwrapSDKContext(ctx), resp.ValidationId)
 				require.NoError(t, err)
 				require.Equal(t, tc.msg.Creator, validation.Applicant)
-				require.Equal(t, tc.msg.ValidationType, validation.Type)
+				require.Equal(t, types.ValidationType(tc.msg.ValidationType), validation.Type)
 				require.Equal(t, tc.msg.ValidatorPermId, validation.ValidatorPermId)
 				require.Equal(t, types.ValidationState_PENDING, validation.State)
 			} else {
@@ -171,7 +171,7 @@ func TestValidationTypePermissionMatching(t *testing.T) {
 			name: "ISSUER_GRANTOR with Trust Registry Permission",
 			msg: &types.MsgCreateValidation{
 				Creator:         creator,
-				ValidationType:  types.ValidationType_ISSUER_GRANTOR,
+				ValidationType:  uint32(types.ValidationType_ISSUER_GRANTOR),
 				ValidatorPermId: trustRegistryPermId,
 				Country:         "US",
 			},
@@ -181,7 +181,7 @@ func TestValidationTypePermissionMatching(t *testing.T) {
 			name: "HOLDER with Issuer Permission",
 			msg: &types.MsgCreateValidation{
 				Creator:         creator,
-				ValidationType:  types.ValidationType_HOLDER,
+				ValidationType:  uint32(types.ValidationType_HOLDER),
 				ValidatorPermId: issuerPermId,
 				Country:         "US",
 			},
@@ -191,7 +191,7 @@ func TestValidationTypePermissionMatching(t *testing.T) {
 			name: "Invalid: ISSUER with Issuer Permission",
 			msg: &types.MsgCreateValidation{
 				Creator:         creator,
-				ValidationType:  types.ValidationType_ISSUER,
+				ValidationType:  uint32(types.ValidationType_ISSUER),
 				ValidatorPermId: issuerPermId,
 				Country:         "US",
 			},

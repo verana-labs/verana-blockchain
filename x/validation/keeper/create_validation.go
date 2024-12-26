@@ -27,7 +27,7 @@ func (ms msgServer) validatePermissions(ctx sdk.Context, msg *types.MsgCreateVal
 	}
 
 	switch msg.ValidationType {
-	case types.ValidationType_ISSUER:
+	case uint32(types.ValidationType_ISSUER):
 		// For debugging
 		fmt.Printf("IssuerPermManagementMode Type: %T\n", cs.IssuerPermManagementMode)
 		fmt.Printf("PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION Type: %T\n",
@@ -45,7 +45,7 @@ func (ms msgServer) validatePermissions(ctx sdk.Context, msg *types.MsgCreateVal
 			return errors.New("invalid issuer permission management mode")
 		}
 
-	case types.ValidationType_ISSUER_GRANTOR:
+	case uint32(types.ValidationType_ISSUER_GRANTOR):
 		if cs.IssuerPermManagementMode == cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION {
 			if perm.CspType != csptypes.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_TRUST_REGISTRY {
 				return errors.New("invalid validator permission type for issuer grantor validation")
@@ -54,7 +54,7 @@ func (ms msgServer) validatePermissions(ctx sdk.Context, msg *types.MsgCreateVal
 			return errors.New("invalid issuer permission management mode for grantor")
 		}
 
-	case types.ValidationType_VERIFIER:
+	case uint32(types.ValidationType_VERIFIER):
 		if cs.VerifierPermManagementMode == cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION {
 			if perm.CspType != csptypes.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_VERIFIER_GRANTOR {
 				return errors.New("invalid validator permission type for verifier validation")
@@ -67,7 +67,7 @@ func (ms msgServer) validatePermissions(ctx sdk.Context, msg *types.MsgCreateVal
 			return errors.New("invalid verifier permission management mode")
 		}
 
-	case types.ValidationType_VERIFIER_GRANTOR:
+	case uint32(types.ValidationType_VERIFIER_GRANTOR):
 		if cs.VerifierPermManagementMode == cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION {
 			if perm.CspType != csptypes.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_TRUST_REGISTRY {
 				return errors.New("invalid validator permission type for verifier grantor validation")
@@ -76,7 +76,7 @@ func (ms msgServer) validatePermissions(ctx sdk.Context, msg *types.MsgCreateVal
 			return errors.New("invalid verifier permission management mode for grantor")
 		}
 
-	case types.ValidationType_HOLDER:
+	case uint32(types.ValidationType_HOLDER):
 		if cs.VerifierPermManagementMode == cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION ||
 			cs.VerifierPermManagementMode == cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_TRUST_REGISTRY_VALIDATION {
 			if perm.CspType != csptypes.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_ISSUER {
@@ -124,7 +124,7 @@ func (ms msgServer) executeCreateValidation(ctx sdk.Context, msg *types.MsgCreat
 	validation := &types.Validation{
 		Id:                id,
 		Applicant:         msg.Creator,
-		Type:              msg.ValidationType,
+		Type:              types.ValidationType(msg.ValidationType),
 		Created:           now,
 		ValidatorPermId:   msg.ValidatorPermId,
 		State:             types.ValidationState_PENDING,
