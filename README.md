@@ -399,7 +399,25 @@ The permission types are:
 
 ### Prerequisites
 
-1. First create a Trust Registry (will need the ID):
+1. Create and fund validator key:
+   ```bash
+   # Create validator key
+   veranad keys add validator --keyring-backend test
+
+   # Fund validator account (using test_user which should already have funds)
+   veranad tx bank send \
+   cooluser \
+   $(veranad keys show validator -a --keyring-backend test) \
+   1000000000uvna \
+   --from cooluser \
+   --keyring-backend test \
+   --chain-id test-1 \
+   --gas auto \
+   --gas-adjustment 1.3 \
+   --gas-prices 1.1uvna
+   ```
+
+2. First create a Trust Registry (will need the ID):
    ```bash
    veranad tx trustregistry create-trust-registry \
    did:example:123456789abcdefghi \
@@ -415,7 +433,7 @@ The permission types are:
    --gas-prices 1.1uvna
    ```
 
-2. Create a Credential Schema (using Trust Registry ID from step 1):
+3. Create a Credential Schema (using Trust Registry ID from step 1):
    ```bash
    echo '{
        "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -443,18 +461,18 @@ The permission types are:
    --from cooluser \
    --keyring-backend test \
    --chain-id test-1 \
-   --gas auto \
+   --gas 800000 \
    --gas-adjustment 1.3 \
    --gas-prices 1.1uvna
    ```
 
-3. Create necessary Permissions (e.g., ISSUER_GRANTOR permission for validating ISSUER requests):
+4. Create necessary Permissions (e.g., ISSUER_GRANTOR permission for validating ISSUER requests):
    ```bash
-   veranad tx cspermission create-credential-schema-perm \                      
+   veranad tx cspermission create-credential-schema-perm \
    1 \
    3 \
    "did:example:123" \
-   verana1mda3hc2z8jnmk86zkvm9wlfgfmxwg2msf2a3ka \
+   $(veranad keys show validator -a --keyring-backend test) \
    "2024-12-29T15:00:00Z" \
    100 \
    200 \
@@ -474,8 +492,8 @@ The permission types are:
 
 1. Create a Validation:
    ```bash
-   veranad tx validation create-validation \    
-   3 \          
+   veranad tx validation create-validation \
+   3 \
    1 \
    US \
    --from cooluser \
@@ -500,6 +518,23 @@ The permission types are:
    ```
 
    Note: Starting a renewal process with a different validator implicitly transfers revocation control of existing permissions to the new validator.
+
+3. Set Validation to Validated:
+   ```bash
+   veranad tx validation set-validated \
+   1 \
+   e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 \
+   --from validator \
+   --keyring-backend test \
+   --chain-id test-1 \
+   --gas 800000 \
+   --gas-adjustment 1.3 \
+   --gas-prices 1.1uvna
+   ```
+
+   Note:
+   - Only the validator can set a validation to VALIDATED state
+   - The summary hash parameter is optional and must be null for HOLDER type validations
 
 ### Queries
 

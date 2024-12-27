@@ -73,3 +73,62 @@ func (ms msgServer) RenewValidation(goCtx context.Context, msg *types.MsgRenewVa
 		ValidationId: msg.Id,
 	}, nil
 }
+
+func (ms msgServer) SetValidated(goCtx context.Context, msg *types.MsgSetValidated) (*types.MsgSetValidatedResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// [MOD-V-MSG-3-2-1] Basic checks
+	val, err := ms.Validation.Get(ctx, msg.Id)
+	if err != nil {
+		return nil, fmt.Errorf("validation not found: %w", err)
+	}
+
+	if val.State != types.ValidationState_PENDING {
+		return nil, fmt.Errorf("validation must be in PENDING state")
+	}
+
+	// Validate summary hash if provided
+	if msg.SummaryHash != "" {
+		if val.Type == types.ValidationType_HOLDER {
+			return nil, fmt.Errorf("summary hash must be null for HOLDER type validations")
+		}
+	}
+
+	// [MOD-V-MSG-3-2-2] Validator permission checks
+	perm, err := ms.csPermissionKeeper.GetCSPermission(ctx, val.ValidatorPermId)
+	if err != nil {
+		return nil, fmt.Errorf("validator permission not found: %w", err)
+	}
+
+	if perm.Grantee != msg.Creator {
+		return nil, fmt.Errorf("only the validator can set validation to validated")
+	}
+
+	// [MOD-V-MSG-3-3] Execute validation
+	now := ctx.BlockTime()
+
+	// Update validation state
+	val.State = types.ValidationState_VALIDATED
+	val.LastStateChange = now
+	val.SummaryHash = msg.SummaryHash
+
+	// TODO: Handle fees and deposits validatorTrustFees & validatorTrustDeposit
+
+	// TODO: Transfer fees from escrow (module accounts) to validator
+	// TODO: Update trust deposits using TrustDeposit module
+
+	// Update validation
+	val.CurrentFees = 0
+	val.CurrentDeposit = 0
+
+	// Set expiration based on validation type
+	// TODO: Get validity periods from params and set val.Exp accordingly
+
+	if err := ms.Validation.Set(ctx, val.Id, val); err != nil {
+		return nil, fmt.Errorf("failed to update validation: %w", err)
+	}
+
+	return &types.MsgSetValidatedResponse{
+		ValidationId: msg.Id,
+	}, nil
+}

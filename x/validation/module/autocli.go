@@ -114,6 +114,21 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 						},
 					},
 				},
+				{
+					RpcMethod: "SetValidated",
+					Use:       "set-validated [id] [summary-hash]",
+					Short:     "Set a validation to VALIDATED state",
+					Long:      "Set a validation to VALIDATED state. Only the validator can execute this method. Optional summary hash can be provided for non-HOLDER validations.",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "id",
+						},
+						{
+							ProtoField: "summary_hash",
+							Optional:   true,
+						},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},

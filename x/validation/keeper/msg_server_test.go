@@ -469,3 +469,172 @@ func TestRenewValidation(t *testing.T) {
 		})
 	}
 }
+
+func TestSetValidated(t *testing.T) {
+	k, ms, csPermKeeper, csKeeper, ctx := setupMsgServer(t)
+	validator := "verana1validator"
+	applicant := "verana1applicant"
+
+	// Create prerequisite data
+	schemaId := csKeeper.CreateMockCredentialSchema(1)
+
+	// Create validator permission
+	validatorPermId := csPermKeeper.CreateMockPermission(
+		validator,
+		schemaId,
+		csptypes.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_ISSUER_GRANTOR,
+		"did:example:123",
+		"US",
+	)
+
+	// Create an initial validation
+	createMsg := &types.MsgCreateValidation{
+		Creator:         applicant,
+		ValidationType:  uint32(types.ValidationType_ISSUER),
+		ValidatorPermId: validatorPermId,
+		Country:         "US",
+	}
+	createResp, err := ms.CreateValidation(ctx, createMsg)
+	require.NoError(t, err)
+	require.NotNil(t, createResp)
+
+	validHash := "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+
+	testCases := []struct {
+		name          string
+		msg           *types.MsgSetValidated
+		expPass       bool
+		errorContains string
+		setupFn       func()
+		checkFn       func(*testing.T, *types.Validation)
+	}{
+		{
+			name: "Valid Set Validated - Without Summary Hash",
+			msg: &types.MsgSetValidated{
+				Creator: validator,
+				Id:      createResp.ValidationId,
+			},
+			expPass: true,
+			checkFn: func(t *testing.T, v *types.Validation) {
+				require.Equal(t, types.ValidationState_VALIDATED, v.State)
+				require.Empty(t, v.SummaryHash)
+			},
+		},
+		{
+			name: "Valid Set Validated - With Summary Hash",
+			msg: &types.MsgSetValidated{
+				Creator:     validator,
+				Id:          createResp.ValidationId,
+				SummaryHash: validHash,
+			},
+			expPass: true,
+			setupFn: func() {
+				// Reset validation state back to PENDING
+				val, err := k.Validation.Get(ctx, createResp.ValidationId)
+				require.NoError(t, err)
+				val.State = types.ValidationState_PENDING
+				err = k.Validation.Set(ctx, createResp.ValidationId, val)
+				require.NoError(t, err)
+			},
+			checkFn: func(t *testing.T, v *types.Validation) {
+				require.Equal(t, types.ValidationState_VALIDATED, v.State)
+				require.Equal(t, validHash, v.SummaryHash)
+			},
+		},
+		{
+			name: "Invalid - Non-existent Validation",
+			msg: &types.MsgSetValidated{
+				Creator: validator,
+				Id:      99999,
+			},
+			expPass:       false,
+			errorContains: "validation not found",
+		},
+		{
+			name: "Invalid - Wrong Validator",
+			msg: &types.MsgSetValidated{
+				Creator: applicant, // Using applicant instead of validator
+				Id:      createResp.ValidationId,
+			},
+			setupFn: func() {
+				// Ensure validation is in PENDING state
+				val, err := k.Validation.Get(ctx, createResp.ValidationId)
+				require.NoError(t, err)
+				val.State = types.ValidationState_PENDING
+				err = k.Validation.Set(ctx, createResp.ValidationId, val)
+				require.NoError(t, err)
+			},
+			expPass:       false,
+			errorContains: "only the validator can set validation to validated",
+		},
+		{
+			name: "Invalid - Already Validated",
+			msg: &types.MsgSetValidated{
+				Creator: validator,
+				Id:      createResp.ValidationId,
+			},
+			setupFn: func() {
+				// Set validation to already validated
+				val, err := k.Validation.Get(ctx, createResp.ValidationId)
+				require.NoError(t, err)
+				val.State = types.ValidationState_VALIDATED
+				err = k.Validation.Set(ctx, createResp.ValidationId, val)
+				require.NoError(t, err)
+			},
+			expPass:       false,
+			errorContains: "validation must be in PENDING state",
+		},
+		{
+			name: "Invalid - Summary Hash with HOLDER Type",
+			msg: &types.MsgSetValidated{
+				Creator:     validator,
+				Id:          createResp.ValidationId,
+				SummaryHash: validHash,
+			},
+			setupFn: func() {
+				// Change validation type to HOLDER
+				val, err := k.Validation.Get(ctx, createResp.ValidationId)
+				require.NoError(t, err)
+				val.Type = types.ValidationType_HOLDER
+				val.State = types.ValidationState_PENDING
+				err = k.Validation.Set(ctx, createResp.ValidationId, val)
+				require.NoError(t, err)
+			},
+			expPass:       false,
+			errorContains: "summary hash must be null for HOLDER type validations",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			if tc.setupFn != nil {
+				tc.setupFn()
+			}
+
+			resp, err := ms.SetValidated(ctx, tc.msg)
+			if tc.expPass {
+				require.NoError(t, err)
+				require.NotNil(t, resp)
+
+				validation, err := k.Validation.Get(ctx, tc.msg.Id)
+				require.NoError(t, err)
+
+				// Common validations
+				require.Equal(t, types.ValidationState_VALIDATED, validation.State)
+				require.True(t, validation.LastStateChange.Equal(sdk.UnwrapSDKContext(ctx).BlockTime()))
+				require.Zero(t, validation.CurrentFees)
+				require.Zero(t, validation.CurrentDeposit)
+
+				if tc.checkFn != nil {
+					tc.checkFn(t, &validation)
+				}
+			} else {
+				require.Error(t, err)
+				if tc.errorContains != "" {
+					require.Contains(t, err.Error(), tc.errorContains)
+				}
+				require.Nil(t, resp)
+			}
+		})
+	}
+}

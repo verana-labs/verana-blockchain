@@ -16,6 +16,7 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 		&MsgUpdateParams{},
 		&MsgCreateValidation{},
 		&MsgRenewValidation{},
+		&MsgSetValidated{},
 	)
 	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)
 }
@@ -23,4 +24,5 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	legacy.RegisterAminoMsg(cdc, &MsgCreateValidation{}, "/dtr/v1/v/create-validation")
 	legacy.RegisterAminoMsg(cdc, &MsgRenewValidation{}, "/dtr/v1/v/renew-validation")
+	legacy.RegisterAminoMsg(cdc, &MsgSetValidated{}, "/dtr/v1/v/set-validated")
 }

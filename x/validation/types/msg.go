@@ -9,9 +9,11 @@ import (
 
 const TypeMsgCreateValidation = "create_validation"
 const TypeMsgRenewValidation = "renew_validation"
+const TypeMsgSetValidated = "set_validated"
 
 var _ sdk.Msg = &MsgCreateValidation{}
 var _ sdk.Msg = &MsgRenewValidation{}
+var _ sdk.Msg = &MsgSetValidated{}
 
 // NewMsgCreateValidation creates a new MsgCreateValidation instance
 func NewMsgCreateValidation(
@@ -140,4 +142,66 @@ func (msg *MsgRenewValidation) ValidateBasic() error {
 	}
 
 	return nil
+}
+
+// NewMsgSetValidated creates a new MsgSetValidated instance
+func NewMsgSetValidated(
+	creator string,
+	id uint64,
+	summaryHash string,
+) *MsgSetValidated {
+	return &MsgSetValidated{
+		Creator:     creator,
+		Id:          id,
+		SummaryHash: summaryHash,
+	}
+}
+
+// Route implements sdk.Msg
+func (msg *MsgSetValidated) Route() string {
+	return RouterKey
+}
+
+// Type implements sdk.Msg
+func (msg *MsgSetValidated) Type() string {
+	return TypeMsgSetValidated
+}
+
+// GetSigners implements sdk.Msg
+func (msg *MsgSetValidated) GetSigners() []sdk.AccAddress {
+	creator, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{creator}
+}
+
+// ValidateBasic implements [MOD-V-MSG-3-2-1] basic checks
+func (msg *MsgSetValidated) ValidateBasic() error {
+	if msg.Creator == "" {
+		return errors.Wrap(sdkerrors.ErrInvalidAddress, "creator address is required")
+	}
+
+	if _, err := sdk.AccAddressFromBech32(msg.Creator); err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+	}
+
+	if msg.Id == 0 {
+		return errors.Wrap(sdkerrors.ErrInvalidRequest, "validation id is required")
+	}
+
+	if msg.SummaryHash != "" && !isValidHash(msg.SummaryHash) {
+		return errors.Wrap(sdkerrors.ErrInvalidRequest, "invalid summary hash format")
+	}
+
+	return nil
+}
+
+// Keep existing isValidCountryCode and isValidValidationType functions...
+
+// Add isValidHash function
+func isValidHash(hash string) bool {
+	// Basic check for SHA-256 hash (64 hexadecimal characters)
+	hashRegex := regexp.MustCompile(`^[a-fA-F0-9]{64}$`)
+	return hashRegex.MatchString(hash)
 }

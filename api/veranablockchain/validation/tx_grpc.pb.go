@@ -22,6 +22,7 @@ const (
 	Msg_UpdateParams_FullMethodName     = "/veranablockchain.validation.Msg/UpdateParams"
 	Msg_CreateValidation_FullMethodName = "/veranablockchain.validation.Msg/CreateValidation"
 	Msg_RenewValidation_FullMethodName  = "/veranablockchain.validation.Msg/RenewValidation"
+	Msg_SetValidated_FullMethodName     = "/veranablockchain.validation.Msg/SetValidated"
 )
 
 // MsgClient is the client API for Msg service.
@@ -33,6 +34,7 @@ type MsgClient interface {
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
 	CreateValidation(ctx context.Context, in *MsgCreateValidation, opts ...grpc.CallOption) (*MsgCreateValidationResponse, error)
 	RenewValidation(ctx context.Context, in *MsgRenewValidation, opts ...grpc.CallOption) (*MsgRenewValidationResponse, error)
+	SetValidated(ctx context.Context, in *MsgSetValidated, opts ...grpc.CallOption) (*MsgSetValidatedResponse, error)
 }
 
 type msgClient struct {
@@ -70,6 +72,15 @@ func (c *msgClient) RenewValidation(ctx context.Context, in *MsgRenewValidation,
 	return out, nil
 }
 
+func (c *msgClient) SetValidated(ctx context.Context, in *MsgSetValidated, opts ...grpc.CallOption) (*MsgSetValidatedResponse, error) {
+	out := new(MsgSetValidatedResponse)
+	err := c.cc.Invoke(ctx, Msg_SetValidated_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
@@ -79,6 +90,7 @@ type MsgServer interface {
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
 	CreateValidation(context.Context, *MsgCreateValidation) (*MsgCreateValidationResponse, error)
 	RenewValidation(context.Context, *MsgRenewValidation) (*MsgRenewValidationResponse, error)
+	SetValidated(context.Context, *MsgSetValidated) (*MsgSetValidatedResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -94,6 +106,9 @@ func (UnimplementedMsgServer) CreateValidation(context.Context, *MsgCreateValida
 }
 func (UnimplementedMsgServer) RenewValidation(context.Context, *MsgRenewValidation) (*MsgRenewValidationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RenewValidation not implemented")
+}
+func (UnimplementedMsgServer) SetValidated(context.Context, *MsgSetValidated) (*MsgSetValidatedResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetValidated not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -162,6 +177,24 @@ func _Msg_RenewValidation_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_SetValidated_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSetValidated)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).SetValidated(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_SetValidated_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).SetValidated(ctx, req.(*MsgSetValidated))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -180,6 +213,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RenewValidation",
 			Handler:    _Msg_RenewValidation_Handler,
+		},
+		{
+			MethodName: "SetValidated",
+			Handler:    _Msg_SetValidated_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
