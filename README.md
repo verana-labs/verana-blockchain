@@ -559,12 +559,11 @@ The permission types are:
 1. List Validations:
    ```bash
    veranad q validation list-validations \
-   --controller <account_address> \
+   --controller $(veranad keys show cooluser -a --keyring-backend test) \
    --validator-perm-id 1 \
-   --type ISSUER \
-   --state PENDING \
+   --type 3 \
+   --state 4 \
    --response-max-size 64 \
-   --exp-before "2024-12-31T00:00:00Z" \
    --output json
    ```
 

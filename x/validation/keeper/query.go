@@ -91,12 +91,12 @@ func matchesFilters(val types.Validation, req *types.QueryListValidationsRequest
 	}
 
 	// Check type filter
-	if req.Type != types.ValidationType_TYPE_UNSPECIFIED && val.Type != req.Type {
+	if req.Type != uint32(types.ValidationType_TYPE_UNSPECIFIED) && val.Type != types.ValidationType(req.Type) {
 		return false
 	}
 
 	// Check state filter
-	if req.State != types.ValidationState_STATE_UNSPECIFIED && val.State != req.State {
+	if req.State != uint32(types.ValidationState_STATE_UNSPECIFIED) && val.State != types.ValidationState(req.State) {
 		return false
 	}
 

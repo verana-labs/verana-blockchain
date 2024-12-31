@@ -111,7 +111,7 @@ func TestListValidations(t *testing.T) {
 			name: "Filter By Type",
 			request: &types.QueryListValidationsRequest{
 				ValidatorPermId: issuerGrantorPermId,
-				Type:            types.ValidationType_ISSUER,
+				Type:            uint32(types.ValidationType_ISSUER),
 				ResponseMaxSize: 10,
 			},
 			expectedError: false,
@@ -126,7 +126,7 @@ func TestListValidations(t *testing.T) {
 			name: "Filter By State",
 			request: &types.QueryListValidationsRequest{
 				ValidatorPermId: issuerGrantorPermId,
-				State:           types.ValidationState_PENDING,
+				State:           uint32(types.ValidationState_PENDING),
 				ResponseMaxSize: 10,
 			},
 			expectedError: false,
