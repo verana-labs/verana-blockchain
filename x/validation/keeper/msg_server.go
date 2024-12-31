@@ -132,3 +132,38 @@ func (ms msgServer) SetValidated(goCtx context.Context, msg *types.MsgSetValidat
 		ValidationId: msg.Id,
 	}, nil
 }
+
+func (ms msgServer) RequestValidationTermination(goCtx context.Context, msg *types.MsgRequestValidationTermination) (*types.MsgRequestValidationTerminationResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// [MOD-V-MSG-4-2-1] Basic checks
+	val, err := ms.Validation.Get(ctx, msg.Id)
+	if err != nil {
+		return nil, fmt.Errorf("validation not found: %w", err)
+	}
+
+	// Check applicant
+	if val.Applicant != msg.Creator {
+		return nil, fmt.Errorf("only the validation applicant can request termination")
+	}
+
+	// Check state
+	if val.State != types.ValidationState_VALIDATED {
+		return nil, fmt.Errorf("validation must be in VALIDATED state")
+	}
+
+	// [MOD-V-MSG-4-3] Execute termination request
+	now := ctx.BlockTime()
+
+	val.State = types.ValidationState_TERMINATION_REQUESTED
+	val.TermRequested = &now
+	val.LastStateChange = now
+
+	if err := ms.Validation.Set(ctx, val.Id, val); err != nil {
+		return nil, fmt.Errorf("failed to update validation: %w", err)
+	}
+
+	return &types.MsgRequestValidationTerminationResponse{
+		ValidationId: msg.Id,
+	}, nil
+}

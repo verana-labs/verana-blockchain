@@ -10,10 +10,12 @@ import (
 const TypeMsgCreateValidation = "create_validation"
 const TypeMsgRenewValidation = "renew_validation"
 const TypeMsgSetValidated = "set_validated"
+const TypeMsgRequestValidationTermination = "request_validation_termination"
 
 var _ sdk.Msg = &MsgCreateValidation{}
 var _ sdk.Msg = &MsgRenewValidation{}
 var _ sdk.Msg = &MsgSetValidated{}
+var _ sdk.Msg = &MsgRequestValidationTermination{}
 
 // NewMsgCreateValidation creates a new MsgCreateValidation instance
 func NewMsgCreateValidation(
@@ -204,4 +206,50 @@ func isValidHash(hash string) bool {
 	// Basic check for SHA-256 hash (64 hexadecimal characters)
 	hashRegex := regexp.MustCompile(`^[a-fA-F0-9]{64}$`)
 	return hashRegex.MatchString(hash)
+}
+
+func NewMsgRequestValidationTermination(
+	creator string,
+	id uint64,
+) *MsgRequestValidationTermination {
+	return &MsgRequestValidationTermination{
+		Creator: creator,
+		Id:      id,
+	}
+}
+
+// Route implements sdk.Msg
+func (msg *MsgRequestValidationTermination) Route() string {
+	return RouterKey
+}
+
+// Type implements sdk.Msg
+func (msg *MsgRequestValidationTermination) Type() string {
+	return TypeMsgRequestValidationTermination
+}
+
+// GetSigners implements sdk.Msg
+func (msg *MsgRequestValidationTermination) GetSigners() []sdk.AccAddress {
+	creator, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{creator}
+}
+
+// ValidateBasic implements sdk.Msg
+func (msg *MsgRequestValidationTermination) ValidateBasic() error {
+	if msg.Creator == "" {
+		return errors.Wrap(sdkerrors.ErrInvalidAddress, "creator address is required")
+	}
+
+	if _, err := sdk.AccAddressFromBech32(msg.Creator); err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+	}
+
+	if msg.Id == 0 {
+		return errors.Wrap(sdkerrors.ErrInvalidRequest, "validation id is required")
+	}
+
+	return nil
 }

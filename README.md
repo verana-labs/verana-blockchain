@@ -536,6 +536,24 @@ The permission types are:
    - Only the validator can set a validation to VALIDATED state
    - The summary hash parameter is optional and must be null for HOLDER type validations
 
+4. Request Validation Termination:
+   ```bash
+   veranad tx validation request-termination \
+   1 \
+   --from cooluser \
+   --keyring-backend test \
+   --chain-id test-1 \
+   --gas 800000 \
+   --gas-adjustment 1.3 \
+   --gas-prices 1.1uvna
+   ```
+
+   Note:
+   - Only the validation applicant can request termination
+   - Validation must be in VALIDATED state
+   - After requesting termination, the validation will be set to TERMINATION_REQUESTED state
+   - A separate confirmation step will be required to complete the termination
+
 ### Queries
 
 1. List Validations:

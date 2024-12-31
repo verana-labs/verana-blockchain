@@ -638,3 +638,117 @@ func TestSetValidated(t *testing.T) {
 		})
 	}
 }
+
+func TestRequestValidationTermination(t *testing.T) {
+	k, ms, csPermKeeper, csKeeper, ctx := setupMsgServer(t)
+	validator := "verana1validator"
+	applicant := "verana1applicant"
+
+	// Create prerequisite data
+	schemaId := csKeeper.CreateMockCredentialSchema(1)
+	validatorPermId := csPermKeeper.CreateMockPermission(
+		validator,
+		schemaId,
+		csptypes.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_ISSUER_GRANTOR,
+		"did:example:123",
+		"US",
+	)
+
+	// Create initial validation
+	createMsg := &types.MsgCreateValidation{
+		Creator:         applicant,
+		ValidationType:  uint32(types.ValidationType_ISSUER),
+		ValidatorPermId: validatorPermId,
+		Country:         "US",
+	}
+	createResp, err := ms.CreateValidation(ctx, createMsg)
+	require.NoError(t, err)
+	require.NotNil(t, createResp)
+
+	// Set validation to VALIDATED
+	setValidatedMsg := &types.MsgSetValidated{
+		Creator: validator,
+		Id:      createResp.ValidationId,
+	}
+	_, err = ms.SetValidated(ctx, setValidatedMsg)
+	require.NoError(t, err)
+
+	testCases := []struct {
+		name          string
+		msg           *types.MsgRequestValidationTermination
+		expPass       bool
+		errorContains string
+		setupFn       func()
+	}{
+		{
+			name: "Valid Request",
+			msg: &types.MsgRequestValidationTermination{
+				Creator: applicant,
+				Id:      createResp.ValidationId,
+			},
+			expPass: true,
+		},
+		{
+			name: "Invalid - Non-existent Validation",
+			msg: &types.MsgRequestValidationTermination{
+				Creator: applicant,
+				Id:      99999,
+			},
+			expPass:       false,
+			errorContains: "validation not found",
+		},
+		{
+			name: "Invalid - Wrong Creator",
+			msg: &types.MsgRequestValidationTermination{
+				Creator: validator,
+				Id:      createResp.ValidationId,
+			},
+			expPass:       false,
+			errorContains: "only the validation applicant can request termination",
+		},
+		{
+			name: "Invalid - Not in VALIDATED State",
+			msg: &types.MsgRequestValidationTermination{
+				Creator: applicant,
+				Id:      createResp.ValidationId,
+			},
+			setupFn: func() {
+				// Change validation state to something other than VALIDATED
+				val, err := k.Validation.Get(ctx, createResp.ValidationId)
+				require.NoError(t, err)
+				val.State = types.ValidationState_PENDING
+				err = k.Validation.Set(ctx, createResp.ValidationId, val)
+				require.NoError(t, err)
+			},
+			expPass:       false,
+			errorContains: "validation must be in VALIDATED state",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			if tc.setupFn != nil {
+				tc.setupFn()
+			}
+
+			resp, err := ms.RequestValidationTermination(ctx, tc.msg)
+			if tc.expPass {
+				require.NoError(t, err)
+				require.NotNil(t, resp)
+
+				// Verify validation state was updated
+				validation, err := k.Validation.Get(ctx, tc.msg.Id)
+				require.NoError(t, err)
+				require.Equal(t, types.ValidationState_TERMINATION_REQUESTED, validation.State)
+				require.NotNil(t, validation.TermRequested)
+				require.True(t, validation.LastStateChange.Equal(sdk.UnwrapSDKContext(ctx).BlockTime()))
+			} else {
+				require.Error(t, err)
+				if tc.errorContains != "" {
+					require.Contains(t, err.Error(), tc.errorContains)
+				}
+				require.Nil(t, resp)
+			}
+		})
+	}
+}

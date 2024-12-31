@@ -129,6 +129,17 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 						},
 					},
 				},
+				{
+					RpcMethod: "RequestValidationTermination",
+					Use:       "request-termination [id]",
+					Short:     "Request termination of a validation",
+					Long:      "Request termination of a validation. Can only be executed by the validation applicant when validation is in VALIDATED state.",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "id",
+						},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},

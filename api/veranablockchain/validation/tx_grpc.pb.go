@@ -19,10 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Msg_UpdateParams_FullMethodName     = "/veranablockchain.validation.Msg/UpdateParams"
-	Msg_CreateValidation_FullMethodName = "/veranablockchain.validation.Msg/CreateValidation"
-	Msg_RenewValidation_FullMethodName  = "/veranablockchain.validation.Msg/RenewValidation"
-	Msg_SetValidated_FullMethodName     = "/veranablockchain.validation.Msg/SetValidated"
+	Msg_UpdateParams_FullMethodName                 = "/veranablockchain.validation.Msg/UpdateParams"
+	Msg_CreateValidation_FullMethodName             = "/veranablockchain.validation.Msg/CreateValidation"
+	Msg_RenewValidation_FullMethodName              = "/veranablockchain.validation.Msg/RenewValidation"
+	Msg_SetValidated_FullMethodName                 = "/veranablockchain.validation.Msg/SetValidated"
+	Msg_RequestValidationTermination_FullMethodName = "/veranablockchain.validation.Msg/RequestValidationTermination"
 )
 
 // MsgClient is the client API for Msg service.
@@ -35,6 +36,7 @@ type MsgClient interface {
 	CreateValidation(ctx context.Context, in *MsgCreateValidation, opts ...grpc.CallOption) (*MsgCreateValidationResponse, error)
 	RenewValidation(ctx context.Context, in *MsgRenewValidation, opts ...grpc.CallOption) (*MsgRenewValidationResponse, error)
 	SetValidated(ctx context.Context, in *MsgSetValidated, opts ...grpc.CallOption) (*MsgSetValidatedResponse, error)
+	RequestValidationTermination(ctx context.Context, in *MsgRequestValidationTermination, opts ...grpc.CallOption) (*MsgRequestValidationTerminationResponse, error)
 }
 
 type msgClient struct {
@@ -81,6 +83,15 @@ func (c *msgClient) SetValidated(ctx context.Context, in *MsgSetValidated, opts 
 	return out, nil
 }
 
+func (c *msgClient) RequestValidationTermination(ctx context.Context, in *MsgRequestValidationTermination, opts ...grpc.CallOption) (*MsgRequestValidationTerminationResponse, error) {
+	out := new(MsgRequestValidationTerminationResponse)
+	err := c.cc.Invoke(ctx, Msg_RequestValidationTermination_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
@@ -91,6 +102,7 @@ type MsgServer interface {
 	CreateValidation(context.Context, *MsgCreateValidation) (*MsgCreateValidationResponse, error)
 	RenewValidation(context.Context, *MsgRenewValidation) (*MsgRenewValidationResponse, error)
 	SetValidated(context.Context, *MsgSetValidated) (*MsgSetValidatedResponse, error)
+	RequestValidationTermination(context.Context, *MsgRequestValidationTermination) (*MsgRequestValidationTerminationResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -109,6 +121,9 @@ func (UnimplementedMsgServer) RenewValidation(context.Context, *MsgRenewValidati
 }
 func (UnimplementedMsgServer) SetValidated(context.Context, *MsgSetValidated) (*MsgSetValidatedResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetValidated not implemented")
+}
+func (UnimplementedMsgServer) RequestValidationTermination(context.Context, *MsgRequestValidationTermination) (*MsgRequestValidationTerminationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RequestValidationTermination not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -195,6 +210,24 @@ func _Msg_SetValidated_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_RequestValidationTermination_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgRequestValidationTermination)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).RequestValidationTermination(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_RequestValidationTermination_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).RequestValidationTermination(ctx, req.(*MsgRequestValidationTermination))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -217,6 +250,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SetValidated",
 			Handler:    _Msg_SetValidated_Handler,
+		},
+		{
+			MethodName: "RequestValidationTermination",
+			Handler:    _Msg_RequestValidationTermination_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
