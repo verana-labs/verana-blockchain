@@ -21,6 +21,7 @@ service Msg {
   rpc RenewValidation(MsgRenewValidation) returns (MsgRenewValidationResponse);
   rpc SetValidated(MsgSetValidated) returns (MsgSetValidatedResponse);
   rpc RequestValidationTermination(MsgRequestValidationTermination) returns (MsgRequestValidationTerminationResponse);
+  rpc ConfirmValidationTermination(MsgConfirmValidationTermination) returns (MsgConfirmValidationTerminationResponse);
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
@@ -85,5 +86,15 @@ message MsgRequestValidationTermination {
 }
 
 message MsgRequestValidationTerminationResponse {
+  uint64 validation_id = 1;
+}
+
+message MsgConfirmValidationTermination {
+  option (cosmos.msg.v1.signer) = "creator";
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint64 id = 2;
+}
+
+message MsgConfirmValidationTerminationResponse {
   uint64 validation_id = 1;
 }

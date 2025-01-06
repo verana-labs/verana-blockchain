@@ -140,6 +140,17 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 						},
 					},
 				},
+				{
+					RpcMethod: "ConfirmValidationTermination",
+					Use:       "confirm-termination [id]",
+					Short:     "Confirm termination of a validation",
+					Long:      "Confirm termination of a validation. For HOLDER type validations: Only validator can confirm before timeout unless timeout period has passed. Both applicant and validator can confirm after timeout or if validation is expired. For non-HOLDER type validations: Only applicant can confirm if not expired. Both applicant and validator can confirm if validation is expired.",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "id",
+						},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},

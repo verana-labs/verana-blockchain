@@ -24,6 +24,7 @@ const (
 	Msg_RenewValidation_FullMethodName              = "/veranablockchain.validation.Msg/RenewValidation"
 	Msg_SetValidated_FullMethodName                 = "/veranablockchain.validation.Msg/SetValidated"
 	Msg_RequestValidationTermination_FullMethodName = "/veranablockchain.validation.Msg/RequestValidationTermination"
+	Msg_ConfirmValidationTermination_FullMethodName = "/veranablockchain.validation.Msg/ConfirmValidationTermination"
 )
 
 // MsgClient is the client API for Msg service.
@@ -37,6 +38,7 @@ type MsgClient interface {
 	RenewValidation(ctx context.Context, in *MsgRenewValidation, opts ...grpc.CallOption) (*MsgRenewValidationResponse, error)
 	SetValidated(ctx context.Context, in *MsgSetValidated, opts ...grpc.CallOption) (*MsgSetValidatedResponse, error)
 	RequestValidationTermination(ctx context.Context, in *MsgRequestValidationTermination, opts ...grpc.CallOption) (*MsgRequestValidationTerminationResponse, error)
+	ConfirmValidationTermination(ctx context.Context, in *MsgConfirmValidationTermination, opts ...grpc.CallOption) (*MsgConfirmValidationTerminationResponse, error)
 }
 
 type msgClient struct {
@@ -92,6 +94,15 @@ func (c *msgClient) RequestValidationTermination(ctx context.Context, in *MsgReq
 	return out, nil
 }
 
+func (c *msgClient) ConfirmValidationTermination(ctx context.Context, in *MsgConfirmValidationTermination, opts ...grpc.CallOption) (*MsgConfirmValidationTerminationResponse, error) {
+	out := new(MsgConfirmValidationTerminationResponse)
+	err := c.cc.Invoke(ctx, Msg_ConfirmValidationTermination_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
@@ -103,6 +114,7 @@ type MsgServer interface {
 	RenewValidation(context.Context, *MsgRenewValidation) (*MsgRenewValidationResponse, error)
 	SetValidated(context.Context, *MsgSetValidated) (*MsgSetValidatedResponse, error)
 	RequestValidationTermination(context.Context, *MsgRequestValidationTermination) (*MsgRequestValidationTerminationResponse, error)
+	ConfirmValidationTermination(context.Context, *MsgConfirmValidationTermination) (*MsgConfirmValidationTerminationResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -124,6 +136,9 @@ func (UnimplementedMsgServer) SetValidated(context.Context, *MsgSetValidated) (*
 }
 func (UnimplementedMsgServer) RequestValidationTermination(context.Context, *MsgRequestValidationTermination) (*MsgRequestValidationTerminationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RequestValidationTermination not implemented")
+}
+func (UnimplementedMsgServer) ConfirmValidationTermination(context.Context, *MsgConfirmValidationTermination) (*MsgConfirmValidationTerminationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ConfirmValidationTermination not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -228,6 +243,24 @@ func _Msg_RequestValidationTermination_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_ConfirmValidationTermination_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgConfirmValidationTermination)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).ConfirmValidationTermination(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_ConfirmValidationTermination_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).ConfirmValidationTermination(ctx, req.(*MsgConfirmValidationTermination))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -254,6 +287,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RequestValidationTermination",
 			Handler:    _Msg_RequestValidationTermination_Handler,
+		},
+		{
+			MethodName: "ConfirmValidationTermination",
+			Handler:    _Msg_ConfirmValidationTermination_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

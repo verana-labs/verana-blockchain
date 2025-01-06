@@ -3,6 +3,8 @@ package keeper
 import (
 	"context"
 	"fmt"
+	"time"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/verana-labs/verana-blockchain/x/validation/types"
 )
@@ -164,6 +166,91 @@ func (ms msgServer) RequestValidationTermination(goCtx context.Context, msg *typ
 	}
 
 	return &types.MsgRequestValidationTerminationResponse{
+		ValidationId: msg.Id,
+	}, nil
+}
+
+func (ms msgServer) ConfirmValidationTermination(goCtx context.Context, msg *types.MsgConfirmValidationTermination) (*types.MsgConfirmValidationTerminationResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// [MOD-V-MSG-5-2-1] Basic checks
+	val, err := ms.Validation.Get(ctx, msg.Id)
+	if err != nil {
+		return nil, fmt.Errorf("validation not found: %w", err)
+	}
+
+	if val.State != types.ValidationState_TERMINATION_REQUESTED {
+		return nil, fmt.Errorf("validation must be in TERMINATION_REQUESTED state")
+	}
+
+	// [MOD-V-MSG-5-2-2] Permission checks
+	validatorPerm, err := ms.csPermissionKeeper.GetCSPermission(ctx, val.ValidatorPermId)
+	if err != nil {
+		return nil, fmt.Errorf("validator permission not found: %w", err)
+	}
+
+	now := ctx.BlockTime()
+
+	// Different handling for HOLDER vs non-HOLDER
+	if val.Type == types.ValidationType_HOLDER {
+		if val.Exp == nil || val.Exp.After(now) {
+			// Not expired - only validator can confirm, unless timeout has passed
+			if msg.Creator != validatorPerm.Grantee {
+				timeoutDays := ms.GetParams(ctx).ValidationTermRequestedTimeoutDays
+				timeout := val.TermRequested.Add(time.Hour * 24 * time.Duration(timeoutDays))
+				if now.Before(timeout) {
+					return nil, fmt.Errorf("only validator can confirm termination before timeout")
+				}
+				// After timeout, both applicant and validator can confirm
+				if msg.Creator != val.Applicant && msg.Creator != validatorPerm.Grantee {
+					return nil, fmt.Errorf("only applicant or validator can confirm termination after timeout")
+				}
+			}
+		} else {
+			// Expired - applicant or validator can confirm
+			if msg.Creator != val.Applicant && msg.Creator != validatorPerm.Grantee {
+				return nil, fmt.Errorf("only applicant or validator can confirm termination")
+			}
+		}
+	} else {
+		// For non-HOLDER types, need to check if all linked permissions are revoked/terminated/expired
+		// TODO: Add check for linked CredentialSchemaPerm entries
+		if val.Exp == nil || val.Exp.After(now) {
+			// Not expired - only applicant can confirm
+			if msg.Creator != val.Applicant {
+				return nil, fmt.Errorf("only applicant can confirm termination")
+			}
+		} else {
+			// Expired - applicant or validator can confirm
+			if msg.Creator != val.Applicant && msg.Creator != validatorPerm.Grantee {
+				return nil, fmt.Errorf("only applicant or validator can confirm termination")
+			}
+		}
+	}
+
+	// [MOD-V-MSG-5-3] Execute termination
+	val.State = types.ValidationState_TERMINATED
+	val.LastStateChange = now
+
+	// Handle applicant deposit
+	if val.ApplicantDeposit > 0 {
+		// TODO: Implement trust deposit reduction via TD module
+		// ms.trustDepositKeeper.ReduceDeposit(ctx, val.Applicant, val.ApplicantDeposit)
+		val.ApplicantDeposit = 0
+	}
+
+	// Handle validator deposits
+	// TODO: Implement trust deposit reduction via TD module
+	// ms.trustDepositKeeper.ReduceDeposit(ctx, validatorPerm.Grantee, deposit.Amount)
+
+	val.ValidatorDeposits = nil
+
+	// Save updated validation
+	if err := ms.Validation.Set(ctx, val.Id, val); err != nil {
+		return nil, fmt.Errorf("failed to update validation: %w", err)
+	}
+
+	return &types.MsgConfirmValidationTerminationResponse{
 		ValidationId: msg.Id,
 	}, nil
 }

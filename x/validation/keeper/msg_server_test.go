@@ -2,14 +2,15 @@ package keeper_test
 
 import (
 	"context"
+	"testing"
+	"time"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 	keepertest "github.com/verana-labs/verana-blockchain/testutil/keeper"
 	csptypes "github.com/verana-labs/verana-blockchain/x/cspermission/types"
 	"github.com/verana-labs/verana-blockchain/x/validation/keeper"
 	"github.com/verana-labs/verana-blockchain/x/validation/types"
-	"testing"
-	"time"
 )
 
 func setupMsgServer(t testing.TB) (keeper.Keeper, types.MsgServer, *keepertest.MockCsPermissionKeeper, *keepertest.MockCredentialSchemaKeeper, context.Context) {
@@ -742,6 +743,217 @@ func TestRequestValidationTermination(t *testing.T) {
 				require.Equal(t, types.ValidationState_TERMINATION_REQUESTED, validation.State)
 				require.NotNil(t, validation.TermRequested)
 				require.True(t, validation.LastStateChange.Equal(sdk.UnwrapSDKContext(ctx).BlockTime()))
+			} else {
+				require.Error(t, err)
+				if tc.errorContains != "" {
+					require.Contains(t, err.Error(), tc.errorContains)
+				}
+				require.Nil(t, resp)
+			}
+		})
+	}
+}
+
+func TestConfirmValidationTermination(t *testing.T) {
+	k, ms, csPermKeeper, csKeeper, ctx := setupMsgServer(t)
+	validator := "verana1validator"
+	applicant := "verana1applicant"
+
+	// Create prerequisite data
+	schemaId := csKeeper.CreateMockCredentialSchema(1)
+	validatorPermId := csPermKeeper.CreateMockPermission(
+		validator,
+		schemaId,
+		csptypes.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_ISSUER_GRANTOR,
+		"did:example:123",
+		"US",
+	)
+
+	// Create initial validation
+	createMsg := &types.MsgCreateValidation{
+		Creator:         applicant,
+		ValidationType:  uint32(types.ValidationType_ISSUER),
+		ValidatorPermId: validatorPermId,
+		Country:         "US",
+	}
+	createResp, err := ms.CreateValidation(ctx, createMsg)
+	require.NoError(t, err)
+	require.NotNil(t, createResp)
+
+	// Set validation to VALIDATED first
+	setValidatedMsg := &types.MsgSetValidated{
+		Creator: validator,
+		Id:      createResp.ValidationId,
+	}
+	_, err = ms.SetValidated(ctx, setValidatedMsg)
+	require.NoError(t, err)
+
+	// Request termination
+	reqTermMsg := &types.MsgRequestValidationTermination{
+		Creator: applicant,
+		Id:      createResp.ValidationId,
+	}
+	_, err = ms.RequestValidationTermination(ctx, reqTermMsg)
+	require.NoError(t, err)
+
+	testCases := []struct {
+		name           string
+		msg            *types.MsgConfirmValidationTermination
+		validationType types.ValidationType
+		expPass        bool
+		errorContains  string
+		setupFn        func()
+		checkFn        func(*testing.T, *types.Validation)
+	}{
+		{
+			name: "Valid Non-HOLDER Termination by Applicant - Not Expired",
+			msg: &types.MsgConfirmValidationTermination{
+				Creator: applicant,
+				Id:      createResp.ValidationId,
+			},
+			validationType: types.ValidationType_ISSUER,
+			expPass:        true,
+			checkFn: func(t *testing.T, v *types.Validation) {
+				require.Equal(t, types.ValidationState_TERMINATED, v.State)
+				require.True(t, v.LastStateChange.Equal(sdk.UnwrapSDKContext(ctx).BlockTime()))
+				require.Zero(t, v.ApplicantDeposit)
+				require.Empty(t, v.ValidatorDeposits)
+			},
+		},
+		{
+			name: "Invalid - Non-existent Validation",
+			msg: &types.MsgConfirmValidationTermination{
+				Creator: applicant,
+				Id:      99999,
+			},
+			expPass:       false,
+			errorContains: "validation not found",
+		},
+		{
+			name: "Invalid - Wrong State",
+			msg: &types.MsgConfirmValidationTermination{
+				Creator: applicant,
+				Id:      createResp.ValidationId,
+			},
+			setupFn: func() {
+				// Set validation to PENDING state
+				val, err := k.Validation.Get(ctx, createResp.ValidationId)
+				require.NoError(t, err)
+				val.State = types.ValidationState_PENDING
+				err = k.Validation.Set(ctx, createResp.ValidationId, val)
+				require.NoError(t, err)
+			},
+			expPass:       false,
+			errorContains: "must be in TERMINATION_REQUESTED state",
+		},
+		{
+			name: "Valid HOLDER Termination by Validator - Not Expired",
+			msg: &types.MsgConfirmValidationTermination{
+				Creator: validator,
+				Id:      createResp.ValidationId,
+			},
+			setupFn: func() {
+				// Set to HOLDER type and TERMINATION_REQUESTED state
+				val, err := k.Validation.Get(ctx, createResp.ValidationId)
+				require.NoError(t, err)
+				val.Type = types.ValidationType_HOLDER
+				val.State = types.ValidationState_TERMINATION_REQUESTED
+				err = k.Validation.Set(ctx, createResp.ValidationId, val)
+				require.NoError(t, err)
+			},
+			validationType: types.ValidationType_HOLDER,
+			expPass:        true,
+		},
+		{
+			name: "Invalid HOLDER Termination by Applicant Before Timeout",
+			msg: &types.MsgConfirmValidationTermination{
+				Creator: applicant,
+				Id:      createResp.ValidationId,
+			},
+			validationType: types.ValidationType_HOLDER,
+			setupFn: func() {
+				// Set to HOLDER type, not expired, and before timeout
+				val, err := k.Validation.Get(ctx, createResp.ValidationId)
+				require.NoError(t, err)
+				val.Type = types.ValidationType_HOLDER
+				val.State = types.ValidationState_TERMINATION_REQUESTED
+				blockTime := sdk.UnwrapSDKContext(ctx).BlockTime()
+				val.TermRequested = &blockTime
+				err = k.Validation.Set(ctx, createResp.ValidationId, val)
+				require.NoError(t, err)
+			},
+			expPass:       false,
+			errorContains: "only validator can confirm termination before timeout",
+		},
+		{
+			name: "Valid HOLDER Termination by Applicant After Timeout",
+			msg: &types.MsgConfirmValidationTermination{
+				Creator: applicant,
+				Id:      createResp.ValidationId,
+			},
+			validationType: types.ValidationType_HOLDER,
+			setupFn: func() {
+				// Set validation to HOLDER type and move time past timeout
+				val, err := k.Validation.Get(ctx, createResp.ValidationId)
+				require.NoError(t, err)
+				val.Type = types.ValidationType_HOLDER
+				val.State = types.ValidationState_TERMINATION_REQUESTED
+
+				// Set term requested to past timeout
+				sdkCtx := sdk.UnwrapSDKContext(ctx)
+				now := time.Now()
+				ctx = sdk.WrapSDKContext(sdkCtx.WithBlockTime(now))
+				pastTimeout := now.Add(-time.Hour * 24 * 8) // 8 days ago (past the 7-day timeout)
+				val.TermRequested = &pastTimeout
+
+				err = k.Validation.Set(ctx, createResp.ValidationId, val)
+				require.NoError(t, err)
+			},
+			expPass: true,
+		},
+		{
+			name: "Valid - Expired Validation with Either Party",
+			msg: &types.MsgConfirmValidationTermination{
+				Creator: validator,
+				Id:      createResp.ValidationId,
+			},
+			setupFn: func() {
+				// Set validation as expired
+				val, err := k.Validation.Get(ctx, createResp.ValidationId)
+				require.NoError(t, err)
+				val.State = types.ValidationState_TERMINATION_REQUESTED
+
+				// Set expiration to past
+				sdkCtx := sdk.UnwrapSDKContext(ctx)
+				pastTime := sdkCtx.BlockTime().Add(-time.Hour * 24)
+				val.Exp = &pastTime
+
+				err = k.Validation.Set(ctx, createResp.ValidationId, val)
+				require.NoError(t, err)
+			},
+			expPass: true,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			if tc.setupFn != nil {
+				tc.setupFn()
+			}
+
+			resp, err := ms.ConfirmValidationTermination(ctx, tc.msg)
+			if tc.expPass {
+				require.NoError(t, err)
+				require.NotNil(t, resp)
+
+				// Get updated validation
+				validation, err := k.Validation.Get(ctx, tc.msg.Id)
+				require.NoError(t, err)
+
+				// Run any additional checks
+				if tc.checkFn != nil {
+					tc.checkFn(t, &validation)
+				}
 			} else {
 				require.Error(t, err)
 				if tc.errorContains != "" {
