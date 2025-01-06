@@ -22,6 +22,7 @@ service Msg {
   rpc SetValidated(MsgSetValidated) returns (MsgSetValidatedResponse);
   rpc RequestValidationTermination(MsgRequestValidationTermination) returns (MsgRequestValidationTerminationResponse);
   rpc ConfirmValidationTermination(MsgConfirmValidationTermination) returns (MsgConfirmValidationTerminationResponse);
+  rpc CancelValidation(MsgCancelValidation) returns (MsgCancelValidationResponse);
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
@@ -96,5 +97,14 @@ message MsgConfirmValidationTermination {
 }
 
 message MsgConfirmValidationTerminationResponse {
+  uint64 validation_id = 1;
+}
+
+message MsgCancelValidation {
+  string creator = 1;
+  uint64 id = 2;
+}
+
+message MsgCancelValidationResponse {
   uint64 validation_id = 1;
 }

@@ -151,6 +151,17 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 						},
 					},
 				},
+				{
+					RpcMethod: "CancelValidation",
+					Use:       "cancel-validation [id]",
+					Short:     "Cancel a pending validation",
+					Long:      "Cancel a pending validation. Only the applicant can cancel. If validation was never completed (no expiration), it will be terminated. Otherwise, it will return to VALIDATED state.",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "id",
+						},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},

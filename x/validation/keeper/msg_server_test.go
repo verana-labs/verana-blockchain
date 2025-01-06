@@ -964,3 +964,134 @@ func TestConfirmValidationTermination(t *testing.T) {
 		})
 	}
 }
+
+func TestCancelValidation(t *testing.T) {
+	k, ms, csPermKeeper, csKeeper, ctx := setupMsgServer(t)
+	validator := "verana1validator"
+	applicant := "verana1applicant"
+
+	// Create prerequisite data
+	schemaId := csKeeper.CreateMockCredentialSchema(1)
+	validatorPermId := csPermKeeper.CreateMockPermission(
+		validator,
+		schemaId,
+		csptypes.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_ISSUER_GRANTOR,
+		"did:example:123",
+		"US",
+	)
+
+	// Create initial validation
+	createMsg := &types.MsgCreateValidation{
+		Creator:         applicant,
+		ValidationType:  uint32(types.ValidationType_ISSUER),
+		ValidatorPermId: validatorPermId,
+		Country:         "US",
+	}
+	createResp, err := ms.CreateValidation(ctx, createMsg)
+	require.NoError(t, err)
+	require.NotNil(t, createResp)
+
+	testCases := []struct {
+		name          string
+		msg           *types.MsgCancelValidation
+		setupFn       func()
+		expPass       bool
+		errorContains string
+		checkFn       func(*testing.T, *types.Validation)
+	}{
+		{
+			name: "Valid Cancellation - Never Validated",
+			msg: &types.MsgCancelValidation{
+				Creator: applicant,
+				Id:      createResp.ValidationId,
+			},
+			expPass: true,
+			checkFn: func(t *testing.T, v *types.Validation) {
+				require.Equal(t, types.ValidationState_TERMINATED, v.State)
+				require.Zero(t, v.CurrentFees)
+				require.Zero(t, v.CurrentDeposit)
+			},
+		},
+		{
+			name: "Invalid - Non-existent Validation",
+			msg: &types.MsgCancelValidation{
+				Creator: applicant,
+				Id:      99999,
+			},
+			expPass:       false,
+			errorContains: "validation not found",
+		},
+		{
+			name: "Invalid - Wrong Creator",
+			msg: &types.MsgCancelValidation{
+				Creator: validator,
+				Id:      createResp.ValidationId,
+			},
+			expPass:       false,
+			errorContains: "only the validation applicant can cancel validation",
+		},
+		{
+			name: "Invalid - Not in PENDING State",
+			msg: &types.MsgCancelValidation{
+				Creator: applicant,
+				Id:      createResp.ValidationId,
+			},
+			setupFn: func() {
+				val, err := k.Validation.Get(ctx, createResp.ValidationId)
+				require.NoError(t, err)
+				val.State = types.ValidationState_VALIDATED
+				err = k.Validation.Set(ctx, createResp.ValidationId, val)
+				require.NoError(t, err)
+			},
+			expPass:       false,
+			errorContains: "must be in PENDING state",
+		},
+		{
+			name: "Valid Cancellation - Previously Validated",
+			msg: &types.MsgCancelValidation{
+				Creator: applicant,
+				Id:      createResp.ValidationId,
+			},
+			setupFn: func() {
+				val, err := k.Validation.Get(ctx, createResp.ValidationId)
+				require.NoError(t, err)
+				val.State = types.ValidationState_PENDING
+				expTime := time.Now().Add(time.Hour * 24 * 30)
+				val.Exp = &expTime
+				err = k.Validation.Set(ctx, createResp.ValidationId, val)
+				require.NoError(t, err)
+			},
+			expPass: true,
+			checkFn: func(t *testing.T, v *types.Validation) {
+				require.Equal(t, types.ValidationState_VALIDATED, v.State)
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			if tc.setupFn != nil {
+				tc.setupFn()
+			}
+
+			resp, err := ms.CancelValidation(ctx, tc.msg)
+			if tc.expPass {
+				require.NoError(t, err)
+				require.NotNil(t, resp)
+
+				validation, err := k.Validation.Get(ctx, tc.msg.Id)
+				require.NoError(t, err)
+
+				if tc.checkFn != nil {
+					tc.checkFn(t, &validation)
+				}
+			} else {
+				require.Error(t, err)
+				if tc.errorContains != "" {
+					require.Contains(t, err.Error(), tc.errorContains)
+				}
+				require.Nil(t, resp)
+			}
+		})
+	}
+}

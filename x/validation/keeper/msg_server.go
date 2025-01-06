@@ -254,3 +254,60 @@ func (ms msgServer) ConfirmValidationTermination(goCtx context.Context, msg *typ
 		ValidationId: msg.Id,
 	}, nil
 }
+
+func (ms msgServer) CancelValidation(goCtx context.Context, msg *types.MsgCancelValidation) (*types.MsgCancelValidationResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// [MOD-V-MSG-6-2-1] Basic checks
+	val, err := ms.Validation.Get(ctx, msg.Id)
+	if err != nil {
+		return nil, fmt.Errorf("validation not found: %w", err)
+	}
+
+	// Check applicant
+	if val.Applicant != msg.Creator {
+		return nil, fmt.Errorf("only the validation applicant can cancel validation")
+	}
+
+	// Check state
+	if val.State != types.ValidationState_PENDING {
+		return nil, fmt.Errorf("validation must be in PENDING state")
+	}
+
+	// [MOD-V-MSG-6-3] Execute cancellation
+	now := ctx.BlockTime()
+
+	// Set state based on expiration
+	if val.Exp == nil {
+		val.State = types.ValidationState_TERMINATED
+	} else {
+		val.State = types.ValidationState_VALIDATED
+	}
+	val.LastStateChange = now
+
+	// Handle fees refund
+	if val.CurrentFees > 0 {
+		// TODO: Transfer fees back from escrow to applicant
+		// applicant, _ := sdk.AccAddressFromBech32(val.Applicant)
+		// if err := ms.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, applicant, sdk.NewCoins(sdk.NewCoin(ms.stakingKeeper.BondDenom(ctx), sdk.NewInt(int64(val.CurrentFees))))); err != nil {
+		// 	return nil, fmt.Errorf("failed to refund fees: %w", err)
+		// }
+		val.CurrentFees = 0
+	}
+
+	// Handle deposit refund
+	if val.CurrentDeposit > 0 {
+		// TODO: Implement trust deposit reduction via TD module
+		// ms.trustDepositKeeper.ReduceDeposit(ctx, val.Applicant, val.CurrentDeposit)
+		val.CurrentDeposit = 0
+	}
+
+	// Save updated validation
+	if err := ms.Validation.Set(ctx, val.Id, val); err != nil {
+		return nil, fmt.Errorf("failed to update validation: %w", err)
+	}
+
+	return &types.MsgCancelValidationResponse{
+		ValidationId: msg.Id,
+	}, nil
+}

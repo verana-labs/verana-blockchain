@@ -1,21 +1,24 @@
 package types
 
 import (
+	"regexp"
+
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"regexp"
 )
 
 const TypeMsgCreateValidation = "create_validation"
 const TypeMsgRenewValidation = "renew_validation"
 const TypeMsgSetValidated = "set_validated"
 const TypeMsgRequestValidationTermination = "request_validation_termination"
+const TypeMsgCancelValidation = "cancel_validation"
 
 var _ sdk.Msg = &MsgCreateValidation{}
 var _ sdk.Msg = &MsgRenewValidation{}
 var _ sdk.Msg = &MsgSetValidated{}
 var _ sdk.Msg = &MsgRequestValidationTermination{}
+var _ sdk.Msg = &MsgCancelValidation{}
 
 // NewMsgCreateValidation creates a new MsgCreateValidation instance
 func NewMsgCreateValidation(
@@ -251,5 +254,40 @@ func (msg *MsgRequestValidationTermination) ValidateBasic() error {
 		return errors.Wrap(sdkerrors.ErrInvalidRequest, "validation id is required")
 	}
 
+	return nil
+}
+
+// NewMsgCancelValidation creates a new MsgCancelValidation instance
+func NewMsgCancelValidation(creator string, id uint64) *MsgCancelValidation {
+	return &MsgCancelValidation{
+		Creator: creator,
+		Id:      id,
+	}
+}
+
+func (msg *MsgCancelValidation) Route() string {
+	return RouterKey
+}
+
+func (msg *MsgCancelValidation) Type() string {
+	return TypeMsgCancelValidation
+}
+
+func (msg *MsgCancelValidation) GetSigners() []sdk.AccAddress {
+	creator, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{creator}
+}
+
+func (msg *MsgCancelValidation) ValidateBasic() error {
+	_, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address: %s", err)
+	}
+	if msg.Id == 0 {
+		return errors.Wrap(sdkerrors.ErrInvalidRequest, "validation ID cannot be 0")
+	}
 	return nil
 }

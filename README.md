@@ -548,6 +548,17 @@ The permission types are:
    --gas-prices 1.1uvna
    ```
 
+6. Cancel a Pending Validation:
+   ```bash
+   veranad tx validation cancel-validation 1 \
+   --from cooluser \
+   --keyring-backend test \
+   --chain-id test-1 \
+   --gas 800000 \
+   --gas-adjustment 1.3 \
+   --gas-prices 1.1uvna
+   ```
+
    Note:
    - Only the validation applicant can request termination
    - Validation must be in VALIDATED state

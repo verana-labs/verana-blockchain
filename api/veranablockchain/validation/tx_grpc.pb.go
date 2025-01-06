@@ -25,6 +25,7 @@ const (
 	Msg_SetValidated_FullMethodName                 = "/veranablockchain.validation.Msg/SetValidated"
 	Msg_RequestValidationTermination_FullMethodName = "/veranablockchain.validation.Msg/RequestValidationTermination"
 	Msg_ConfirmValidationTermination_FullMethodName = "/veranablockchain.validation.Msg/ConfirmValidationTermination"
+	Msg_CancelValidation_FullMethodName             = "/veranablockchain.validation.Msg/CancelValidation"
 )
 
 // MsgClient is the client API for Msg service.
@@ -39,6 +40,7 @@ type MsgClient interface {
 	SetValidated(ctx context.Context, in *MsgSetValidated, opts ...grpc.CallOption) (*MsgSetValidatedResponse, error)
 	RequestValidationTermination(ctx context.Context, in *MsgRequestValidationTermination, opts ...grpc.CallOption) (*MsgRequestValidationTerminationResponse, error)
 	ConfirmValidationTermination(ctx context.Context, in *MsgConfirmValidationTermination, opts ...grpc.CallOption) (*MsgConfirmValidationTerminationResponse, error)
+	CancelValidation(ctx context.Context, in *MsgCancelValidation, opts ...grpc.CallOption) (*MsgCancelValidationResponse, error)
 }
 
 type msgClient struct {
@@ -103,6 +105,15 @@ func (c *msgClient) ConfirmValidationTermination(ctx context.Context, in *MsgCon
 	return out, nil
 }
 
+func (c *msgClient) CancelValidation(ctx context.Context, in *MsgCancelValidation, opts ...grpc.CallOption) (*MsgCancelValidationResponse, error) {
+	out := new(MsgCancelValidationResponse)
+	err := c.cc.Invoke(ctx, Msg_CancelValidation_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
@@ -115,6 +126,7 @@ type MsgServer interface {
 	SetValidated(context.Context, *MsgSetValidated) (*MsgSetValidatedResponse, error)
 	RequestValidationTermination(context.Context, *MsgRequestValidationTermination) (*MsgRequestValidationTerminationResponse, error)
 	ConfirmValidationTermination(context.Context, *MsgConfirmValidationTermination) (*MsgConfirmValidationTerminationResponse, error)
+	CancelValidation(context.Context, *MsgCancelValidation) (*MsgCancelValidationResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -139,6 +151,9 @@ func (UnimplementedMsgServer) RequestValidationTermination(context.Context, *Msg
 }
 func (UnimplementedMsgServer) ConfirmValidationTermination(context.Context, *MsgConfirmValidationTermination) (*MsgConfirmValidationTerminationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ConfirmValidationTermination not implemented")
+}
+func (UnimplementedMsgServer) CancelValidation(context.Context, *MsgCancelValidation) (*MsgCancelValidationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CancelValidation not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -261,6 +276,24 @@ func _Msg_ConfirmValidationTermination_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_CancelValidation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgCancelValidation)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).CancelValidation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_CancelValidation_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).CancelValidation(ctx, req.(*MsgCancelValidation))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -291,6 +324,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ConfirmValidationTermination",
 			Handler:    _Msg_ConfirmValidationTermination_Handler,
+		},
+		{
+			MethodName: "CancelValidation",
+			Handler:    _Msg_CancelValidation_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
