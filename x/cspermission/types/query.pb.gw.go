@@ -576,17 +576,17 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 }
 
 var (
-	pattern_Query_Params_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"verana-labs", "verana-blockchain", "cspermission", "params"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_Params_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"vpr", "v1", "csp", "params"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_ListCSP_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"dtr", "v1", "csp", "list"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_ListCSP_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"vpr", "v1", "csp", "list"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_GetCSP_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"dtr", "v1", "csp", "get", "id"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_GetCSP_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"vpr", "v1", "csp", "get", "id"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_IsAuthorizedIssuer_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"dtr", "v1", "csp", "authorized_issuer"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_IsAuthorizedIssuer_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"vpr", "v1", "csp", "authorized_issuer"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_IsAuthorizedVerifier_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"dtr", "v1", "csp", "authorized_verifier"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_IsAuthorizedVerifier_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"vpr", "v1", "csp", "authorized_verifier"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_GetCSPS_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"dtr", "v1", "csp", "get_session", "id"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_GetCSPS_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"vpr", "v1", "csp", "get_session", "id"}, "", runtime.AssumeColonVerbOpt(false)))
 )
 
 var (

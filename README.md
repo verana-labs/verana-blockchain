@@ -547,7 +547,18 @@ The permission types are:
    --gas-adjustment 1.3 \
    --gas-prices 1.1uvna
    ```
-
+   
+5. Confirm Validation Termination:
+   ```bash
+   veranad tx validation confirm-termination 1 \
+   --from validator \
+   --keyring-backend test \
+   --chain-id test-1 \
+   --gas 800000 \
+   --gas-adjustment 1.3 \
+   --gas-prices 1.1uvna
+   ```   
+   
 6. Cancel a Pending Validation:
    ```bash
    veranad tx validation cancel-validation 1 \
@@ -564,17 +575,6 @@ The permission types are:
    - Validation must be in VALIDATED state
    - After requesting termination, the validation will be set to TERMINATION_REQUESTED state
    - A separate confirmation step will be required to complete the termination
-
-5. Confirm Validation Termination:
-   ```bash
-   veranad tx validation confirm-termination 1 \
-   --from validator \
-   --keyring-backend test \
-   --chain-id test-1 \
-   --gas 800000 \
-   --gas-adjustment 1.3 \
-   --gas-prices 1.1uvna
-   ```   
 
 ### Queries
 

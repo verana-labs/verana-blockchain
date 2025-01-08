@@ -16,25 +16,25 @@ option go_package = "github.com/verana-labs/verana-blockchain/x/cspermission/typ
 service Query {
   // Parameters queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/verana-labs/verana-blockchain/cspermission/params";
+    option (google.api.http).get = "/vpr/v1/csp/params";
   }
   // ListCSP returns the list of credential schema permissions.
   rpc ListCSP(QueryListCSPRequest) returns (QueryListCSPResponse) {
-    option (google.api.http).get = "/dtr/v1/csp/list";
+    option (google.api.http).get = "/vpr/v1/csp/list";
   }
   // GetCSP returns credential schema permission by ID
   rpc GetCSP(QueryGetCSPRequest) returns (QueryGetCSPResponse) {
-    option (google.api.http).get = "/dtr/v1/csp/get/{id}";
+    option (google.api.http).get = "/vpr/v1/csp/get/{id}";
   }
   // IsAuthorizedIssuer checks if a DID is authorized to issue credentials
   rpc IsAuthorizedIssuer(QueryIsAuthorizedIssuerRequest) returns (QueryIsAuthorizedIssuerResponse) {
-    option (google.api.http).get = "/dtr/v1/csp/authorized_issuer";
+    option (google.api.http).get = "/vpr/v1/csp/authorized_issuer";
   }
   rpc IsAuthorizedVerifier(QueryIsAuthorizedVerifierRequest) returns (QueryIsAuthorizedVerifierResponse) {
-    option (google.api.http).get = "/dtr/v1/csp/authorized_verifier";
+    option (google.api.http).get = "/vpr/v1/csp/authorized_verifier";
   }
   rpc GetCSPS(QueryGetCSPSRequest) returns (QueryGetCSPSResponse) {
-    option (google.api.http).get = "/dtr/v1/csp/get_session/{id}";
+    option (google.api.http).get = "/vpr/v1/csp/get_session/{id}";
   }
 }
 

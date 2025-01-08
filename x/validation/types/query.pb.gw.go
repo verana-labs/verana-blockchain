@@ -321,11 +321,11 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 }
 
 var (
-	pattern_Query_Params_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"verana-labs", "verana-blockchain", "validation", "params"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_Params_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"vpr", "v1", "val", "params"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_ListValidations_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"dtr", "v1", "val", "list"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_ListValidations_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"vpr", "v1", "val", "list"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_GetValidation_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"dtr", "v1", "val", "get", "id"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_GetValidation_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"vpr", "v1", "val", "get", "id"}, "", runtime.AssumeColonVerbOpt(false)))
 )
 
 var (

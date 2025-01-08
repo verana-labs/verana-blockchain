@@ -16,13 +16,13 @@ option go_package = "github.com/verana-labs/verana-blockchain/x/validation/types
 service Query {
   // Parameters queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/verana-labs/verana-blockchain/validation/params";
+    option (google.api.http).get = "/vpr/v1/val/params";
   }
   rpc ListValidations(QueryListValidationsRequest) returns (QueryListValidationsResponse) {
-    option (google.api.http).get = "/dtr/v1/val/list";
+    option (google.api.http).get = "/vpr/v1/val/list";
   }
   rpc GetValidation(QueryGetValidationRequest) returns (QueryGetValidationResponse) {
-    option (google.api.http).get = "/dtr/v1/val/get/{id}";
+    option (google.api.http).get = "/vpr/v1/val/get/{id}";
   }
 }
 

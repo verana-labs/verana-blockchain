@@ -454,13 +454,13 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 }
 
 var (
-	pattern_Query_Params_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"verana-labs", "verana-blockchain", "trustregistry", "params"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_Params_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"vpr", "v1", "tr", "params"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_GetTrustRegistry_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"dtr", "v1", "tr", "get", "tr_id"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_GetTrustRegistry_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"vpr", "v1", "tr", "get", "tr_id"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_ListTrustRegistries_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"dtr", "v1", "tr", "list"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_ListTrustRegistries_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"vpr", "v1", "tr", "list"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_GetTrustRegistryWithDID_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"dtr", "v1", "tr", "get_with_did", "did"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_GetTrustRegistryWithDID_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"vpr", "v1", "tr", "get_with_did", "did"}, "", runtime.AssumeColonVerbOpt(false)))
 )
 
 var (
