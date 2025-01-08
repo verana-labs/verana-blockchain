@@ -291,3 +291,37 @@ func validatePermManagementModes(msg *MsgCreateCredentialSchema) error {
 
 	return nil
 }
+
+// Validate checks if the credential schema update parameters are valid
+func (msg *MsgUpdateCredentialSchema) ValidateBasic() error {
+	if msg.Creator == "" {
+		return fmt.Errorf("creator address is required")
+	}
+
+	if _, err := sdk.AccAddressFromBech32(msg.Creator); err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+	}
+
+	if msg.Id == 0 {
+		return fmt.Errorf("credential schema id is required")
+	}
+
+	return nil
+}
+
+// Validate checks if the archive credential schema parameters are valid
+func (msg *MsgArchiveCredentialSchema) ValidateBasic() error {
+	if msg.Creator == "" {
+		return fmt.Errorf("creator address is required")
+	}
+
+	if _, err := sdk.AccAddressFromBech32(msg.Creator); err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+	}
+
+	if msg.Id == 0 {
+		return fmt.Errorf("credential schema id is required")
+	}
+
+	return nil
+}

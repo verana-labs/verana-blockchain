@@ -39,7 +39,7 @@ func (ms msgServer) validateTrustRegistryPerm(msg *types.MsgCreateCredentialSche
 }
 
 func (ms msgServer) validateIssuerPerm(ctx sdk.Context, msg *types.MsgCreateCredentialSchemaPerm, cs credentialschematypes.CredentialSchema) error {
-	if cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_OPEN {
+	if cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_OPEN {
 		return errors.Wrap(sdkerrors.ErrInvalidRequest, "cannot create ISSUER permission when management mode is OPEN")
 	}
 
@@ -51,7 +51,7 @@ func (ms msgServer) validateIssuerPerm(ctx sdk.Context, msg *types.MsgCreateCred
 }
 
 func (ms msgServer) validateVerifierPerm(ctx sdk.Context, msg *types.MsgCreateCredentialSchemaPerm, cs credentialschematypes.CredentialSchema) error {
-	if cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_OPEN {
+	if cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_OPEN {
 		return errors.Wrap(sdkerrors.ErrInvalidRequest, "cannot create VERIFIER permission when management mode is OPEN")
 	}
 
@@ -63,7 +63,7 @@ func (ms msgServer) validateVerifierPerm(ctx sdk.Context, msg *types.MsgCreateCr
 }
 
 func (ms msgServer) validateHolderPerm(ctx sdk.Context, msg *types.MsgCreateCredentialSchemaPerm, cs credentialschematypes.CredentialSchema) error {
-	if cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_OPEN {
+	if cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_OPEN {
 		return errors.Wrap(sdkerrors.ErrInvalidRequest, "cannot create HOLDER permission when management mode is OPEN")
 	}
 

@@ -10,10 +10,10 @@ import (
 )
 
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	legacy.RegisterAminoMsg(cdc, &MsgAddDID{}, "/dtr/v1/dd/add-did")
-	legacy.RegisterAminoMsg(cdc, &MsgRenewDID{}, "/dtr/v1/dd/renew-did")
-	legacy.RegisterAminoMsg(cdc, &MsgRemoveDID{}, "/dtr/v1/dd/remove-did")
-	legacy.RegisterAminoMsg(cdc, &MsgTouchDID{}, "/dtr/v1/dd/touch-did")
+	legacy.RegisterAminoMsg(cdc, &MsgAddDID{}, "/vpr/v1/dd/add-did")
+	legacy.RegisterAminoMsg(cdc, &MsgRenewDID{}, "/vpr/v1/dd/renew-did")
+	legacy.RegisterAminoMsg(cdc, &MsgRemoveDID{}, "/vpr/v1/dd/remove-did")
+	legacy.RegisterAminoMsg(cdc, &MsgTouchDID{}, "/vpr/v1/dd/touch-did")
 }
 
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {

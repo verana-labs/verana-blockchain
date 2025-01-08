@@ -9,6 +9,14 @@ import (
 	// this line is used by starport scaffolding # 1
 )
 
+func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
+	legacy.RegisterAminoMsg(cdc, &MsgCreateValidation{}, "/vpr/v1/v/create-validation")
+	legacy.RegisterAminoMsg(cdc, &MsgRenewValidation{}, "/vpr/v1/v/renew-validation")
+	legacy.RegisterAminoMsg(cdc, &MsgSetValidated{}, "/vpr/v1/v/set-validated")
+	legacy.RegisterAminoMsg(cdc, &MsgCancelValidation{}, "/vpr/v1/v/cancel-validation")
+	legacy.RegisterAminoMsg(cdc, &MsgConfirmValidationTermination{}, "/vpr/v1/v/confirm-termination")
+}
+
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 	// this line is used by starport scaffolding # 3
 
@@ -21,12 +29,4 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 		&MsgCancelValidation{},
 	)
 	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)
-}
-
-func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	legacy.RegisterAminoMsg(cdc, &MsgCreateValidation{}, "/dtr/v1/v/create-validation")
-	legacy.RegisterAminoMsg(cdc, &MsgRenewValidation{}, "/dtr/v1/v/renew-validation")
-	legacy.RegisterAminoMsg(cdc, &MsgSetValidated{}, "/dtr/v1/v/set-validated")
-	legacy.RegisterAminoMsg(cdc, &MsgCancelValidation{}, "/dtr/v1/v/cancel-validation")
-	legacy.RegisterAminoMsg(cdc, &MsgConfirmValidationTermination{}, "/dtr/v1/v/confirm-termination")
 }

@@ -10,10 +10,10 @@ import (
 )
 
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	legacy.RegisterAminoMsg(cdc, &MsgCreateCredentialSchemaPerm{}, "/dtr/v1/csp/create-csp")
-	legacy.RegisterAminoMsg(cdc, &MsgRevokeCredentialSchemaPerm{}, "/dtr/v1/csp/revoke-csp")
-	legacy.RegisterAminoMsg(cdc, &MsgTerminateCredentialSchemaPerm{}, "/dtr/v1/csp/terminate-csp")
-	legacy.RegisterAminoMsg(cdc, &MsgCreateOrUpdateCSPS{}, "/dtr/v1/csp/create-or-update-csps")
+	legacy.RegisterAminoMsg(cdc, &MsgCreateCredentialSchemaPerm{}, "/vpr/v1/csp/create-csp")
+	legacy.RegisterAminoMsg(cdc, &MsgRevokeCredentialSchemaPerm{}, "/vpr/v1/csp/revoke-csp")
+	legacy.RegisterAminoMsg(cdc, &MsgTerminateCredentialSchemaPerm{}, "/vpr/v1/csp/terminate-csp")
+	legacy.RegisterAminoMsg(cdc, &MsgCreateOrUpdateCSPS{}, "/vpr/v1/csp/create-or-update-csps")
 }
 
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {

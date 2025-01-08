@@ -32,7 +32,7 @@ func (ms msgServer) validateRevokePermissions(ctx sdk.Context, creator string, c
 }
 
 func (ms msgServer) validateIssuerRevoke(ctx sdk.Context, creator string, csp *types.CredentialSchemaPerm, cs credentialschematypes.CredentialSchema) error {
-	if cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_OPEN {
+	if cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_OPEN {
 		return errors.Wrap(sdkerrors.ErrInvalidRequest, "cannot revoke ISSUER permission when management mode is OPEN")
 	}
 
@@ -40,7 +40,7 @@ func (ms msgServer) validateIssuerRevoke(ctx sdk.Context, creator string, csp *t
 }
 
 func (ms msgServer) validateVerifierRevoke(ctx sdk.Context, creator string, csp *types.CredentialSchemaPerm, cs credentialschematypes.CredentialSchema) error {
-	if cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_OPEN {
+	if cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_OPEN {
 		return errors.Wrap(sdkerrors.ErrInvalidRequest, "cannot revoke VERIFIER permission when management mode is OPEN")
 	}
 
@@ -48,7 +48,7 @@ func (ms msgServer) validateVerifierRevoke(ctx sdk.Context, creator string, csp 
 }
 
 func (ms msgServer) validateHolderRevoke(ctx sdk.Context, creator string, csp *types.CredentialSchemaPerm, cs credentialschematypes.CredentialSchema) error {
-	if cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_OPEN {
+	if cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_OPEN {
 		return errors.Wrap(sdkerrors.ErrInvalidRequest, "cannot revoke HOLDER permission when management mode is OPEN")
 	}
 

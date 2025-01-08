@@ -10,9 +10,9 @@ import (
 )
 
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	legacy.RegisterAminoMsg(cdc, &MsgCreateTrustRegistry{}, "/dtr/v1/tr/create-trust-registry")
-	legacy.RegisterAminoMsg(cdc, &MsgAddGovernanceFrameworkDocument{}, "/dtr/v1/tr/add-gfd")
-	legacy.RegisterAminoMsg(cdc, &MsgIncreaseActiveGovernanceFrameworkVersion{}, "/dtr/v1/tr/increase-active-gf-version")
+	legacy.RegisterAminoMsg(cdc, &MsgCreateTrustRegistry{}, "/vpr/v1/tr/create-trust-registry")
+	legacy.RegisterAminoMsg(cdc, &MsgAddGovernanceFrameworkDocument{}, "/vpr/v1/tr/add-gfd")
+	legacy.RegisterAminoMsg(cdc, &MsgIncreaseActiveGovernanceFrameworkVersion{}, "/vpr/v1/tr/increase-active-gf-version")
 }
 
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {

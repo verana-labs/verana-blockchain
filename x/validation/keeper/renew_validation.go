@@ -62,11 +62,11 @@ func (ms msgServer) validateRenewalPermissions(ctx sdk.Context, msg *types.MsgRe
 		// Validate based on validation type and schema management mode
 		switch val.Type {
 		case types.ValidationType_ISSUER:
-			if cs.IssuerPermManagementMode == cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION {
+			if cs.IssuerPermManagementMode == cstypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION {
 				if perm.CspType != csptypes.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_ISSUER_GRANTOR {
 					return errors.New("invalid validator permission type for issuer validation")
 				}
-			} else if cs.IssuerPermManagementMode == cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_TRUST_REGISTRY_VALIDATION {
+			} else if cs.IssuerPermManagementMode == cstypes.CredentialSchemaPermManagementMode_TRUST_REGISTRY_VALIDATION {
 				if perm.CspType != csptypes.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_TRUST_REGISTRY {
 					return errors.New("invalid validator permission type for issuer validation")
 				}
@@ -75,7 +75,7 @@ func (ms msgServer) validateRenewalPermissions(ctx sdk.Context, msg *types.MsgRe
 			}
 
 		case types.ValidationType_ISSUER_GRANTOR:
-			if cs.IssuerPermManagementMode == cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION {
+			if cs.IssuerPermManagementMode == cstypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION {
 				if perm.CspType != csptypes.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_TRUST_REGISTRY {
 					return errors.New("invalid validator permission type for issuer grantor validation")
 				}
@@ -84,11 +84,11 @@ func (ms msgServer) validateRenewalPermissions(ctx sdk.Context, msg *types.MsgRe
 			}
 
 		case types.ValidationType_VERIFIER:
-			if cs.VerifierPermManagementMode == cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION {
+			if cs.VerifierPermManagementMode == cstypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION {
 				if perm.CspType != csptypes.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_VERIFIER_GRANTOR {
 					return errors.New("invalid validator permission type for verifier validation")
 				}
-			} else if cs.VerifierPermManagementMode == cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_TRUST_REGISTRY_VALIDATION {
+			} else if cs.VerifierPermManagementMode == cstypes.CredentialSchemaPermManagementMode_TRUST_REGISTRY_VALIDATION {
 				if perm.CspType != csptypes.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_TRUST_REGISTRY {
 					return errors.New("invalid validator permission type for verifier validation")
 				}
@@ -97,7 +97,7 @@ func (ms msgServer) validateRenewalPermissions(ctx sdk.Context, msg *types.MsgRe
 			}
 
 		case types.ValidationType_VERIFIER_GRANTOR:
-			if cs.VerifierPermManagementMode == cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION {
+			if cs.VerifierPermManagementMode == cstypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION {
 				if perm.CspType != csptypes.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_TRUST_REGISTRY {
 					return errors.New("invalid validator permission type for verifier grantor validation")
 				}
@@ -106,8 +106,8 @@ func (ms msgServer) validateRenewalPermissions(ctx sdk.Context, msg *types.MsgRe
 			}
 
 		case types.ValidationType_HOLDER:
-			if cs.VerifierPermManagementMode == cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION ||
-				cs.VerifierPermManagementMode == cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_TRUST_REGISTRY_VALIDATION {
+			if cs.VerifierPermManagementMode == cstypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION ||
+				cs.VerifierPermManagementMode == cstypes.CredentialSchemaPermManagementMode_TRUST_REGISTRY_VALIDATION {
 				if perm.CspType != csptypes.CredentialSchemaPermType_CREDENTIAL_SCHEMA_PERM_TYPE_ISSUER {
 					return errors.New("invalid validator permission type for holder validation")
 				}

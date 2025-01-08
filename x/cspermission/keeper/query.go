@@ -90,7 +90,7 @@ func (qs queryServer) IsAuthorizedIssuer(ctx context.Context, req *types.QueryIs
 	}
 
 	// If issuer mode is OPEN, return authorized immediately
-	if cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_OPEN {
+	if cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_OPEN {
 		return &types.QueryIsAuthorizedIssuerResponse{
 			Status: types.AuthorizationStatus_AUTHORIZED,
 		}, nil
@@ -229,7 +229,7 @@ func (qs queryServer) IsAuthorizedVerifier(ctx context.Context, req *types.Query
 	}
 
 	// If verifier mode is OPEN, return authorized immediately
-	if cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_OPEN {
+	if cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_OPEN {
 		return &types.QueryIsAuthorizedVerifierResponse{
 			Status: types.AuthorizationStatus_AUTHORIZED,
 		}, nil

@@ -128,6 +128,46 @@ $ veranad tx credentialschema create-credential-schema 1 schema.json 365 365 180
 						},
 					},
 				},
+				{
+					RpcMethod: "UpdateCredentialSchema",
+					Use:       "update [id] [issuer-grantor-period] [verifier-grantor-period] [issuer-period] [verifier-period] [holder-period]",
+					Short:     "Update a credential schema's validity periods",
+					Long:      "Update the validity periods of an existing credential schema",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "id",
+						},
+						{
+							ProtoField: "issuer_grantor_validation_validity_period",
+						},
+						{
+							ProtoField: "verifier_grantor_validation_validity_period",
+						},
+						{
+							ProtoField: "issuer_validation_validity_period",
+						},
+						{
+							ProtoField: "verifier_validation_validity_period",
+						},
+						{
+							ProtoField: "holder_validation_validity_period",
+						},
+					},
+				},
+				{
+					RpcMethod: "ArchiveCredentialSchema",
+					Use:       "archive [id] [archive]",
+					Short:     "Archive or unarchive a credential schema",
+					Long:      "Set the archive status of a credential schema. Use true to archive, false to unarchive",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "id",
+						},
+						{
+							ProtoField: "archive",
+						},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},

@@ -19,8 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Msg_UpdateParams_FullMethodName           = "/veranablockchain.credentialschema.Msg/UpdateParams"
-	Msg_CreateCredentialSchema_FullMethodName = "/veranablockchain.credentialschema.Msg/CreateCredentialSchema"
+	Msg_UpdateParams_FullMethodName            = "/veranablockchain.credentialschema.Msg/UpdateParams"
+	Msg_CreateCredentialSchema_FullMethodName  = "/veranablockchain.credentialschema.Msg/CreateCredentialSchema"
+	Msg_UpdateCredentialSchema_FullMethodName  = "/veranablockchain.credentialschema.Msg/UpdateCredentialSchema"
+	Msg_ArchiveCredentialSchema_FullMethodName = "/veranablockchain.credentialschema.Msg/ArchiveCredentialSchema"
 )
 
 // MsgClient is the client API for Msg service.
@@ -32,6 +34,10 @@ type MsgClient interface {
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
 	// CreateCredentialSchema defines a method for creating a new credential schema.
 	CreateCredentialSchema(ctx context.Context, in *MsgCreateCredentialSchema, opts ...grpc.CallOption) (*MsgCreateCredentialSchemaResponse, error)
+	// UpdateCredentialSchema defines a method for updating a credential schema.
+	UpdateCredentialSchema(ctx context.Context, in *MsgUpdateCredentialSchema, opts ...grpc.CallOption) (*MsgUpdateCredentialSchemaResponse, error)
+	// ArchiveCredentialSchema defines a method for archiving a credential schema.
+	ArchiveCredentialSchema(ctx context.Context, in *MsgArchiveCredentialSchema, opts ...grpc.CallOption) (*MsgArchiveCredentialSchemaResponse, error)
 }
 
 type msgClient struct {
@@ -60,6 +66,24 @@ func (c *msgClient) CreateCredentialSchema(ctx context.Context, in *MsgCreateCre
 	return out, nil
 }
 
+func (c *msgClient) UpdateCredentialSchema(ctx context.Context, in *MsgUpdateCredentialSchema, opts ...grpc.CallOption) (*MsgUpdateCredentialSchemaResponse, error) {
+	out := new(MsgUpdateCredentialSchemaResponse)
+	err := c.cc.Invoke(ctx, Msg_UpdateCredentialSchema_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) ArchiveCredentialSchema(ctx context.Context, in *MsgArchiveCredentialSchema, opts ...grpc.CallOption) (*MsgArchiveCredentialSchemaResponse, error) {
+	out := new(MsgArchiveCredentialSchemaResponse)
+	err := c.cc.Invoke(ctx, Msg_ArchiveCredentialSchema_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
@@ -69,6 +93,10 @@ type MsgServer interface {
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
 	// CreateCredentialSchema defines a method for creating a new credential schema.
 	CreateCredentialSchema(context.Context, *MsgCreateCredentialSchema) (*MsgCreateCredentialSchemaResponse, error)
+	// UpdateCredentialSchema defines a method for updating a credential schema.
+	UpdateCredentialSchema(context.Context, *MsgUpdateCredentialSchema) (*MsgUpdateCredentialSchemaResponse, error)
+	// ArchiveCredentialSchema defines a method for archiving a credential schema.
+	ArchiveCredentialSchema(context.Context, *MsgArchiveCredentialSchema) (*MsgArchiveCredentialSchemaResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -81,6 +109,12 @@ func (UnimplementedMsgServer) UpdateParams(context.Context, *MsgUpdateParams) (*
 }
 func (UnimplementedMsgServer) CreateCredentialSchema(context.Context, *MsgCreateCredentialSchema) (*MsgCreateCredentialSchemaResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateCredentialSchema not implemented")
+}
+func (UnimplementedMsgServer) UpdateCredentialSchema(context.Context, *MsgUpdateCredentialSchema) (*MsgUpdateCredentialSchemaResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateCredentialSchema not implemented")
+}
+func (UnimplementedMsgServer) ArchiveCredentialSchema(context.Context, *MsgArchiveCredentialSchema) (*MsgArchiveCredentialSchemaResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ArchiveCredentialSchema not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -131,6 +165,42 @@ func _Msg_CreateCredentialSchema_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_UpdateCredentialSchema_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgUpdateCredentialSchema)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).UpdateCredentialSchema(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_UpdateCredentialSchema_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).UpdateCredentialSchema(ctx, req.(*MsgUpdateCredentialSchema))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_ArchiveCredentialSchema_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgArchiveCredentialSchema)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).ArchiveCredentialSchema(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_ArchiveCredentialSchema_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).ArchiveCredentialSchema(ctx, req.(*MsgArchiveCredentialSchema))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -145,6 +215,14 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateCredentialSchema",
 			Handler:    _Msg_CreateCredentialSchema_Handler,
+		},
+		{
+			MethodName: "UpdateCredentialSchema",
+			Handler:    _Msg_UpdateCredentialSchema_Handler,
+		},
+		{
+			MethodName: "ArchiveCredentialSchema",
+			Handler:    _Msg_ArchiveCredentialSchema_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

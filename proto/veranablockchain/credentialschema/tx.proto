@@ -19,6 +19,10 @@ service Msg {
   rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
   // CreateCredentialSchema defines a method for creating a new credential schema.
   rpc CreateCredentialSchema(MsgCreateCredentialSchema) returns (MsgCreateCredentialSchemaResponse);
+  // UpdateCredentialSchema defines a method for updating a credential schema.
+  rpc UpdateCredentialSchema(MsgUpdateCredentialSchema) returns (MsgUpdateCredentialSchemaResponse);
+  // ArchiveCredentialSchema defines a method for archiving a credential schema.
+  rpc ArchiveCredentialSchema(MsgArchiveCredentialSchema) returns (MsgArchiveCredentialSchemaResponse);
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
@@ -53,8 +57,8 @@ message MsgCreateCredentialSchema {
   uint32 issuer_validation_validity_period = 6;
   uint32 verifier_validation_validity_period = 7;
   uint32 holder_validation_validity_period = 8;
-  CredentialSchemaPermManagementMode issuer_perm_management_mode = 9;
-  CredentialSchemaPermManagementMode verifier_perm_management_mode = 10;
+  uint32 issuer_perm_management_mode = 9;
+  uint32 verifier_perm_management_mode = 10;
 }
 
 message MsgCreateCredentialSchemaResponse {
@@ -73,6 +77,8 @@ message MsgUpdateCredentialSchema {
   uint32 holder_validation_validity_period = 7;
 }
 
+message MsgUpdateCredentialSchemaResponse {}
+
 message MsgArchiveCredentialSchema {
   option (cosmos.msg.v1.signer) = "creator";
 
@@ -80,3 +86,5 @@ message MsgArchiveCredentialSchema {
   uint64 id = 2;
   bool archive = 3;
 }
+
+message MsgArchiveCredentialSchemaResponse {}
