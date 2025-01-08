@@ -6,7 +6,7 @@ log() {
 }
 
 # Variables
-CHAIN_ID="test-1"
+CHAIN_ID="vna-local-1"
 MONIKER="validator1"
 BINARY="veranad"
 HOME_DIR="$HOME/.verana"
@@ -25,16 +25,6 @@ GRPC_PORT="9090"
 GRPC_WEB_PORT="9091"
 
 log "Starting Primary Validator setup..."
-
-# Ensure the binary is in the correct location
-if [ ! -f "/usr/local/bin/$BINARY" ]; then
-    log "Moving $BINARY to /usr/local/bin..."
-    sudo mv ~/go/bin/$BINARY /usr/local/bin/
-    if [ $? -ne 0 ]; then
-        log "Error: Failed to move $BINARY to /usr/local/bin. Please check permissions."
-        exit 1
-    fi
-fi
 
 # Initialize the chain
 log "Initializing the chain..."

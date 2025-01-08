@@ -31,7 +31,7 @@ This README provides instructions for setting up the Verana blockchain and inter
    e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 \
    --from cooluser \
    --keyring-backend test \
-   --chain-id test-1 \
+   --chain-id vna-local-1 \
    --gas 800000 \
    --gas-adjustment 1.3 \
    --gas-prices 1.1uvna
@@ -49,7 +49,7 @@ This README provides instructions for setting up the Verana blockchain and inter
    2 \
    --from cooluser \
    --keyring-backend test \
-   --chain-id test-1 \
+   --chain-id vna-local-1 \
    --gas 800000 \
    --gas-adjustment 1.3 \
    --gas-prices 1.1uvna
@@ -63,7 +63,7 @@ This README provides instructions for setting up the Verana blockchain and inter
    <tr_id> \
    --from cooluser \
    --keyring-backend test \
-   --chain-id test-1 \
+   --chain-id vna-local-1 \
    --gas 800000 \
    --gas-adjustment 1.3 \
    --gas-prices 1.1uvna
@@ -159,7 +159,7 @@ Note: Replace `cooluser`, chain ID, gas prices, and other parameters according t
    e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 \
    --from cooluser \
    --keyring-backend test \
-   --chain-id test-1 \
+   --chain-id vna-local-1 \
    --gas 800000 \
    --gas-adjustment 1.3 \
    --gas-prices 1.1uvna \
@@ -177,7 +177,7 @@ Note: Replace `cooluser`, chain ID, gas prices, and other parameters according t
    e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 \
    --from cooluser \
    --keyring-backend test \
-   --chain-id test-1 \
+   --chain-id vna-local-1 \
    --gas 800000 \
    --gas-adjustment 1.3 \
    --gas-prices 1.1uvna \
@@ -211,7 +211,7 @@ Note: Replace `cooluser`, chain ID, gas prices, and other parameters according t
    5 \
    --from cooluser \
    --keyring-backend test \
-   --chain-id test-1 \
+   --chain-id vna-local-1 \
    --gas 800000 \
    --gas-adjustment 1.3 \
    --gas-prices 1.1uvna
@@ -225,7 +225,7 @@ Note: Replace `cooluser`, chain ID, gas prices, and other parameters according t
    2 \
    --from cooluser \
    --keyring-backend test \
-   --chain-id test-1 \
+   --chain-id vna-local-1 \
    --gas 800000 \
    --gas-adjustment 1.3 \
    --gas-prices 1.1uvna
@@ -238,7 +238,7 @@ Note: Replace `cooluser`, chain ID, gas prices, and other parameters according t
    did:example:123456789abcdefghi \
    --from cooluser \
    --keyring-backend test \
-   --chain-id test-1 \
+   --chain-id vna-local-1 \
    --gas 800000 \
    --gas-adjustment 1.3 \
    --gas-prices 1.1uvna
@@ -251,7 +251,7 @@ Note: Replace `cooluser`, chain ID, gas prices, and other parameters according t
    did:example:123456789abcdefghi \
    --from cooluser \
    --keyring-backend test \
-   --chain-id test-1 \
+   --chain-id vna-local-1 \
    --gas 800000 \
    --gas-adjustment 1.3 \
    --gas-prices 1.1uvna
@@ -318,7 +318,7 @@ Note: Replace `cooluser`, chain ID, gas prices, and other parameters according t
    2 \
    --from cooluser \
    --keyring-backend test \
-   --chain-id test-1 \
+   --chain-id vna-local-1 \
    --gas 800000 \
    --gas-adjustment 1.3 \
    --gas-prices 1.1uvna
@@ -381,7 +381,7 @@ verana1mda3hc2z8jnmk86zkvm9wlfgfmxwg2msf2a3ka \
 --validation-id 123 \
 --from cooluser \
 --keyring-backend test \
---chain-id test-1 \
+--chain-id vna-local-1 \
 --gas 800000 \
 --gas-adjustment 1.3 \
 --gas-prices 1.1uvna
