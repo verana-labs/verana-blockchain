@@ -92,7 +92,7 @@ execute_tx() {
 }
 
 # Common transaction parameters
-COMMON_PARAMS="--keyring-backend test --chain-id test-1 --gas 800000 --gas-adjustment 1.3 --gas-prices 1.1uvna --yes --output json"
+COMMON_PARAMS="--keyring-backend test --chain-id vna-local-1 --gas 800000 --gas-adjustment 1.3 --gas-prices 1.1uvna --yes --output json"
 
 log "Beginning test sequence..."
 

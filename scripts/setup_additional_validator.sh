@@ -14,7 +14,7 @@ fi
 VALIDATOR_NUM=$1
 
 # Variables
-CHAIN_ID="test-1"
+CHAIN_ID="vna-local-1"
 MONIKER="validator$VALIDATOR_NUM"
 BINARY="veranad"
 HOME_DIR="$HOME/.verana$VALIDATOR_NUM"

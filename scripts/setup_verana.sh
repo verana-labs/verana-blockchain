@@ -8,7 +8,7 @@ log() {
 }
 
 # Variables
-CHAIN_ID="test-1"
+CHAIN_ID="vna-local-1"
 MONIKER="testdev"
 BINARY="veranad"
 HOME_DIR="$HOME/.verana"
