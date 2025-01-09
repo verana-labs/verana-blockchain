@@ -41,8 +41,8 @@ func (m *MockCredentialSchemaKeeper) CreateMockCredentialSchema(trId uint64) uin
 	m.credentialschemas[id] = credentialschematypes.CredentialSchema{
 		Id:                         id,
 		TrId:                       trId,
-		IssuerPermManagementMode:   credentialschematypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION,
-		VerifierPermManagementMode: credentialschematypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION,
+		IssuerPermManagementMode:   credentialschematypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION,
+		VerifierPermManagementMode: credentialschematypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION,
 	}
 
 	return id

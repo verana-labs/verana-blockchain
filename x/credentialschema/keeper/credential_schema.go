@@ -73,6 +73,7 @@ func (ms msgServer) executeCreateCredentialSchema(ctx sdk.Context, schemaID uint
 		Id:                                      schemaID, // Use the generated ID
 		TrId:                                    msg.TrId,
 		Created:                                 ctx.BlockTime(),
+		Modified:                                ctx.BlockTime(),
 		Deposit:                                 trustDeposit,
 		JsonSchema:                              msg.JsonSchema,
 		IssuerGrantorValidationValidityPeriod:   msg.IssuerGrantorValidationValidityPeriod,

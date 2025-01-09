@@ -24,16 +24,16 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Long: `List credential schemas with optional filters.
 Example:
 $ veranad query credentialschema list-schemas
-$ veranad query credentialschema list-schemas --tr_id 1 --created_after 2024-01-01T00:00:00Z --response_max_size 100`,
+$ veranad query credentialschema list-schemas --tr_id 1 --modified_after 2024-01-01T00:00:00Z --response_max_size 100`,
 					FlagOptions: map[string]*autocliv1.FlagOptions{
 						"tr_id": {
 							Name:         "tr_id",
 							Usage:        "Filter by trust registry ID",
 							DefaultValue: "0",
 						},
-						"created_after": {
-							Name:         "created_after",
-							Usage:        "Show schemas created after this datetime (RFC3339 format)",
+						"modified_after": {
+							Name:         "modified_after",
+							Usage:        "Show schemas modified after this datetime (RFC3339 format)",
 							DefaultValue: "",
 						},
 						"response_max_size": {

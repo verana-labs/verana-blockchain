@@ -45,7 +45,7 @@ message QueryParamsResponse {
 
 message QueryListCredentialSchemasRequest {
   uint64 tr_id = 1; // optional
-  google.protobuf.Timestamp created_after = 2 [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
+  google.protobuf.Timestamp modified_after = 2 [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
   uint32 response_max_size = 3;
 }
 
