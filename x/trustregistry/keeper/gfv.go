@@ -9,14 +9,14 @@ import (
 )
 
 func (ms msgServer) validateIncreaseActiveGovernanceFrameworkVersionParams(ctx sdk.Context, msg *types.MsgIncreaseActiveGovernanceFrameworkVersion) error {
-	if msg.TrId == 0 {
+	if msg.Id == 0 {
 		return errors.New("trust registry ID is mandatory")
 	}
 
 	// Direct lookup by ID
-	tr, err := ms.TrustRegistry.Get(ctx, msg.TrId)
+	tr, err := ms.TrustRegistry.Get(ctx, msg.Id)
 	if err != nil {
-		return fmt.Errorf("trust registry with ID %d does not exist: %w", msg.TrId, err)
+		return fmt.Errorf("trust registry with ID %d does not exist: %w", msg.Id, err)
 	}
 
 	if tr.Controller != msg.Creator {
@@ -29,7 +29,7 @@ func (ms msgServer) validateIncreaseActiveGovernanceFrameworkVersionParams(ctx s
 	var gfv types.GovernanceFrameworkVersion
 	found := false
 	err = ms.GFVersion.Walk(ctx, nil, func(id uint64, v types.GovernanceFrameworkVersion) (bool, error) {
-		if v.TrId == msg.TrId && v.Version == nextVersion {
+		if v.TrId == msg.Id && v.Version == nextVersion {
 			gfv = v
 			found = true
 			return true, nil
@@ -64,7 +64,7 @@ func (ms msgServer) validateIncreaseActiveGovernanceFrameworkVersionParams(ctx s
 
 func (ms msgServer) executeIncreaseActiveGovernanceFrameworkVersion(ctx sdk.Context, msg *types.MsgIncreaseActiveGovernanceFrameworkVersion) error {
 	// Direct lookup of trust registry by ID
-	tr, err := ms.TrustRegistry.Get(ctx, msg.TrId)
+	tr, err := ms.TrustRegistry.Get(ctx, msg.Id)
 	if err != nil {
 		return fmt.Errorf("error finding trust registry: %w", err)
 	}
@@ -75,7 +75,7 @@ func (ms msgServer) executeIncreaseActiveGovernanceFrameworkVersion(ctx sdk.Cont
 	var gfv types.GovernanceFrameworkVersion
 	found := false
 	err = ms.GFVersion.Walk(ctx, nil, func(id uint64, v types.GovernanceFrameworkVersion) (bool, error) {
-		if v.TrId == msg.TrId && v.Version == nextVersion {
+		if v.TrId == msg.Id && v.Version == nextVersion {
 			gfv = v
 			found = true
 			return true, nil

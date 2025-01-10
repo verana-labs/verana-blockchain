@@ -331,7 +331,7 @@ func TestMsgServerIncreaseActiveGovernanceFrameworkVersion(t *testing.T) {
 			name: "Cannot Increase Version - Missing Default Language Document",
 			msg: &types.MsgIncreaseActiveGovernanceFrameworkVersion{
 				Creator: creator,
-				TrId:    trID,
+				Id:      trID,
 			},
 			isValid: false,
 		},
@@ -352,7 +352,7 @@ func TestMsgServerIncreaseActiveGovernanceFrameworkVersion(t *testing.T) {
 			},
 			msg: &types.MsgIncreaseActiveGovernanceFrameworkVersion{
 				Creator: creator,
-				TrId:    trID,
+				Id:      trID,
 			},
 			isValid: true,
 		},
@@ -360,7 +360,7 @@ func TestMsgServerIncreaseActiveGovernanceFrameworkVersion(t *testing.T) {
 			name: "Wrong Controller",
 			msg: &types.MsgIncreaseActiveGovernanceFrameworkVersion{
 				Creator: "wrong-controller",
-				TrId:    trID,
+				Id:      trID,
 			},
 			isValid: false,
 		},
@@ -368,7 +368,7 @@ func TestMsgServerIncreaseActiveGovernanceFrameworkVersion(t *testing.T) {
 			name: "Non-existent Trust Registry",
 			msg: &types.MsgIncreaseActiveGovernanceFrameworkVersion{
 				Creator: creator,
-				TrId:    99999,
+				Id:      99999,
 			},
 			isValid: false,
 		},
@@ -386,7 +386,7 @@ func TestMsgServerIncreaseActiveGovernanceFrameworkVersion(t *testing.T) {
 				require.NotNil(t, resp)
 
 				// Verify version increase
-				tr, err := k.TrustRegistry.Get(ctx, tc.msg.TrId)
+				tr, err := k.TrustRegistry.Get(ctx, tc.msg.Id)
 				require.NoError(t, err)
 				require.Equal(t, int32(2), tr.ActiveVersion)
 			} else {
