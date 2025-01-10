@@ -87,28 +87,70 @@ func (ms msgServer) IncreaseActiveGovernanceFrameworkVersion(goCtx context.Conte
 }
 
 func (ms msgServer) UpdateTrustRegistry(goCtx context.Context, msg *types.MsgUpdateTrustRegistry) (*types.MsgUpdateTrustRegistryResponse, error) {
-    ctx := sdk.UnwrapSDKContext(goCtx)
+	ctx := sdk.UnwrapSDKContext(goCtx)
 
-    // Get trust registry
-    tr, err := ms.TrustRegistry.Get(ctx, msg.Id)
-    if err != nil {
-        return nil, fmt.Errorf("trust registry not found: %w", err)
-    }
+	// Get trust registry
+	tr, err := ms.TrustRegistry.Get(ctx, msg.Id)
+	if err != nil {
+		return nil, fmt.Errorf("trust registry not found: %w", err)
+	}
 
-    // Check controller
-    if tr.Controller != msg.Creator {
-        return nil, fmt.Errorf("only trust registry controller can update trust registry")
-    }
+	// Check controller
+	if tr.Controller != msg.Creator {
+		return nil, fmt.Errorf("only trust registry controller can update trust registry")
+	}
 
-    // Update fields
-    tr.Did = msg.Did
-    tr.Aka = msg.Aka
-    tr.Modified = ctx.BlockTime()
+	// Update fields
+	tr.Did = msg.Did
+	tr.Aka = msg.Aka
+	tr.Modified = ctx.BlockTime()
 
-    // Save updated trust registry
-    if err := ms.TrustRegistry.Set(ctx, tr.Id, tr); err != nil {
-        return nil, fmt.Errorf("failed to update trust registry: %w", err)
-    }
+	// Save updated trust registry
+	if err := ms.TrustRegistry.Set(ctx, tr.Id, tr); err != nil {
+		return nil, fmt.Errorf("failed to update trust registry: %w", err)
+	}
 
-    return &types.MsgUpdateTrustRegistryResponse{}, nil
-} 
+	return &types.MsgUpdateTrustRegistryResponse{}, nil
+}
+
+func (ms msgServer) ArchiveTrustRegistry(goCtx context.Context, msg *types.MsgArchiveTrustRegistry) (*types.MsgArchiveTrustRegistryResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Get trust registry
+	tr, err := ms.TrustRegistry.Get(ctx, msg.Id)
+	if err != nil {
+		return nil, fmt.Errorf("trust registry not found: %w", err)
+	}
+
+	// Check controller
+	if tr.Controller != msg.Creator {
+		return nil, fmt.Errorf("only trust registry controller can archive trust registry")
+	}
+
+	// Check archive state
+	if msg.Archive {
+		if tr.Archived != nil {
+			return nil, fmt.Errorf("trust registry is already archived")
+		}
+	} else {
+		if tr.Archived == nil {
+			return nil, fmt.Errorf("trust registry is not archived")
+		}
+	}
+
+	// Update archive state
+	now := ctx.BlockTime()
+	if msg.Archive {
+		tr.Archived = &now
+	} else {
+		tr.Archived = nil
+	}
+	tr.Modified = now
+
+	// Save updated trust registry
+	if err := ms.TrustRegistry.Set(ctx, tr.Id, tr); err != nil {
+		return nil, fmt.Errorf("failed to update trust registry: %w", err)
+	}
+
+	return &types.MsgArchiveTrustRegistryResponse{}, nil
+}

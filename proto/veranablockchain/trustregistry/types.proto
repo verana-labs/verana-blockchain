@@ -14,10 +14,11 @@ message TrustRegistry {
   string controller = 3 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   google.protobuf.Timestamp created = 4 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
   google.protobuf.Timestamp modified = 5 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
-  int64 deposit = 6;
-  string aka = 7;
-  int32 active_version = 8;
-  string language = 9;
+  google.protobuf.Timestamp archived = 6 [(gogoproto.nullable) = true, (gogoproto.stdtime) = true];
+  int64 deposit = 7;
+  string aka = 8;
+  int32 active_version = 9;
+  string language = 10;
 }
 
 message GovernanceFrameworkVersion {

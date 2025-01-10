@@ -122,6 +122,16 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 						{ProtoField: "aka"},
 					},
 				},
+				{
+					RpcMethod: "ArchiveTrustRegistry",
+					Use:       "archive-trust-registry [id] [archive]",
+					Short:     "Archive or unarchive a trust registry",
+					Long:      "Set the archive status of a trust registry. Use true to archive, false to unarchive. Only the controller can archive/unarchive.",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "id"},
+						{ProtoField: "archive"},
+					},
+				},
 			},
 		},
 	}

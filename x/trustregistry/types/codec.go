@@ -14,6 +14,7 @@ func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	legacy.RegisterAminoMsg(cdc, &MsgAddGovernanceFrameworkDocument{}, "/vpr/v1/tr/add-gfd")
 	legacy.RegisterAminoMsg(cdc, &MsgIncreaseActiveGovernanceFrameworkVersion{}, "/vpr/v1/tr/increase-active-gf-version")
 	legacy.RegisterAminoMsg(cdc, &MsgUpdateTrustRegistry{}, "/vpr/v1/tr/update-trust-registry")
+	
 }
 
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
@@ -26,6 +27,7 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 		&MsgAddGovernanceFrameworkDocument{},
 		&MsgIncreaseActiveGovernanceFrameworkVersion{},
 		&MsgUpdateTrustRegistry{},
+		&MsgArchiveTrustRegistry{},
 	)
 	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)
 }

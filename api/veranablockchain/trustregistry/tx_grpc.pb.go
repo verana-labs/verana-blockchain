@@ -24,6 +24,7 @@ const (
 	Msg_AddGovernanceFrameworkDocument_FullMethodName           = "/veranablockchain.trustregistry.Msg/AddGovernanceFrameworkDocument"
 	Msg_IncreaseActiveGovernanceFrameworkVersion_FullMethodName = "/veranablockchain.trustregistry.Msg/IncreaseActiveGovernanceFrameworkVersion"
 	Msg_UpdateTrustRegistry_FullMethodName                      = "/veranablockchain.trustregistry.Msg/UpdateTrustRegistry"
+	Msg_ArchiveTrustRegistry_FullMethodName                     = "/veranablockchain.trustregistry.Msg/ArchiveTrustRegistry"
 )
 
 // MsgClient is the client API for Msg service.
@@ -38,6 +39,7 @@ type MsgClient interface {
 	AddGovernanceFrameworkDocument(ctx context.Context, in *MsgAddGovernanceFrameworkDocument, opts ...grpc.CallOption) (*MsgAddGovernanceFrameworkDocumentResponse, error)
 	IncreaseActiveGovernanceFrameworkVersion(ctx context.Context, in *MsgIncreaseActiveGovernanceFrameworkVersion, opts ...grpc.CallOption) (*MsgIncreaseActiveGovernanceFrameworkVersionResponse, error)
 	UpdateTrustRegistry(ctx context.Context, in *MsgUpdateTrustRegistry, opts ...grpc.CallOption) (*MsgUpdateTrustRegistryResponse, error)
+	ArchiveTrustRegistry(ctx context.Context, in *MsgArchiveTrustRegistry, opts ...grpc.CallOption) (*MsgArchiveTrustRegistryResponse, error)
 }
 
 type msgClient struct {
@@ -93,6 +95,15 @@ func (c *msgClient) UpdateTrustRegistry(ctx context.Context, in *MsgUpdateTrustR
 	return out, nil
 }
 
+func (c *msgClient) ArchiveTrustRegistry(ctx context.Context, in *MsgArchiveTrustRegistry, opts ...grpc.CallOption) (*MsgArchiveTrustRegistryResponse, error) {
+	out := new(MsgArchiveTrustRegistryResponse)
+	err := c.cc.Invoke(ctx, Msg_ArchiveTrustRegistry_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
@@ -105,6 +116,7 @@ type MsgServer interface {
 	AddGovernanceFrameworkDocument(context.Context, *MsgAddGovernanceFrameworkDocument) (*MsgAddGovernanceFrameworkDocumentResponse, error)
 	IncreaseActiveGovernanceFrameworkVersion(context.Context, *MsgIncreaseActiveGovernanceFrameworkVersion) (*MsgIncreaseActiveGovernanceFrameworkVersionResponse, error)
 	UpdateTrustRegistry(context.Context, *MsgUpdateTrustRegistry) (*MsgUpdateTrustRegistryResponse, error)
+	ArchiveTrustRegistry(context.Context, *MsgArchiveTrustRegistry) (*MsgArchiveTrustRegistryResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -126,6 +138,9 @@ func (UnimplementedMsgServer) IncreaseActiveGovernanceFrameworkVersion(context.C
 }
 func (UnimplementedMsgServer) UpdateTrustRegistry(context.Context, *MsgUpdateTrustRegistry) (*MsgUpdateTrustRegistryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateTrustRegistry not implemented")
+}
+func (UnimplementedMsgServer) ArchiveTrustRegistry(context.Context, *MsgArchiveTrustRegistry) (*MsgArchiveTrustRegistryResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ArchiveTrustRegistry not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -230,6 +245,24 @@ func _Msg_UpdateTrustRegistry_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_ArchiveTrustRegistry_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgArchiveTrustRegistry)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).ArchiveTrustRegistry(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_ArchiveTrustRegistry_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).ArchiveTrustRegistry(ctx, req.(*MsgArchiveTrustRegistry))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -256,6 +289,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateTrustRegistry",
 			Handler:    _Msg_UpdateTrustRegistry_Handler,
+		},
+		{
+			MethodName: "ArchiveTrustRegistry",
+			Handler:    _Msg_ArchiveTrustRegistry_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
