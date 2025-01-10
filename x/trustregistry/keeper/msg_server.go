@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"fmt"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/verana-labs/verana-blockchain/x/trustregistry/types"
@@ -84,3 +85,30 @@ func (ms msgServer) IncreaseActiveGovernanceFrameworkVersion(goCtx context.Conte
 
 	return &types.MsgIncreaseActiveGovernanceFrameworkVersionResponse{}, nil
 }
+
+func (ms msgServer) UpdateTrustRegistry(goCtx context.Context, msg *types.MsgUpdateTrustRegistry) (*types.MsgUpdateTrustRegistryResponse, error) {
+    ctx := sdk.UnwrapSDKContext(goCtx)
+
+    // Get trust registry
+    tr, err := ms.TrustRegistry.Get(ctx, msg.Id)
+    if err != nil {
+        return nil, fmt.Errorf("trust registry not found: %w", err)
+    }
+
+    // Check controller
+    if tr.Controller != msg.Creator {
+        return nil, fmt.Errorf("only trust registry controller can update trust registry")
+    }
+
+    // Update fields
+    tr.Did = msg.Did
+    tr.Aka = msg.Aka
+    tr.Modified = ctx.BlockTime()
+
+    // Save updated trust registry
+    if err := ms.TrustRegistry.Set(ctx, tr.Id, tr); err != nil {
+        return nil, fmt.Errorf("failed to update trust registry: %w", err)
+    }
+
+    return &types.MsgUpdateTrustRegistryResponse{}, nil
+} 
