@@ -35,7 +35,7 @@ func setupTestData(t *testing.T) (keeper.Keeper, types.QueryServer, context.Cont
 	// Add documents in different languages for version 2
 	addDocMsg := &types.MsgAddGovernanceFrameworkDocument{
 		Creator:     creator,
-		TrId:        trID,
+		Id:          trID,
 		DocLanguage: "en",
 		DocUrl:      "http://example.com/doc2-en",
 		DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
@@ -117,59 +117,6 @@ func TestGetTrustRegistry(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			response, err := qs.GetTrustRegistry(ctx, tc.request)
-			if tc.expectedError {
-				require.Error(t, err)
-				return
-			}
-			require.NoError(t, err)
-			require.NotNil(t, response)
-			if tc.check != nil {
-				tc.check(t, response)
-			}
-		})
-	}
-}
-
-func TestGetTrustRegistryWithDID(t *testing.T) {
-	_, qs, ctx, _ := setupTestData(t)
-
-	testCases := []struct {
-		name          string
-		request       *types.QueryGetTrustRegistryWithDIDRequest
-		expectedError bool
-		check         func(*testing.T, *types.QueryGetTrustRegistryResponse)
-	}{
-		{
-			name: "Valid Request",
-			request: &types.QueryGetTrustRegistryWithDIDRequest{
-				Did:          "did:example:123",
-				ActiveGfOnly: false,
-			},
-			expectedError: false,
-			check: func(t *testing.T, response *types.QueryGetTrustRegistryResponse) {
-				require.NotNil(t, response.TrustRegistry)
-				require.Equal(t, "did:example:123", response.TrustRegistry.Did)
-			},
-		},
-		{
-			name: "Invalid DID",
-			request: &types.QueryGetTrustRegistryWithDIDRequest{
-				Did: "invalid-did",
-			},
-			expectedError: true,
-		},
-		{
-			name: "Non-existent DID",
-			request: &types.QueryGetTrustRegistryWithDIDRequest{
-				Did: "did:example:nonexistent",
-			},
-			expectedError: true,
-		},
-	}
-
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			response, err := qs.GetTrustRegistryWithDID(ctx, tc.request)
 			if tc.expectedError {
 				require.Error(t, err)
 				return

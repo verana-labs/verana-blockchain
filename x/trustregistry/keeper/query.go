@@ -38,29 +38,6 @@ func (qs queryServer) GetTrustRegistry(ctx context.Context, req *types.QueryGetT
 	return qs.getTrustRegistryData(ctx, tr, req.ActiveGfOnly, req.PreferredLanguage)
 }
 
-func (qs queryServer) GetTrustRegistryWithDID(ctx context.Context, req *types.QueryGetTrustRegistryWithDIDRequest) (*types.QueryGetTrustRegistryResponse, error) {
-	if !isValidDID(req.Did) {
-		return nil, status.Error(codes.InvalidArgument, "invalid DID syntax")
-	}
-
-	// Get ID from DID index
-	id, err := qs.k.TrustRegistryDIDIndex.Get(ctx, req.Did)
-	if err != nil {
-		if errors.Is(err, collections.ErrNotFound) {
-			return nil, status.Error(codes.NotFound, "trust registry not found")
-		}
-		return nil, status.Error(codes.Internal, err.Error())
-	}
-
-	// Get trust registry using ID
-	tr, err := qs.k.TrustRegistry.Get(ctx, id)
-	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
-	}
-
-	return qs.getTrustRegistryData(ctx, tr, req.ActiveGfOnly, req.PreferredLanguage)
-}
-
 func (qs queryServer) getTrustRegistryData(ctx context.Context, tr types.TrustRegistry, activeOnly bool, preferredLang string) (*types.QueryGetTrustRegistryResponse, error) {
 	var versions []types.GovernanceFrameworkVersion
 	var documents []types.GovernanceFrameworkDocument

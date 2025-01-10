@@ -11,14 +11,14 @@ import (
 
 func (ms msgServer) validateAddGovernanceFrameworkDocumentParams(ctx sdk.Context, msg *types.MsgAddGovernanceFrameworkDocument) error {
 	// Check mandatory parameters
-	if msg.TrId == 0 || msg.DocLanguage == "" || msg.DocUrl == "" || msg.DocHash == "" {
+	if msg.Id == 0 || msg.DocLanguage == "" || msg.DocUrl == "" || msg.DocHash == "" {
 		return errors.New("missing mandatory parameter")
 	}
 
 	// Direct lookup of trust registry by ID
-	tr, err := ms.TrustRegistry.Get(ctx, msg.TrId)
+	tr, err := ms.TrustRegistry.Get(ctx, msg.Id)
 	if err != nil {
-		return fmt.Errorf("trust registry with ID %d does not exist: %w", msg.TrId, err)
+		return fmt.Errorf("trust registry with ID %d does not exist: %w", msg.Id, err)
 	}
 
 	// Check controller
@@ -30,7 +30,7 @@ func (ms msgServer) validateAddGovernanceFrameworkDocumentParams(ctx sdk.Context
 	var maxVersion int32
 	var hasVersion bool
 	err = ms.GFVersion.Walk(ctx, nil, func(id uint64, gfv types.GovernanceFrameworkVersion) (bool, error) {
-		if gfv.TrId == msg.TrId {
+		if gfv.TrId == msg.Id {
 			if gfv.Version == msg.Version {
 				hasVersion = true
 			}
@@ -78,7 +78,7 @@ func (ms msgServer) executeAddGovernanceFrameworkDocument(ctx sdk.Context, msg *
 
 	// Check if version exists
 	err := ms.GFVersion.Walk(ctx, nil, func(id uint64, v types.GovernanceFrameworkVersion) (bool, error) {
-		if v.TrId == msg.TrId && v.Version == msg.Version {
+		if v.TrId == msg.Id && v.Version == msg.Version {
 			gfv = v
 			gfvExists = true
 			return true, nil
@@ -98,7 +98,7 @@ func (ms msgServer) executeAddGovernanceFrameworkDocument(ctx sdk.Context, msg *
 
 		gfv = types.GovernanceFrameworkVersion{
 			Id:          gfvID,
-			TrId:        msg.TrId,
+			TrId:        msg.Id,
 			Created:     now,
 			Version:     msg.Version,
 			ActiveSince: time.Time{}, // Zero time as per spec - not active yet

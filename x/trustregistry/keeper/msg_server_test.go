@@ -150,7 +150,7 @@ func TestMsgServerAddGovernanceFrameworkDocument(t *testing.T) {
 			name: "Valid Add Document with Next Version",
 			msg: &types.MsgAddGovernanceFrameworkDocument{
 				Creator:     creator,
-				TrId:        trID,
+				Id:          trID,
 				DocLanguage: "en",
 				DocUrl:      "http://example.com/doc2",
 				DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
@@ -162,7 +162,7 @@ func TestMsgServerAddGovernanceFrameworkDocument(t *testing.T) {
 			name: "Valid Add Document to Same Version with Different Language",
 			msg: &types.MsgAddGovernanceFrameworkDocument{
 				Creator:     creator,
-				TrId:        trID,
+				Id:          trID,
 				DocLanguage: "fr",
 				DocUrl:      "http://example.com/doc2-fr",
 				DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
@@ -174,7 +174,7 @@ func TestMsgServerAddGovernanceFrameworkDocument(t *testing.T) {
 			name: "Valid Add Next Version",
 			msg: &types.MsgAddGovernanceFrameworkDocument{
 				Creator:     creator,
-				TrId:        trID,
+				Id:          trID,
 				DocLanguage: "en",
 				DocUrl:      "http://example.com/doc3",
 				DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
@@ -186,7 +186,7 @@ func TestMsgServerAddGovernanceFrameworkDocument(t *testing.T) {
 			name: "Invalid Version (Less than Active Version)",
 			msg: &types.MsgAddGovernanceFrameworkDocument{
 				Creator:     creator,
-				TrId:        trID,
+				Id:          trID,
 				DocLanguage: "en",
 				DocUrl:      "http://example.com/doc-old",
 				DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
@@ -198,7 +198,7 @@ func TestMsgServerAddGovernanceFrameworkDocument(t *testing.T) {
 			name: "Invalid Trust Registry ID",
 			msg: &types.MsgAddGovernanceFrameworkDocument{
 				Creator:     creator,
-				TrId:        99999,
+				Id:          99999,
 				DocLanguage: "en",
 				DocUrl:      "http://example.com/doc2",
 				DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
@@ -210,7 +210,7 @@ func TestMsgServerAddGovernanceFrameworkDocument(t *testing.T) {
 			name: "Invalid Language Format",
 			msg: &types.MsgAddGovernanceFrameworkDocument{
 				Creator:     creator,
-				TrId:        trID,
+				Id:          trID,
 				DocLanguage: "invalid-language",
 				DocUrl:      "http://example.com/doc2",
 				DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
@@ -222,7 +222,7 @@ func TestMsgServerAddGovernanceFrameworkDocument(t *testing.T) {
 			name: "Wrong Controller",
 			msg: &types.MsgAddGovernanceFrameworkDocument{
 				Creator:     "wrong-controller",
-				TrId:        trID,
+				Id:          trID,
 				DocLanguage: "en",
 				DocUrl:      "http://example.com/doc2",
 				DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
@@ -236,7 +236,7 @@ func TestMsgServerAddGovernanceFrameworkDocument(t *testing.T) {
 				// Add version 3 document first
 				msg := &types.MsgAddGovernanceFrameworkDocument{
 					Creator:     creator,
-					TrId:        trID,
+					Id:          trID,
 					DocLanguage: "en",
 					DocUrl:      "http://example.com/doc3",
 					DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
@@ -247,7 +247,7 @@ func TestMsgServerAddGovernanceFrameworkDocument(t *testing.T) {
 			},
 			msg: &types.MsgAddGovernanceFrameworkDocument{
 				Creator:     creator,
-				TrId:        trID,
+				Id:          trID,
 				DocLanguage: "en",
 				DocUrl:      "http://example.com/doc5",
 				DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
@@ -311,7 +311,7 @@ func TestMsgServerIncreaseActiveGovernanceFrameworkVersion(t *testing.T) {
 	// Add version 2 documents
 	addGFDocMsg := &types.MsgAddGovernanceFrameworkDocument{
 		Creator:     creator,
-		TrId:        trID,
+		Id:          trID,
 		DocLanguage: "es", // First add Spanish version
 		DocUrl:      "http://example.com/doc2-es",
 		DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
@@ -341,7 +341,7 @@ func TestMsgServerIncreaseActiveGovernanceFrameworkVersion(t *testing.T) {
 				// Add English (default language) document for version 2
 				msg := &types.MsgAddGovernanceFrameworkDocument{
 					Creator:     creator,
-					TrId:        trID,
+					Id:          trID,
 					DocLanguage: "en",
 					DocUrl:      "http://example.com/doc2-en",
 					DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",

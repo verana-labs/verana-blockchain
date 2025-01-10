@@ -33,27 +33,6 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					},
 				},
 				{
-					RpcMethod: "GetTrustRegistryWithDID",
-					Use:       "get-trust-registry-by-did [did]",
-					Short:     "Get trust registry information by DID",
-					Long:      "Get the trust registry information for a given DID, with options to filter by active governance framework and preferred language",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
-						{ProtoField: "did"},
-					},
-					FlagOptions: map[string]*autocliv1.FlagOptions{
-						"active_gf_only": {
-							Name:         "active-gf-only",
-							DefaultValue: "false",
-							Usage:        "If true, include only current governance framework data",
-						},
-						"preferred_language": {
-							Name:         "preferred-language",
-							DefaultValue: "",
-							Usage:        "Preferred language for the returned documents",
-						},
-					},
-				},
-				{
 					RpcMethod: "ListTrustRegistries",
 					Use:       "list-trust-registries",
 					Short:     "List Trust Registries",
@@ -112,14 +91,14 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod: "AddGovernanceFrameworkDocument",
-					Use:       "add-governance-framework-document [tr_id] [doc-language] [doc-url] [doc-hash] [version]",
-					Short:     "Add a new governance framework document",
-					Long:      "Add a new governance framework document to an existing trust registry. The version must be either equal to the highest existing version or exactly one more than the highest version.",
+					Use:       "add-governance-framework-document [id] [language] [url] [hash] [version]",
+					Short:     "Add a governance framework document",
+					Long:      "Add a new governance framework document to a trust registry",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
-						{ProtoField: "tr_id"},
-						{ProtoField: "doc_language"},
-						{ProtoField: "doc_url"},
-						{ProtoField: "doc_hash"},
+						{ProtoField: "id"},
+						{ProtoField: "language"},
+						{ProtoField: "url"},
+						{ProtoField: "hash"},
 						{ProtoField: "version"},
 					},
 				},
