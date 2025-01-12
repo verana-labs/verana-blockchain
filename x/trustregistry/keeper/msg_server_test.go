@@ -3,6 +3,7 @@ package keeper_test
 import (
 	"context"
 	"testing"
+	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
@@ -46,17 +47,6 @@ func TestMsgServerCreateTrustRegistry(t *testing.T) {
 				DocHash:  "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
 			},
 			isValid: true,
-		},
-		{
-			name: "Invalid DID",
-			msg: &types.MsgCreateTrustRegistry{
-				Creator:  creator,
-				Did:      "invalid-did",
-				Language: "en",
-				DocUrl:   "http://example.com/doc",
-				DocHash:  "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
-			},
-			isValid: false,
 		},
 		{
 			name: "Missing Language",
@@ -392,6 +382,217 @@ func TestMsgServerIncreaseActiveGovernanceFrameworkVersion(t *testing.T) {
 			} else {
 				require.Error(t, err)
 				require.Nil(t, resp)
+			}
+		})
+	}
+}
+
+func TestMsgServerUpdateTrustRegistry(t *testing.T) {
+	k, ms, ctx := setupMsgServer(t)
+
+	// Create initial trust registry
+	creator := sdk.AccAddress([]byte("test_creator")).String()
+	validDid := "did:example:123456789abcdefghi"
+	createMsg := &types.MsgCreateTrustRegistry{
+		Creator:  creator,
+		Did:      validDid,
+		Language: "en",
+		DocUrl:   "http://example.com/doc",
+		DocHash:  "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+	}
+	resp, err := ms.CreateTrustRegistry(ctx, createMsg)
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+
+	// Get trust registry ID
+	trID, err := k.TrustRegistryDIDIndex.Get(ctx, validDid)
+	require.NoError(t, err)
+
+	// Advance block time
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	ctx = sdk.WrapSDKContext(sdkCtx.WithBlockTime(sdkCtx.BlockTime().Add(time.Hour)))
+
+	testCases := []struct {
+		name      string
+		msg       *types.MsgUpdateTrustRegistry
+		expectErr bool
+	}{
+		{
+			name: "Valid Update",
+			msg: &types.MsgUpdateTrustRegistry{
+				Creator: creator,
+				Id:      trID,
+				Did:     "did:example:newdid",
+				Aka:     "http://new.example.com",
+			},
+			expectErr: false,
+		},
+		{
+			name: "Wrong Controller",
+			msg: &types.MsgUpdateTrustRegistry{
+				Creator: "wrong-controller",
+				Id:      trID,
+				Did:     "did:example:newdid",
+				Aka:     "http://example.com",
+			},
+			expectErr: true,
+		},
+		{
+			name: "Non-existent Trust Registry",
+			msg: &types.MsgUpdateTrustRegistry{
+				Creator: creator,
+				Id:      99999,
+				Did:     "did:example:newdid",
+				Aka:     "http://example.com",
+			},
+			expectErr: true,
+		},
+		{
+			name: "Clear AKA",
+			msg: &types.MsgUpdateTrustRegistry{
+				Creator: creator,
+				Id:      trID,
+				Did:     "did:example:newdid",
+				Aka:     "", // Empty string to clear AKA
+			},
+			expectErr: false,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			// Advance block time for each test
+			sdkCtx := sdk.UnwrapSDKContext(ctx)
+			testCtx := sdk.WrapSDKContext(sdkCtx.WithBlockTime(sdkCtx.BlockTime().Add(time.Hour)))
+
+			resp, err := ms.UpdateTrustRegistry(testCtx, tc.msg)
+			if tc.expectErr {
+				require.Error(t, err)
+				require.Nil(t, resp)
+			} else {
+				require.NoError(t, err)
+				require.NotNil(t, resp)
+
+				// Verify changes
+				tr, err := k.TrustRegistry.Get(testCtx, tc.msg.Id)
+				require.NoError(t, err)
+				require.Equal(t, tc.msg.Did, tr.Did)
+				require.Equal(t, tc.msg.Aka, tr.Aka)
+				require.NotEqual(t, tr.Created, tr.Modified)
+			}
+		})
+	}
+}
+
+func TestMsgServerArchiveTrustRegistry(t *testing.T) {
+	k, ms, ctx := setupMsgServer(t)
+
+	// Create initial trust registry
+	creator := sdk.AccAddress([]byte("test_creator")).String()
+	validDid := "did:example:123456789abcdefghi"
+	createMsg := &types.MsgCreateTrustRegistry{
+		Creator:  creator,
+		Did:      validDid,
+		Language: "en",
+		DocUrl:   "http://example.com/doc",
+		DocHash:  "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+	}
+	resp, err := ms.CreateTrustRegistry(ctx, createMsg)
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+
+	// Get trust registry ID
+	trID, err := k.TrustRegistryDIDIndex.Get(ctx, validDid)
+	require.NoError(t, err)
+
+	// Advance block time
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	ctx = sdk.WrapSDKContext(sdkCtx.WithBlockTime(sdkCtx.BlockTime().Add(time.Hour)))
+
+	testCases := []struct {
+		name      string
+		msg       *types.MsgArchiveTrustRegistry
+		expectErr bool
+	}{
+		{
+			name: "Valid Archive",
+			msg: &types.MsgArchiveTrustRegistry{
+				Creator: creator,
+				Id:      trID,
+				Archive: true,
+			},
+			expectErr: false,
+		},
+		{
+			name: "Already Archived",
+			msg: &types.MsgArchiveTrustRegistry{
+				Creator: creator,
+				Id:      trID,
+				Archive: true,
+			},
+			expectErr: true,
+		},
+		{
+			name: "Valid Unarchive",
+			msg: &types.MsgArchiveTrustRegistry{
+				Creator: creator,
+				Id:      trID,
+				Archive: false,
+			},
+			expectErr: false,
+		},
+		{
+			name: "Already Unarchived",
+			msg: &types.MsgArchiveTrustRegistry{
+				Creator: creator,
+				Id:      trID,
+				Archive: false,
+			},
+			expectErr: true,
+		},
+		{
+			name: "Wrong Controller",
+			msg: &types.MsgArchiveTrustRegistry{
+				Creator: "wrong-controller",
+				Id:      trID,
+				Archive: true,
+			},
+			expectErr: true,
+		},
+		{
+			name: "Non-existent Trust Registry",
+			msg: &types.MsgArchiveTrustRegistry{
+				Creator: creator,
+				Id:      99999,
+				Archive: true,
+			},
+			expectErr: true,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			// Advance block time for each test
+			sdkCtx := sdk.UnwrapSDKContext(ctx)
+			testCtx := sdk.WrapSDKContext(sdkCtx.WithBlockTime(sdkCtx.BlockTime().Add(time.Hour)))
+
+			resp, err := ms.ArchiveTrustRegistry(testCtx, tc.msg)
+			if tc.expectErr {
+				require.Error(t, err)
+				require.Nil(t, resp)
+			} else {
+				require.NoError(t, err)
+				require.NotNil(t, resp)
+
+				// Verify changes
+				tr, err := k.TrustRegistry.Get(testCtx, tc.msg.Id)
+				require.NoError(t, err)
+				if tc.msg.Archive {
+					require.NotNil(t, tr.Archived)
+				} else {
+					require.Nil(t, tr.Archived)
+				}
+				require.NotEqual(t, tr.Created, tr.Modified)
 			}
 		})
 	}

@@ -28,10 +28,8 @@ func (ms msgServer) CreateTrustRegistry(goCtx context.Context, msg *types.MsgCre
 		return nil, err
 	}
 
-	// [MOD-TR-MSG-1-2-2] Create New Trust Registry fee checks
-	if err := ms.checkSufficientFees(ctx, msg.Creator); err != nil {
-		return nil, err
-	}
+	// TODO: Implement trust deposit functionality when trust deposit module is available
+	// Required deposit: GlobalVariables.trust_registry_trust_deposit * GlobalVariables.trust_unit_price
 
 	// [MOD-TR-MSG-1-3] Create New Trust Registry execution
 	now := ctx.BlockTime()
@@ -54,10 +52,6 @@ func (ms msgServer) AddGovernanceFrameworkDocument(goCtx context.Context, msg *t
 		return nil, err
 	}
 
-	if err := ms.checkSufficientFees(ctx, msg.Creator); err != nil {
-		return nil, err
-	}
-
 	if err := ms.executeAddGovernanceFrameworkDocument(ctx, msg); err != nil {
 		return nil, err
 	}
@@ -70,11 +64,6 @@ func (ms msgServer) IncreaseActiveGovernanceFrameworkVersion(goCtx context.Conte
 
 	// Validate parameters
 	if err := ms.validateIncreaseActiveGovernanceFrameworkVersionParams(ctx, msg); err != nil {
-		return nil, err
-	}
-
-	// Check fees
-	if err := ms.checkSufficientFees(ctx, msg.Creator); err != nil {
 		return nil, err
 	}
 

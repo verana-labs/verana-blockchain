@@ -2,6 +2,8 @@
 
 This README provides instructions for setting up the Verana blockchain and interacting with the Trust Registry module.
 
+```ignite generate proto-go ```
+
 ## Setting Up the Chain
 
 1. Clone the repository:
@@ -25,10 +27,10 @@ This README provides instructions for setting up the Verana blockchain and inter
    ```bash
    veranad tx trustregistry create-trust-registry \
    did:example:123456789abcdefghi \
-   "http://example-aka.com" \
    en \
    https://example.com/governance-framework.pdf \
    e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 \
+   --aka "http://example-aka.com" \
    --from cooluser \
    --keyring-backend test \
    --chain-id vna-local-1 \
@@ -63,6 +65,28 @@ This README provides instructions for setting up the Verana blockchain and inter
    <tr_id> \
    --from cooluser \
    --keyring-backend test \
+   --chain-id vna-local-1 \
+   --gas 800000 \
+   --gas-adjustment 1.3 \
+   --gas-prices 1.1uvna
+   ```
+
+4. Update a trust registry
+   ```bash
+   veranad tx trustregistry update-trust-registry 1 did:example:123456789abcdefggg \
+   --aka [aka] \
+   --from cooluser \
+   --keyring-backend test \
+   --chain-id vna-local-1 \
+   --gas 800000 \
+   --gas-adjustment 1.3 \
+   --gas-prices 1.1uvna
+   ```
+
+5. Archive/Unarchive a trust registry
+   ```bash
+   veranad tx trustregistry archive-trust-registry [id] [true|false] \
+   --from cooluser \
    --chain-id vna-local-1 \
    --gas 800000 \
    --gas-adjustment 1.3 \

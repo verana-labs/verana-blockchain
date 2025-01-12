@@ -78,15 +78,21 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 			RpcCommandOptions: []*autocliv1.RpcCommandOptions{
 				{
 					RpcMethod: "CreateTrustRegistry",
-					Use:       "create-trust-registry [did] [aka] [language] [doc-url] [doc-hash]",
+					Use:       "create-trust-registry [did] [language] [doc-url] [doc-hash]",
 					Short:     "Create a new trust registry",
-					Long:      "Create a new trust registry with the specified DID, AKA URI, language, and initial governance framework document",
+					Long:      "Create a new trust registry with the specified DID, language, and initial governance framework document",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "did"},
-						{ProtoField: "aka"},
 						{ProtoField: "language"},
 						{ProtoField: "doc_url"},
 						{ProtoField: "doc_hash"},
+					},
+					FlagOptions: map[string]*autocliv1.FlagOptions{
+						"aka": {
+							Name:         "aka",
+							DefaultValue: "",
+							Usage:        "aka uri",
+						},
 					},
 				},
 				{
@@ -113,13 +119,19 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod: "UpdateTrustRegistry",
-					Use:       "update-trust-registry [id] [did] [aka]",
+					Use:       "update-trust-registry [id] [did]",
 					Short:     "Update a trust registry",
 					Long:      "Update a trust registry's DID and AKA URI. Only the controller can update a trust registry.",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "id"},
 						{ProtoField: "did"},
-						{ProtoField: "aka"},
+					},
+					FlagOptions: map[string]*autocliv1.FlagOptions{
+						"aka": {
+							Name:         "aka",
+							DefaultValue: "",
+							Usage:        "aka uri",
+						},
 					},
 				},
 				{
