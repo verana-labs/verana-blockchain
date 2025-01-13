@@ -103,15 +103,7 @@ This README provides instructions for setting up the Verana blockchain and inter
    --output json
    ```
 
-2. Query Trust Registry by DID:
-   ```bash
-   veranad q trustregistry get-trust-registry-by-did did:example:123456789abcdefghi \
-   --active-gf-only \
-   --preferred-language en \
-   --output json
-   ```
-
-3. List Trust Registries:
+2. List Trust Registries:
    ```bash
    veranad q trustregistry list-trust-registries \
    --controller <account_address> \
@@ -318,7 +310,7 @@ Note: Replace `cooluser`, chain ID, gas prices, and other parameters according t
    ```bash
    echo '{
        "$schema": "https://json-schema.org/draft/2020-12/schema",
-       "$id": "/dtr/v1/cs/js/1",
+       "$id": "/vpr/v1/cs/js/1",
        "type": "object",
        "$defs": {},
        "properties": {
@@ -348,13 +340,46 @@ Note: Replace `cooluser`, chain ID, gas prices, and other parameters according t
    --gas-prices 1.1uvna
    ```
 
+2. Update a Credential Schema:
+   ```bash
+   veranad tx credentialschema update \
+   <schema_id> \
+   <issuer_grantor_validation_validity_period> \
+   <verifier_grantor_validation_validity_period> \
+   <issuer_validation_validity_period> \
+   <verifier_validation_validity_period> \
+   <holder_validation_validity_period> \
+   --from cooluser \
+   --keyring-backend test \
+   --chain-id vna-local-1 \
+   --gas 800000 \
+   --gas-adjustment 1.3 \
+   --gas-prices 1.1uvna
+   ```
+   Note: Replace `<schema_id>` and other placeholders with actual values.
+
+3. Archive a Credential Schema:
+   ```bash
+   veranad tx credentialschema archive-credential-schema \
+   <schema_id> \
+   <archive> \
+   --from cooluser \
+   --keyring-backend test \
+   --chain-id vna-local-1 \
+   --gas 800000 \
+   --gas-adjustment 1.3 \
+   --gas-prices 1.1uvna
+   ```
+   Note: Replace `<schema_id>` with the actual ID of the credential schema you wish to archive. Use `true` to archive and `false` to unarchive.
+
+
 ### Queries
 
 1. List Credential Schemas:
    ```bash
    veranad q credentialschema list-schemas \
    --tr_id 1 \
-   --created_after "2024-01-01T00:00:00Z" \
+   --modified_after "2024-01-01T00:00:00Z" \
    --response_max_size 100 \
    --output json
    ```

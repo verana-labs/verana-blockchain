@@ -65,23 +65,16 @@ func (ms msgServer) UpdateCredentialSchema(goCtx context.Context, msg *types.Msg
 		return nil, fmt.Errorf("trust registry not found: %w", err)
 	}
 	if tr.Controller != msg.Creator {
-		return nil, fmt.Errorf("only trust registry controller can update credential schema")
+		return nil, fmt.Errorf("creator is not the controller of the trust registry")
 	}
 
 	// Validate validity periods against params
 	params := ms.GetParams(ctx)
-	if err := ValidateValidityPeriods(
-		params,
-		msg.IssuerGrantorValidationValidityPeriod,
-		msg.VerifierGrantorValidationValidityPeriod,
-		msg.IssuerValidationValidityPeriod,
-		msg.VerifierValidationValidityPeriod,
-		msg.HolderValidationValidityPeriod,
-	); err != nil {
-		return nil, err
+	if err := ValidateValidityPeriods(params, msg); err != nil {
+		return nil, fmt.Errorf("invalid validity period: %w", err)
 	}
 
-	// Update credential schema
+	// [MOD-CS-MSG-2-3] Update mutable fields only
 	cs.IssuerGrantorValidationValidityPeriod = msg.IssuerGrantorValidationValidityPeriod
 	cs.VerifierGrantorValidationValidityPeriod = msg.VerifierGrantorValidationValidityPeriod
 	cs.IssuerValidationValidityPeriod = msg.IssuerValidationValidityPeriod
@@ -99,25 +92,21 @@ func (ms msgServer) UpdateCredentialSchema(goCtx context.Context, msg *types.Msg
 // ValidateValidityPeriods checks if all validity periods are within allowed ranges
 func ValidateValidityPeriods(
 	params types.Params,
-	issuerGrantorPeriod,
-	verifierGrantorPeriod,
-	issuerPeriod,
-	verifierPeriod,
-	holderPeriod uint32,
+	msg *types.MsgUpdateCredentialSchema,
 ) error {
-	if issuerGrantorPeriod > params.CredentialSchemaIssuerGrantorValidationValidityPeriodMaxDays {
+	if msg.IssuerGrantorValidationValidityPeriod > params.CredentialSchemaIssuerGrantorValidationValidityPeriodMaxDays {
 		return errors.New("issuer grantor validation validity period exceeds maximum allowed days")
 	}
-	if verifierGrantorPeriod > params.CredentialSchemaVerifierGrantorValidationValidityPeriodMaxDays {
+	if msg.VerifierGrantorValidationValidityPeriod > params.CredentialSchemaVerifierGrantorValidationValidityPeriodMaxDays {
 		return errors.New("verifier grantor validation validity period exceeds maximum allowed days")
 	}
-	if issuerPeriod > params.CredentialSchemaIssuerValidationValidityPeriodMaxDays {
+	if msg.IssuerValidationValidityPeriod > params.CredentialSchemaIssuerValidationValidityPeriodMaxDays {
 		return errors.New("issuer validation validity period exceeds maximum allowed days")
 	}
-	if verifierPeriod > params.CredentialSchemaVerifierValidationValidityPeriodMaxDays {
+	if msg.VerifierValidationValidityPeriod > params.CredentialSchemaVerifierValidationValidityPeriodMaxDays {
 		return errors.New("verifier validation validity period exceeds maximum allowed days")
 	}
-	if holderPeriod > params.CredentialSchemaHolderValidationValidityPeriodMaxDays {
+	if msg.HolderValidationValidityPeriod > params.CredentialSchemaHolderValidationValidityPeriodMaxDays {
 		return errors.New("holder validation validity period exceeds maximum allowed days")
 	}
 	return nil

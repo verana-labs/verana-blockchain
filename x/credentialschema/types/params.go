@@ -17,6 +17,7 @@ const (
 	DefaultCredentialSchemaIssuerValidationValidityPeriodMaxDays          = uint32(3650)
 	DefaultCredentialSchemaVerifierValidationValidityPeriodMaxDays        = uint32(3650)
 	DefaultCredentialSchemaHolderValidationValidityPeriodMaxDays          = uint32(3650)
+	DefaultCredentialSchemaTrustUnitPrice                                 = uint64(1000000) // 1000000uvna = 1vna
 )
 
 // ParamKeyTable the param key table for launch module
@@ -33,6 +34,7 @@ func NewParams(
 	issuerValidityPeriod uint32,
 	verifierValidityPeriod uint32,
 	holderValidityPeriod uint32,
+	trustUnitPrice uint64,
 ) Params {
 	return Params{
 		CredentialSchemaTrustDeposit:                                   trustDeposit,
@@ -42,6 +44,7 @@ func NewParams(
 		CredentialSchemaIssuerValidationValidityPeriodMaxDays:          issuerValidityPeriod,
 		CredentialSchemaVerifierValidationValidityPeriodMaxDays:        verifierValidityPeriod,
 		CredentialSchemaHolderValidationValidityPeriodMaxDays:          holderValidityPeriod,
+		TrustUnitPrice:                                                 trustUnitPrice,
 	}
 }
 
@@ -55,6 +58,7 @@ func DefaultParams() Params {
 		DefaultCredentialSchemaIssuerValidationValidityPeriodMaxDays,
 		DefaultCredentialSchemaVerifierValidationValidityPeriodMaxDays,
 		DefaultCredentialSchemaHolderValidationValidityPeriodMaxDays,
+		DefaultCredentialSchemaTrustUnitPrice,
 	)
 }
 
@@ -96,6 +100,11 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 			&p.CredentialSchemaHolderValidationValidityPeriodMaxDays,
 			validatePositiveUint32,
 		),
+		paramtypes.NewParamSetPair(
+			[]byte("TrustUnitPrice"),
+			&p.TrustUnitPrice,
+			validatePositiveUint64,
+		),
 	}
 }
 
@@ -121,6 +130,9 @@ func (p Params) Validate() error {
 	}
 	if p.CredentialSchemaHolderValidationValidityPeriodMaxDays == 0 {
 		return fmt.Errorf("holder validation validity period max days must be positive")
+	}
+	if p.TrustUnitPrice == 0 {
+		return fmt.Errorf("trust unit price must be positive")
 	}
 	return nil
 }

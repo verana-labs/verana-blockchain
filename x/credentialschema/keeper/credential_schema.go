@@ -62,15 +62,20 @@ func validateValidityPeriodsWithParams(msg *types.MsgCreateCredentialSchema, par
 }
 
 func (ms msgServer) executeCreateCredentialSchema(ctx sdk.Context, schemaID uint64, msg *types.MsgCreateCredentialSchema) error {
-	// Get params using the getter method
 	params := ms.GetParams(ctx)
 
 	// Calculate trust deposit
-	trustDeposit := params.CredentialSchemaTrustDeposit
+	trustDeposit := params.CredentialSchemaTrustDeposit * params.TrustUnitPrice
+
+	// TODO: Handle trust deposit
+	// creator, _ := sdk.AccAddressFromBech32(msg.Creator)
+	// if err := ms.trustDepositKeeper.IncreaseDeposit(ctx, creator, trustDeposit); err != nil {
+	// 	return fmt.Errorf("failed to handle trust deposit: %w", err)
+	// }
 
 	// Create the credential schema
 	credentialSchema := types.CredentialSchema{
-		Id:                                      schemaID, // Use the generated ID
+		Id:                                      schemaID,
 		TrId:                                    msg.TrId,
 		Created:                                 ctx.BlockTime(),
 		Modified:                                ctx.BlockTime(),
@@ -85,9 +90,7 @@ func (ms msgServer) executeCreateCredentialSchema(ctx sdk.Context, schemaID uint
 		VerifierPermManagementMode:              types.CredentialSchemaPermManagementMode(msg.VerifierPermManagementMode),
 	}
 
-	// TODO:Handle trust deposit
-
-	// Persist the credential schema using keeper method
+	// Persist the credential schema
 	if err := ms.SetCredentialSchema(ctx, credentialSchema); err != nil {
 		return fmt.Errorf("failed to persist credential schema: %w", err)
 	}
