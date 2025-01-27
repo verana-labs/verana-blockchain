@@ -16,6 +16,7 @@ CONFIG_TOML_PATH="$HOME_DIR/config/config.toml"
 VALIDATOR_NAME="cooluser"
 VALIDATOR_AMOUNT="1000000000000000000000uvna"
 GENTX_AMOUNT="1000000000uvna"
+SEED_PHRASE_COOLUSER="pink glory help gown abstract eight nice crazy forward ketchup skill cheese"
 
 # Default ports for primary validator
 P2P_PORT="26656"
@@ -36,7 +37,7 @@ fi
 
 # Add a validator key
 log "Adding validator key..."
-$BINARY keys add $VALIDATOR_NAME --keyring-backend test
+echo "$SEED_PHRASE_COOLUSER" | $BINARY keys add $VALIDATOR_NAME --recover --keyring-backend test
 if [ $? -ne 0 ]; then
     log "Error: Failed to add validator key."
     exit 1
