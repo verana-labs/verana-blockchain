@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"fmt"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/verana-labs/verana-blockchain/x/trustregistry/types"
@@ -27,10 +28,8 @@ func (ms msgServer) CreateTrustRegistry(goCtx context.Context, msg *types.MsgCre
 		return nil, err
 	}
 
-	// [MOD-TR-MSG-1-2-2] Create New Trust Registry fee checks
-	if err := ms.checkSufficientFees(ctx, msg.Creator); err != nil {
-		return nil, err
-	}
+	// TODO: Implement trust deposit functionality when trust deposit module is available
+	// Required deposit: GlobalVariables.trust_registry_trust_deposit * GlobalVariables.trust_unit_price
 
 	// [MOD-TR-MSG-1-3] Create New Trust Registry execution
 	now := ctx.BlockTime()
@@ -53,10 +52,6 @@ func (ms msgServer) AddGovernanceFrameworkDocument(goCtx context.Context, msg *t
 		return nil, err
 	}
 
-	if err := ms.checkSufficientFees(ctx, msg.Creator); err != nil {
-		return nil, err
-	}
-
 	if err := ms.executeAddGovernanceFrameworkDocument(ctx, msg); err != nil {
 		return nil, err
 	}
@@ -72,15 +67,79 @@ func (ms msgServer) IncreaseActiveGovernanceFrameworkVersion(goCtx context.Conte
 		return nil, err
 	}
 
-	// Check fees
-	if err := ms.checkSufficientFees(ctx, msg.Creator); err != nil {
-		return nil, err
-	}
-
 	// Execute the increase
 	if err := ms.executeIncreaseActiveGovernanceFrameworkVersion(ctx, msg); err != nil {
 		return nil, err
 	}
 
 	return &types.MsgIncreaseActiveGovernanceFrameworkVersionResponse{}, nil
+}
+
+func (ms msgServer) UpdateTrustRegistry(goCtx context.Context, msg *types.MsgUpdateTrustRegistry) (*types.MsgUpdateTrustRegistryResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Get trust registry
+	tr, err := ms.TrustRegistry.Get(ctx, msg.Id)
+	if err != nil {
+		return nil, fmt.Errorf("trust registry not found: %w", err)
+	}
+
+	// Check controller
+	if tr.Controller != msg.Creator {
+		return nil, fmt.Errorf("only trust registry controller can update trust registry")
+	}
+
+	// Update fields
+	tr.Did = msg.Did
+	tr.Aka = msg.Aka
+	tr.Modified = ctx.BlockTime()
+
+	// Save updated trust registry
+	if err := ms.TrustRegistry.Set(ctx, tr.Id, tr); err != nil {
+		return nil, fmt.Errorf("failed to update trust registry: %w", err)
+	}
+
+	return &types.MsgUpdateTrustRegistryResponse{}, nil
+}
+
+func (ms msgServer) ArchiveTrustRegistry(goCtx context.Context, msg *types.MsgArchiveTrustRegistry) (*types.MsgArchiveTrustRegistryResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Get trust registry
+	tr, err := ms.TrustRegistry.Get(ctx, msg.Id)
+	if err != nil {
+		return nil, fmt.Errorf("trust registry not found: %w", err)
+	}
+
+	// Check controller
+	if tr.Controller != msg.Creator {
+		return nil, fmt.Errorf("only trust registry controller can archive trust registry")
+	}
+
+	// Check archive state
+	if msg.Archive {
+		if tr.Archived != nil {
+			return nil, fmt.Errorf("trust registry is already archived")
+		}
+	} else {
+		if tr.Archived == nil {
+			return nil, fmt.Errorf("trust registry is not archived")
+		}
+	}
+
+	// Update archive state
+	now := ctx.BlockTime()
+	if msg.Archive {
+		tr.Archived = &now
+	} else {
+		tr.Archived = nil
+	}
+	tr.Modified = now
+
+	// Save updated trust registry
+	if err := ms.TrustRegistry.Set(ctx, tr.Id, tr); err != nil {
+		return nil, fmt.Errorf("failed to update trust registry: %w", err)
+	}
+
+	return &types.MsgArchiveTrustRegistryResponse{}, nil
 }

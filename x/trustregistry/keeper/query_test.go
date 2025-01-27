@@ -35,7 +35,7 @@ func setupTestData(t *testing.T) (keeper.Keeper, types.QueryServer, context.Cont
 	// Add documents in different languages for version 2
 	addDocMsg := &types.MsgAddGovernanceFrameworkDocument{
 		Creator:     creator,
-		TrId:        trID,
+		Id:          trID,
 		DocLanguage: "en",
 		DocUrl:      "http://example.com/doc2-en",
 		DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
@@ -71,8 +71,16 @@ func TestGetTrustRegistry(t *testing.T) {
 			check: func(t *testing.T, response *types.QueryGetTrustRegistryResponse) {
 				require.NotNil(t, response.TrustRegistry)
 				require.Equal(t, trID, response.TrustRegistry.Id)
-				require.Len(t, response.Versions, 2)  // Version 1 and 2
-				require.Len(t, response.Documents, 3) // 1 doc for v1, 2 docs for v2
+				require.Len(t, response.TrustRegistry.Versions, 2) // Version 1 and 2
+
+				// Check versions and their documents
+				for _, version := range response.TrustRegistry.Versions {
+					if version.Version == 1 {
+						require.Len(t, version.Documents, 1) // Version 1 has 1 document
+					} else if version.Version == 2 {
+						require.Len(t, version.Documents, 2) // Version 2 has 2 documents (en, es)
+					}
+				}
 			},
 		},
 		{
@@ -84,9 +92,9 @@ func TestGetTrustRegistry(t *testing.T) {
 			expectedError: false,
 			check: func(t *testing.T, response *types.QueryGetTrustRegistryResponse) {
 				require.NotNil(t, response.TrustRegistry)
-				require.Len(t, response.Versions, 1)
-				require.Equal(t, int32(1), response.Versions[0].Version)
-				require.Len(t, response.Documents, 1)
+				require.Len(t, response.TrustRegistry.Versions, 1)
+				require.Equal(t, int32(1), response.TrustRegistry.Versions[0].Version)
+				require.Len(t, response.TrustRegistry.Versions[0].Documents, 1)
 			},
 		},
 		{
@@ -98,9 +106,10 @@ func TestGetTrustRegistry(t *testing.T) {
 			expectedError: false,
 			check: func(t *testing.T, response *types.QueryGetTrustRegistryResponse) {
 				require.NotNil(t, response.TrustRegistry)
-				for _, doc := range response.Documents {
-					if doc.GfvId == 2 { // For version 2
-						require.Equal(t, "es", doc.Language)
+				for _, version := range response.TrustRegistry.Versions {
+					if version.Version == 2 {
+						require.Len(t, version.Documents, 1) // Should only have Spanish document
+						require.Equal(t, "es", version.Documents[0].Language)
 					}
 				}
 			},
@@ -117,59 +126,6 @@ func TestGetTrustRegistry(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			response, err := qs.GetTrustRegistry(ctx, tc.request)
-			if tc.expectedError {
-				require.Error(t, err)
-				return
-			}
-			require.NoError(t, err)
-			require.NotNil(t, response)
-			if tc.check != nil {
-				tc.check(t, response)
-			}
-		})
-	}
-}
-
-func TestGetTrustRegistryWithDID(t *testing.T) {
-	_, qs, ctx, _ := setupTestData(t)
-
-	testCases := []struct {
-		name          string
-		request       *types.QueryGetTrustRegistryWithDIDRequest
-		expectedError bool
-		check         func(*testing.T, *types.QueryGetTrustRegistryResponse)
-	}{
-		{
-			name: "Valid Request",
-			request: &types.QueryGetTrustRegistryWithDIDRequest{
-				Did:          "did:example:123",
-				ActiveGfOnly: false,
-			},
-			expectedError: false,
-			check: func(t *testing.T, response *types.QueryGetTrustRegistryResponse) {
-				require.NotNil(t, response.TrustRegistry)
-				require.Equal(t, "did:example:123", response.TrustRegistry.Did)
-			},
-		},
-		{
-			name: "Invalid DID",
-			request: &types.QueryGetTrustRegistryWithDIDRequest{
-				Did: "invalid-did",
-			},
-			expectedError: true,
-		},
-		{
-			name: "Non-existent DID",
-			request: &types.QueryGetTrustRegistryWithDIDRequest{
-				Did: "did:example:nonexistent",
-			},
-			expectedError: true,
-		},
-	}
-
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			response, err := qs.GetTrustRegistryWithDID(ctx, tc.request)
 			if tc.expectedError {
 				require.Error(t, err)
 				return
@@ -212,6 +168,14 @@ func TestListTrustRegistries(t *testing.T) {
 			expectedError: false,
 			check: func(t *testing.T, response *types.QueryListTrustRegistriesResponse) {
 				require.Len(t, response.TrustRegistries, 2)
+
+				// Check nested structure for each trust registry
+				for _, tr := range response.TrustRegistries {
+					require.NotEmpty(t, tr.Versions)
+					for _, version := range tr.Versions {
+						require.NotEmpty(t, version.Documents)
+					}
+				}
 			},
 		},
 		{
@@ -224,6 +188,12 @@ func TestListTrustRegistries(t *testing.T) {
 			check: func(t *testing.T, response *types.QueryListTrustRegistriesResponse) {
 				require.Len(t, response.TrustRegistries, 1)
 				require.Equal(t, "another_creator", response.TrustRegistries[0].Controller)
+
+				// Check nested structure
+				tr := response.TrustRegistries[0]
+				require.NotEmpty(t, tr.Versions)
+				require.Len(t, tr.Versions[0].Documents, 1) // Should have one document
+				require.Equal(t, "fr", tr.Versions[0].Documents[0].Language)
 			},
 		},
 		{
@@ -236,11 +206,19 @@ func TestListTrustRegistries(t *testing.T) {
 		{
 			name: "Default Response Max Size",
 			request: &types.QueryListTrustRegistriesRequest{
-				ResponseMaxSize: 10, // More than 2
+				ResponseMaxSize: 10,
 			},
 			expectedError: false,
 			check: func(t *testing.T, response *types.QueryListTrustRegistriesResponse) {
 				require.Len(t, response.TrustRegistries, 2)
+
+				// Verify nested structure exists for all trust registries
+				for _, tr := range response.TrustRegistries {
+					require.NotEmpty(t, tr.Versions)
+					for _, version := range tr.Versions {
+						require.NotEmpty(t, version.Documents)
+					}
+				}
 			},
 		},
 	}

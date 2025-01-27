@@ -30,15 +30,16 @@ var _ = time.Kitchen
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type TrustRegistry struct {
-	Id            uint64    `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Did           string    `protobuf:"bytes,2,opt,name=did,proto3" json:"did,omitempty"`
-	Controller    string    `protobuf:"bytes,3,opt,name=controller,proto3" json:"controller,omitempty"`
-	Created       time.Time `protobuf:"bytes,4,opt,name=created,proto3,stdtime" json:"created"`
-	Modified      time.Time `protobuf:"bytes,5,opt,name=modified,proto3,stdtime" json:"modified"`
-	Deposit       int64     `protobuf:"varint,6,opt,name=deposit,proto3" json:"deposit,omitempty"`
-	Aka           string    `protobuf:"bytes,7,opt,name=aka,proto3" json:"aka,omitempty"`
-	ActiveVersion int32     `protobuf:"varint,8,opt,name=active_version,json=activeVersion,proto3" json:"active_version,omitempty"`
-	Language      string    `protobuf:"bytes,9,opt,name=language,proto3" json:"language,omitempty"`
+	Id            uint64     `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Did           string     `protobuf:"bytes,2,opt,name=did,proto3" json:"did,omitempty"`
+	Controller    string     `protobuf:"bytes,3,opt,name=controller,proto3" json:"controller,omitempty"`
+	Created       time.Time  `protobuf:"bytes,4,opt,name=created,proto3,stdtime" json:"created"`
+	Modified      time.Time  `protobuf:"bytes,5,opt,name=modified,proto3,stdtime" json:"modified"`
+	Archived      *time.Time `protobuf:"bytes,6,opt,name=archived,proto3,stdtime" json:"archived,omitempty"`
+	Deposit       int64      `protobuf:"varint,7,opt,name=deposit,proto3" json:"deposit,omitempty"`
+	Aka           string     `protobuf:"bytes,8,opt,name=aka,proto3" json:"aka,omitempty"`
+	ActiveVersion int32      `protobuf:"varint,9,opt,name=active_version,json=activeVersion,proto3" json:"active_version,omitempty"`
+	Language      string     `protobuf:"bytes,10,opt,name=language,proto3" json:"language,omitempty"`
 }
 
 func (m *TrustRegistry) Reset()         { *m = TrustRegistry{} }
@@ -107,6 +108,13 @@ func (m *TrustRegistry) GetModified() time.Time {
 		return m.Modified
 	}
 	return time.Time{}
+}
+
+func (m *TrustRegistry) GetArchived() *time.Time {
+	if m != nil {
+		return m.Archived
+	}
+	return nil
 }
 
 func (m *TrustRegistry) GetDeposit() int64 {
@@ -297,10 +305,222 @@ func (m *GovernanceFrameworkDocument) GetHash() string {
 	return ""
 }
 
+// GovernanceFrameworkVersionWithDocs extends GovernanceFrameworkVersion to include its documents
+type GovernanceFrameworkVersionWithDocs struct {
+	Id          uint64                        `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	TrId        uint64                        `protobuf:"varint,2,opt,name=tr_id,json=trId,proto3" json:"tr_id,omitempty"`
+	Created     time.Time                     `protobuf:"bytes,3,opt,name=created,proto3,stdtime" json:"created"`
+	Version     int32                         `protobuf:"varint,4,opt,name=version,proto3" json:"version,omitempty"`
+	ActiveSince time.Time                     `protobuf:"bytes,5,opt,name=active_since,json=activeSince,proto3,stdtime" json:"active_since"`
+	Documents   []GovernanceFrameworkDocument `protobuf:"bytes,6,rep,name=documents,proto3" json:"documents"`
+}
+
+func (m *GovernanceFrameworkVersionWithDocs) Reset()         { *m = GovernanceFrameworkVersionWithDocs{} }
+func (m *GovernanceFrameworkVersionWithDocs) String() string { return proto.CompactTextString(m) }
+func (*GovernanceFrameworkVersionWithDocs) ProtoMessage()    {}
+func (*GovernanceFrameworkVersionWithDocs) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d6a1e5c27d81066, []int{3}
+}
+func (m *GovernanceFrameworkVersionWithDocs) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GovernanceFrameworkVersionWithDocs) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GovernanceFrameworkVersionWithDocs.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GovernanceFrameworkVersionWithDocs) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GovernanceFrameworkVersionWithDocs.Merge(m, src)
+}
+func (m *GovernanceFrameworkVersionWithDocs) XXX_Size() int {
+	return m.Size()
+}
+func (m *GovernanceFrameworkVersionWithDocs) XXX_DiscardUnknown() {
+	xxx_messageInfo_GovernanceFrameworkVersionWithDocs.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GovernanceFrameworkVersionWithDocs proto.InternalMessageInfo
+
+func (m *GovernanceFrameworkVersionWithDocs) GetId() uint64 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
+func (m *GovernanceFrameworkVersionWithDocs) GetTrId() uint64 {
+	if m != nil {
+		return m.TrId
+	}
+	return 0
+}
+
+func (m *GovernanceFrameworkVersionWithDocs) GetCreated() time.Time {
+	if m != nil {
+		return m.Created
+	}
+	return time.Time{}
+}
+
+func (m *GovernanceFrameworkVersionWithDocs) GetVersion() int32 {
+	if m != nil {
+		return m.Version
+	}
+	return 0
+}
+
+func (m *GovernanceFrameworkVersionWithDocs) GetActiveSince() time.Time {
+	if m != nil {
+		return m.ActiveSince
+	}
+	return time.Time{}
+}
+
+func (m *GovernanceFrameworkVersionWithDocs) GetDocuments() []GovernanceFrameworkDocument {
+	if m != nil {
+		return m.Documents
+	}
+	return nil
+}
+
+// TrustRegistryWithVersions extends TrustRegistry to include its versions with nested documents
+type TrustRegistryWithVersions struct {
+	Id            uint64                               `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Did           string                               `protobuf:"bytes,2,opt,name=did,proto3" json:"did,omitempty"`
+	Controller    string                               `protobuf:"bytes,3,opt,name=controller,proto3" json:"controller,omitempty"`
+	Created       time.Time                            `protobuf:"bytes,4,opt,name=created,proto3,stdtime" json:"created"`
+	Modified      time.Time                            `protobuf:"bytes,5,opt,name=modified,proto3,stdtime" json:"modified"`
+	Archived      *time.Time                           `protobuf:"bytes,6,opt,name=archived,proto3,stdtime" json:"archived,omitempty"`
+	Deposit       int64                                `protobuf:"varint,7,opt,name=deposit,proto3" json:"deposit,omitempty"`
+	Aka           string                               `protobuf:"bytes,8,opt,name=aka,proto3" json:"aka,omitempty"`
+	ActiveVersion int32                                `protobuf:"varint,9,opt,name=active_version,json=activeVersion,proto3" json:"active_version,omitempty"`
+	Language      string                               `protobuf:"bytes,10,opt,name=language,proto3" json:"language,omitempty"`
+	Versions      []GovernanceFrameworkVersionWithDocs `protobuf:"bytes,11,rep,name=versions,proto3" json:"versions"`
+}
+
+func (m *TrustRegistryWithVersions) Reset()         { *m = TrustRegistryWithVersions{} }
+func (m *TrustRegistryWithVersions) String() string { return proto.CompactTextString(m) }
+func (*TrustRegistryWithVersions) ProtoMessage()    {}
+func (*TrustRegistryWithVersions) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d6a1e5c27d81066, []int{4}
+}
+func (m *TrustRegistryWithVersions) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *TrustRegistryWithVersions) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_TrustRegistryWithVersions.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *TrustRegistryWithVersions) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TrustRegistryWithVersions.Merge(m, src)
+}
+func (m *TrustRegistryWithVersions) XXX_Size() int {
+	return m.Size()
+}
+func (m *TrustRegistryWithVersions) XXX_DiscardUnknown() {
+	xxx_messageInfo_TrustRegistryWithVersions.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TrustRegistryWithVersions proto.InternalMessageInfo
+
+func (m *TrustRegistryWithVersions) GetId() uint64 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
+func (m *TrustRegistryWithVersions) GetDid() string {
+	if m != nil {
+		return m.Did
+	}
+	return ""
+}
+
+func (m *TrustRegistryWithVersions) GetController() string {
+	if m != nil {
+		return m.Controller
+	}
+	return ""
+}
+
+func (m *TrustRegistryWithVersions) GetCreated() time.Time {
+	if m != nil {
+		return m.Created
+	}
+	return time.Time{}
+}
+
+func (m *TrustRegistryWithVersions) GetModified() time.Time {
+	if m != nil {
+		return m.Modified
+	}
+	return time.Time{}
+}
+
+func (m *TrustRegistryWithVersions) GetArchived() *time.Time {
+	if m != nil {
+		return m.Archived
+	}
+	return nil
+}
+
+func (m *TrustRegistryWithVersions) GetDeposit() int64 {
+	if m != nil {
+		return m.Deposit
+	}
+	return 0
+}
+
+func (m *TrustRegistryWithVersions) GetAka() string {
+	if m != nil {
+		return m.Aka
+	}
+	return ""
+}
+
+func (m *TrustRegistryWithVersions) GetActiveVersion() int32 {
+	if m != nil {
+		return m.ActiveVersion
+	}
+	return 0
+}
+
+func (m *TrustRegistryWithVersions) GetLanguage() string {
+	if m != nil {
+		return m.Language
+	}
+	return ""
+}
+
+func (m *TrustRegistryWithVersions) GetVersions() []GovernanceFrameworkVersionWithDocs {
+	if m != nil {
+		return m.Versions
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*TrustRegistry)(nil), "veranablockchain.trustregistry.TrustRegistry")
 	proto.RegisterType((*GovernanceFrameworkVersion)(nil), "veranablockchain.trustregistry.GovernanceFrameworkVersion")
 	proto.RegisterType((*GovernanceFrameworkDocument)(nil), "veranablockchain.trustregistry.GovernanceFrameworkDocument")
+	proto.RegisterType((*GovernanceFrameworkVersionWithDocs)(nil), "veranablockchain.trustregistry.GovernanceFrameworkVersionWithDocs")
+	proto.RegisterType((*TrustRegistryWithVersions)(nil), "veranablockchain.trustregistry.TrustRegistryWithVersions")
 }
 
 func init() {
@@ -308,41 +528,47 @@ func init() {
 }
 
 var fileDescriptor_7d6a1e5c27d81066 = []byte{
-	// 531 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x53, 0xdd, 0x6a, 0x13, 0x41,
-	0x14, 0xce, 0x24, 0x9b, 0xbf, 0xa9, 0x2d, 0x3a, 0x56, 0x18, 0x23, 0x6c, 0x42, 0x40, 0x08, 0x42,
-	0x77, 0x41, 0x6f, 0xbc, 0x2a, 0x1a, 0xc4, 0xe2, 0xed, 0xb6, 0x88, 0x78, 0x13, 0x66, 0x77, 0x26,
-	0x93, 0x21, 0xbb, 0x33, 0x61, 0x66, 0x76, 0xb5, 0x6f, 0xd1, 0x87, 0xf1, 0x19, 0xa4, 0x97, 0xc5,
-	0x2b, 0x2f, 0x44, 0x25, 0xf1, 0x41, 0x64, 0xff, 0x6a, 0x5a, 0x7b, 0x53, 0xf1, 0x66, 0xf9, 0xce,
-	0xcf, 0xb7, 0xe7, 0x7c, 0xe7, 0xcc, 0x81, 0x4f, 0x32, 0xa6, 0x89, 0x24, 0x61, 0xac, 0xa2, 0x65,
-	0xb4, 0x20, 0x42, 0xfa, 0x56, 0xa7, 0xc6, 0x6a, 0xc6, 0x85, 0xb1, 0xfa, 0xd4, 0xb7, 0xa7, 0x2b,
-	0x66, 0xbc, 0x95, 0x56, 0x56, 0x21, 0xf7, 0x7a, 0xae, 0x77, 0x25, 0x77, 0x70, 0x8f, 0x24, 0x42,
-	0x2a, 0xbf, 0xf8, 0x96, 0x94, 0xc1, 0x3e, 0x57, 0x5c, 0x15, 0xd0, 0xcf, 0x51, 0xe5, 0x7d, 0x18,
-	0x29, 0x93, 0x28, 0x33, 0x2b, 0x03, 0xa5, 0x51, 0x85, 0x86, 0x5c, 0x29, 0x1e, 0x33, 0xbf, 0xb0,
-	0xc2, 0x74, 0xee, 0x5b, 0x91, 0x30, 0x63, 0x49, 0xb2, 0x2a, 0x13, 0xc6, 0xdf, 0x9a, 0x70, 0xf7,
-	0x24, 0x2f, 0x1b, 0x54, 0x65, 0xd1, 0x1e, 0x6c, 0x0a, 0x8a, 0xc1, 0x08, 0x4c, 0x9c, 0xa0, 0x29,
-	0x28, 0xba, 0x0b, 0x5b, 0x54, 0x50, 0xdc, 0x1c, 0x81, 0x49, 0x3f, 0xc8, 0x21, 0x7a, 0x0e, 0x61,
-	0xa4, 0xa4, 0xd5, 0x2a, 0x8e, 0x99, 0xc6, 0xad, 0x3c, 0x30, 0xc5, 0x5f, 0x3e, 0x1d, 0xec, 0x57,
-	0xa5, 0x5f, 0x52, 0xaa, 0x99, 0x31, 0xc7, 0x56, 0x0b, 0xc9, 0x83, 0xad, 0x5c, 0x74, 0x08, 0xbb,
-	0x91, 0x66, 0xc4, 0x32, 0x8a, 0x9d, 0x11, 0x98, 0xec, 0x3c, 0x1d, 0x78, 0x65, 0x83, 0x5e, 0xdd,
-	0xa0, 0x77, 0x52, 0x37, 0x38, 0xed, 0x9d, 0x7f, 0x1f, 0x36, 0xce, 0x7e, 0x0c, 0x41, 0x50, 0x93,
-	0xd0, 0x0b, 0xd8, 0x4b, 0x14, 0x15, 0x73, 0xc1, 0x28, 0x6e, 0xdf, 0xe2, 0x07, 0x97, 0x2c, 0x84,
-	0x61, 0x97, 0xb2, 0x95, 0x32, 0xc2, 0xe2, 0xce, 0x08, 0x4c, 0x5a, 0x41, 0x6d, 0xe6, 0x3a, 0xc9,
-	0x92, 0xe0, 0x6e, 0xa9, 0x93, 0x2c, 0x09, 0x7a, 0x0c, 0xf7, 0x48, 0x64, 0x45, 0xc6, 0x66, 0x19,
-	0xd3, 0x46, 0x28, 0x89, 0x7b, 0x23, 0x30, 0x69, 0x07, 0xbb, 0xa5, 0xf7, 0x6d, 0xe9, 0x44, 0x03,
-	0xd8, 0x8b, 0x89, 0xe4, 0x29, 0xe1, 0x0c, 0xf7, 0x0b, 0xf6, 0xa5, 0x3d, 0xfe, 0x05, 0xe0, 0xe0,
-	0x48, 0x65, 0x4c, 0x4b, 0x22, 0x23, 0xf6, 0x5a, 0x93, 0x84, 0x7d, 0x50, 0x7a, 0x59, 0x53, 0xaf,
-	0xcf, 0xfa, 0x3e, 0x6c, 0x5b, 0x3d, 0xab, 0xa6, 0xed, 0x04, 0x8e, 0xd5, 0x6f, 0xe8, 0xf6, 0xd0,
-	0x5a, 0xff, 0x32, 0x34, 0x0c, 0xbb, 0x75, 0xff, 0x4e, 0xd1, 0x7f, 0x6d, 0xa2, 0x23, 0x78, 0xa7,
-	0x12, 0x68, 0x84, 0x8c, 0xd8, 0xad, 0x46, 0xba, 0x53, 0x32, 0x8f, 0x73, 0xe2, 0xf8, 0x33, 0x80,
-	0x8f, 0x6e, 0x90, 0xf9, 0x4a, 0x45, 0x69, 0xc2, 0xa4, 0xfd, 0x4b, 0xe7, 0x03, 0xd8, 0xe1, 0xf3,
-	0xec, 0x8f, 0xd0, 0x36, 0x9f, 0x67, 0xff, 0x41, 0xe9, 0xf6, 0x26, 0x9c, 0xab, 0x9b, 0xc8, 0xd7,
-	0x9b, 0xea, 0xb8, 0x90, 0xd8, 0x0f, 0x72, 0x88, 0x10, 0x74, 0x16, 0xc4, 0x2c, 0x8a, 0x77, 0xd0,
-	0x0f, 0x0a, 0x3c, 0x7d, 0x77, 0xbe, 0x76, 0xc1, 0xc5, 0xda, 0x05, 0x3f, 0xd7, 0x2e, 0x38, 0xdb,
-	0xb8, 0x8d, 0x8b, 0x8d, 0xdb, 0xf8, 0xba, 0x71, 0x1b, 0xef, 0x0f, 0xb9, 0xb0, 0x8b, 0x34, 0xf4,
-	0x22, 0x95, 0xf8, 0xe5, 0xe1, 0x1e, 0xc4, 0x24, 0x34, 0x35, 0xde, 0xba, 0xf8, 0x8f, 0x37, 0xdd,
-	0x7c, 0xd8, 0x29, 0x24, 0x3c, 0xfb, 0x1d, 0x00, 0x00, 0xff, 0xff, 0xc2, 0xda, 0x53, 0x4b, 0x22,
-	0x04, 0x00, 0x00,
+	// 638 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x55, 0xdd, 0x6a, 0x13, 0x4f,
+	0x14, 0xcf, 0x24, 0x9b, 0xaf, 0xc9, 0xbf, 0xe5, 0xef, 0x58, 0x61, 0x1a, 0x61, 0x1b, 0x02, 0x42,
+	0x10, 0xba, 0x0b, 0xf5, 0x46, 0x10, 0x8a, 0x86, 0x62, 0xf1, 0x76, 0x5b, 0x54, 0xbc, 0x09, 0x93,
+	0x99, 0xc9, 0x66, 0xc8, 0xee, 0x4e, 0x98, 0x99, 0x5d, 0xed, 0x5b, 0xf4, 0x09, 0x7c, 0x0a, 0x9f,
+	0x41, 0x7a, 0x23, 0x14, 0xaf, 0xbc, 0x52, 0x69, 0x7d, 0x10, 0xd9, 0xaf, 0x36, 0x8d, 0xb5, 0xd8,
+	0xe2, 0x85, 0x88, 0x37, 0xcb, 0x39, 0x33, 0xe7, 0x77, 0xbe, 0x7e, 0x67, 0xcf, 0xc0, 0xfb, 0x09,
+	0x57, 0x24, 0x22, 0xe3, 0x40, 0xd2, 0x19, 0x9d, 0x12, 0x11, 0xb9, 0x46, 0xc5, 0xda, 0x28, 0xee,
+	0x0b, 0x6d, 0xd4, 0x81, 0x6b, 0x0e, 0xe6, 0x5c, 0x3b, 0x73, 0x25, 0x8d, 0x44, 0xf6, 0xb2, 0xad,
+	0x73, 0xc1, 0xb6, 0x7b, 0x8b, 0x84, 0x22, 0x92, 0x6e, 0xf6, 0xcd, 0x21, 0xdd, 0x35, 0x5f, 0xfa,
+	0x32, 0x13, 0xdd, 0x54, 0x2a, 0x4e, 0xd7, 0xa9, 0xd4, 0xa1, 0xd4, 0xa3, 0xfc, 0x22, 0x57, 0x8a,
+	0xab, 0x0d, 0x5f, 0x4a, 0x3f, 0xe0, 0x6e, 0xa6, 0x8d, 0xe3, 0x89, 0x6b, 0x44, 0xc8, 0xb5, 0x21,
+	0xe1, 0x3c, 0x37, 0xe8, 0xbf, 0xad, 0xc1, 0x95, 0xfd, 0x34, 0xac, 0x57, 0x84, 0x45, 0xab, 0xb0,
+	0x2a, 0x18, 0x06, 0x3d, 0x30, 0xb0, 0xbc, 0xaa, 0x60, 0xe8, 0x7f, 0x58, 0x63, 0x82, 0xe1, 0x6a,
+	0x0f, 0x0c, 0xda, 0x5e, 0x2a, 0xa2, 0x87, 0x10, 0x52, 0x19, 0x19, 0x25, 0x83, 0x80, 0x2b, 0x5c,
+	0x4b, 0x2f, 0x86, 0xf8, 0xe3, 0xbb, 0xcd, 0xb5, 0x22, 0xf4, 0x13, 0xc6, 0x14, 0xd7, 0x7a, 0xcf,
+	0x28, 0x11, 0xf9, 0xde, 0x82, 0x2d, 0xda, 0x86, 0x4d, 0xaa, 0x38, 0x31, 0x9c, 0x61, 0xab, 0x07,
+	0x06, 0x9d, 0xad, 0xae, 0x93, 0x27, 0xe8, 0x94, 0x09, 0x3a, 0xfb, 0x65, 0x82, 0xc3, 0xd6, 0xd1,
+	0xe7, 0x8d, 0xca, 0xe1, 0x97, 0x0d, 0xe0, 0x95, 0x20, 0xf4, 0x18, 0xb6, 0x42, 0xc9, 0xc4, 0x44,
+	0x70, 0x86, 0xeb, 0xd7, 0x70, 0x70, 0x86, 0x4a, 0x3d, 0x10, 0x45, 0xa7, 0x22, 0xe1, 0x0c, 0x37,
+	0x7e, 0xc9, 0x03, 0xc8, 0x3d, 0x94, 0x28, 0x84, 0x61, 0x93, 0xf1, 0xb9, 0xd4, 0xc2, 0xe0, 0x66,
+	0x0f, 0x0c, 0x6a, 0x5e, 0xa9, 0xa6, 0x9d, 0x22, 0x33, 0x82, 0x5b, 0x79, 0xa7, 0xc8, 0x8c, 0xa0,
+	0x7b, 0x70, 0x95, 0x50, 0x23, 0x12, 0x3e, 0x4a, 0xb8, 0xd2, 0x42, 0x46, 0xb8, 0xdd, 0x03, 0x83,
+	0xba, 0xb7, 0x92, 0x9f, 0x3e, 0xcf, 0x0f, 0x51, 0x17, 0xb6, 0x02, 0x12, 0xf9, 0x31, 0xf1, 0x39,
+	0x86, 0x19, 0xfa, 0x4c, 0xef, 0x7f, 0x03, 0xb0, 0xbb, 0x2b, 0x13, 0xae, 0x22, 0x12, 0x51, 0xfe,
+	0x54, 0x91, 0x90, 0xbf, 0x96, 0x6a, 0x56, 0x42, 0x97, 0xd9, 0xba, 0x0d, 0xeb, 0x46, 0x8d, 0x0a,
+	0xbe, 0x2c, 0xcf, 0x32, 0xea, 0x19, 0x5b, 0x6c, 0x7b, 0xed, 0x26, 0x6d, 0xc7, 0xb0, 0x59, 0xe6,
+	0x6f, 0x65, 0xf9, 0x97, 0x2a, 0xda, 0x85, 0xff, 0x15, 0x05, 0x6a, 0x11, 0x51, 0x7e, 0x2d, 0x52,
+	0x3a, 0x39, 0x72, 0x2f, 0x05, 0xf6, 0xdf, 0x03, 0x78, 0xf7, 0x92, 0x32, 0x77, 0x24, 0x8d, 0x43,
+	0x1e, 0x99, 0x1f, 0xea, 0xbc, 0x03, 0x1b, 0xfe, 0x24, 0x39, 0x2f, 0xb4, 0xee, 0x4f, 0x92, 0xdf,
+	0x50, 0xe9, 0x22, 0x13, 0xd6, 0x45, 0x26, 0x52, 0x7a, 0x63, 0x15, 0x64, 0x25, 0xb6, 0xbd, 0x54,
+	0x44, 0x08, 0x5a, 0x53, 0xa2, 0xa7, 0xd9, 0x20, 0xb5, 0xbd, 0x4c, 0xee, 0x7f, 0xa8, 0xc2, 0xfe,
+	0xcf, 0xf9, 0x7a, 0x21, 0xcc, 0x74, 0x47, 0x52, 0xfd, 0xb7, 0xf0, 0x86, 0x46, 0xb0, 0xcd, 0x0a,
+	0x8e, 0x34, 0x6e, 0xf4, 0x6a, 0x83, 0xce, 0xd6, 0x23, 0xe7, 0xea, 0xc5, 0xe6, 0x5c, 0xc1, 0xf3,
+	0xd0, 0x4a, 0xc3, 0x78, 0xe7, 0x3e, 0xfb, 0x87, 0x16, 0x5c, 0xbf, 0xb0, 0xa0, 0xd2, 0x16, 0x16,
+	0xdd, 0xd4, 0xff, 0x96, 0xd5, 0x1f, 0xb5, 0xac, 0x10, 0x83, 0xad, 0x02, 0xab, 0x71, 0x27, 0x1b,
+	0x86, 0xe1, 0x0d, 0x86, 0x61, 0xe9, 0x5f, 0x29, 0x66, 0xe2, 0xcc, 0xf3, 0xf0, 0xe5, 0xd1, 0x89,
+	0x0d, 0x8e, 0x4f, 0x6c, 0xf0, 0xf5, 0xc4, 0x06, 0x87, 0xa7, 0x76, 0xe5, 0xf8, 0xd4, 0xae, 0x7c,
+	0x3a, 0xb5, 0x2b, 0xaf, 0xb6, 0x7d, 0x61, 0xa6, 0xf1, 0xd8, 0xa1, 0x32, 0x74, 0xf3, 0xb8, 0x9b,
+	0x01, 0x19, 0xeb, 0x52, 0x5e, 0x78, 0x96, 0xdf, 0x5c, 0xf6, 0x30, 0x8f, 0x1b, 0x59, 0x5b, 0x1f,
+	0x7c, 0x0f, 0x00, 0x00, 0xff, 0xff, 0x57, 0x68, 0x92, 0xe9, 0xc7, 0x07, 0x00, 0x00,
 }
 
 func (m *TrustRegistry) Marshal() (dAtA []byte, err error) {
@@ -370,39 +596,49 @@ func (m *TrustRegistry) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		copy(dAtA[i:], m.Language)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.Language)))
 		i--
-		dAtA[i] = 0x4a
+		dAtA[i] = 0x52
 	}
 	if m.ActiveVersion != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.ActiveVersion))
 		i--
-		dAtA[i] = 0x40
+		dAtA[i] = 0x48
 	}
 	if len(m.Aka) > 0 {
 		i -= len(m.Aka)
 		copy(dAtA[i:], m.Aka)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.Aka)))
 		i--
-		dAtA[i] = 0x3a
+		dAtA[i] = 0x42
 	}
 	if m.Deposit != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.Deposit))
 		i--
-		dAtA[i] = 0x30
+		dAtA[i] = 0x38
 	}
-	n1, err1 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.Modified, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.Modified):])
-	if err1 != nil {
-		return 0, err1
+	if m.Archived != nil {
+		n1, err1 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(*m.Archived, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(*m.Archived):])
+		if err1 != nil {
+			return 0, err1
+		}
+		i -= n1
+		i = encodeVarintTypes(dAtA, i, uint64(n1))
+		i--
+		dAtA[i] = 0x32
 	}
-	i -= n1
-	i = encodeVarintTypes(dAtA, i, uint64(n1))
-	i--
-	dAtA[i] = 0x2a
-	n2, err2 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.Created, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.Created):])
+	n2, err2 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.Modified, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.Modified):])
 	if err2 != nil {
 		return 0, err2
 	}
 	i -= n2
 	i = encodeVarintTypes(dAtA, i, uint64(n2))
+	i--
+	dAtA[i] = 0x2a
+	n3, err3 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.Created, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.Created):])
+	if err3 != nil {
+		return 0, err3
+	}
+	i -= n3
+	i = encodeVarintTypes(dAtA, i, uint64(n3))
 	i--
 	dAtA[i] = 0x22
 	if len(m.Controller) > 0 {
@@ -447,12 +683,12 @@ func (m *GovernanceFrameworkVersion) MarshalToSizedBuffer(dAtA []byte) (int, err
 	_ = i
 	var l int
 	_ = l
-	n3, err3 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.ActiveSince, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.ActiveSince):])
-	if err3 != nil {
-		return 0, err3
+	n4, err4 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.ActiveSince, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.ActiveSince):])
+	if err4 != nil {
+		return 0, err4
 	}
-	i -= n3
-	i = encodeVarintTypes(dAtA, i, uint64(n3))
+	i -= n4
+	i = encodeVarintTypes(dAtA, i, uint64(n4))
 	i--
 	dAtA[i] = 0x2a
 	if m.Version != 0 {
@@ -460,12 +696,12 @@ func (m *GovernanceFrameworkVersion) MarshalToSizedBuffer(dAtA []byte) (int, err
 		i--
 		dAtA[i] = 0x20
 	}
-	n4, err4 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.Created, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.Created):])
-	if err4 != nil {
-		return 0, err4
+	n5, err5 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.Created, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.Created):])
+	if err5 != nil {
+		return 0, err5
 	}
-	i -= n4
-	i = encodeVarintTypes(dAtA, i, uint64(n4))
+	i -= n5
+	i = encodeVarintTypes(dAtA, i, uint64(n5))
 	i--
 	dAtA[i] = 0x1a
 	if m.TrId != 0 {
@@ -522,18 +758,192 @@ func (m *GovernanceFrameworkDocument) MarshalToSizedBuffer(dAtA []byte) (int, er
 		i--
 		dAtA[i] = 0x22
 	}
-	n5, err5 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.Created, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.Created):])
-	if err5 != nil {
-		return 0, err5
+	n6, err6 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.Created, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.Created):])
+	if err6 != nil {
+		return 0, err6
 	}
-	i -= n5
-	i = encodeVarintTypes(dAtA, i, uint64(n5))
+	i -= n6
+	i = encodeVarintTypes(dAtA, i, uint64(n6))
 	i--
 	dAtA[i] = 0x1a
 	if m.GfvId != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.GfvId))
 		i--
 		dAtA[i] = 0x10
+	}
+	if m.Id != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Id))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *GovernanceFrameworkVersionWithDocs) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GovernanceFrameworkVersionWithDocs) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GovernanceFrameworkVersionWithDocs) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Documents) > 0 {
+		for iNdEx := len(m.Documents) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Documents[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x32
+		}
+	}
+	n7, err7 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.ActiveSince, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.ActiveSince):])
+	if err7 != nil {
+		return 0, err7
+	}
+	i -= n7
+	i = encodeVarintTypes(dAtA, i, uint64(n7))
+	i--
+	dAtA[i] = 0x2a
+	if m.Version != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Version))
+		i--
+		dAtA[i] = 0x20
+	}
+	n8, err8 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.Created, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.Created):])
+	if err8 != nil {
+		return 0, err8
+	}
+	i -= n8
+	i = encodeVarintTypes(dAtA, i, uint64(n8))
+	i--
+	dAtA[i] = 0x1a
+	if m.TrId != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.TrId))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.Id != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Id))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *TrustRegistryWithVersions) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *TrustRegistryWithVersions) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *TrustRegistryWithVersions) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Versions) > 0 {
+		for iNdEx := len(m.Versions) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Versions[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x5a
+		}
+	}
+	if len(m.Language) > 0 {
+		i -= len(m.Language)
+		copy(dAtA[i:], m.Language)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Language)))
+		i--
+		dAtA[i] = 0x52
+	}
+	if m.ActiveVersion != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.ActiveVersion))
+		i--
+		dAtA[i] = 0x48
+	}
+	if len(m.Aka) > 0 {
+		i -= len(m.Aka)
+		copy(dAtA[i:], m.Aka)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Aka)))
+		i--
+		dAtA[i] = 0x42
+	}
+	if m.Deposit != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Deposit))
+		i--
+		dAtA[i] = 0x38
+	}
+	if m.Archived != nil {
+		n9, err9 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(*m.Archived, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(*m.Archived):])
+		if err9 != nil {
+			return 0, err9
+		}
+		i -= n9
+		i = encodeVarintTypes(dAtA, i, uint64(n9))
+		i--
+		dAtA[i] = 0x32
+	}
+	n10, err10 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.Modified, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.Modified):])
+	if err10 != nil {
+		return 0, err10
+	}
+	i -= n10
+	i = encodeVarintTypes(dAtA, i, uint64(n10))
+	i--
+	dAtA[i] = 0x2a
+	n11, err11 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.Created, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.Created):])
+	if err11 != nil {
+		return 0, err11
+	}
+	i -= n11
+	i = encodeVarintTypes(dAtA, i, uint64(n11))
+	i--
+	dAtA[i] = 0x22
+	if len(m.Controller) > 0 {
+		i -= len(m.Controller)
+		copy(dAtA[i:], m.Controller)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Controller)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Did) > 0 {
+		i -= len(m.Did)
+		copy(dAtA[i:], m.Did)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Did)))
+		i--
+		dAtA[i] = 0x12
 	}
 	if m.Id != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.Id))
@@ -575,6 +985,10 @@ func (m *TrustRegistry) Size() (n int) {
 	n += 1 + l + sovTypes(uint64(l))
 	l = github_com_cosmos_gogoproto_types.SizeOfStdTime(m.Modified)
 	n += 1 + l + sovTypes(uint64(l))
+	if m.Archived != nil {
+		l = github_com_cosmos_gogoproto_types.SizeOfStdTime(*m.Archived)
+		n += 1 + l + sovTypes(uint64(l))
+	}
 	if m.Deposit != 0 {
 		n += 1 + sovTypes(uint64(m.Deposit))
 	}
@@ -639,6 +1053,82 @@ func (m *GovernanceFrameworkDocument) Size() (n int) {
 	l = len(m.Hash)
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *GovernanceFrameworkVersionWithDocs) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Id != 0 {
+		n += 1 + sovTypes(uint64(m.Id))
+	}
+	if m.TrId != 0 {
+		n += 1 + sovTypes(uint64(m.TrId))
+	}
+	l = github_com_cosmos_gogoproto_types.SizeOfStdTime(m.Created)
+	n += 1 + l + sovTypes(uint64(l))
+	if m.Version != 0 {
+		n += 1 + sovTypes(uint64(m.Version))
+	}
+	l = github_com_cosmos_gogoproto_types.SizeOfStdTime(m.ActiveSince)
+	n += 1 + l + sovTypes(uint64(l))
+	if len(m.Documents) > 0 {
+		for _, e := range m.Documents {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *TrustRegistryWithVersions) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Id != 0 {
+		n += 1 + sovTypes(uint64(m.Id))
+	}
+	l = len(m.Did)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.Controller)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = github_com_cosmos_gogoproto_types.SizeOfStdTime(m.Created)
+	n += 1 + l + sovTypes(uint64(l))
+	l = github_com_cosmos_gogoproto_types.SizeOfStdTime(m.Modified)
+	n += 1 + l + sovTypes(uint64(l))
+	if m.Archived != nil {
+		l = github_com_cosmos_gogoproto_types.SizeOfStdTime(*m.Archived)
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Deposit != 0 {
+		n += 1 + sovTypes(uint64(m.Deposit))
+	}
+	l = len(m.Aka)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.ActiveVersion != 0 {
+		n += 1 + sovTypes(uint64(m.ActiveVersion))
+	}
+	l = len(m.Language)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.Versions) > 0 {
+		for _, e := range m.Versions {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
 	}
 	return n
 }
@@ -828,6 +1318,42 @@ func (m *TrustRegistry) Unmarshal(dAtA []byte) error {
 			}
 			iNdEx = postIndex
 		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Archived", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Archived == nil {
+				m.Archived = new(time.Time)
+			}
+			if err := github_com_cosmos_gogoproto_types.StdTimeUnmarshal(m.Archived, dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Deposit", wireType)
 			}
@@ -846,7 +1372,7 @@ func (m *TrustRegistry) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 7:
+		case 8:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Aka", wireType)
 			}
@@ -878,7 +1404,7 @@ func (m *TrustRegistry) Unmarshal(dAtA []byte) error {
 			}
 			m.Aka = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 8:
+		case 9:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ActiveVersion", wireType)
 			}
@@ -897,7 +1423,7 @@ func (m *TrustRegistry) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 9:
+		case 10:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Language", wireType)
 			}
@@ -1318,6 +1844,584 @@ func (m *GovernanceFrameworkDocument) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Hash = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GovernanceFrameworkVersionWithDocs) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GovernanceFrameworkVersionWithDocs: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GovernanceFrameworkVersionWithDocs: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Id |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TrId", wireType)
+			}
+			m.TrId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.TrId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Created", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := github_com_cosmos_gogoproto_types.StdTimeUnmarshal(&m.Created, dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Version", wireType)
+			}
+			m.Version = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Version |= int32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ActiveSince", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := github_com_cosmos_gogoproto_types.StdTimeUnmarshal(&m.ActiveSince, dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Documents", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Documents = append(m.Documents, GovernanceFrameworkDocument{})
+			if err := m.Documents[len(m.Documents)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *TrustRegistryWithVersions) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: TrustRegistryWithVersions: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: TrustRegistryWithVersions: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Id |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Did", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Did = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Controller", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Controller = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Created", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := github_com_cosmos_gogoproto_types.StdTimeUnmarshal(&m.Created, dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Modified", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := github_com_cosmos_gogoproto_types.StdTimeUnmarshal(&m.Modified, dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Archived", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Archived == nil {
+				m.Archived = new(time.Time)
+			}
+			if err := github_com_cosmos_gogoproto_types.StdTimeUnmarshal(m.Archived, dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Deposit", wireType)
+			}
+			m.Deposit = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Deposit |= int64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Aka", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Aka = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 9:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ActiveVersion", wireType)
+			}
+			m.ActiveVersion = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ActiveVersion |= int32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Language", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Language = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Versions", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Versions = append(m.Versions, GovernanceFrameworkVersionWithDocs{})
+			if err := m.Versions[len(m.Versions)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

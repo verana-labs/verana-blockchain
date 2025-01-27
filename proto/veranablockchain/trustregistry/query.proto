@@ -27,11 +27,6 @@ service Query {
   rpc ListTrustRegistries(QueryListTrustRegistriesRequest) returns (QueryListTrustRegistriesResponse) {
     option (google.api.http).get = "/dtr/v1/tr/list";
   }
-
-  // GetTrustRegistryWithDID queries by DID
-  rpc GetTrustRegistryWithDID(QueryGetTrustRegistryWithDIDRequest) returns (QueryGetTrustRegistryResponse) {
-    option (google.api.http).get = "/dtr/v1/tr/get_with_did/{did}";
-  }
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -55,9 +50,7 @@ message QueryGetTrustRegistryRequest {
 
 // QueryGetTrustRegistryResponse is the response type for the Query/GetTrustRegistry RPC method.
 message QueryGetTrustRegistryResponse {
-  TrustRegistry trust_registry = 1;
-  repeated GovernanceFrameworkVersion versions = 2[(gogoproto.nullable) = false];
-  repeated GovernanceFrameworkDocument documents = 3[(gogoproto.nullable) = false];
+  TrustRegistryWithVersions trust_registry = 1;
 }
 
 // QueryListTrustRegistriesRequest is the request type for the Query/ListTrustRegistries RPC method.
@@ -71,11 +64,5 @@ message QueryListTrustRegistriesRequest {
 
 // QueryListTrustRegistriesResponse is the response type for the Query/ListTrustRegistries RPC method.
 message QueryListTrustRegistriesResponse {
-  repeated TrustRegistry trust_registries = 1 [(gogoproto.nullable) = false];
-}
-
-message QueryGetTrustRegistryWithDIDRequest {
-  string did = 1;
-  bool active_gf_only = 2;
-  string preferred_language = 3;
+  repeated TrustRegistryWithVersions trust_registries = 1 [(gogoproto.nullable) = false];
 }

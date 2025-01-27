@@ -10,15 +10,10 @@ import (
 )
 
 func (ms msgServer) validateAddGovernanceFrameworkDocumentParams(ctx sdk.Context, msg *types.MsgAddGovernanceFrameworkDocument) error {
-	// Check mandatory parameters
-	if msg.TrId == 0 || msg.DocLanguage == "" || msg.DocUrl == "" || msg.DocHash == "" {
-		return errors.New("missing mandatory parameter")
-	}
-
 	// Direct lookup of trust registry by ID
-	tr, err := ms.TrustRegistry.Get(ctx, msg.TrId)
+	tr, err := ms.TrustRegistry.Get(ctx, msg.Id)
 	if err != nil {
-		return fmt.Errorf("trust registry with ID %d does not exist: %w", msg.TrId, err)
+		return fmt.Errorf("trust registry with ID %d does not exist: %w", msg.Id, err)
 	}
 
 	// Check controller
@@ -30,7 +25,7 @@ func (ms msgServer) validateAddGovernanceFrameworkDocumentParams(ctx sdk.Context
 	var maxVersion int32
 	var hasVersion bool
 	err = ms.GFVersion.Walk(ctx, nil, func(id uint64, gfv types.GovernanceFrameworkVersion) (bool, error) {
-		if gfv.TrId == msg.TrId {
+		if gfv.TrId == msg.Id {
 			if gfv.Version == msg.Version {
 				hasVersion = true
 			}
@@ -58,73 +53,63 @@ func (ms msgServer) validateAddGovernanceFrameworkDocumentParams(ctx sdk.Context
 		return errors.New("invalid language tag (must conform to rfc1766)")
 	}
 
-	// Validate URL and hash
-	if !isValidURL(msg.DocUrl) {
-		return errors.New("invalid document URL")
-	}
-
-	if !isValidHash(msg.DocHash) {
-		return errors.New("invalid document hash")
-	}
-
 	return nil
 }
 
 func (ms msgServer) executeAddGovernanceFrameworkDocument(ctx sdk.Context, msg *types.MsgAddGovernanceFrameworkDocument) error {
-	now := ctx.BlockTime()
-
+	// Find or create governance framework version
 	var gfv types.GovernanceFrameworkVersion
-	var gfvExists bool
-
-	// Check if version exists
-	err := ms.GFVersion.Walk(ctx, nil, func(id uint64, v types.GovernanceFrameworkVersion) (bool, error) {
-		if v.TrId == msg.TrId && v.Version == msg.Version {
-			gfv = v
-			gfvExists = true
-			return true, nil
+	maxVersion := int32(0)
+	err := ms.GFVersion.Walk(ctx, nil, func(key uint64, version types.GovernanceFrameworkVersion) (bool, error) {
+		if version.TrId == msg.Id {
+			if version.Version > maxVersion {
+				maxVersion = version.Version
+			}
+			if version.Version == msg.Version {
+				gfv = version
+			}
 		}
 		return false, nil
 	})
 	if err != nil {
-		return fmt.Errorf("error checking existing version: %w", err)
+		return fmt.Errorf("failed to walk governance framework versions: %w", err)
 	}
 
 	// Create new version if needed
-	if !gfvExists {
-		gfvID, err := ms.Keeper.GetNextID(ctx, "gfv")
+	if gfv.Id == 0 {
+		nextGfvId, err := ms.GetNextID(ctx, "gfv")
 		if err != nil {
-			return fmt.Errorf("failed to generate GFV ID: %w", err)
+			return fmt.Errorf("failed to generate governance framework version ID: %w", err)
 		}
-
 		gfv = types.GovernanceFrameworkVersion{
-			Id:          gfvID,
-			TrId:        msg.TrId,
-			Created:     now,
+			Id:          nextGfvId,
+			TrId:        msg.Id,
+			Created:     ctx.BlockTime(),
 			Version:     msg.Version,
 			ActiveSince: time.Time{}, // Zero time as per spec - not active yet
 		}
 		if err := ms.GFVersion.Set(ctx, gfv.Id, gfv); err != nil {
-			return fmt.Errorf("failed to persist GovernanceFrameworkVersion: %w", err)
+			return fmt.Errorf("failed to persist governance framework version: %w", err)
 		}
 	}
 
-	// Create new document
-	gfdID, err := ms.Keeper.GetNextID(ctx, "gfd")
+	// Create document
+	nextGfdId, err := ms.GetNextID(ctx, "gfd")
 	if err != nil {
-		return fmt.Errorf("failed to generate GFD ID: %w", err)
+		return fmt.Errorf("failed to generate governance framework document ID: %w", err)
 	}
 
 	gfd := types.GovernanceFrameworkDocument{
-		Id:       gfdID,
+		Id:       nextGfdId,
 		GfvId:    gfv.Id,
-		Created:  now,
+		Created:  ctx.BlockTime(),
 		Language: msg.DocLanguage,
 		Url:      msg.DocUrl,
 		Hash:     msg.DocHash,
 	}
 
 	if err := ms.GFDocument.Set(ctx, gfd.Id, gfd); err != nil {
-		return fmt.Errorf("failed to persist GovernanceFrameworkDocument: %w", err)
+		return fmt.Errorf("failed to persist governance framework document: %w", err)
 	}
 
 	return nil
