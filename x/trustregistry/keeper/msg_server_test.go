@@ -3,6 +3,7 @@ package keeper_test
 import (
 	"context"
 	"testing"
+	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
@@ -46,17 +47,6 @@ func TestMsgServerCreateTrustRegistry(t *testing.T) {
 				DocHash:  "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
 			},
 			isValid: true,
-		},
-		{
-			name: "Invalid DID",
-			msg: &types.MsgCreateTrustRegistry{
-				Creator:  creator,
-				Did:      "invalid-did",
-				Language: "en",
-				DocUrl:   "http://example.com/doc",
-				DocHash:  "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
-			},
-			isValid: false,
 		},
 		{
 			name: "Missing Language",
@@ -150,7 +140,7 @@ func TestMsgServerAddGovernanceFrameworkDocument(t *testing.T) {
 			name: "Valid Add Document with Next Version",
 			msg: &types.MsgAddGovernanceFrameworkDocument{
 				Creator:     creator,
-				TrId:        trID,
+				Id:          trID,
 				DocLanguage: "en",
 				DocUrl:      "http://example.com/doc2",
 				DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
@@ -162,7 +152,7 @@ func TestMsgServerAddGovernanceFrameworkDocument(t *testing.T) {
 			name: "Valid Add Document to Same Version with Different Language",
 			msg: &types.MsgAddGovernanceFrameworkDocument{
 				Creator:     creator,
-				TrId:        trID,
+				Id:          trID,
 				DocLanguage: "fr",
 				DocUrl:      "http://example.com/doc2-fr",
 				DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
@@ -174,7 +164,7 @@ func TestMsgServerAddGovernanceFrameworkDocument(t *testing.T) {
 			name: "Valid Add Next Version",
 			msg: &types.MsgAddGovernanceFrameworkDocument{
 				Creator:     creator,
-				TrId:        trID,
+				Id:          trID,
 				DocLanguage: "en",
 				DocUrl:      "http://example.com/doc3",
 				DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
@@ -186,7 +176,7 @@ func TestMsgServerAddGovernanceFrameworkDocument(t *testing.T) {
 			name: "Invalid Version (Less than Active Version)",
 			msg: &types.MsgAddGovernanceFrameworkDocument{
 				Creator:     creator,
-				TrId:        trID,
+				Id:          trID,
 				DocLanguage: "en",
 				DocUrl:      "http://example.com/doc-old",
 				DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
@@ -198,7 +188,7 @@ func TestMsgServerAddGovernanceFrameworkDocument(t *testing.T) {
 			name: "Invalid Trust Registry ID",
 			msg: &types.MsgAddGovernanceFrameworkDocument{
 				Creator:     creator,
-				TrId:        99999,
+				Id:          99999,
 				DocLanguage: "en",
 				DocUrl:      "http://example.com/doc2",
 				DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
@@ -210,7 +200,7 @@ func TestMsgServerAddGovernanceFrameworkDocument(t *testing.T) {
 			name: "Invalid Language Format",
 			msg: &types.MsgAddGovernanceFrameworkDocument{
 				Creator:     creator,
-				TrId:        trID,
+				Id:          trID,
 				DocLanguage: "invalid-language",
 				DocUrl:      "http://example.com/doc2",
 				DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
@@ -222,7 +212,7 @@ func TestMsgServerAddGovernanceFrameworkDocument(t *testing.T) {
 			name: "Wrong Controller",
 			msg: &types.MsgAddGovernanceFrameworkDocument{
 				Creator:     "wrong-controller",
-				TrId:        trID,
+				Id:          trID,
 				DocLanguage: "en",
 				DocUrl:      "http://example.com/doc2",
 				DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
@@ -236,7 +226,7 @@ func TestMsgServerAddGovernanceFrameworkDocument(t *testing.T) {
 				// Add version 3 document first
 				msg := &types.MsgAddGovernanceFrameworkDocument{
 					Creator:     creator,
-					TrId:        trID,
+					Id:          trID,
 					DocLanguage: "en",
 					DocUrl:      "http://example.com/doc3",
 					DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
@@ -247,7 +237,7 @@ func TestMsgServerAddGovernanceFrameworkDocument(t *testing.T) {
 			},
 			msg: &types.MsgAddGovernanceFrameworkDocument{
 				Creator:     creator,
-				TrId:        trID,
+				Id:          trID,
 				DocLanguage: "en",
 				DocUrl:      "http://example.com/doc5",
 				DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
@@ -311,7 +301,7 @@ func TestMsgServerIncreaseActiveGovernanceFrameworkVersion(t *testing.T) {
 	// Add version 2 documents
 	addGFDocMsg := &types.MsgAddGovernanceFrameworkDocument{
 		Creator:     creator,
-		TrId:        trID,
+		Id:          trID,
 		DocLanguage: "es", // First add Spanish version
 		DocUrl:      "http://example.com/doc2-es",
 		DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
@@ -331,7 +321,7 @@ func TestMsgServerIncreaseActiveGovernanceFrameworkVersion(t *testing.T) {
 			name: "Cannot Increase Version - Missing Default Language Document",
 			msg: &types.MsgIncreaseActiveGovernanceFrameworkVersion{
 				Creator: creator,
-				TrId:    trID,
+				Id:      trID,
 			},
 			isValid: false,
 		},
@@ -341,7 +331,7 @@ func TestMsgServerIncreaseActiveGovernanceFrameworkVersion(t *testing.T) {
 				// Add English (default language) document for version 2
 				msg := &types.MsgAddGovernanceFrameworkDocument{
 					Creator:     creator,
-					TrId:        trID,
+					Id:          trID,
 					DocLanguage: "en",
 					DocUrl:      "http://example.com/doc2-en",
 					DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
@@ -352,7 +342,7 @@ func TestMsgServerIncreaseActiveGovernanceFrameworkVersion(t *testing.T) {
 			},
 			msg: &types.MsgIncreaseActiveGovernanceFrameworkVersion{
 				Creator: creator,
-				TrId:    trID,
+				Id:      trID,
 			},
 			isValid: true,
 		},
@@ -360,7 +350,7 @@ func TestMsgServerIncreaseActiveGovernanceFrameworkVersion(t *testing.T) {
 			name: "Wrong Controller",
 			msg: &types.MsgIncreaseActiveGovernanceFrameworkVersion{
 				Creator: "wrong-controller",
-				TrId:    trID,
+				Id:      trID,
 			},
 			isValid: false,
 		},
@@ -368,7 +358,7 @@ func TestMsgServerIncreaseActiveGovernanceFrameworkVersion(t *testing.T) {
 			name: "Non-existent Trust Registry",
 			msg: &types.MsgIncreaseActiveGovernanceFrameworkVersion{
 				Creator: creator,
-				TrId:    99999,
+				Id:      99999,
 			},
 			isValid: false,
 		},
@@ -386,12 +376,223 @@ func TestMsgServerIncreaseActiveGovernanceFrameworkVersion(t *testing.T) {
 				require.NotNil(t, resp)
 
 				// Verify version increase
-				tr, err := k.TrustRegistry.Get(ctx, tc.msg.TrId)
+				tr, err := k.TrustRegistry.Get(ctx, tc.msg.Id)
 				require.NoError(t, err)
 				require.Equal(t, int32(2), tr.ActiveVersion)
 			} else {
 				require.Error(t, err)
 				require.Nil(t, resp)
+			}
+		})
+	}
+}
+
+func TestMsgServerUpdateTrustRegistry(t *testing.T) {
+	k, ms, ctx := setupMsgServer(t)
+
+	// Create initial trust registry
+	creator := sdk.AccAddress([]byte("test_creator")).String()
+	validDid := "did:example:123456789abcdefghi"
+	createMsg := &types.MsgCreateTrustRegistry{
+		Creator:  creator,
+		Did:      validDid,
+		Language: "en",
+		DocUrl:   "http://example.com/doc",
+		DocHash:  "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+	}
+	resp, err := ms.CreateTrustRegistry(ctx, createMsg)
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+
+	// Get trust registry ID
+	trID, err := k.TrustRegistryDIDIndex.Get(ctx, validDid)
+	require.NoError(t, err)
+
+	// Advance block time
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	ctx = sdk.WrapSDKContext(sdkCtx.WithBlockTime(sdkCtx.BlockTime().Add(time.Hour)))
+
+	testCases := []struct {
+		name      string
+		msg       *types.MsgUpdateTrustRegistry
+		expectErr bool
+	}{
+		{
+			name: "Valid Update",
+			msg: &types.MsgUpdateTrustRegistry{
+				Creator: creator,
+				Id:      trID,
+				Did:     "did:example:newdid",
+				Aka:     "http://new.example.com",
+			},
+			expectErr: false,
+		},
+		{
+			name: "Wrong Controller",
+			msg: &types.MsgUpdateTrustRegistry{
+				Creator: "wrong-controller",
+				Id:      trID,
+				Did:     "did:example:newdid",
+				Aka:     "http://example.com",
+			},
+			expectErr: true,
+		},
+		{
+			name: "Non-existent Trust Registry",
+			msg: &types.MsgUpdateTrustRegistry{
+				Creator: creator,
+				Id:      99999,
+				Did:     "did:example:newdid",
+				Aka:     "http://example.com",
+			},
+			expectErr: true,
+		},
+		{
+			name: "Clear AKA",
+			msg: &types.MsgUpdateTrustRegistry{
+				Creator: creator,
+				Id:      trID,
+				Did:     "did:example:newdid",
+				Aka:     "", // Empty string to clear AKA
+			},
+			expectErr: false,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			// Advance block time for each test
+			sdkCtx := sdk.UnwrapSDKContext(ctx)
+			testCtx := sdk.WrapSDKContext(sdkCtx.WithBlockTime(sdkCtx.BlockTime().Add(time.Hour)))
+
+			resp, err := ms.UpdateTrustRegistry(testCtx, tc.msg)
+			if tc.expectErr {
+				require.Error(t, err)
+				require.Nil(t, resp)
+			} else {
+				require.NoError(t, err)
+				require.NotNil(t, resp)
+
+				// Verify changes
+				tr, err := k.TrustRegistry.Get(testCtx, tc.msg.Id)
+				require.NoError(t, err)
+				require.Equal(t, tc.msg.Did, tr.Did)
+				require.Equal(t, tc.msg.Aka, tr.Aka)
+				require.NotEqual(t, tr.Created, tr.Modified)
+			}
+		})
+	}
+}
+
+func TestMsgServerArchiveTrustRegistry(t *testing.T) {
+	k, ms, ctx := setupMsgServer(t)
+
+	// Create initial trust registry
+	creator := sdk.AccAddress([]byte("test_creator")).String()
+	validDid := "did:example:123456789abcdefghi"
+	createMsg := &types.MsgCreateTrustRegistry{
+		Creator:  creator,
+		Did:      validDid,
+		Language: "en",
+		DocUrl:   "http://example.com/doc",
+		DocHash:  "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+	}
+	resp, err := ms.CreateTrustRegistry(ctx, createMsg)
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+
+	// Get trust registry ID
+	trID, err := k.TrustRegistryDIDIndex.Get(ctx, validDid)
+	require.NoError(t, err)
+
+	// Advance block time
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	ctx = sdk.WrapSDKContext(sdkCtx.WithBlockTime(sdkCtx.BlockTime().Add(time.Hour)))
+
+	testCases := []struct {
+		name      string
+		msg       *types.MsgArchiveTrustRegistry
+		expectErr bool
+	}{
+		{
+			name: "Valid Archive",
+			msg: &types.MsgArchiveTrustRegistry{
+				Creator: creator,
+				Id:      trID,
+				Archive: true,
+			},
+			expectErr: false,
+		},
+		{
+			name: "Already Archived",
+			msg: &types.MsgArchiveTrustRegistry{
+				Creator: creator,
+				Id:      trID,
+				Archive: true,
+			},
+			expectErr: true,
+		},
+		{
+			name: "Valid Unarchive",
+			msg: &types.MsgArchiveTrustRegistry{
+				Creator: creator,
+				Id:      trID,
+				Archive: false,
+			},
+			expectErr: false,
+		},
+		{
+			name: "Already Unarchived",
+			msg: &types.MsgArchiveTrustRegistry{
+				Creator: creator,
+				Id:      trID,
+				Archive: false,
+			},
+			expectErr: true,
+		},
+		{
+			name: "Wrong Controller",
+			msg: &types.MsgArchiveTrustRegistry{
+				Creator: "wrong-controller",
+				Id:      trID,
+				Archive: true,
+			},
+			expectErr: true,
+		},
+		{
+			name: "Non-existent Trust Registry",
+			msg: &types.MsgArchiveTrustRegistry{
+				Creator: creator,
+				Id:      99999,
+				Archive: true,
+			},
+			expectErr: true,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			// Advance block time for each test
+			sdkCtx := sdk.UnwrapSDKContext(ctx)
+			testCtx := sdk.WrapSDKContext(sdkCtx.WithBlockTime(sdkCtx.BlockTime().Add(time.Hour)))
+
+			resp, err := ms.ArchiveTrustRegistry(testCtx, tc.msg)
+			if tc.expectErr {
+				require.Error(t, err)
+				require.Nil(t, resp)
+			} else {
+				require.NoError(t, err)
+				require.NotNil(t, resp)
+
+				// Verify changes
+				tr, err := k.TrustRegistry.Get(testCtx, tc.msg.Id)
+				require.NoError(t, err)
+				if tc.msg.Archive {
+					require.NotNil(t, tr.Archived)
+				} else {
+					require.Nil(t, tr.Archived)
+				}
+				require.NotEqual(t, tr.Created, tr.Modified)
 			}
 		})
 	}

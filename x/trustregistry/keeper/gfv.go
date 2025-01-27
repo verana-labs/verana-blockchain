@@ -9,14 +9,10 @@ import (
 )
 
 func (ms msgServer) validateIncreaseActiveGovernanceFrameworkVersionParams(ctx sdk.Context, msg *types.MsgIncreaseActiveGovernanceFrameworkVersion) error {
-	if msg.TrId == 0 {
-		return errors.New("trust registry ID is mandatory")
-	}
-
 	// Direct lookup by ID
-	tr, err := ms.TrustRegistry.Get(ctx, msg.TrId)
+	tr, err := ms.TrustRegistry.Get(ctx, msg.Id)
 	if err != nil {
-		return fmt.Errorf("trust registry with ID %d does not exist: %w", msg.TrId, err)
+		return fmt.Errorf("trust registry with ID %d does not exist: %w", msg.Id, err)
 	}
 
 	if tr.Controller != msg.Creator {
@@ -29,7 +25,7 @@ func (ms msgServer) validateIncreaseActiveGovernanceFrameworkVersionParams(ctx s
 	var gfv types.GovernanceFrameworkVersion
 	found := false
 	err = ms.GFVersion.Walk(ctx, nil, func(id uint64, v types.GovernanceFrameworkVersion) (bool, error) {
-		if v.TrId == msg.TrId && v.Version == nextVersion {
+		if v.TrId == msg.Id && v.Version == nextVersion {
 			gfv = v
 			found = true
 			return true, nil
@@ -64,43 +60,41 @@ func (ms msgServer) validateIncreaseActiveGovernanceFrameworkVersionParams(ctx s
 
 func (ms msgServer) executeIncreaseActiveGovernanceFrameworkVersion(ctx sdk.Context, msg *types.MsgIncreaseActiveGovernanceFrameworkVersion) error {
 	// Direct lookup of trust registry by ID
-	tr, err := ms.TrustRegistry.Get(ctx, msg.TrId)
+	tr, err := ms.TrustRegistry.Get(ctx, msg.Id)
 	if err != nil {
 		return fmt.Errorf("error finding trust registry: %w", err)
 	}
 
 	nextVersion := tr.ActiveVersion + 1
+	var nextGfv types.GovernanceFrameworkVersion
+	var found bool
 
-	// Find the GFV to activate
-	var gfv types.GovernanceFrameworkVersion
-	found := false
-	err = ms.GFVersion.Walk(ctx, nil, func(id uint64, v types.GovernanceFrameworkVersion) (bool, error) {
-		if v.TrId == msg.TrId && v.Version == nextVersion {
-			gfv = v
+	err = ms.GFVersion.Walk(ctx, nil, func(key uint64, gfv types.GovernanceFrameworkVersion) (bool, error) {
+		if gfv.TrId == msg.Id && gfv.Version == nextVersion {
+			nextGfv = gfv
 			found = true
 			return true, nil
 		}
 		return false, nil
 	})
 	if err != nil {
-		return fmt.Errorf("error finding version: %w", err)
+		return fmt.Errorf("failed to walk governance framework versions: %w", err)
 	}
 	if !found {
-		return fmt.Errorf("governance framework version not found")
-	}
-
-	now := ctx.BlockTime()
-	tr.ActiveVersion = nextVersion
-	tr.Modified = now
-	gfv.ActiveSince = now
-
-	// Update trust registry using ID as key
-	if err = ms.TrustRegistry.Set(ctx, tr.Id, tr); err != nil {
-		return fmt.Errorf("failed to update trust registry: %w", err)
+		return fmt.Errorf("next version not found")
 	}
 
 	// Update version
-	if err = ms.GFVersion.Set(ctx, gfv.Id, gfv); err != nil {
+	now := ctx.BlockTime()
+	tr.ActiveVersion = nextVersion
+	tr.Modified = now
+	nextGfv.ActiveSince = now
+
+	// Persist changes
+	if err := ms.TrustRegistry.Set(ctx, tr.Id, tr); err != nil {
+		return fmt.Errorf("failed to update trust registry: %w", err)
+	}
+	if err := ms.GFVersion.Set(ctx, nextGfv.Id, nextGfv); err != nil {
 		return fmt.Errorf("failed to update governance framework version: %w", err)
 	}
 

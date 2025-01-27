@@ -33,27 +33,6 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					},
 				},
 				{
-					RpcMethod: "GetTrustRegistryWithDID",
-					Use:       "get-trust-registry-by-did [did]",
-					Short:     "Get trust registry information by DID",
-					Long:      "Get the trust registry information for a given DID, with options to filter by active governance framework and preferred language",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
-						{ProtoField: "did"},
-					},
-					FlagOptions: map[string]*autocliv1.FlagOptions{
-						"active_gf_only": {
-							Name:         "active-gf-only",
-							DefaultValue: "false",
-							Usage:        "If true, include only current governance framework data",
-						},
-						"preferred_language": {
-							Name:         "preferred-language",
-							DefaultValue: "",
-							Usage:        "Preferred language for the returned documents",
-						},
-					},
-				},
-				{
 					RpcMethod: "ListTrustRegistries",
 					Use:       "list-trust-registries",
 					Short:     "List Trust Registries",
@@ -99,24 +78,30 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 			RpcCommandOptions: []*autocliv1.RpcCommandOptions{
 				{
 					RpcMethod: "CreateTrustRegistry",
-					Use:       "create-trust-registry [did] [aka] [language] [doc-url] [doc-hash]",
+					Use:       "create-trust-registry [did] [language] [doc-url] [doc-hash]",
 					Short:     "Create a new trust registry",
-					Long:      "Create a new trust registry with the specified DID, AKA URI, language, and initial governance framework document",
+					Long:      "Create a new trust registry with the specified DID, language, and initial governance framework document",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "did"},
-						{ProtoField: "aka"},
 						{ProtoField: "language"},
 						{ProtoField: "doc_url"},
 						{ProtoField: "doc_hash"},
 					},
+					FlagOptions: map[string]*autocliv1.FlagOptions{
+						"aka": {
+							Name:         "aka",
+							DefaultValue: "",
+							Usage:        "aka uri",
+						},
+					},
 				},
 				{
 					RpcMethod: "AddGovernanceFrameworkDocument",
-					Use:       "add-governance-framework-document [tr_id] [doc-language] [doc-url] [doc-hash] [version]",
-					Short:     "Add a new governance framework document",
-					Long:      "Add a new governance framework document to an existing trust registry. The version must be either equal to the highest existing version or exactly one more than the highest version.",
+					Use:       "add-governance-framework-document [id] [doc-language] [url] [hash] [version]",
+					Short:     "Add a governance framework document",
+					Long:      "Add a new governance framework document to a trust registry",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
-						{ProtoField: "tr_id"},
+						{ProtoField: "id"},
 						{ProtoField: "doc_language"},
 						{ProtoField: "doc_url"},
 						{ProtoField: "doc_hash"},
@@ -125,11 +110,38 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod: "IncreaseActiveGovernanceFrameworkVersion",
-					Use:       "increase-active-gf-version [tr_id]",
+					Use:       "increase-active-gf-version [id]",
 					Short:     "Increase the active governance framework version",
 					Long:      "Increase the active governance framework version for a trust registry. This can only be done by the controller of the trust registry and requires a document in the trust registry's default language for the new version.",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
-						{ProtoField: "tr_id"},
+						{ProtoField: "id"},
+					},
+				},
+				{
+					RpcMethod: "UpdateTrustRegistry",
+					Use:       "update-trust-registry [id] [did]",
+					Short:     "Update a trust registry",
+					Long:      "Update a trust registry's DID and AKA URI. Only the controller can update a trust registry.",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "id"},
+						{ProtoField: "did"},
+					},
+					FlagOptions: map[string]*autocliv1.FlagOptions{
+						"aka": {
+							Name:         "aka",
+							DefaultValue: "",
+							Usage:        "aka uri",
+						},
+					},
+				},
+				{
+					RpcMethod: "ArchiveTrustRegistry",
+					Use:       "archive-trust-registry [id] [archive]",
+					Short:     "Archive or unarchive a trust registry",
+					Long:      "Set the archive status of a trust registry. Use true to archive, false to unarchive. Only the controller can archive/unarchive.",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "id"},
+						{ProtoField: "archive"},
 					},
 				},
 			},
