@@ -55,11 +55,14 @@ import (
 
 	credentialschemamodulev1 "github.com/verana-labs/verana-blockchain/api/veranablockchain/credentialschema/module"
 	diddirectorymodulev1 "github.com/verana-labs/verana-blockchain/api/veranablockchain/diddirectory/module"
+	permissionmodulev1 "github.com/verana-labs/verana-blockchain/api/veranablockchain/permission/module"
 	trustregistrymodulev1 "github.com/verana-labs/verana-blockchain/api/veranablockchain/trustregistry/module"
 	_ "github.com/verana-labs/verana-blockchain/x/credentialschema/module" // import for side-effects
 	credentialschemamoduletypes "github.com/verana-labs/verana-blockchain/x/credentialschema/types"
 	_ "github.com/verana-labs/verana-blockchain/x/diddirectory/module" // import for side-effects
 	diddirectorymoduletypes "github.com/verana-labs/verana-blockchain/x/diddirectory/types"
+	_ "github.com/verana-labs/verana-blockchain/x/permission/module" // import for side-effects
+	permissionmoduletypes "github.com/verana-labs/verana-blockchain/x/permission/types"
 	_ "github.com/verana-labs/verana-blockchain/x/trustregistry/module" // import for side-effects
 	trustregistrymoduletypes "github.com/verana-labs/verana-blockchain/x/trustregistry/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
@@ -102,6 +105,7 @@ var (
 		trustregistrymoduletypes.ModuleName,
 		diddirectorymoduletypes.ModuleName,
 		credentialschemamoduletypes.ModuleName,
+		permissionmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 
@@ -129,6 +133,7 @@ var (
 		trustregistrymoduletypes.ModuleName,
 		diddirectorymoduletypes.ModuleName,
 		credentialschemamoduletypes.ModuleName,
+		permissionmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	}
 
@@ -150,6 +155,7 @@ var (
 		trustregistrymoduletypes.ModuleName,
 		diddirectorymoduletypes.ModuleName,
 		credentialschemamoduletypes.ModuleName,
+		permissionmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	}
 
@@ -316,6 +322,10 @@ var (
 			{
 				Name:   credentialschemamoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&credentialschemamodulev1.Module{}),
+			},
+			{
+				Name:   permissionmoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&permissionmodulev1.Module{}),
 			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},

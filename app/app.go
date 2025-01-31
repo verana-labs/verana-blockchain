@@ -101,6 +101,7 @@ import (
 
 	credentialschemamodulekeeper "github.com/verana-labs/verana-blockchain/x/credentialschema/keeper"
 
+	permissionmodulekeeper "github.com/verana-labs/verana-blockchain/x/permission/keeper"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 	authzmodule "github.com/cosmos/cosmos-sdk/x/authz/module"
 
@@ -194,6 +195,7 @@ type App struct {
 	TrustregistryKeeper    trustregistrymodulekeeper.Keeper
 	DiddirectoryKeeper     diddirectorymodulekeeper.Keeper
 	CredentialschemaKeeper credentialschemamodulekeeper.Keeper
+	PermissionKeeper       permissionmodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -308,6 +310,7 @@ func New(
 		&app.TrustregistryKeeper,
 		&app.DiddirectoryKeeper,
 		&app.CredentialschemaKeeper,
+		&app.PermissionKeeper,
 		// this line is used by starport scaffolding # stargate/app/keeperDefinition
 	); err != nil {
 		panic(err)
