@@ -2,8 +2,6 @@ package v3
 
 import (
 	"context"
-	cspermission "github.com/verana-labs/verana-blockchain/x/cspermission/module"
-	cspermissiontypes "github.com/verana-labs/verana-blockchain/x/cspermission/types"
 
 	upgradetypes "cosmossdk.io/x/upgrade/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -27,7 +25,6 @@ func CreateUpgradeHandler(
 		}
 
 		credentialschema.InitGenesis(ctx, keepers.GetCredentialSchemaKeeper(), *credentialschematypes.DefaultGenesis())
-		cspermission.InitGenesis(ctx, keepers.GetCsPermissionKeeper(), *cspermissiontypes.DefaultGenesis())
 		return migrations, nil
 	}
 }

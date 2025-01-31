@@ -54,13 +54,10 @@ import (
 	"google.golang.org/protobuf/types/known/durationpb"
 
 	credentialschemamodulev1 "github.com/verana-labs/verana-blockchain/api/veranablockchain/credentialschema/module"
-	cspermissionmodulev1 "github.com/verana-labs/verana-blockchain/api/veranablockchain/cspermission/module"
 	diddirectorymodulev1 "github.com/verana-labs/verana-blockchain/api/veranablockchain/diddirectory/module"
 	trustregistrymodulev1 "github.com/verana-labs/verana-blockchain/api/veranablockchain/trustregistry/module"
 	_ "github.com/verana-labs/verana-blockchain/x/credentialschema/module" // import for side-effects
 	credentialschemamoduletypes "github.com/verana-labs/verana-blockchain/x/credentialschema/types"
-	_ "github.com/verana-labs/verana-blockchain/x/cspermission/module" // import for side-effects
-	cspermissionmoduletypes "github.com/verana-labs/verana-blockchain/x/cspermission/types"
 	_ "github.com/verana-labs/verana-blockchain/x/diddirectory/module" // import for side-effects
 	diddirectorymoduletypes "github.com/verana-labs/verana-blockchain/x/diddirectory/types"
 	_ "github.com/verana-labs/verana-blockchain/x/trustregistry/module" // import for side-effects
@@ -105,7 +102,6 @@ var (
 		trustregistrymoduletypes.ModuleName,
 		diddirectorymoduletypes.ModuleName,
 		credentialschemamoduletypes.ModuleName,
-		cspermissionmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 
@@ -133,7 +129,6 @@ var (
 		trustregistrymoduletypes.ModuleName,
 		diddirectorymoduletypes.ModuleName,
 		credentialschemamoduletypes.ModuleName,
-		cspermissionmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	}
 
@@ -155,7 +150,6 @@ var (
 		trustregistrymoduletypes.ModuleName,
 		diddirectorymoduletypes.ModuleName,
 		credentialschemamoduletypes.ModuleName,
-		cspermissionmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	}
 
@@ -322,10 +316,6 @@ var (
 			{
 				Name:   credentialschemamoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&credentialschemamodulev1.Module{}),
-			},
-			{
-				Name:   cspermissionmoduletypes.ModuleName,
-				Config: appconfig.WrapAny(&cspermissionmodulev1.Module{}),
 			},
 			// this line is used by starport scaffolding # stargate/app/moduleConfig
 		},

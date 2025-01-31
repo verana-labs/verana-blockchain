@@ -7,7 +7,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	credentialschemakeeper "github.com/verana-labs/verana-blockchain/x/credentialschema/keeper"
-	cspermissionkeeper "github.com/verana-labs/verana-blockchain/x/cspermission/keeper"
 	diddirectorykeeper "github.com/verana-labs/verana-blockchain/x/diddirectory/keeper"
 )
 
@@ -19,7 +18,6 @@ type BaseAppParamManager interface {
 type AppKeepers interface {
 	GetDidDirectoryKeeper() diddirectorykeeper.Keeper
 	GetCredentialSchemaKeeper() credentialschemakeeper.Keeper
-	GetCsPermissionKeeper() cspermissionkeeper.Keeper
 }
 
 type Upgrade struct {
