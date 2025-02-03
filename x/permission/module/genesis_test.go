@@ -17,7 +17,7 @@ func TestGenesis(t *testing.T) {
 		// this line is used by starport scaffolding # genesis/test/state
 	}
 
-	k, ctx := keepertest.PermissionKeeper(t)
+	k, _, ctx := keepertest.PermissionKeeper(t)
 	permission.InitGenesis(ctx, k, genesisState)
 	got := permission.ExportGenesis(ctx, k)
 	require.NotNil(t, got)

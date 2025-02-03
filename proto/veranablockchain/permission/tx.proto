@@ -6,6 +6,7 @@ import "cosmos/msg/v1/msg.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "veranablockchain/permission/params.proto";
+import "veranablockchain/permission/types.proto";
 
 option go_package = "github.com/verana-labs/verana-blockchain/x/permission/types";
 
@@ -16,6 +17,7 @@ service Msg {
   // UpdateParams defines a (governance) operation for updating the module
   // parameters. The authority defaults to the x/gov module account.
   rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
+  rpc StartPermissionVP(MsgStartPermissionVP) returns (MsgStartPermissionVPResponse);
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
@@ -38,3 +40,19 @@ message MsgUpdateParams {
 // MsgUpdateParamsResponse defines the response structure for executing a
 // MsgUpdateParams message.
 message MsgUpdateParamsResponse {}
+
+// MsgStartPermissionVP represents a message to start a permission validation process
+message MsgStartPermissionVP {
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint32 type = 2;
+  uint64 validator_perm_id = 3;
+  string country = 4;
+  string did = 5 [(gogoproto.nullable) = true]; // optional
+}
+
+// MsgStartPermissionVPResponse defines the Msg/StartPermissionVP response type
+message MsgStartPermissionVPResponse {
+  uint64 permission_id = 1;
+}

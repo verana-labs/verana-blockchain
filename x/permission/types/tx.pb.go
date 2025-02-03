@@ -126,9 +126,133 @@ func (m *MsgUpdateParamsResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgUpdateParamsResponse proto.InternalMessageInfo
 
+// MsgStartPermissionVP represents a message to start a permission validation process
+type MsgStartPermissionVP struct {
+	Creator         string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	Type            uint32 `protobuf:"varint,2,opt,name=type,proto3" json:"type,omitempty"`
+	ValidatorPermId uint64 `protobuf:"varint,3,opt,name=validator_perm_id,json=validatorPermId,proto3" json:"validator_perm_id,omitempty"`
+	Country         string `protobuf:"bytes,4,opt,name=country,proto3" json:"country,omitempty"`
+	Did             string `protobuf:"bytes,5,opt,name=did,proto3" json:"did,omitempty"`
+}
+
+func (m *MsgStartPermissionVP) Reset()         { *m = MsgStartPermissionVP{} }
+func (m *MsgStartPermissionVP) String() string { return proto.CompactTextString(m) }
+func (*MsgStartPermissionVP) ProtoMessage()    {}
+func (*MsgStartPermissionVP) Descriptor() ([]byte, []int) {
+	return fileDescriptor_9be78fdf8430a9d2, []int{2}
+}
+func (m *MsgStartPermissionVP) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgStartPermissionVP) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgStartPermissionVP.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgStartPermissionVP) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgStartPermissionVP.Merge(m, src)
+}
+func (m *MsgStartPermissionVP) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgStartPermissionVP) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgStartPermissionVP.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgStartPermissionVP proto.InternalMessageInfo
+
+func (m *MsgStartPermissionVP) GetCreator() string {
+	if m != nil {
+		return m.Creator
+	}
+	return ""
+}
+
+func (m *MsgStartPermissionVP) GetType() uint32 {
+	if m != nil {
+		return m.Type
+	}
+	return 0
+}
+
+func (m *MsgStartPermissionVP) GetValidatorPermId() uint64 {
+	if m != nil {
+		return m.ValidatorPermId
+	}
+	return 0
+}
+
+func (m *MsgStartPermissionVP) GetCountry() string {
+	if m != nil {
+		return m.Country
+	}
+	return ""
+}
+
+func (m *MsgStartPermissionVP) GetDid() string {
+	if m != nil {
+		return m.Did
+	}
+	return ""
+}
+
+// MsgStartPermissionVPResponse defines the Msg/StartPermissionVP response type
+type MsgStartPermissionVPResponse struct {
+	PermissionId uint64 `protobuf:"varint,1,opt,name=permission_id,json=permissionId,proto3" json:"permission_id,omitempty"`
+}
+
+func (m *MsgStartPermissionVPResponse) Reset()         { *m = MsgStartPermissionVPResponse{} }
+func (m *MsgStartPermissionVPResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgStartPermissionVPResponse) ProtoMessage()    {}
+func (*MsgStartPermissionVPResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_9be78fdf8430a9d2, []int{3}
+}
+func (m *MsgStartPermissionVPResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgStartPermissionVPResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgStartPermissionVPResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgStartPermissionVPResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgStartPermissionVPResponse.Merge(m, src)
+}
+func (m *MsgStartPermissionVPResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgStartPermissionVPResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgStartPermissionVPResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgStartPermissionVPResponse proto.InternalMessageInfo
+
+func (m *MsgStartPermissionVPResponse) GetPermissionId() uint64 {
+	if m != nil {
+		return m.PermissionId
+	}
+	return 0
+}
+
 func init() {
 	proto.RegisterType((*MsgUpdateParams)(nil), "veranablockchain.permission.MsgUpdateParams")
 	proto.RegisterType((*MsgUpdateParamsResponse)(nil), "veranablockchain.permission.MsgUpdateParamsResponse")
+	proto.RegisterType((*MsgStartPermissionVP)(nil), "veranablockchain.permission.MsgStartPermissionVP")
+	proto.RegisterType((*MsgStartPermissionVPResponse)(nil), "veranablockchain.permission.MsgStartPermissionVPResponse")
 }
 
 func init() {
@@ -136,30 +260,40 @@ func init() {
 }
 
 var fileDescriptor_9be78fdf8430a9d2 = []byte{
-	// 356 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x52, 0x29, 0x4b, 0x2d, 0x4a,
-	0xcc, 0x4b, 0x4c, 0xca, 0xc9, 0x4f, 0xce, 0x4e, 0xce, 0x48, 0xcc, 0xcc, 0xd3, 0x2f, 0x48, 0x2d,
-	0xca, 0xcd, 0x2c, 0x2e, 0xce, 0xcc, 0xcf, 0xd3, 0x2f, 0xa9, 0xd0, 0x2b, 0x28, 0xca, 0x2f, 0xc9,
-	0x17, 0x92, 0x46, 0x57, 0xa5, 0x87, 0x50, 0x25, 0x25, 0x98, 0x98, 0x9b, 0x99, 0x97, 0xaf, 0x0f,
-	0x26, 0x21, 0xea, 0xa5, 0xc4, 0x93, 0xf3, 0x8b, 0x73, 0xf3, 0x8b, 0xf5, 0x73, 0x8b, 0xd3, 0xf5,
-	0xcb, 0x0c, 0x41, 0x14, 0x54, 0x42, 0x12, 0x22, 0x11, 0x0f, 0xe6, 0xe9, 0x43, 0x38, 0x50, 0x29,
-	0x91, 0xf4, 0xfc, 0xf4, 0x7c, 0x88, 0x38, 0x88, 0x05, 0x15, 0xd5, 0xc0, 0xe7, 0xbe, 0x82, 0xc4,
-	0xa2, 0xc4, 0x5c, 0xa8, 0x7e, 0xa5, 0xcb, 0x8c, 0x5c, 0xfc, 0xbe, 0xc5, 0xe9, 0xa1, 0x05, 0x29,
-	0x89, 0x25, 0xa9, 0x01, 0x60, 0x19, 0x21, 0x33, 0x2e, 0xce, 0xc4, 0xd2, 0x92, 0x8c, 0xfc, 0xa2,
-	0xcc, 0x92, 0x4a, 0x09, 0x46, 0x05, 0x46, 0x0d, 0x4e, 0x27, 0x89, 0x4b, 0x5b, 0x74, 0x45, 0xa0,
-	0x16, 0x3b, 0xa6, 0xa4, 0x14, 0xa5, 0x16, 0x17, 0x07, 0x97, 0x14, 0x65, 0xe6, 0xa5, 0x07, 0x21,
-	0x94, 0x0a, 0xb9, 0x71, 0xb1, 0x41, 0xcc, 0x96, 0x60, 0x52, 0x60, 0xd4, 0xe0, 0x36, 0x52, 0xd6,
-	0xc3, 0x13, 0x00, 0x7a, 0x10, 0xcb, 0x9c, 0x38, 0x4f, 0xdc, 0x93, 0x67, 0x58, 0xf1, 0x7c, 0x83,
-	0x16, 0x63, 0x10, 0x54, 0xb7, 0x95, 0x43, 0xd3, 0xf3, 0x0d, 0x5a, 0x08, 0x73, 0xbb, 0x9e, 0x6f,
-	0xd0, 0xd2, 0xc5, 0xf0, 0x50, 0x05, 0xb2, 0x97, 0xd0, 0x7c, 0xa0, 0x24, 0xc9, 0x25, 0x8e, 0x26,
-	0x14, 0x94, 0x5a, 0x5c, 0x90, 0x9f, 0x57, 0x9c, 0x6a, 0xd4, 0xc0, 0xc8, 0xc5, 0xec, 0x5b, 0x9c,
-	0x2e, 0x54, 0xc4, 0xc5, 0x83, 0xe2, 0x69, 0x1d, 0xbc, 0x8e, 0x45, 0x33, 0x4d, 0xca, 0x84, 0x14,
-	0xd5, 0x30, 0xbb, 0xa5, 0x58, 0x1b, 0x40, 0xfe, 0x74, 0x0a, 0x3d, 0xf1, 0x48, 0x8e, 0xf1, 0xc2,
-	0x23, 0x39, 0xc6, 0x07, 0x8f, 0xe4, 0x18, 0x27, 0x3c, 0x96, 0x63, 0xb8, 0xf0, 0x58, 0x8e, 0xe1,
-	0xc6, 0x63, 0x39, 0x86, 0x28, 0xeb, 0xf4, 0xcc, 0x92, 0x8c, 0xd2, 0x24, 0xbd, 0xe4, 0xfc, 0x5c,
-	0x7d, 0x88, 0x05, 0xba, 0x39, 0x89, 0x49, 0xc5, 0x30, 0x36, 0x2e, 0xef, 0x97, 0x54, 0x16, 0xa4,
-	0x16, 0x27, 0xb1, 0x81, 0x63, 0xd4, 0x18, 0x10, 0x00, 0x00, 0xff, 0xff, 0x74, 0x3d, 0x64, 0x4f,
-	0x9d, 0x02, 0x00, 0x00,
+	// 525 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x53, 0x4f, 0x6b, 0x13, 0x41,
+	0x14, 0xcf, 0x34, 0x69, 0x4b, 0xc6, 0x94, 0x92, 0x21, 0xd8, 0xed, 0x2a, 0xdb, 0x90, 0x0a, 0x86,
+	0x60, 0x76, 0x69, 0x14, 0xc1, 0x7a, 0xd1, 0x08, 0x42, 0x0f, 0x81, 0xb0, 0xa5, 0x1e, 0xbc, 0x84,
+	0xc9, 0xee, 0xb2, 0x19, 0xcc, 0xee, 0x2c, 0x33, 0x93, 0xd0, 0xdc, 0x54, 0x3c, 0x79, 0xf2, 0x63,
+	0x78, 0xcc, 0xc1, 0x0f, 0x11, 0x3c, 0x15, 0xbd, 0x78, 0x2a, 0x92, 0x1c, 0xf2, 0x35, 0x64, 0xf6,
+	0x4f, 0x56, 0x13, 0x9b, 0x92, 0xcb, 0xee, 0xbc, 0xf7, 0x7e, 0xef, 0xbd, 0xdf, 0xef, 0xcd, 0x1b,
+	0xf8, 0x60, 0xe8, 0x30, 0xec, 0xe3, 0x6e, 0x9f, 0x5a, 0xef, 0xac, 0x1e, 0x26, 0xbe, 0x11, 0x38,
+	0xcc, 0x23, 0x9c, 0x13, 0xea, 0x1b, 0xe2, 0x52, 0x0f, 0x18, 0x15, 0x14, 0xdd, 0x5b, 0x46, 0xe9,
+	0x29, 0x4a, 0x2d, 0x62, 0x8f, 0xf8, 0xd4, 0x08, 0xbf, 0x11, 0x5e, 0x3d, 0xb0, 0x28, 0xf7, 0x28,
+	0x37, 0x3c, 0xee, 0x1a, 0xc3, 0x13, 0xf9, 0x8b, 0x03, 0x87, 0x51, 0xa0, 0x13, 0x5a, 0x46, 0x64,
+	0xc4, 0xa1, 0x92, 0x4b, 0x5d, 0x1a, 0xf9, 0xe5, 0x29, 0xf6, 0x56, 0xd7, 0xf1, 0x0b, 0x30, 0xc3,
+	0x5e, 0x92, 0xff, 0x70, 0xad, 0x92, 0x51, 0xe0, 0xc4, 0xc0, 0xca, 0x4f, 0x00, 0xf7, 0x5b, 0xdc,
+	0xbd, 0x08, 0x6c, 0x2c, 0x9c, 0x76, 0x58, 0x02, 0x3d, 0x85, 0x79, 0x3c, 0x10, 0x3d, 0xca, 0x88,
+	0x18, 0x29, 0xa0, 0x0c, 0xaa, 0xf9, 0xa6, 0xf2, 0xe3, 0x5b, 0xbd, 0x14, 0x33, 0x7c, 0x69, 0xdb,
+	0xcc, 0xe1, 0xfc, 0x5c, 0x30, 0xe2, 0xbb, 0x66, 0x0a, 0x45, 0xaf, 0xe1, 0x4e, 0x44, 0x42, 0xd9,
+	0x2a, 0x83, 0xea, 0x9d, 0xc6, 0xb1, 0xbe, 0x66, 0x52, 0x7a, 0xd4, 0xac, 0x99, 0x9f, 0x5c, 0x1f,
+	0x65, 0xbe, 0xce, 0xc7, 0x35, 0x60, 0xc6, 0xd9, 0xa7, 0x2f, 0x3e, 0xce, 0xc7, 0xb5, 0xb4, 0xee,
+	0xe7, 0xf9, 0xb8, 0x56, 0x5f, 0xd1, 0x73, 0xf9, 0xb7, 0xa2, 0x25, 0x05, 0x95, 0x43, 0x78, 0xb0,
+	0xe4, 0x32, 0x1d, 0x1e, 0x50, 0x9f, 0x3b, 0x95, 0xef, 0x00, 0x96, 0x5a, 0xdc, 0x3d, 0x17, 0x98,
+	0x89, 0xf6, 0xa2, 0xc2, 0x9b, 0x36, 0x6a, 0xc0, 0x5d, 0x8b, 0x39, 0x58, 0x50, 0x76, 0xab, 0xe6,
+	0x04, 0x88, 0x10, 0xcc, 0xc9, 0x61, 0x86, 0x7a, 0xf7, 0xcc, 0xf0, 0x8c, 0x6a, 0xb0, 0x38, 0xc4,
+	0x7d, 0x62, 0x4b, 0x40, 0x47, 0x72, 0xec, 0x10, 0x5b, 0xc9, 0x96, 0x41, 0x35, 0x67, 0xee, 0x2f,
+	0x02, 0xb2, 0xf3, 0x99, 0x8d, 0x14, 0xb8, 0x6b, 0xd1, 0x81, 0x2f, 0xd8, 0x48, 0xc9, 0xc9, 0x9e,
+	0x66, 0x62, 0xa2, 0xbb, 0x30, 0x6b, 0x13, 0x5b, 0xd9, 0x0e, 0x99, 0xe4, 0x26, 0xd7, 0x47, 0xc0,
+	0x94, 0x8e, 0xd3, 0x82, 0x9c, 0x4d, 0xd2, 0xbf, 0xf2, 0x0a, 0xde, 0xff, 0x9f, 0x96, 0x44, 0x2c,
+	0x3a, 0x86, 0x7b, 0xe9, 0x94, 0x24, 0x0f, 0x10, 0xf2, 0x28, 0xa4, 0xce, 0x33, 0xbb, 0xf1, 0x69,
+	0x0b, 0x66, 0x5b, 0xdc, 0x45, 0x0c, 0x16, 0xfe, 0x59, 0x83, 0x47, 0x6b, 0xaf, 0x6f, 0x69, 0xbe,
+	0xea, 0x93, 0x4d, 0xd0, 0x0b, 0x82, 0x1f, 0x00, 0x2c, 0xae, 0x5e, 0xc5, 0xc9, 0x6d, 0xb5, 0x56,
+	0x52, 0xd4, 0x67, 0x1b, 0xa7, 0x24, 0x1c, 0xd4, 0xed, 0xf7, 0x72, 0xfb, 0x9a, 0x17, 0x93, 0xa9,
+	0x06, 0xae, 0xa6, 0x1a, 0xf8, 0x3d, 0xd5, 0xc0, 0x97, 0x99, 0x96, 0xb9, 0x9a, 0x69, 0x99, 0x5f,
+	0x33, 0x2d, 0xf3, 0xf6, 0xb9, 0x4b, 0x44, 0x6f, 0xd0, 0xd5, 0x2d, 0xea, 0x19, 0x51, 0x97, 0x7a,
+	0x1f, 0x77, 0x79, 0x72, 0xbe, 0x69, 0x29, 0xc3, 0x67, 0xd6, 0xdd, 0x09, 0xdf, 0xd9, 0xe3, 0x3f,
+	0x01, 0x00, 0x00, 0xff, 0xff, 0x2e, 0x34, 0x09, 0xb6, 0x5c, 0x04, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -177,6 +311,7 @@ type MsgClient interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
+	StartPermissionVP(ctx context.Context, in *MsgStartPermissionVP, opts ...grpc.CallOption) (*MsgStartPermissionVPResponse, error)
 }
 
 type msgClient struct {
@@ -196,11 +331,21 @@ func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts 
 	return out, nil
 }
 
+func (c *msgClient) StartPermissionVP(ctx context.Context, in *MsgStartPermissionVP, opts ...grpc.CallOption) (*MsgStartPermissionVPResponse, error) {
+	out := new(MsgStartPermissionVPResponse)
+	err := c.cc.Invoke(ctx, "/veranablockchain.permission.Msg/StartPermissionVP", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
+	StartPermissionVP(context.Context, *MsgStartPermissionVP) (*MsgStartPermissionVPResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -209,6 +354,9 @@ type UnimplementedMsgServer struct {
 
 func (*UnimplementedMsgServer) UpdateParams(ctx context.Context, req *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
+}
+func (*UnimplementedMsgServer) StartPermissionVP(ctx context.Context, req *MsgStartPermissionVP) (*MsgStartPermissionVPResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method StartPermissionVP not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
@@ -233,6 +381,24 @@ func _Msg_UpdateParams_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_StartPermissionVP_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgStartPermissionVP)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).StartPermissionVP(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/veranablockchain.permission.Msg/StartPermissionVP",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).StartPermissionVP(ctx, req.(*MsgStartPermissionVP))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var Msg_serviceDesc = _Msg_serviceDesc
 var _Msg_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "veranablockchain.permission.Msg",
@@ -241,6 +407,10 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateParams",
 			Handler:    _Msg_UpdateParams_Handler,
+		},
+		{
+			MethodName: "StartPermissionVP",
+			Handler:    _Msg_StartPermissionVP_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -310,6 +480,88 @@ func (m *MsgUpdateParamsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	return len(dAtA) - i, nil
 }
 
+func (m *MsgStartPermissionVP) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgStartPermissionVP) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgStartPermissionVP) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Did) > 0 {
+		i -= len(m.Did)
+		copy(dAtA[i:], m.Did)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Did)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.Country) > 0 {
+		i -= len(m.Country)
+		copy(dAtA[i:], m.Country)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Country)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.ValidatorPermId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.ValidatorPermId))
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.Type != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.Type))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Creator) > 0 {
+		i -= len(m.Creator)
+		copy(dAtA[i:], m.Creator)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Creator)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgStartPermissionVPResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgStartPermissionVPResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgStartPermissionVPResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.PermissionId != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.PermissionId))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTx(v)
 	base := offset
@@ -342,6 +594,45 @@ func (m *MsgUpdateParamsResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
+	return n
+}
+
+func (m *MsgStartPermissionVP) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Creator)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.Type != 0 {
+		n += 1 + sovTx(uint64(m.Type))
+	}
+	if m.ValidatorPermId != 0 {
+		n += 1 + sovTx(uint64(m.ValidatorPermId))
+	}
+	l = len(m.Country)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.Did)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgStartPermissionVPResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.PermissionId != 0 {
+		n += 1 + sovTx(uint64(m.PermissionId))
+	}
 	return n
 }
 
@@ -495,6 +786,259 @@ func (m *MsgUpdateParamsResponse) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: MsgUpdateParamsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgStartPermissionVP) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgStartPermissionVP: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgStartPermissionVP: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Creator", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Creator = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Type", wireType)
+			}
+			m.Type = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Type |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ValidatorPermId", wireType)
+			}
+			m.ValidatorPermId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ValidatorPermId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Country", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Country = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Did", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Did = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgStartPermissionVPResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgStartPermissionVPResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgStartPermissionVPResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PermissionId", wireType)
+			}
+			m.PermissionId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.PermissionId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTx(dAtA[iNdEx:])

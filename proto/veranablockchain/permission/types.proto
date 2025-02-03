@@ -1,0 +1,61 @@
+syntax = "proto3";
+package veranablockchain.permission;
+
+import "amino/amino.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/verana-labs/verana-blockchain/x/permission/types";
+
+// Permission types
+enum PermissionType {
+  PERMISSION_TYPE_UNSPECIFIED = 0;
+  PERMISSION_TYPE_ISSUER = 1;
+  PERMISSION_TYPE_VERIFIER = 2;
+  PERMISSION_TYPE_ISSUER_GRANTOR = 3;
+  PERMISSION_TYPE_VERIFIER_GRANTOR = 4;
+  PERMISSION_TYPE_TRUST_REGISTRY = 5;
+  PERMISSION_TYPE_HOLDER = 6;
+}
+
+// Validation process states
+enum ValidationState {
+  VALIDATION_STATE_UNSPECIFIED = 0;
+  VALIDATION_STATE_PENDING = 1;
+  VALIDATION_STATE_VALIDATED = 2;
+  VALIDATION_STATE_TERMINATED = 3;
+}
+
+message Permission {
+  uint64 id = 1;
+  uint64 schema_id = 2;
+  PermissionType type = 3;
+  string did = 4;
+  string grantee = 5 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  google.protobuf.Timestamp created = 6 [(gogoproto.stdtime) = true];
+  string created_by = 7 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  google.protobuf.Timestamp extended = 8 [(gogoproto.stdtime) = true];
+  string extended_by = 9 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  google.protobuf.Timestamp effective_from = 10 [(gogoproto.stdtime) = true];
+  google.protobuf.Timestamp effective_until = 11 [(gogoproto.stdtime) = true];
+  google.protobuf.Timestamp modified = 12 [(gogoproto.stdtime) = true];
+  uint64 validation_fees = 13;
+  uint64 issuance_fees = 14;
+  uint64 verification_fees = 15;
+  uint64 deposit = 16;
+  google.protobuf.Timestamp revoked = 17 [(gogoproto.stdtime) = true];
+  string revoked_by = 18 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  google.protobuf.Timestamp terminated = 19 [(gogoproto.stdtime) = true];
+  string terminated_by = 20 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string country = 21;
+  uint64 validator_perm_id = 22;
+  ValidationState vp_state = 23;
+  google.protobuf.Timestamp vp_exp = 24 [(gogoproto.stdtime) = true];
+  google.protobuf.Timestamp vp_last_state_change = 25 [(gogoproto.stdtime) = true];
+  uint64 vp_validator_deposit = 26;
+  uint64 vp_current_fees = 27;
+  uint64 vp_current_deposit = 28;
+  string vp_summary_digest_sri = 29;
+  google.protobuf.Timestamp vp_term_requested = 30 [(gogoproto.stdtime) = true];
+}

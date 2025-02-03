@@ -28,6 +28,33 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					RpcMethod: "UpdateParams",
 					Skip:      true, // skipped because authority gated
 				},
+				{
+					RpcMethod: "StartPermissionVP",
+					Use:       "start-permission-vp [type] [validator-perm-id] [country]",
+					Short:     "Start a new permission validation process",
+					Long: `Start a new permission validation process with the specified parameters:
+- type: Permission type (0=Unspecified, 1=Issuer, 2=Verifier, 3=IssuerGrantor, 4=VerifierGrantor, 5=TrustRegistry, 6=Holder)
+- validator-perm-id: ID of the validator permission
+- country: ISO 3166-1 alpha-2 country code`,
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "type",
+						},
+						{
+							ProtoField: "validator_perm_id",
+						},
+						{
+							ProtoField: "country",
+						},
+					},
+					FlagOptions: map[string]*autocliv1.FlagOptions{
+						"did": {
+							Name:         "did",
+							Usage:        "Optional DID for this permission",
+							DefaultValue: "",
+						},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},
