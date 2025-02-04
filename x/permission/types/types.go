@@ -45,3 +45,17 @@ func isValidDID(did string) bool {
 	match, _ := regexp.MatchString(`^did:[a-zA-Z0-9]+:[a-zA-Z0-9._-]+$`, did)
 	return match
 }
+
+func (msg MsgRenewPermissionVP) ValidateBasic() error {
+	// Validate creator address
+	if _, err := sdk.AccAddressFromBech32(msg.Creator); err != nil {
+		return fmt.Errorf("invalid creator address: %w", err)
+	}
+
+	// Validate permission ID
+	if msg.Id == 0 {
+		return fmt.Errorf("permission ID cannot be 0")
+	}
+
+	return nil
+}

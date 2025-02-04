@@ -55,6 +55,18 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 						},
 					},
 				},
+				{
+					RpcMethod: "RenewPermissionVP",
+					Use:       "renew-permission-vp [id]",
+					Short:     "Renew a permission validation process",
+					Long: `Renew a permission validation process for an existing permission:
+- id: ID of the permission to renew`,
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "id",
+						},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},

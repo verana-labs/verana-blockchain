@@ -18,6 +18,7 @@ service Msg {
   // parameters. The authority defaults to the x/gov module account.
   rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
   rpc StartPermissionVP(MsgStartPermissionVP) returns (MsgStartPermissionVPResponse);
+  rpc RenewPermissionVP(MsgRenewPermissionVP) returns (MsgRenewPermissionVPResponse);
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
@@ -56,3 +57,14 @@ message MsgStartPermissionVP {
 message MsgStartPermissionVPResponse {
   uint64 permission_id = 1;
 }
+
+// MsgRenewPermissionVP represents a message to renew a permission validation process
+message MsgRenewPermissionVP {
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint64 id = 2;  // ID of the permission to renew
+}
+
+// MsgRenewPermissionVPResponse defines the Msg/RenewPermissionVP response type
+message MsgRenewPermissionVPResponse {}

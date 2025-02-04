@@ -103,3 +103,90 @@ func TestStartPermissionVP(t *testing.T) {
 		})
 	}
 }
+
+func TestRenewPermissionVP(t *testing.T) {
+	k, ms, csKeeper, ctx := setupMsgServer(t)
+	creator := sdk.AccAddress([]byte("test_creator")).String()
+
+	// Create mock credential schema
+	csKeeper.CreateMockCredentialSchema(1,
+		cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION,
+		cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION)
+
+	// Create validator permission
+	now := time.Now()
+	validatorPerm := types.Permission{
+		SchemaId:   1,
+		Type:       3, // ISSUER_GRANTOR
+		Grantee:    creator,
+		Created:    &now,
+		CreatedBy:  creator,
+		Extended:   &now,
+		ExtendedBy: creator,
+		Modified:   &now,
+		Country:    "US",
+		VpState:    types.ValidationState_VALIDATION_STATE_VALIDATED,
+	}
+	validatorPermID, err := k.CreatePermission(sdk.UnwrapSDKContext(ctx), validatorPerm)
+	require.NoError(t, err)
+
+	// Create applicant permission
+	applicantPerm := types.Permission{
+		SchemaId:        1,
+		Type:            1, // ISSUER
+		Grantee:         creator,
+		Created:         &now,
+		CreatedBy:       creator,
+		Extended:        &now,
+		ExtendedBy:      creator,
+		Modified:        &now,
+		Country:         "US",
+		ValidatorPermId: validatorPermID,
+		VpState:         types.ValidationState_VALIDATION_STATE_VALIDATED,
+	}
+	applicantPermID, err := k.CreatePermission(sdk.UnwrapSDKContext(ctx), applicantPerm)
+	require.NoError(t, err)
+
+	testCases := []struct {
+		name string
+		msg  *types.MsgRenewPermissionVP
+		err  string
+	}{
+		{
+			name: "Non-existent Permission",
+			msg: &types.MsgRenewPermissionVP{
+				Creator: creator,
+				Id:      999,
+			},
+			err: "permission not found",
+		},
+		{
+			name: "Wrong Creator",
+			msg: &types.MsgRenewPermissionVP{
+				Creator: sdk.AccAddress([]byte("wrong_creator")).String(),
+				Id:      applicantPermID,
+			},
+			err: "creator is not the permission grantee",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			resp, err := ms.RenewPermissionVP(ctx, tc.msg)
+			if tc.err != "" {
+				require.Error(t, err)
+				require.Contains(t, err.Error(), tc.err)
+				require.Nil(t, resp)
+			} else {
+				require.NoError(t, err)
+				require.NotNil(t, resp)
+
+				// Verify updated permission
+				perm, err := k.GetPermission(sdk.UnwrapSDKContext(ctx), tc.msg.Id)
+				require.NoError(t, err)
+				require.Equal(t, types.ValidationState_VALIDATION_STATE_PENDING, perm.VpState)
+				require.NotNil(t, perm.VpLastStateChange)
+			}
+		})
+	}
+}

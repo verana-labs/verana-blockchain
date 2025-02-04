@@ -97,3 +97,7 @@ func (k Keeper) getNextPermissionID(ctx sdk.Context) (uint64, error) {
 
 	return nextID, nil
 }
+
+func (k Keeper) UpdatePermission(ctx sdk.Context, perm types.Permission) error {
+	return k.Permission.Set(ctx, perm.Id, perm)
+}
