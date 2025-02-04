@@ -4,6 +4,7 @@ import (
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"regexp"
+	"time"
 )
 
 func (msg MsgStartPermissionVP) ValidateBasic() error {
@@ -55,6 +56,42 @@ func (msg MsgRenewPermissionVP) ValidateBasic() error {
 	// Validate permission ID
 	if msg.Id == 0 {
 		return fmt.Errorf("permission ID cannot be 0")
+	}
+
+	return nil
+}
+
+// ValidateBasic for MsgSetPermissionVPToValidated
+func (msg MsgSetPermissionVPToValidated) ValidateBasic() error {
+	// Validate creator address
+	if _, err := sdk.AccAddressFromBech32(msg.Creator); err != nil {
+		return fmt.Errorf("invalid creator address: %w", err)
+	}
+
+	// Validate permission ID
+	if msg.Id == 0 {
+		return fmt.Errorf("permission ID cannot be 0")
+	}
+
+	// Validate fees are non-negative
+	if msg.ValidationFees < 0 {
+		return fmt.Errorf("validation fees cannot be negative")
+	}
+	if msg.IssuanceFees < 0 {
+		return fmt.Errorf("issuance fees cannot be negative")
+	}
+	if msg.VerificationFees < 0 {
+		return fmt.Errorf("verification fees cannot be negative")
+	}
+
+	// Validate country code if provided
+	if msg.Country != "" && !isValidCountryCode(msg.Country) {
+		return fmt.Errorf("invalid country code format")
+	}
+
+	// Validate effective until if provided
+	if msg.EffectiveUntil != nil && msg.EffectiveUntil.Before(time.Now()) {
+		return fmt.Errorf("effective until must be in the future")
 	}
 
 	return nil

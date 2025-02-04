@@ -12,6 +12,7 @@ import (
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	legacy.RegisterAminoMsg(cdc, &MsgStartPermissionVP{}, "/perm/v1/start-permission-vp")
 	legacy.RegisterAminoMsg(cdc, &MsgRenewPermissionVP{}, "/perm/v1/renew-permission-vp")
+	legacy.RegisterAminoMsg(cdc, &MsgSetPermissionVPToValidated{}, "/perm/v1/set-permission-vp-validated")
 }
 
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
@@ -21,6 +22,7 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 		&MsgUpdateParams{},
 		&MsgStartPermissionVP{},
 		&MsgRenewPermissionVP{},
+		&MsgSetPermissionVPToValidated{},
 	)
 	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)
 }

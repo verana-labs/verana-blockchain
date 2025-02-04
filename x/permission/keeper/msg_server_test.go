@@ -190,3 +190,94 @@ func TestRenewPermissionVP(t *testing.T) {
 		})
 	}
 }
+
+func TestSetPermissionVPToValidated(t *testing.T) {
+	k, ms, csKeeper, ctx := setupMsgServer(t)
+	creator := sdk.AccAddress([]byte("test_creator")).String()
+	validatorAddr := sdk.AccAddress([]byte("test_validator")).String()
+
+	// Create mock credential schema with validation periods
+	csKeeper.CreateMockCredentialSchema(1,
+		cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION,
+		cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION)
+
+	// Create validator permission
+	now := time.Now()
+	validatorPerm := types.Permission{
+		SchemaId:   1,
+		Type:       3, // ISSUER_GRANTOR
+		Grantee:    validatorAddr,
+		Created:    &now,
+		CreatedBy:  validatorAddr,
+		Extended:   &now,
+		ExtendedBy: validatorAddr,
+		Modified:   &now,
+		Country:    "US",
+		VpState:    types.ValidationState_VALIDATION_STATE_VALIDATED,
+	}
+	validatorPermID, err := k.CreatePermission(sdk.UnwrapSDKContext(ctx), validatorPerm)
+	require.NoError(t, err)
+
+	// Create applicant permission
+	applicantPerm := types.Permission{
+		SchemaId:        1,
+		Type:            1, // ISSUER
+		Grantee:         creator,
+		Created:         &now,
+		CreatedBy:       creator,
+		Extended:        &now,
+		ExtendedBy:      creator,
+		Modified:        &now,
+		Country:         "US",
+		ValidatorPermId: validatorPermID,
+		VpState:         types.ValidationState_VALIDATION_STATE_PENDING,
+	}
+	applicantPermID, err := k.CreatePermission(sdk.UnwrapSDKContext(ctx), applicantPerm)
+	require.NoError(t, err)
+
+	testCases := []struct {
+		name string
+		msg  *types.MsgSetPermissionVPToValidated
+		err  string
+	}{
+		{
+			name: "Invalid Permission ID",
+			msg: &types.MsgSetPermissionVPToValidated{
+				Creator: validatorAddr,
+				Id:      999,
+			},
+			err: "permission not found",
+		},
+		{
+			name: "Wrong Validator",
+			msg: &types.MsgSetPermissionVPToValidated{
+				Creator: creator,
+				Id:      applicantPermID,
+			},
+			err: "creator is not the validator",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			resp, err := ms.SetPermissionVPToValidated(ctx, tc.msg)
+			if tc.err != "" {
+				require.Error(t, err)
+				require.Contains(t, err.Error(), tc.err)
+				require.Nil(t, resp)
+			} else {
+				require.NoError(t, err)
+				require.NotNil(t, resp)
+
+				// Verify updated permission
+				perm, err := k.GetPermission(sdk.UnwrapSDKContext(ctx), tc.msg.Id)
+				require.NoError(t, err)
+				require.Equal(t, types.ValidationState_VALIDATION_STATE_VALIDATED, perm.VpState)
+				require.Equal(t, tc.msg.ValidationFees, perm.ValidationFees)
+				require.Equal(t, tc.msg.Country, perm.Country)
+				require.NotNil(t, perm.EffectiveFrom)
+				require.Equal(t, tc.msg.EffectiveUntil, perm.EffectiveUntil)
+			}
+		})
+	}
+}

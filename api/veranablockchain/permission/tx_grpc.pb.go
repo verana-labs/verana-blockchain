@@ -19,9 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Msg_UpdateParams_FullMethodName      = "/veranablockchain.permission.Msg/UpdateParams"
-	Msg_StartPermissionVP_FullMethodName = "/veranablockchain.permission.Msg/StartPermissionVP"
-	Msg_RenewPermissionVP_FullMethodName = "/veranablockchain.permission.Msg/RenewPermissionVP"
+	Msg_UpdateParams_FullMethodName               = "/veranablockchain.permission.Msg/UpdateParams"
+	Msg_StartPermissionVP_FullMethodName          = "/veranablockchain.permission.Msg/StartPermissionVP"
+	Msg_RenewPermissionVP_FullMethodName          = "/veranablockchain.permission.Msg/RenewPermissionVP"
+	Msg_SetPermissionVPToValidated_FullMethodName = "/veranablockchain.permission.Msg/SetPermissionVPToValidated"
 )
 
 // MsgClient is the client API for Msg service.
@@ -33,6 +34,7 @@ type MsgClient interface {
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
 	StartPermissionVP(ctx context.Context, in *MsgStartPermissionVP, opts ...grpc.CallOption) (*MsgStartPermissionVPResponse, error)
 	RenewPermissionVP(ctx context.Context, in *MsgRenewPermissionVP, opts ...grpc.CallOption) (*MsgRenewPermissionVPResponse, error)
+	SetPermissionVPToValidated(ctx context.Context, in *MsgSetPermissionVPToValidated, opts ...grpc.CallOption) (*MsgSetPermissionVPToValidatedResponse, error)
 }
 
 type msgClient struct {
@@ -70,6 +72,15 @@ func (c *msgClient) RenewPermissionVP(ctx context.Context, in *MsgRenewPermissio
 	return out, nil
 }
 
+func (c *msgClient) SetPermissionVPToValidated(ctx context.Context, in *MsgSetPermissionVPToValidated, opts ...grpc.CallOption) (*MsgSetPermissionVPToValidatedResponse, error) {
+	out := new(MsgSetPermissionVPToValidatedResponse)
+	err := c.cc.Invoke(ctx, Msg_SetPermissionVPToValidated_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
@@ -79,6 +90,7 @@ type MsgServer interface {
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
 	StartPermissionVP(context.Context, *MsgStartPermissionVP) (*MsgStartPermissionVPResponse, error)
 	RenewPermissionVP(context.Context, *MsgRenewPermissionVP) (*MsgRenewPermissionVPResponse, error)
+	SetPermissionVPToValidated(context.Context, *MsgSetPermissionVPToValidated) (*MsgSetPermissionVPToValidatedResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -94,6 +106,9 @@ func (UnimplementedMsgServer) StartPermissionVP(context.Context, *MsgStartPermis
 }
 func (UnimplementedMsgServer) RenewPermissionVP(context.Context, *MsgRenewPermissionVP) (*MsgRenewPermissionVPResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RenewPermissionVP not implemented")
+}
+func (UnimplementedMsgServer) SetPermissionVPToValidated(context.Context, *MsgSetPermissionVPToValidated) (*MsgSetPermissionVPToValidatedResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetPermissionVPToValidated not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -162,6 +177,24 @@ func _Msg_RenewPermissionVP_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_SetPermissionVPToValidated_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSetPermissionVPToValidated)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).SetPermissionVPToValidated(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_SetPermissionVPToValidated_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).SetPermissionVPToValidated(ctx, req.(*MsgSetPermissionVPToValidated))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -180,6 +213,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RenewPermissionVP",
 			Handler:    _Msg_RenewPermissionVP_Handler,
+		},
+		{
+			MethodName: "SetPermissionVPToValidated",
+			Handler:    _Msg_SetPermissionVPToValidated_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

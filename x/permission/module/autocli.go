@@ -67,6 +67,56 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 						},
 					},
 				},
+				{
+					RpcMethod: "SetPermissionVPToValidated",
+					Use:       "set-permission-vp-validated [id]",
+					Short:     "Set permission validation process to validated state",
+					Long: `Set a permission validation process to validated state with optional parameters:
+- id: ID of the permission to validate
+- effective-until: Optional timestamp until when this permission is effective (RFC3339 format)
+- validation-fees: Optional validation fees
+- issuance-fees: Optional issuance fees
+- verification-fees: Optional verification fees
+- country: Optional country code (ISO 3166-1 alpha-2)
+- vp-summary-digest-sri: Optional digest SRI of validation information`,
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "id",
+						},
+					},
+					FlagOptions: map[string]*autocliv1.FlagOptions{
+						"effective_until": {
+							Name:         "effective-until",
+							Usage:        "Timestamp until when this permission is effective (RFC3339)",
+							DefaultValue: "",
+						},
+						"validation_fees": {
+							Name:         "validation-fees",
+							Usage:        "Validation fees",
+							DefaultValue: "0",
+						},
+						"issuance_fees": {
+							Name:         "issuance-fees",
+							Usage:        "Issuance fees",
+							DefaultValue: "0",
+						},
+						"verification_fees": {
+							Name:         "verification-fees",
+							Usage:        "Verification fees",
+							DefaultValue: "0",
+						},
+						"country": {
+							Name:         "country",
+							Usage:        "Country code (ISO 3166-1 alpha-2)",
+							DefaultValue: "",
+						},
+						"vp_summary_digest_sri": {
+							Name:         "vp-summary-digest-sri",
+							Usage:        "Digest SRI of validation information",
+							DefaultValue: "",
+						},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},

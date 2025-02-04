@@ -107,3 +107,82 @@ func (ms msgServer) executeRenewPermissionVP(ctx sdk.Context, perm types.Permiss
 	// Store updated permission
 	return ms.Keeper.UpdatePermission(ctx, perm)
 }
+
+func (ms msgServer) SetPermissionVPToValidated(goCtx context.Context, msg *types.MsgSetPermissionVPToValidated) (*types.MsgSetPermissionVPToValidatedResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	now := ctx.BlockTime()
+
+	// [MOD-PERM-MSG-3-2-1] Basic checks
+	applicantPerm, err := ms.Keeper.GetPermission(ctx, msg.Id)
+	if err != nil {
+		return nil, fmt.Errorf("permission not found: %w", err)
+	}
+
+	// Check renewal-specific constraints
+	if applicantPerm.EffectiveFrom != nil {
+		if msg.ValidationFees != applicantPerm.ValidationFees {
+			return nil, fmt.Errorf("validation fees cannot be changed during renewal")
+		}
+		if msg.IssuanceFees != applicantPerm.IssuanceFees {
+			return nil, fmt.Errorf("issuance fees cannot be changed during renewal")
+		}
+		if msg.VerificationFees != applicantPerm.VerificationFees {
+			return nil, fmt.Errorf("verification fees cannot be changed during renewal")
+		}
+		if msg.Country != applicantPerm.Country {
+			return nil, fmt.Errorf("country cannot be changed during renewal")
+		}
+	}
+
+	// Check summary digest SRI
+	if applicantPerm.Type == types.PermissionType_PERMISSION_TYPE_HOLDER && msg.VpSummaryDigestSri != "" {
+		return nil, fmt.Errorf("vp_summary_digest_sri must be null for HOLDER type")
+	}
+
+	// [MOD-PERM-MSG-3-2-2] Validator permission checks
+	validatorPerm, err := ms.Keeper.GetPermission(ctx, applicantPerm.ValidatorPermId)
+	if err != nil {
+		return nil, fmt.Errorf("validator permission not found: %w", err)
+	}
+
+	if validatorPerm.Grantee != msg.Creator {
+		return nil, fmt.Errorf("creator is not the validator")
+	}
+
+	// Get validation period and calculate expiration
+	cs, err := ms.credentialSchemaKeeper.GetCredentialSchemaById(ctx, applicantPerm.SchemaId)
+	if err != nil {
+		return nil, fmt.Errorf("credential schema not found: %w", err)
+	}
+
+	validityPeriod := getValidityPeriod(uint32(applicantPerm.Type), cs)
+	vpExp := calculateVPExp(applicantPerm.VpExp, uint64(validityPeriod), now)
+
+	// Check effective_until if provided
+	if msg.EffectiveUntil != nil {
+		if applicantPerm.EffectiveUntil == nil {
+			if !msg.EffectiveUntil.After(now) {
+				return nil, fmt.Errorf("effective_until must be after current time")
+			}
+			if vpExp != nil && msg.EffectiveUntil.After(*vpExp) {
+				return nil, fmt.Errorf("effective_until cannot be after validation expiration")
+			}
+		} else {
+			if !msg.EffectiveUntil.After(*applicantPerm.EffectiveUntil) {
+				return nil, fmt.Errorf("effective_until must be after current effective_until")
+			}
+			if vpExp != nil && msg.EffectiveUntil.After(*vpExp) {
+				return nil, fmt.Errorf("effective_until cannot be after validation expiration")
+			}
+		}
+	} else {
+		msg.EffectiveUntil = vpExp
+	}
+
+	// [MOD-PERM-MSG-3-3] Execution
+	if err := ms.executeSetPermissionVPToValidated(ctx, applicantPerm, msg, now, vpExp); err != nil {
+		return nil, fmt.Errorf("failed to execute set to validated: %w", err)
+	}
+
+	return &types.MsgSetPermissionVPToValidatedResponse{}, nil
+}
