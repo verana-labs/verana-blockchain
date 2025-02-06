@@ -23,6 +23,7 @@ service Msg {
   rpc SetPermissionVPToValidated(MsgSetPermissionVPToValidated) returns (MsgSetPermissionVPToValidatedResponse);
   rpc RequestPermissionVPTermination(MsgRequestPermissionVPTermination) returns (MsgRequestPermissionVPTerminationResponse);
   rpc ConfirmPermissionVPTermination(MsgConfirmPermissionVPTermination) returns (MsgConfirmPermissionVPTerminationResponse);
+  rpc CancelPermissionVPLastRequest(MsgCancelPermissionVPLastRequest) returns (MsgCancelPermissionVPLastRequestResponse);
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
@@ -110,3 +111,12 @@ message MsgConfirmPermissionVPTermination {
 }
 
 message MsgConfirmPermissionVPTerminationResponse {}
+
+message MsgCancelPermissionVPLastRequest {
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint64 id = 2;  // Permission ID
+}
+
+message MsgCancelPermissionVPLastRequestResponse {}

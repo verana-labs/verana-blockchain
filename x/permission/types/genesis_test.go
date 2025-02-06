@@ -19,12 +19,23 @@ func TestGenesisState_Validate(t *testing.T) {
 			valid:    true,
 		},
 		{
-			desc:     "valid genesis state",
+			desc: "valid genesis state",
 			genState: &types.GenesisState{
-
+				Params: types.Params{
+					ValidationTermRequestedTimeoutDays: 7,
+				},
 				// this line is used by starport scaffolding # types/genesis/validField
 			},
 			valid: true,
+		},
+		{
+			desc: "invalid params",
+			genState: &types.GenesisState{
+				Params: types.Params{
+					ValidationTermRequestedTimeoutDays: 0, // Invalid - must be positive
+				},
+			},
+			valid: false,
 		},
 		// this line is used by starport scaffolding # types/genesis/testcase
 	}

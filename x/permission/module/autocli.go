@@ -143,6 +143,17 @@ For active VPs, only the grantee can request termination unless it's a HOLDER ty
 						},
 					},
 				},
+				{
+					RpcMethod: "CancelPermissionVPLastRequest",
+					Use:       "cancel-permission-vp-request [id]",
+					Short:     "Cancel a pending permission VP request",
+					Long:      "Cancel a pending permission VP request. Can only be executed by the permission grantee and only when the permission is in PENDING state.",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "id",
+						},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},

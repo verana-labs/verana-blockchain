@@ -126,3 +126,18 @@ func (msg *MsgConfirmPermissionVPTermination) ValidateBasic() error {
 
 	return nil
 }
+
+// ValidateBasic for MsgConfirmPermissionVPTermination
+func (msg *MsgCancelPermissionVPLastRequest) ValidateBasic() error {
+	// Validate creator address
+	if _, err := sdk.AccAddressFromBech32(msg.Creator); err != nil {
+		return fmt.Errorf("invalid creator address: %w", err)
+	}
+
+	// Validate permission ID
+	if msg.Id == 0 {
+		return fmt.Errorf("permission ID cannot be 0")
+	}
+
+	return nil
+}

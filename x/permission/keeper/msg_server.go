@@ -352,3 +352,72 @@ func (ms msgServer) executeConfirmPermissionVPTermination(ctx sdk.Context, appli
 	// Persist changes
 	return ms.Keeper.UpdatePermission(ctx, applicantPerm)
 }
+
+func (ms msgServer) CancelPermissionVPLastRequest(goCtx context.Context, msg *types.MsgCancelPermissionVPLastRequest) (*types.MsgCancelPermissionVPLastRequestResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Load applicant permission
+	applicantPerm, err := ms.Keeper.GetPermission(ctx, msg.Id)
+	if err != nil {
+		return nil, fmt.Errorf("permission not found: %w", err)
+	}
+
+	// Check if creator is the grantee
+	if applicantPerm.Grantee != msg.Creator {
+		return nil, fmt.Errorf("creator is not the permission grantee")
+	}
+
+	// Check permission state
+	if applicantPerm.VpState != types.ValidationState_VALIDATION_STATE_PENDING {
+		return nil, fmt.Errorf("permission must be in PENDING state")
+	}
+
+	// [MOD-PERM-MSG-6-3] Execution
+	if err := ms.executeCancelPermissionVPLastRequest(ctx, applicantPerm); err != nil {
+		return nil, fmt.Errorf("failed to execute VP cancellation: %w", err)
+	}
+
+	return &types.MsgCancelPermissionVPLastRequestResponse{}, nil
+}
+
+func (ms msgServer) executeCancelPermissionVPLastRequest(ctx sdk.Context, perm types.Permission) error {
+	now := ctx.BlockTime()
+
+	// Update basic fields
+	perm.Modified = &now
+	perm.VpLastStateChange = &now
+
+	// Set state based on vp_exp
+	if perm.VpExp == nil {
+		perm.VpState = types.ValidationState_VALIDATION_STATE_TERMINATED
+	} else {
+		perm.VpState = types.ValidationState_VALIDATION_STATE_VALIDATED
+	}
+
+	// Handle current fees if any
+	if perm.VpCurrentFees > 0 {
+		// TODO: After bank module integration
+		// Transfer fees back from escrow
+		// if err := ms.bankKeeper.SendCoinsFromModuleToAccount(
+		//     ctx,
+		//     types.ModuleName,
+		//     sdk.AccAddress(perm.Grantee),
+		//     sdk.NewCoins(sdk.NewCoin(ms.Keeper.GetParams(ctx).FeeDenom, sdk.NewInt(int64(perm.VpCurrentFees)))),
+		// ); err != nil {
+		//     return fmt.Errorf("failed to refund fees: %w", err)
+		// }
+		perm.VpCurrentFees = 0
+	}
+
+	// Handle current deposit if any
+	if perm.VpCurrentDeposit > 0 {
+		// TODO: After trust deposit module integration
+		// if err := ms.trustDepositKeeper.DecreaseTrustDeposit(ctx, perm.Grantee, perm.VpCurrentDeposit); err != nil {
+		//     return fmt.Errorf("failed to decrease trust deposit: %w", err)
+		// }
+		perm.VpCurrentDeposit = 0
+	}
+
+	// Persist changes
+	return ms.Keeper.UpdatePermission(ctx, perm)
+}
