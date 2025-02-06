@@ -24,6 +24,7 @@ const (
 	Msg_RenewPermissionVP_FullMethodName              = "/veranablockchain.permission.Msg/RenewPermissionVP"
 	Msg_SetPermissionVPToValidated_FullMethodName     = "/veranablockchain.permission.Msg/SetPermissionVPToValidated"
 	Msg_RequestPermissionVPTermination_FullMethodName = "/veranablockchain.permission.Msg/RequestPermissionVPTermination"
+	Msg_ConfirmPermissionVPTermination_FullMethodName = "/veranablockchain.permission.Msg/ConfirmPermissionVPTermination"
 )
 
 // MsgClient is the client API for Msg service.
@@ -37,6 +38,7 @@ type MsgClient interface {
 	RenewPermissionVP(ctx context.Context, in *MsgRenewPermissionVP, opts ...grpc.CallOption) (*MsgRenewPermissionVPResponse, error)
 	SetPermissionVPToValidated(ctx context.Context, in *MsgSetPermissionVPToValidated, opts ...grpc.CallOption) (*MsgSetPermissionVPToValidatedResponse, error)
 	RequestPermissionVPTermination(ctx context.Context, in *MsgRequestPermissionVPTermination, opts ...grpc.CallOption) (*MsgRequestPermissionVPTerminationResponse, error)
+	ConfirmPermissionVPTermination(ctx context.Context, in *MsgConfirmPermissionVPTermination, opts ...grpc.CallOption) (*MsgConfirmPermissionVPTerminationResponse, error)
 }
 
 type msgClient struct {
@@ -92,6 +94,15 @@ func (c *msgClient) RequestPermissionVPTermination(ctx context.Context, in *MsgR
 	return out, nil
 }
 
+func (c *msgClient) ConfirmPermissionVPTermination(ctx context.Context, in *MsgConfirmPermissionVPTermination, opts ...grpc.CallOption) (*MsgConfirmPermissionVPTerminationResponse, error) {
+	out := new(MsgConfirmPermissionVPTerminationResponse)
+	err := c.cc.Invoke(ctx, Msg_ConfirmPermissionVPTermination_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
@@ -103,6 +114,7 @@ type MsgServer interface {
 	RenewPermissionVP(context.Context, *MsgRenewPermissionVP) (*MsgRenewPermissionVPResponse, error)
 	SetPermissionVPToValidated(context.Context, *MsgSetPermissionVPToValidated) (*MsgSetPermissionVPToValidatedResponse, error)
 	RequestPermissionVPTermination(context.Context, *MsgRequestPermissionVPTermination) (*MsgRequestPermissionVPTerminationResponse, error)
+	ConfirmPermissionVPTermination(context.Context, *MsgConfirmPermissionVPTermination) (*MsgConfirmPermissionVPTerminationResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -124,6 +136,9 @@ func (UnimplementedMsgServer) SetPermissionVPToValidated(context.Context, *MsgSe
 }
 func (UnimplementedMsgServer) RequestPermissionVPTermination(context.Context, *MsgRequestPermissionVPTermination) (*MsgRequestPermissionVPTerminationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RequestPermissionVPTermination not implemented")
+}
+func (UnimplementedMsgServer) ConfirmPermissionVPTermination(context.Context, *MsgConfirmPermissionVPTermination) (*MsgConfirmPermissionVPTerminationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ConfirmPermissionVPTermination not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -228,6 +243,24 @@ func _Msg_RequestPermissionVPTermination_Handler(srv interface{}, ctx context.Co
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_ConfirmPermissionVPTermination_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgConfirmPermissionVPTermination)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).ConfirmPermissionVPTermination(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_ConfirmPermissionVPTermination_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).ConfirmPermissionVPTermination(ctx, req.(*MsgConfirmPermissionVPTermination))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -254,6 +287,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RequestPermissionVPTermination",
 			Handler:    _Msg_RequestPermissionVPTermination_Handler,
+		},
+		{
+			MethodName: "ConfirmPermissionVPTermination",
+			Handler:    _Msg_ConfirmPermissionVPTermination_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

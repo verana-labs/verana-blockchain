@@ -97,8 +97,23 @@ func (msg *MsgSetPermissionVPToValidated) ValidateBasic() error {
 	return nil
 }
 
-// ValidateBasic performs stateless validation
+// ValidateBasic for MsgRequestPermissionVPTermination
 func (msg *MsgRequestPermissionVPTermination) ValidateBasic() error {
+	// Validate creator address
+	if _, err := sdk.AccAddressFromBech32(msg.Creator); err != nil {
+		return fmt.Errorf("invalid creator address: %w", err)
+	}
+
+	// Validate permission ID
+	if msg.Id == 0 {
+		return fmt.Errorf("permission ID cannot be 0")
+	}
+
+	return nil
+}
+
+// ValidateBasic for MsgConfirmPermissionVPTermination
+func (msg *MsgConfirmPermissionVPTermination) ValidateBasic() error {
 	// Validate creator address
 	if _, err := sdk.AccAddressFromBech32(msg.Creator); err != nil {
 		return fmt.Errorf("invalid creator address: %w", err)

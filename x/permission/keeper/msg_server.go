@@ -276,3 +276,79 @@ func (ms msgServer) handleTerminationDeposits(ctx sdk.Context, perm *types.Permi
 
 	return nil
 }
+
+func (ms msgServer) ConfirmPermissionVPTermination(goCtx context.Context, msg *types.MsgConfirmPermissionVPTermination) (*types.MsgConfirmPermissionVPTerminationResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	now := ctx.BlockTime()
+
+	// Load applicant permission
+	applicantPerm, err := ms.Keeper.GetPermission(ctx, msg.Id)
+	if err != nil {
+		return nil, fmt.Errorf("permission not found: %w", err)
+	}
+
+	// Check permission state
+	if applicantPerm.VpState != types.ValidationState_VALIDATION_STATE_TERMINATION_REQUESTED {
+		return nil, fmt.Errorf("permission must be in TERMINATION_REQUESTED state")
+	}
+
+	// [MOD-PERM-MSG-5-2-2] Permission checks
+	validatorPerm, err := ms.Keeper.GetPermission(ctx, applicantPerm.ValidatorPermId)
+	if err != nil {
+		return nil, fmt.Errorf("validator permission not found: %w", err)
+	}
+
+	// Calculate timeout
+	termRequestTimeout := applicantPerm.VpTermRequested.AddDate(0, 0, int(ms.Keeper.GetParams(ctx).ValidationTermRequestedTimeoutDays))
+	timeoutReached := now.After(termRequestTimeout)
+
+	// Check authorization
+	if !timeoutReached {
+		// Before timeout: only validator can confirm
+		if msg.Creator != validatorPerm.Grantee {
+			return nil, fmt.Errorf("only validator can confirm termination before timeout")
+		}
+	} else {
+		// After timeout: either validator or applicant can confirm
+		if msg.Creator != validatorPerm.Grantee && msg.Creator != applicantPerm.Grantee {
+			return nil, fmt.Errorf("only validator or applicant can confirm termination after timeout")
+		}
+	}
+
+	// [MOD-PERM-MSG-5-3] Execution
+	if err := ms.executeConfirmPermissionVPTermination(ctx, applicantPerm, validatorPerm, msg.Creator, now); err != nil {
+		return nil, fmt.Errorf("failed to execute termination confirmation: %w", err)
+	}
+
+	return &types.MsgConfirmPermissionVPTerminationResponse{}, nil
+}
+
+func (ms msgServer) executeConfirmPermissionVPTermination(ctx sdk.Context, applicantPerm types.Permission, validatorPerm types.Permission, confirmer string, now time.Time) error {
+	// Update basic fields
+	applicantPerm.Modified = &now
+	applicantPerm.VpState = types.ValidationState_VALIDATION_STATE_TERMINATED
+	applicantPerm.VpLastStateChange = &now
+	applicantPerm.Terminated = &now
+	applicantPerm.TerminatedBy = confirmer
+
+	// Handle deposits based on who confirmed
+	if applicantPerm.Deposit > 0 {
+		// TODO: After trust deposit module implementation
+		// if err := ms.trustDepositKeeper.DecreaseTrustDeposit(ctx, applicantPerm.Grantee, applicantPerm.Deposit); err != nil {
+		//     return fmt.Errorf("failed to decrease applicant trust deposit: %w", err)
+		// }
+		applicantPerm.Deposit = 0
+	}
+
+	// Only return validator deposit if validator confirmed
+	if confirmer == validatorPerm.Grantee && applicantPerm.VpValidatorDeposit > 0 {
+		// TODO: After trust deposit module implementation
+		// if err := ms.trustDepositKeeper.DecreaseTrustDeposit(ctx, validatorPerm.Grantee, applicantPerm.ValidatorDeposit); err != nil {
+		//     return fmt.Errorf("failed to decrease validator trust deposit: %w", err)
+		// }
+		applicantPerm.VpValidatorDeposit = 0
+	}
+
+	// Persist changes
+	return ms.Keeper.UpdatePermission(ctx, applicantPerm)
+}
