@@ -5,6 +5,7 @@ import (
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/verana-labs/verana-blockchain/x/permission/types"
+	"time"
 )
 
 type msgServer struct {
@@ -185,4 +186,93 @@ func (ms msgServer) SetPermissionVPToValidated(goCtx context.Context, msg *types
 	}
 
 	return &types.MsgSetPermissionVPToValidatedResponse{}, nil
+}
+
+func (ms msgServer) RequestPermissionVPTermination(goCtx context.Context, msg *types.MsgRequestPermissionVPTermination) (*types.MsgRequestPermissionVPTerminationResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	now := ctx.BlockTime()
+
+	// [MOD-PERM-MSG-4-2-1] Basic checks
+	applicantPerm, err := ms.Keeper.GetPermission(ctx, msg.Id)
+	if err != nil {
+		return nil, fmt.Errorf("permission not found: %w", err)
+	}
+
+	if applicantPerm.VpState != types.ValidationState_VALIDATION_STATE_VALIDATED {
+		return nil, fmt.Errorf("permission must be in VALIDATED state")
+	}
+
+	// Check termination authorization
+	if applicantPerm.VpExp != nil && now.After(*applicantPerm.VpExp) {
+		// VP has expired - either party can terminate
+		validatorPerm, err := ms.Keeper.GetPermission(ctx, applicantPerm.ValidatorPermId)
+		if err != nil {
+			return nil, fmt.Errorf("validator permission not found: %w", err)
+		}
+		if msg.Creator != applicantPerm.Grantee && msg.Creator != validatorPerm.Grantee {
+			return nil, fmt.Errorf("only grantee or validator can terminate expired VP")
+		}
+	} else {
+		// VP not expired - only grantee can terminate
+		if msg.Creator != applicantPerm.Grantee {
+			return nil, fmt.Errorf("only grantee can terminate active VP")
+		}
+	}
+
+	// [MOD-PERM-MSG-4-3] Execution
+	err = ms.executeRequestPermissionVPTermination(ctx, applicantPerm, msg.Creator, now)
+	if err != nil {
+		return nil, fmt.Errorf("failed to execute termination request: %w", err)
+	}
+
+	return &types.MsgRequestPermissionVPTerminationResponse{}, nil
+}
+
+func (ms msgServer) executeRequestPermissionVPTermination(ctx sdk.Context, perm types.Permission, terminator string, now time.Time) error {
+	// Update basic fields
+	perm.Modified = &now
+	perm.VpTermRequested = &now
+	perm.VpLastStateChange = &now
+
+	// Set state based on conditions
+	if perm.Type != types.PermissionType_PERMISSION_TYPE_HOLDER && // not HOLDER
+		(perm.VpExp != nil && now.After(*perm.VpExp)) { // expired
+		// Immediate termination
+		perm.VpState = types.ValidationState_VALIDATION_STATE_TERMINATED
+		perm.Terminated = &now
+		perm.TerminatedBy = terminator
+
+		// Handle deposits
+		if err := ms.handleTerminationDeposits(ctx, &perm); err != nil {
+			return fmt.Errorf("failed to handle termination deposits: %w", err)
+		}
+	} else {
+		// Request termination
+		perm.VpState = types.ValidationState_VALIDATION_STATE_TERMINATION_REQUESTED
+	}
+
+	return ms.Keeper.UpdatePermission(ctx, perm)
+}
+
+func (ms msgServer) handleTerminationDeposits(ctx sdk.Context, perm *types.Permission) error {
+	// TODO: After trust deposit module is ready
+	// if perm.Deposit > 0 {
+	//     if err := ms.trustDepositKeeper.DecreaseTrustDeposit(ctx, perm.Grantee, perm.Deposit); err != nil {
+	//         return err
+	//     }
+	//     perm.Deposit = 0
+	// }
+	//
+	// if perm.ValidatorDeposit > 0 {
+	//     validatorPerm, err := ms.Keeper.GetPermission(ctx, perm.ValidatorPermId)
+	//     if err != nil {
+	//         return err
+	//     }
+	//     if err := ms.trustDepositKeeper.DecreaseTrustDeposit(ctx, validatorPerm.Grantee, perm.ValidatorDeposit); err != nil {
+	//         return err
+	//     }
+	//     perm.ValidatorDeposit = 0
+	// }
+
+	return nil
 }

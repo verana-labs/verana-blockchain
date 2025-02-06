@@ -117,6 +117,20 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 						},
 					},
 				},
+				{
+					RpcMethod: "RequestPermissionVPTermination",
+					Use:       "request-permission-vp-termination [id]",
+					Short:     "Request termination of a permission validation process",
+					Long: `Request termination of a permission validation process:
+- id: ID of the permission validation process to terminate
+Note: For expired VPs, either the grantee or validator can request termination.
+For active VPs, only the grantee can request termination unless it's a HOLDER type.`,
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "id",
+						},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},

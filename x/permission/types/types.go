@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func (msg MsgStartPermissionVP) ValidateBasic() error {
+func (msg *MsgStartPermissionVP) ValidateBasic() error {
 	if _, err := sdk.AccAddressFromBech32(msg.Creator); err != nil {
 		return fmt.Errorf("invalid creator address: %w", err)
 	}
@@ -47,7 +47,7 @@ func isValidDID(did string) bool {
 	return match
 }
 
-func (msg MsgRenewPermissionVP) ValidateBasic() error {
+func (msg *MsgRenewPermissionVP) ValidateBasic() error {
 	// Validate creator address
 	if _, err := sdk.AccAddressFromBech32(msg.Creator); err != nil {
 		return fmt.Errorf("invalid creator address: %w", err)
@@ -62,7 +62,7 @@ func (msg MsgRenewPermissionVP) ValidateBasic() error {
 }
 
 // ValidateBasic for MsgSetPermissionVPToValidated
-func (msg MsgSetPermissionVPToValidated) ValidateBasic() error {
+func (msg *MsgSetPermissionVPToValidated) ValidateBasic() error {
 	// Validate creator address
 	if _, err := sdk.AccAddressFromBech32(msg.Creator); err != nil {
 		return fmt.Errorf("invalid creator address: %w", err)
@@ -92,6 +92,21 @@ func (msg MsgSetPermissionVPToValidated) ValidateBasic() error {
 	// Validate effective until if provided
 	if msg.EffectiveUntil != nil && msg.EffectiveUntil.Before(time.Now()) {
 		return fmt.Errorf("effective until must be in the future")
+	}
+
+	return nil
+}
+
+// ValidateBasic performs stateless validation
+func (msg *MsgRequestPermissionVPTermination) ValidateBasic() error {
+	// Validate creator address
+	if _, err := sdk.AccAddressFromBech32(msg.Creator); err != nil {
+		return fmt.Errorf("invalid creator address: %w", err)
+	}
+
+	// Validate permission ID
+	if msg.Id == 0 {
+		return fmt.Errorf("permission ID cannot be 0")
 	}
 
 	return nil
