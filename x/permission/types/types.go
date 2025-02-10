@@ -141,3 +141,55 @@ func (msg *MsgCancelPermissionVPLastRequest) ValidateBasic() error {
 
 	return nil
 }
+
+func (msg *MsgCreateRootPermission) ValidateBasic() error {
+	// Validate creator address
+	if _, err := sdk.AccAddressFromBech32(msg.Creator); err != nil {
+		return fmt.Errorf("invalid creator address: %w", err)
+	}
+
+	// Validate schema ID
+	if msg.SchemaId == 0 {
+		return fmt.Errorf("schema ID cannot be 0")
+	}
+
+	// Validate DID
+	if msg.Did == "" {
+		return fmt.Errorf("DID is required")
+	}
+	if !isValidDID(msg.Did) {
+		return fmt.Errorf("invalid DID format")
+	}
+
+	// Validate fees are non-negative
+	if msg.ValidationFees < 0 {
+		return fmt.Errorf("validation fees cannot be negative")
+	}
+	if msg.IssuanceFees < 0 {
+		return fmt.Errorf("issuance fees cannot be negative")
+	}
+	if msg.VerificationFees < 0 {
+		return fmt.Errorf("verification fees cannot be negative")
+	}
+
+	// Validate country code if present
+	if msg.Country != "" && !isValidCountryCode(msg.Country) {
+		return fmt.Errorf("invalid country code format")
+	}
+
+	// Validate effective dates if present
+	now := time.Now()
+	if msg.EffectiveFrom != nil {
+		if !msg.EffectiveFrom.After(now) {
+			return fmt.Errorf("effective_from must be in the future")
+		}
+
+		if msg.EffectiveUntil != nil {
+			if !msg.EffectiveUntil.After(*msg.EffectiveFrom) {
+				return fmt.Errorf("effective_until must be after effective_from")
+			}
+		}
+	}
+
+	return nil
+}

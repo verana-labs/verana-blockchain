@@ -42,6 +42,7 @@ func PermissionKeeper(t testing.TB) (keeper.Keeper, *MockCredentialSchemaKeeper,
 		log.NewNopLogger(),
 		authority.String(),
 		credentialSchemaKeeper,
+		NewMockTrustRegistryKeeper(),
 	)
 
 	ctx := sdk.NewContext(stateStore, cmtproto.Header{}, false, log.NewNopLogger())

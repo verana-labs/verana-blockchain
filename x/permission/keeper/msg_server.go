@@ -421,3 +421,79 @@ func (ms msgServer) executeCancelPermissionVPLastRequest(ctx sdk.Context, perm t
 	// Persist changes
 	return ms.Keeper.UpdatePermission(ctx, perm)
 }
+
+func (ms msgServer) CreateRootPermission(goCtx context.Context, msg *types.MsgCreateRootPermission) (*types.MsgCreateRootPermissionResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	now := ctx.BlockTime()
+
+	// Check credential schema exists
+	_, err := ms.credentialSchemaKeeper.GetCredentialSchemaById(ctx, msg.SchemaId)
+	if err != nil {
+		return nil, fmt.Errorf("credential schema not found: %w", err)
+	}
+
+	// [MOD-PERM-MSG-7-2-2] Permission checks
+	if err := ms.validateCreateRootPermissionAuthority(ctx, msg); err != nil {
+		return nil, err
+	}
+
+	// [MOD-PERM-MSG-7-3] Execution
+	id, err := ms.executeCreateRootPermission(ctx, msg, now)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create root permission: %w", err)
+	}
+
+	return &types.MsgCreateRootPermissionResponse{
+		Id: id,
+	}, nil
+}
+
+func (ms msgServer) validateCreateRootPermissionAuthority(ctx sdk.Context, msg *types.MsgCreateRootPermission) error {
+	// Get credential schema
+	cs, err := ms.credentialSchemaKeeper.GetCredentialSchemaById(ctx, msg.SchemaId)
+	if err != nil {
+		return fmt.Errorf("credential schema not found: %w", err)
+	}
+
+	// Load trust registry
+	tr, err := ms.trustRegistryKeeper.GetTrustRegistry(ctx, cs.TrId)
+	if err != nil {
+		return fmt.Errorf("trust registry not found: %w", err)
+	}
+
+	// Check if creator is the controller
+	if tr.Controller != msg.Creator {
+		return fmt.Errorf("creator is not the trust registry controller")
+	}
+
+	return nil
+}
+
+func (ms msgServer) executeCreateRootPermission(ctx sdk.Context, msg *types.MsgCreateRootPermission, now time.Time) (uint64, error) {
+	// Create new permission
+	perm := types.Permission{
+		SchemaId:         msg.SchemaId,
+		Type:             types.PermissionType_PERMISSION_TYPE_TRUST_REGISTRY,
+		Did:              msg.Did,
+		Grantee:          msg.Creator,
+		Created:          &now,
+		CreatedBy:        msg.Creator,
+		Modified:         &now,
+		EffectiveFrom:    msg.EffectiveFrom,
+		EffectiveUntil:   msg.EffectiveUntil,
+		Country:          msg.Country,
+		ValidationFees:   msg.ValidationFees,
+		IssuanceFees:     msg.IssuanceFees,
+		VerificationFees: msg.VerificationFees,
+		Deposit:          0,
+		VpState:          types.ValidationState_VALIDATION_STATE_VALIDATED,
+	}
+
+	// Store the permission
+	id, err := ms.Keeper.CreatePermission(ctx, perm)
+	if err != nil {
+		return 0, fmt.Errorf("failed to create permission: %w", err)
+	}
+
+	return id, nil
+}
