@@ -497,3 +497,105 @@ func (ms msgServer) executeCreateRootPermission(ctx sdk.Context, msg *types.MsgC
 
 	return id, nil
 }
+
+func (ms msgServer) ExtendPermission(goCtx context.Context, msg *types.MsgExtendPermission) (*types.MsgExtendPermissionResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	now := ctx.BlockTime()
+
+	// [MOD-PERM-MSG-8-2-1] Basic checks
+	applicantPerm, err := ms.Keeper.GetPermission(ctx, msg.Id)
+	if err != nil {
+		return nil, fmt.Errorf("permission not found: %w", err)
+	}
+
+	// Check effective_until is after current effective_until
+	if applicantPerm.EffectiveUntil != nil && !msg.EffectiveUntil.After(*applicantPerm.EffectiveUntil) {
+		return nil, fmt.Errorf("effective_until must be after current effective_until")
+	}
+
+	// Check effective_until is before or equal to vp_exp
+	if applicantPerm.VpExp != nil && msg.EffectiveUntil.After(*applicantPerm.VpExp) {
+		return nil, fmt.Errorf("effective_until cannot be after validation expiration")
+	}
+
+	// [MOD-PERM-MSG-8-2-2] Validator permission checks
+	if err := ms.validateExtendPermissionAuthority(ctx, msg.Creator, applicantPerm); err != nil {
+		return nil, err
+	}
+
+	// [MOD-PERM-MSG-8-3] Execution
+	if err := ms.executeExtendPermission(ctx, applicantPerm, msg.Creator, msg.EffectiveUntil, now); err != nil {
+		return nil, fmt.Errorf("failed to extend permission: %w", err)
+	}
+
+	return &types.MsgExtendPermissionResponse{}, nil
+}
+
+func (ms msgServer) validateExtendPermissionAuthority(ctx sdk.Context, creator string, perm types.Permission) error {
+	if perm.ValidatorPermId == 0 {
+		// For TRUST_REGISTRY type, creator must be the grantee
+		if perm.Type == types.PermissionType_PERMISSION_TYPE_TRUST_REGISTRY {
+			if perm.Grantee != creator {
+				return fmt.Errorf("creator is not the permission grantee")
+			}
+		} else {
+			return fmt.Errorf("invalid permission type for extension")
+		}
+	} else {
+		// For other types, creator must be the validator
+		validatorPerm, err := ms.Keeper.GetPermission(ctx, perm.ValidatorPermId)
+		if err != nil {
+			return fmt.Errorf("validator permission not found: %w", err)
+		}
+		if validatorPerm.Grantee != creator {
+			return fmt.Errorf("creator is not the validator")
+		}
+	}
+	return nil
+}
+
+func (ms msgServer) executeExtendPermission(ctx sdk.Context, perm types.Permission, creator string, effectiveUntil *time.Time, now time.Time) error {
+	perm.EffectiveUntil = effectiveUntil
+	perm.Extended = &now
+	perm.Modified = &now
+	perm.ExtendedBy = creator
+
+	return ms.Keeper.UpdatePermission(ctx, perm)
+}
+
+// RevokePermission handles the MsgRevokePermission message
+func (ms msgServer) RevokePermission(goCtx context.Context, msg *types.MsgRevokePermission) (*types.MsgRevokePermissionResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	now := ctx.BlockTime()
+
+	// [MOD-PERM-MSG-9-2-1] Basic checks
+	applicantPerm, err := ms.Keeper.GetPermission(ctx, msg.Id)
+	if err != nil {
+		return nil, fmt.Errorf("permission not found: %w", err)
+	}
+
+	// [MOD-PERM-MSG-9-2-2] Validator permission checks
+	validatorPerm, err := ms.Keeper.GetPermission(ctx, applicantPerm.ValidatorPermId)
+	if err != nil {
+		return nil, fmt.Errorf("validator permission not found: %w", err)
+	}
+
+	if validatorPerm.Grantee != msg.Creator {
+		return nil, fmt.Errorf("creator is not the validator")
+	}
+
+	// [MOD-PERM-MSG-9-3] Execution
+	if err := ms.executeRevokePermission(ctx, applicantPerm, msg.Creator, now); err != nil {
+		return nil, fmt.Errorf("failed to revoke permission: %w", err)
+	}
+
+	return &types.MsgRevokePermissionResponse{}, nil
+}
+
+func (ms msgServer) executeRevokePermission(ctx sdk.Context, perm types.Permission, creator string, now time.Time) error {
+	perm.Revoked = &now
+	perm.Modified = &now
+	perm.RevokedBy = creator
+
+	return ms.Keeper.UpdatePermission(ctx, perm)
+}

@@ -154,6 +154,71 @@ For active VPs, only the grantee can request termination unless it's a HOLDER ty
 						},
 					},
 				},
+				{
+					RpcMethod: "CreateRootPermission",
+					Use:       "create-root-permission [schema-id] [did] [validation-fees] [issuance-fees] [verification-fees]",
+					Short:     "Create a new root permission for a credential schema",
+					Long:      "Create a new root permission for a credential schema. Can only be executed by the trust registry controller.",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "schema_id",
+						},
+						{
+							ProtoField: "did",
+						},
+						{
+							ProtoField: "validation_fees",
+						},
+						{
+							ProtoField: "issuance_fees",
+						},
+						{
+							ProtoField: "verification_fees",
+						},
+					},
+					FlagOptions: map[string]*autocliv1.FlagOptions{
+						"country": {
+							Name:         "country",
+							DefaultValue: "",
+							Usage:        "Optional country code (ISO 3166-1 alpha-2)",
+						},
+						"effective_from": {
+							Name:         "effective-from",
+							DefaultValue: "",
+							Usage:        "Optional timestamp (RFC3339) from when the permission is effective",
+						},
+						"effective_until": {
+							Name:         "effective-until",
+							DefaultValue: "",
+							Usage:        "Optional timestamp (RFC3339) until when the permission is effective",
+						},
+					},
+				},
+				{
+					RpcMethod: "ExtendPermission",
+					Use:       "extend-permission [id] [effective-until]",
+					Short:     "Extend a permission's effective duration",
+					Long:      "Extend a permission's effective duration. Can only be executed by the validator of the permission.",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "id",
+						},
+						{
+							ProtoField: "effective_until",
+						},
+					},
+				},
+				{
+					RpcMethod: "RevokePermission",
+					Use:       "revoke-permission [id]",
+					Short:     "Revoke a permission",
+					Long:      "Revoke a permission. Can only be executed by the validator of the permission.",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "id",
+						},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},

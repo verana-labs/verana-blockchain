@@ -27,6 +27,8 @@ const (
 	Msg_ConfirmPermissionVPTermination_FullMethodName = "/veranablockchain.permission.Msg/ConfirmPermissionVPTermination"
 	Msg_CancelPermissionVPLastRequest_FullMethodName  = "/veranablockchain.permission.Msg/CancelPermissionVPLastRequest"
 	Msg_CreateRootPermission_FullMethodName           = "/veranablockchain.permission.Msg/CreateRootPermission"
+	Msg_ExtendPermission_FullMethodName               = "/veranablockchain.permission.Msg/ExtendPermission"
+	Msg_RevokePermission_FullMethodName               = "/veranablockchain.permission.Msg/RevokePermission"
 )
 
 // MsgClient is the client API for Msg service.
@@ -43,6 +45,8 @@ type MsgClient interface {
 	ConfirmPermissionVPTermination(ctx context.Context, in *MsgConfirmPermissionVPTermination, opts ...grpc.CallOption) (*MsgConfirmPermissionVPTerminationResponse, error)
 	CancelPermissionVPLastRequest(ctx context.Context, in *MsgCancelPermissionVPLastRequest, opts ...grpc.CallOption) (*MsgCancelPermissionVPLastRequestResponse, error)
 	CreateRootPermission(ctx context.Context, in *MsgCreateRootPermission, opts ...grpc.CallOption) (*MsgCreateRootPermissionResponse, error)
+	ExtendPermission(ctx context.Context, in *MsgExtendPermission, opts ...grpc.CallOption) (*MsgExtendPermissionResponse, error)
+	RevokePermission(ctx context.Context, in *MsgRevokePermission, opts ...grpc.CallOption) (*MsgRevokePermissionResponse, error)
 }
 
 type msgClient struct {
@@ -125,6 +129,24 @@ func (c *msgClient) CreateRootPermission(ctx context.Context, in *MsgCreateRootP
 	return out, nil
 }
 
+func (c *msgClient) ExtendPermission(ctx context.Context, in *MsgExtendPermission, opts ...grpc.CallOption) (*MsgExtendPermissionResponse, error) {
+	out := new(MsgExtendPermissionResponse)
+	err := c.cc.Invoke(ctx, Msg_ExtendPermission_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) RevokePermission(ctx context.Context, in *MsgRevokePermission, opts ...grpc.CallOption) (*MsgRevokePermissionResponse, error) {
+	out := new(MsgRevokePermissionResponse)
+	err := c.cc.Invoke(ctx, Msg_RevokePermission_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
@@ -139,6 +161,8 @@ type MsgServer interface {
 	ConfirmPermissionVPTermination(context.Context, *MsgConfirmPermissionVPTermination) (*MsgConfirmPermissionVPTerminationResponse, error)
 	CancelPermissionVPLastRequest(context.Context, *MsgCancelPermissionVPLastRequest) (*MsgCancelPermissionVPLastRequestResponse, error)
 	CreateRootPermission(context.Context, *MsgCreateRootPermission) (*MsgCreateRootPermissionResponse, error)
+	ExtendPermission(context.Context, *MsgExtendPermission) (*MsgExtendPermissionResponse, error)
+	RevokePermission(context.Context, *MsgRevokePermission) (*MsgRevokePermissionResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -169,6 +193,12 @@ func (UnimplementedMsgServer) CancelPermissionVPLastRequest(context.Context, *Ms
 }
 func (UnimplementedMsgServer) CreateRootPermission(context.Context, *MsgCreateRootPermission) (*MsgCreateRootPermissionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateRootPermission not implemented")
+}
+func (UnimplementedMsgServer) ExtendPermission(context.Context, *MsgExtendPermission) (*MsgExtendPermissionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ExtendPermission not implemented")
+}
+func (UnimplementedMsgServer) RevokePermission(context.Context, *MsgRevokePermission) (*MsgRevokePermissionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RevokePermission not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -327,6 +357,42 @@ func _Msg_CreateRootPermission_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_ExtendPermission_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgExtendPermission)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).ExtendPermission(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_ExtendPermission_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).ExtendPermission(ctx, req.(*MsgExtendPermission))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_RevokePermission_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgRevokePermission)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).RevokePermission(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_RevokePermission_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).RevokePermission(ctx, req.(*MsgRevokePermission))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -365,6 +431,14 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateRootPermission",
 			Handler:    _Msg_CreateRootPermission_Handler,
+		},
+		{
+			MethodName: "ExtendPermission",
+			Handler:    _Msg_ExtendPermission_Handler,
+		},
+		{
+			MethodName: "RevokePermission",
+			Handler:    _Msg_RevokePermission_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

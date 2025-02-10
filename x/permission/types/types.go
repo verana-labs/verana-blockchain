@@ -193,3 +193,36 @@ func (msg *MsgCreateRootPermission) ValidateBasic() error {
 
 	return nil
 }
+
+func (msg *MsgExtendPermission) ValidateBasic() error {
+	// Validate creator address
+	if _, err := sdk.AccAddressFromBech32(msg.Creator); err != nil {
+		return fmt.Errorf("invalid creator address: %w", err)
+	}
+
+	// Validate permission ID
+	if msg.Id == 0 {
+		return fmt.Errorf("permission ID cannot be 0")
+	}
+
+	// Validate effective_until is in the future
+	if msg.EffectiveUntil != nil && !msg.EffectiveUntil.After(time.Now()) {
+		return fmt.Errorf("effective_until must be in the future")
+	}
+
+	return nil
+}
+
+func (msg *MsgRevokePermission) ValidateBasic() error {
+	// Validate creator address
+	if _, err := sdk.AccAddressFromBech32(msg.Creator); err != nil {
+		return fmt.Errorf("invalid creator address: %w", err)
+	}
+
+	// Validate permission ID
+	if msg.Id == 0 {
+		return fmt.Errorf("permission ID cannot be 0")
+	}
+
+	return nil
+}

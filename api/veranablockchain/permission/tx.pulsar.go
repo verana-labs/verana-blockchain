@@ -7693,6 +7693,1733 @@ func (x *fastReflection_MsgCreateRootPermissionResponse) ProtoMethods() *protoif
 	}
 }
 
+var (
+	md_MsgExtendPermission                 protoreflect.MessageDescriptor
+	fd_MsgExtendPermission_creator         protoreflect.FieldDescriptor
+	fd_MsgExtendPermission_id              protoreflect.FieldDescriptor
+	fd_MsgExtendPermission_effective_until protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_veranablockchain_permission_tx_proto_init()
+	md_MsgExtendPermission = File_veranablockchain_permission_tx_proto.Messages().ByName("MsgExtendPermission")
+	fd_MsgExtendPermission_creator = md_MsgExtendPermission.Fields().ByName("creator")
+	fd_MsgExtendPermission_id = md_MsgExtendPermission.Fields().ByName("id")
+	fd_MsgExtendPermission_effective_until = md_MsgExtendPermission.Fields().ByName("effective_until")
+}
+
+var _ protoreflect.Message = (*fastReflection_MsgExtendPermission)(nil)
+
+type fastReflection_MsgExtendPermission MsgExtendPermission
+
+func (x *MsgExtendPermission) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgExtendPermission)(x)
+}
+
+func (x *MsgExtendPermission) slowProtoReflect() protoreflect.Message {
+	mi := &file_veranablockchain_permission_tx_proto_msgTypes[16]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_MsgExtendPermission_messageType fastReflection_MsgExtendPermission_messageType
+var _ protoreflect.MessageType = fastReflection_MsgExtendPermission_messageType{}
+
+type fastReflection_MsgExtendPermission_messageType struct{}
+
+func (x fastReflection_MsgExtendPermission_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgExtendPermission)(nil)
+}
+func (x fastReflection_MsgExtendPermission_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgExtendPermission)
+}
+func (x fastReflection_MsgExtendPermission_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgExtendPermission
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_MsgExtendPermission) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgExtendPermission
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_MsgExtendPermission) Type() protoreflect.MessageType {
+	return _fastReflection_MsgExtendPermission_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_MsgExtendPermission) New() protoreflect.Message {
+	return new(fastReflection_MsgExtendPermission)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_MsgExtendPermission) Interface() protoreflect.ProtoMessage {
+	return (*MsgExtendPermission)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_MsgExtendPermission) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Creator != "" {
+		value := protoreflect.ValueOfString(x.Creator)
+		if !f(fd_MsgExtendPermission_creator, value) {
+			return
+		}
+	}
+	if x.Id != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.Id)
+		if !f(fd_MsgExtendPermission_id, value) {
+			return
+		}
+	}
+	if x.EffectiveUntil != nil {
+		value := protoreflect.ValueOfMessage(x.EffectiveUntil.ProtoReflect())
+		if !f(fd_MsgExtendPermission_effective_until, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_MsgExtendPermission) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "veranablockchain.permission.MsgExtendPermission.creator":
+		return x.Creator != ""
+	case "veranablockchain.permission.MsgExtendPermission.id":
+		return x.Id != uint64(0)
+	case "veranablockchain.permission.MsgExtendPermission.effective_until":
+		return x.EffectiveUntil != nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgExtendPermission"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgExtendPermission does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgExtendPermission) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "veranablockchain.permission.MsgExtendPermission.creator":
+		x.Creator = ""
+	case "veranablockchain.permission.MsgExtendPermission.id":
+		x.Id = uint64(0)
+	case "veranablockchain.permission.MsgExtendPermission.effective_until":
+		x.EffectiveUntil = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgExtendPermission"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgExtendPermission does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_MsgExtendPermission) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "veranablockchain.permission.MsgExtendPermission.creator":
+		value := x.Creator
+		return protoreflect.ValueOfString(value)
+	case "veranablockchain.permission.MsgExtendPermission.id":
+		value := x.Id
+		return protoreflect.ValueOfUint64(value)
+	case "veranablockchain.permission.MsgExtendPermission.effective_until":
+		value := x.EffectiveUntil
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgExtendPermission"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgExtendPermission does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgExtendPermission) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "veranablockchain.permission.MsgExtendPermission.creator":
+		x.Creator = value.Interface().(string)
+	case "veranablockchain.permission.MsgExtendPermission.id":
+		x.Id = value.Uint()
+	case "veranablockchain.permission.MsgExtendPermission.effective_until":
+		x.EffectiveUntil = value.Message().Interface().(*timestamppb.Timestamp)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgExtendPermission"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgExtendPermission does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgExtendPermission) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "veranablockchain.permission.MsgExtendPermission.effective_until":
+		if x.EffectiveUntil == nil {
+			x.EffectiveUntil = new(timestamppb.Timestamp)
+		}
+		return protoreflect.ValueOfMessage(x.EffectiveUntil.ProtoReflect())
+	case "veranablockchain.permission.MsgExtendPermission.creator":
+		panic(fmt.Errorf("field creator of message veranablockchain.permission.MsgExtendPermission is not mutable"))
+	case "veranablockchain.permission.MsgExtendPermission.id":
+		panic(fmt.Errorf("field id of message veranablockchain.permission.MsgExtendPermission is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgExtendPermission"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgExtendPermission does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_MsgExtendPermission) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "veranablockchain.permission.MsgExtendPermission.creator":
+		return protoreflect.ValueOfString("")
+	case "veranablockchain.permission.MsgExtendPermission.id":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "veranablockchain.permission.MsgExtendPermission.effective_until":
+		m := new(timestamppb.Timestamp)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgExtendPermission"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgExtendPermission does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_MsgExtendPermission) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in veranablockchain.permission.MsgExtendPermission", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_MsgExtendPermission) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgExtendPermission) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_MsgExtendPermission) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_MsgExtendPermission) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*MsgExtendPermission)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		l = len(x.Creator)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.Id != 0 {
+			n += 1 + runtime.Sov(uint64(x.Id))
+		}
+		if x.EffectiveUntil != nil {
+			l = options.Size(x.EffectiveUntil)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*MsgExtendPermission)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.EffectiveUntil != nil {
+			encoded, err := options.Marshal(x.EffectiveUntil)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x1a
+		}
+		if x.Id != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Id))
+			i--
+			dAtA[i] = 0x10
+		}
+		if len(x.Creator) > 0 {
+			i -= len(x.Creator)
+			copy(dAtA[i:], x.Creator)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Creator)))
+			i--
+			dAtA[i] = 0xa
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*MsgExtendPermission)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgExtendPermission: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgExtendPermission: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Creator", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Creator = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 2:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+				}
+				x.Id = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Id |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field EffectiveUntil", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.EffectiveUntil == nil {
+					x.EffectiveUntil = &timestamppb.Timestamp{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.EffectiveUntil); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_MsgExtendPermissionResponse protoreflect.MessageDescriptor
+)
+
+func init() {
+	file_veranablockchain_permission_tx_proto_init()
+	md_MsgExtendPermissionResponse = File_veranablockchain_permission_tx_proto.Messages().ByName("MsgExtendPermissionResponse")
+}
+
+var _ protoreflect.Message = (*fastReflection_MsgExtendPermissionResponse)(nil)
+
+type fastReflection_MsgExtendPermissionResponse MsgExtendPermissionResponse
+
+func (x *MsgExtendPermissionResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgExtendPermissionResponse)(x)
+}
+
+func (x *MsgExtendPermissionResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_veranablockchain_permission_tx_proto_msgTypes[17]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_MsgExtendPermissionResponse_messageType fastReflection_MsgExtendPermissionResponse_messageType
+var _ protoreflect.MessageType = fastReflection_MsgExtendPermissionResponse_messageType{}
+
+type fastReflection_MsgExtendPermissionResponse_messageType struct{}
+
+func (x fastReflection_MsgExtendPermissionResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgExtendPermissionResponse)(nil)
+}
+func (x fastReflection_MsgExtendPermissionResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgExtendPermissionResponse)
+}
+func (x fastReflection_MsgExtendPermissionResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgExtendPermissionResponse
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_MsgExtendPermissionResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgExtendPermissionResponse
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_MsgExtendPermissionResponse) Type() protoreflect.MessageType {
+	return _fastReflection_MsgExtendPermissionResponse_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_MsgExtendPermissionResponse) New() protoreflect.Message {
+	return new(fastReflection_MsgExtendPermissionResponse)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_MsgExtendPermissionResponse) Interface() protoreflect.ProtoMessage {
+	return (*MsgExtendPermissionResponse)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_MsgExtendPermissionResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_MsgExtendPermissionResponse) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgExtendPermissionResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgExtendPermissionResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgExtendPermissionResponse) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgExtendPermissionResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgExtendPermissionResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_MsgExtendPermissionResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgExtendPermissionResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgExtendPermissionResponse does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgExtendPermissionResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgExtendPermissionResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgExtendPermissionResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgExtendPermissionResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgExtendPermissionResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgExtendPermissionResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_MsgExtendPermissionResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgExtendPermissionResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgExtendPermissionResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_MsgExtendPermissionResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in veranablockchain.permission.MsgExtendPermissionResponse", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_MsgExtendPermissionResponse) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgExtendPermissionResponse) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_MsgExtendPermissionResponse) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_MsgExtendPermissionResponse) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*MsgExtendPermissionResponse)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*MsgExtendPermissionResponse)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*MsgExtendPermissionResponse)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgExtendPermissionResponse: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgExtendPermissionResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_MsgRevokePermission         protoreflect.MessageDescriptor
+	fd_MsgRevokePermission_creator protoreflect.FieldDescriptor
+	fd_MsgRevokePermission_id      protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_veranablockchain_permission_tx_proto_init()
+	md_MsgRevokePermission = File_veranablockchain_permission_tx_proto.Messages().ByName("MsgRevokePermission")
+	fd_MsgRevokePermission_creator = md_MsgRevokePermission.Fields().ByName("creator")
+	fd_MsgRevokePermission_id = md_MsgRevokePermission.Fields().ByName("id")
+}
+
+var _ protoreflect.Message = (*fastReflection_MsgRevokePermission)(nil)
+
+type fastReflection_MsgRevokePermission MsgRevokePermission
+
+func (x *MsgRevokePermission) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgRevokePermission)(x)
+}
+
+func (x *MsgRevokePermission) slowProtoReflect() protoreflect.Message {
+	mi := &file_veranablockchain_permission_tx_proto_msgTypes[18]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_MsgRevokePermission_messageType fastReflection_MsgRevokePermission_messageType
+var _ protoreflect.MessageType = fastReflection_MsgRevokePermission_messageType{}
+
+type fastReflection_MsgRevokePermission_messageType struct{}
+
+func (x fastReflection_MsgRevokePermission_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgRevokePermission)(nil)
+}
+func (x fastReflection_MsgRevokePermission_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgRevokePermission)
+}
+func (x fastReflection_MsgRevokePermission_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgRevokePermission
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_MsgRevokePermission) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgRevokePermission
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_MsgRevokePermission) Type() protoreflect.MessageType {
+	return _fastReflection_MsgRevokePermission_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_MsgRevokePermission) New() protoreflect.Message {
+	return new(fastReflection_MsgRevokePermission)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_MsgRevokePermission) Interface() protoreflect.ProtoMessage {
+	return (*MsgRevokePermission)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_MsgRevokePermission) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Creator != "" {
+		value := protoreflect.ValueOfString(x.Creator)
+		if !f(fd_MsgRevokePermission_creator, value) {
+			return
+		}
+	}
+	if x.Id != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.Id)
+		if !f(fd_MsgRevokePermission_id, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_MsgRevokePermission) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "veranablockchain.permission.MsgRevokePermission.creator":
+		return x.Creator != ""
+	case "veranablockchain.permission.MsgRevokePermission.id":
+		return x.Id != uint64(0)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgRevokePermission"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgRevokePermission does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgRevokePermission) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "veranablockchain.permission.MsgRevokePermission.creator":
+		x.Creator = ""
+	case "veranablockchain.permission.MsgRevokePermission.id":
+		x.Id = uint64(0)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgRevokePermission"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgRevokePermission does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_MsgRevokePermission) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "veranablockchain.permission.MsgRevokePermission.creator":
+		value := x.Creator
+		return protoreflect.ValueOfString(value)
+	case "veranablockchain.permission.MsgRevokePermission.id":
+		value := x.Id
+		return protoreflect.ValueOfUint64(value)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgRevokePermission"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgRevokePermission does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgRevokePermission) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "veranablockchain.permission.MsgRevokePermission.creator":
+		x.Creator = value.Interface().(string)
+	case "veranablockchain.permission.MsgRevokePermission.id":
+		x.Id = value.Uint()
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgRevokePermission"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgRevokePermission does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgRevokePermission) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "veranablockchain.permission.MsgRevokePermission.creator":
+		panic(fmt.Errorf("field creator of message veranablockchain.permission.MsgRevokePermission is not mutable"))
+	case "veranablockchain.permission.MsgRevokePermission.id":
+		panic(fmt.Errorf("field id of message veranablockchain.permission.MsgRevokePermission is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgRevokePermission"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgRevokePermission does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_MsgRevokePermission) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "veranablockchain.permission.MsgRevokePermission.creator":
+		return protoreflect.ValueOfString("")
+	case "veranablockchain.permission.MsgRevokePermission.id":
+		return protoreflect.ValueOfUint64(uint64(0))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgRevokePermission"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgRevokePermission does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_MsgRevokePermission) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in veranablockchain.permission.MsgRevokePermission", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_MsgRevokePermission) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgRevokePermission) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_MsgRevokePermission) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_MsgRevokePermission) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*MsgRevokePermission)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		l = len(x.Creator)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.Id != 0 {
+			n += 1 + runtime.Sov(uint64(x.Id))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*MsgRevokePermission)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Id != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.Id))
+			i--
+			dAtA[i] = 0x10
+		}
+		if len(x.Creator) > 0 {
+			i -= len(x.Creator)
+			copy(dAtA[i:], x.Creator)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Creator)))
+			i--
+			dAtA[i] = 0xa
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*MsgRevokePermission)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgRevokePermission: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgRevokePermission: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Creator", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Creator = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 2:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+				}
+				x.Id = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.Id |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_MsgRevokePermissionResponse protoreflect.MessageDescriptor
+)
+
+func init() {
+	file_veranablockchain_permission_tx_proto_init()
+	md_MsgRevokePermissionResponse = File_veranablockchain_permission_tx_proto.Messages().ByName("MsgRevokePermissionResponse")
+}
+
+var _ protoreflect.Message = (*fastReflection_MsgRevokePermissionResponse)(nil)
+
+type fastReflection_MsgRevokePermissionResponse MsgRevokePermissionResponse
+
+func (x *MsgRevokePermissionResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgRevokePermissionResponse)(x)
+}
+
+func (x *MsgRevokePermissionResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_veranablockchain_permission_tx_proto_msgTypes[19]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_MsgRevokePermissionResponse_messageType fastReflection_MsgRevokePermissionResponse_messageType
+var _ protoreflect.MessageType = fastReflection_MsgRevokePermissionResponse_messageType{}
+
+type fastReflection_MsgRevokePermissionResponse_messageType struct{}
+
+func (x fastReflection_MsgRevokePermissionResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgRevokePermissionResponse)(nil)
+}
+func (x fastReflection_MsgRevokePermissionResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgRevokePermissionResponse)
+}
+func (x fastReflection_MsgRevokePermissionResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgRevokePermissionResponse
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_MsgRevokePermissionResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgRevokePermissionResponse
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_MsgRevokePermissionResponse) Type() protoreflect.MessageType {
+	return _fastReflection_MsgRevokePermissionResponse_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_MsgRevokePermissionResponse) New() protoreflect.Message {
+	return new(fastReflection_MsgRevokePermissionResponse)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_MsgRevokePermissionResponse) Interface() protoreflect.ProtoMessage {
+	return (*MsgRevokePermissionResponse)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_MsgRevokePermissionResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_MsgRevokePermissionResponse) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgRevokePermissionResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgRevokePermissionResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgRevokePermissionResponse) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgRevokePermissionResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgRevokePermissionResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_MsgRevokePermissionResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgRevokePermissionResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgRevokePermissionResponse does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgRevokePermissionResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgRevokePermissionResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgRevokePermissionResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgRevokePermissionResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgRevokePermissionResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgRevokePermissionResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_MsgRevokePermissionResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgRevokePermissionResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgRevokePermissionResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_MsgRevokePermissionResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in veranablockchain.permission.MsgRevokePermissionResponse", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_MsgRevokePermissionResponse) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgRevokePermissionResponse) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_MsgRevokePermissionResponse) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_MsgRevokePermissionResponse) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*MsgRevokePermissionResponse)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*MsgRevokePermissionResponse)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*MsgRevokePermissionResponse)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgRevokePermissionResponse: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgRevokePermissionResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
 // Code generated by protoc-gen-go. DO NOT EDIT.
 // versions:
 // 	protoc-gen-go v1.27.0
@@ -8419,6 +10146,152 @@ func (x *MsgCreateRootPermissionResponse) GetId() uint64 {
 	return 0
 }
 
+type MsgExtendPermission struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Creator        string                 `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	Id             uint64                 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"` // Permission ID
+	EffectiveUntil *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=effective_until,json=effectiveUntil,proto3" json:"effective_until,omitempty"`
+}
+
+func (x *MsgExtendPermission) Reset() {
+	*x = MsgExtendPermission{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_veranablockchain_permission_tx_proto_msgTypes[16]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *MsgExtendPermission) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MsgExtendPermission) ProtoMessage() {}
+
+// Deprecated: Use MsgExtendPermission.ProtoReflect.Descriptor instead.
+func (*MsgExtendPermission) Descriptor() ([]byte, []int) {
+	return file_veranablockchain_permission_tx_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *MsgExtendPermission) GetCreator() string {
+	if x != nil {
+		return x.Creator
+	}
+	return ""
+}
+
+func (x *MsgExtendPermission) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *MsgExtendPermission) GetEffectiveUntil() *timestamppb.Timestamp {
+	if x != nil {
+		return x.EffectiveUntil
+	}
+	return nil
+}
+
+type MsgExtendPermissionResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *MsgExtendPermissionResponse) Reset() {
+	*x = MsgExtendPermissionResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_veranablockchain_permission_tx_proto_msgTypes[17]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *MsgExtendPermissionResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MsgExtendPermissionResponse) ProtoMessage() {}
+
+// Deprecated: Use MsgExtendPermissionResponse.ProtoReflect.Descriptor instead.
+func (*MsgExtendPermissionResponse) Descriptor() ([]byte, []int) {
+	return file_veranablockchain_permission_tx_proto_rawDescGZIP(), []int{17}
+}
+
+type MsgRevokePermission struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Creator string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	Id      uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"` // Permission ID
+}
+
+func (x *MsgRevokePermission) Reset() {
+	*x = MsgRevokePermission{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_veranablockchain_permission_tx_proto_msgTypes[18]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *MsgRevokePermission) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MsgRevokePermission) ProtoMessage() {}
+
+// Deprecated: Use MsgRevokePermission.ProtoReflect.Descriptor instead.
+func (*MsgRevokePermission) Descriptor() ([]byte, []int) {
+	return file_veranablockchain_permission_tx_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *MsgRevokePermission) GetCreator() string {
+	if x != nil {
+		return x.Creator
+	}
+	return ""
+}
+
+func (x *MsgRevokePermission) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+type MsgRevokePermissionResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *MsgRevokePermissionResponse) Reset() {
+	*x = MsgRevokePermissionResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_veranablockchain_permission_tx_proto_msgTypes[19]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *MsgRevokePermissionResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MsgRevokePermissionResponse) ProtoMessage() {}
+
+// Deprecated: Use MsgRevokePermissionResponse.ProtoReflect.Descriptor instead.
+func (*MsgRevokePermissionResponse) Descriptor() ([]byte, []int) {
+	return file_veranablockchain_permission_tx_proto_rawDescGZIP(), []int{19}
+}
+
 var File_veranablockchain_permission_tx_proto protoreflect.FileDescriptor
 
 var file_veranablockchain_permission_tx_proto_rawDesc = []byte{
@@ -8569,7 +10442,29 @@ var file_veranablockchain_permission_tx_proto_rawDesc = []byte{
 	0x1f, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x52, 0x6f, 0x6f, 0x74, 0x50, 0x65,
 	0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
 	0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64,
-	0x32, 0xb2, 0x09, 0x0a, 0x03, 0x4d, 0x73, 0x67, 0x12, 0x72, 0x0a, 0x0c, 0x55, 0x70, 0x64, 0x61,
+	0x22, 0xb6, 0x01, 0x0a, 0x13, 0x4d, 0x73, 0x67, 0x45, 0x78, 0x74, 0x65, 0x6e, 0x64, 0x50, 0x65,
+	0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x32, 0x0a, 0x07, 0x63, 0x72, 0x65, 0x61,
+	0x74, 0x6f, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63,
+	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72,
+	0x69, 0x6e, 0x67, 0x52, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x12, 0x0e, 0x0a, 0x02,
+	0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x12, 0x4d, 0x0a, 0x0f,
+	0x65, 0x66, 0x66, 0x65, 0x63, 0x74, 0x69, 0x76, 0x65, 0x5f, 0x75, 0x6e, 0x74, 0x69, 0x6c, 0x18,
+	0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d,
+	0x70, 0x42, 0x08, 0xc8, 0xde, 0x1f, 0x01, 0x90, 0xdf, 0x1f, 0x01, 0x52, 0x0e, 0x65, 0x66, 0x66,
+	0x65, 0x63, 0x74, 0x69, 0x76, 0x65, 0x55, 0x6e, 0x74, 0x69, 0x6c, 0x3a, 0x0c, 0x82, 0xe7, 0xb0,
+	0x2a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x22, 0x1d, 0x0a, 0x1b, 0x4d, 0x73, 0x67,
+	0x45, 0x78, 0x74, 0x65, 0x6e, 0x64, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x67, 0x0a, 0x13, 0x4d, 0x73, 0x67, 0x52,
+	0x65, 0x76, 0x6f, 0x6b, 0x65, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12,
+	0x32, 0x0a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
+	0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64,
+	0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x07, 0x63, 0x72, 0x65, 0x61,
+	0x74, 0x6f, 0x72, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52,
+	0x02, 0x69, 0x64, 0x3a, 0x0c, 0x82, 0xe7, 0xb0, 0x2a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f,
+	0x72, 0x22, 0x1d, 0x0a, 0x1b, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x76, 0x6f, 0x6b, 0x65, 0x50, 0x65,
+	0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x32, 0xb2, 0x0b, 0x0a, 0x03, 0x4d, 0x73, 0x67, 0x12, 0x72, 0x0a, 0x0c, 0x55, 0x70, 0x64, 0x61,
 	0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x2c, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e,
 	0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d,
 	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65,
@@ -8643,6 +10538,22 @@ var file_veranablockchain_permission_tx_proto_rawDesc = []byte{
 	0x1a, 0x3c, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68,
 	0x61, 0x69, 0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2e, 0x4d,
 	0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x52, 0x6f, 0x6f, 0x74, 0x50, 0x65, 0x72, 0x6d,
+	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x7e,
+	0x0a, 0x10, 0x45, 0x78, 0x74, 0x65, 0x6e, 0x64, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69,
+	0x6f, 0x6e, 0x12, 0x30, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b,
+	0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e,
+	0x2e, 0x4d, 0x73, 0x67, 0x45, 0x78, 0x74, 0x65, 0x6e, 0x64, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73,
+	0x73, 0x69, 0x6f, 0x6e, 0x1a, 0x38, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f,
+	0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69,
+	0x6f, 0x6e, 0x2e, 0x4d, 0x73, 0x67, 0x45, 0x78, 0x74, 0x65, 0x6e, 0x64, 0x50, 0x65, 0x72, 0x6d,
+	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x7e,
+	0x0a, 0x10, 0x52, 0x65, 0x76, 0x6f, 0x6b, 0x65, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69,
+	0x6f, 0x6e, 0x12, 0x30, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b,
+	0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e,
+	0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x76, 0x6f, 0x6b, 0x65, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73,
+	0x73, 0x69, 0x6f, 0x6e, 0x1a, 0x38, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f,
+	0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69,
+	0x6f, 0x6e, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x76, 0x6f, 0x6b, 0x65, 0x50, 0x65, 0x72, 0x6d,
 	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05,
 	0x80, 0xe7, 0xb0, 0x2a, 0x01, 0x42, 0x81, 0x02, 0x0a, 0x1f, 0x63, 0x6f, 0x6d, 0x2e, 0x76, 0x65,
 	0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x70,
@@ -8676,7 +10587,7 @@ func file_veranablockchain_permission_tx_proto_rawDescGZIP() []byte {
 	return file_veranablockchain_permission_tx_proto_rawDescData
 }
 
-var file_veranablockchain_permission_tx_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
+var file_veranablockchain_permission_tx_proto_msgTypes = make([]protoimpl.MessageInfo, 20)
 var file_veranablockchain_permission_tx_proto_goTypes = []interface{}{
 	(*MsgUpdateParams)(nil),                           // 0: veranablockchain.permission.MsgUpdateParams
 	(*MsgUpdateParamsResponse)(nil),                   // 1: veranablockchain.permission.MsgUpdateParamsResponse
@@ -8694,35 +10605,44 @@ var file_veranablockchain_permission_tx_proto_goTypes = []interface{}{
 	(*MsgCancelPermissionVPLastRequestResponse)(nil),  // 13: veranablockchain.permission.MsgCancelPermissionVPLastRequestResponse
 	(*MsgCreateRootPermission)(nil),                   // 14: veranablockchain.permission.MsgCreateRootPermission
 	(*MsgCreateRootPermissionResponse)(nil),           // 15: veranablockchain.permission.MsgCreateRootPermissionResponse
-	(*Params)(nil),                                    // 16: veranablockchain.permission.Params
-	(*timestamppb.Timestamp)(nil),                     // 17: google.protobuf.Timestamp
+	(*MsgExtendPermission)(nil),                       // 16: veranablockchain.permission.MsgExtendPermission
+	(*MsgExtendPermissionResponse)(nil),               // 17: veranablockchain.permission.MsgExtendPermissionResponse
+	(*MsgRevokePermission)(nil),                       // 18: veranablockchain.permission.MsgRevokePermission
+	(*MsgRevokePermissionResponse)(nil),               // 19: veranablockchain.permission.MsgRevokePermissionResponse
+	(*Params)(nil),                                    // 20: veranablockchain.permission.Params
+	(*timestamppb.Timestamp)(nil),                     // 21: google.protobuf.Timestamp
 }
 var file_veranablockchain_permission_tx_proto_depIdxs = []int32{
-	16, // 0: veranablockchain.permission.MsgUpdateParams.params:type_name -> veranablockchain.permission.Params
-	17, // 1: veranablockchain.permission.MsgSetPermissionVPToValidated.effective_until:type_name -> google.protobuf.Timestamp
-	17, // 2: veranablockchain.permission.MsgCreateRootPermission.effective_from:type_name -> google.protobuf.Timestamp
-	17, // 3: veranablockchain.permission.MsgCreateRootPermission.effective_until:type_name -> google.protobuf.Timestamp
-	0,  // 4: veranablockchain.permission.Msg.UpdateParams:input_type -> veranablockchain.permission.MsgUpdateParams
-	2,  // 5: veranablockchain.permission.Msg.StartPermissionVP:input_type -> veranablockchain.permission.MsgStartPermissionVP
-	4,  // 6: veranablockchain.permission.Msg.RenewPermissionVP:input_type -> veranablockchain.permission.MsgRenewPermissionVP
-	6,  // 7: veranablockchain.permission.Msg.SetPermissionVPToValidated:input_type -> veranablockchain.permission.MsgSetPermissionVPToValidated
-	8,  // 8: veranablockchain.permission.Msg.RequestPermissionVPTermination:input_type -> veranablockchain.permission.MsgRequestPermissionVPTermination
-	10, // 9: veranablockchain.permission.Msg.ConfirmPermissionVPTermination:input_type -> veranablockchain.permission.MsgConfirmPermissionVPTermination
-	12, // 10: veranablockchain.permission.Msg.CancelPermissionVPLastRequest:input_type -> veranablockchain.permission.MsgCancelPermissionVPLastRequest
-	14, // 11: veranablockchain.permission.Msg.CreateRootPermission:input_type -> veranablockchain.permission.MsgCreateRootPermission
-	1,  // 12: veranablockchain.permission.Msg.UpdateParams:output_type -> veranablockchain.permission.MsgUpdateParamsResponse
-	3,  // 13: veranablockchain.permission.Msg.StartPermissionVP:output_type -> veranablockchain.permission.MsgStartPermissionVPResponse
-	5,  // 14: veranablockchain.permission.Msg.RenewPermissionVP:output_type -> veranablockchain.permission.MsgRenewPermissionVPResponse
-	7,  // 15: veranablockchain.permission.Msg.SetPermissionVPToValidated:output_type -> veranablockchain.permission.MsgSetPermissionVPToValidatedResponse
-	9,  // 16: veranablockchain.permission.Msg.RequestPermissionVPTermination:output_type -> veranablockchain.permission.MsgRequestPermissionVPTerminationResponse
-	11, // 17: veranablockchain.permission.Msg.ConfirmPermissionVPTermination:output_type -> veranablockchain.permission.MsgConfirmPermissionVPTerminationResponse
-	13, // 18: veranablockchain.permission.Msg.CancelPermissionVPLastRequest:output_type -> veranablockchain.permission.MsgCancelPermissionVPLastRequestResponse
-	15, // 19: veranablockchain.permission.Msg.CreateRootPermission:output_type -> veranablockchain.permission.MsgCreateRootPermissionResponse
-	12, // [12:20] is the sub-list for method output_type
-	4,  // [4:12] is the sub-list for method input_type
-	4,  // [4:4] is the sub-list for extension type_name
-	4,  // [4:4] is the sub-list for extension extendee
-	0,  // [0:4] is the sub-list for field type_name
+	20, // 0: veranablockchain.permission.MsgUpdateParams.params:type_name -> veranablockchain.permission.Params
+	21, // 1: veranablockchain.permission.MsgSetPermissionVPToValidated.effective_until:type_name -> google.protobuf.Timestamp
+	21, // 2: veranablockchain.permission.MsgCreateRootPermission.effective_from:type_name -> google.protobuf.Timestamp
+	21, // 3: veranablockchain.permission.MsgCreateRootPermission.effective_until:type_name -> google.protobuf.Timestamp
+	21, // 4: veranablockchain.permission.MsgExtendPermission.effective_until:type_name -> google.protobuf.Timestamp
+	0,  // 5: veranablockchain.permission.Msg.UpdateParams:input_type -> veranablockchain.permission.MsgUpdateParams
+	2,  // 6: veranablockchain.permission.Msg.StartPermissionVP:input_type -> veranablockchain.permission.MsgStartPermissionVP
+	4,  // 7: veranablockchain.permission.Msg.RenewPermissionVP:input_type -> veranablockchain.permission.MsgRenewPermissionVP
+	6,  // 8: veranablockchain.permission.Msg.SetPermissionVPToValidated:input_type -> veranablockchain.permission.MsgSetPermissionVPToValidated
+	8,  // 9: veranablockchain.permission.Msg.RequestPermissionVPTermination:input_type -> veranablockchain.permission.MsgRequestPermissionVPTermination
+	10, // 10: veranablockchain.permission.Msg.ConfirmPermissionVPTermination:input_type -> veranablockchain.permission.MsgConfirmPermissionVPTermination
+	12, // 11: veranablockchain.permission.Msg.CancelPermissionVPLastRequest:input_type -> veranablockchain.permission.MsgCancelPermissionVPLastRequest
+	14, // 12: veranablockchain.permission.Msg.CreateRootPermission:input_type -> veranablockchain.permission.MsgCreateRootPermission
+	16, // 13: veranablockchain.permission.Msg.ExtendPermission:input_type -> veranablockchain.permission.MsgExtendPermission
+	18, // 14: veranablockchain.permission.Msg.RevokePermission:input_type -> veranablockchain.permission.MsgRevokePermission
+	1,  // 15: veranablockchain.permission.Msg.UpdateParams:output_type -> veranablockchain.permission.MsgUpdateParamsResponse
+	3,  // 16: veranablockchain.permission.Msg.StartPermissionVP:output_type -> veranablockchain.permission.MsgStartPermissionVPResponse
+	5,  // 17: veranablockchain.permission.Msg.RenewPermissionVP:output_type -> veranablockchain.permission.MsgRenewPermissionVPResponse
+	7,  // 18: veranablockchain.permission.Msg.SetPermissionVPToValidated:output_type -> veranablockchain.permission.MsgSetPermissionVPToValidatedResponse
+	9,  // 19: veranablockchain.permission.Msg.RequestPermissionVPTermination:output_type -> veranablockchain.permission.MsgRequestPermissionVPTerminationResponse
+	11, // 20: veranablockchain.permission.Msg.ConfirmPermissionVPTermination:output_type -> veranablockchain.permission.MsgConfirmPermissionVPTerminationResponse
+	13, // 21: veranablockchain.permission.Msg.CancelPermissionVPLastRequest:output_type -> veranablockchain.permission.MsgCancelPermissionVPLastRequestResponse
+	15, // 22: veranablockchain.permission.Msg.CreateRootPermission:output_type -> veranablockchain.permission.MsgCreateRootPermissionResponse
+	17, // 23: veranablockchain.permission.Msg.ExtendPermission:output_type -> veranablockchain.permission.MsgExtendPermissionResponse
+	19, // 24: veranablockchain.permission.Msg.RevokePermission:output_type -> veranablockchain.permission.MsgRevokePermissionResponse
+	15, // [15:25] is the sub-list for method output_type
+	5,  // [5:15] is the sub-list for method input_type
+	5,  // [5:5] is the sub-list for extension type_name
+	5,  // [5:5] is the sub-list for extension extendee
+	0,  // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_veranablockchain_permission_tx_proto_init() }
@@ -8925,6 +10845,54 @@ func file_veranablockchain_permission_tx_proto_init() {
 				return nil
 			}
 		}
+		file_veranablockchain_permission_tx_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MsgExtendPermission); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_veranablockchain_permission_tx_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MsgExtendPermissionResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_veranablockchain_permission_tx_proto_msgTypes[18].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MsgRevokePermission); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_veranablockchain_permission_tx_proto_msgTypes[19].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MsgRevokePermissionResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -8932,7 +10900,7 @@ func file_veranablockchain_permission_tx_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_veranablockchain_permission_tx_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   16,
+			NumMessages:   20,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
