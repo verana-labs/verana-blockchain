@@ -22,7 +22,7 @@ import (
 	"github.com/verana-labs/verana-blockchain/x/permission/types"
 )
 
-func PermissionKeeper(t testing.TB) (keeper.Keeper, *MockCredentialSchemaKeeper, sdk.Context) {
+func PermissionKeeper(t testing.TB) (keeper.Keeper, *MockCredentialSchemaKeeper, *MockTrustRegistryKeeper, sdk.Context) {
 	storeKey := storetypes.NewKVStoreKey(types.StoreKey)
 
 	db := dbm.NewMemDB()
@@ -34,24 +34,27 @@ func PermissionKeeper(t testing.TB) (keeper.Keeper, *MockCredentialSchemaKeeper,
 	cdc := codec.NewProtoCodec(registry)
 	authority := authtypes.NewModuleAddress(govtypes.ModuleName)
 
-	credentialSchemaKeeper := NewMockCredentialSchemaKeeper()
+	// Create mock keepers
+	csKeeper := NewMockCredentialSchemaKeeper()
+	trkKeeper := NewMockTrustRegistryKeeper()
 
 	k := keeper.NewKeeper(
 		cdc,
 		runtime.NewKVStoreService(storeKey),
 		log.NewNopLogger(),
 		authority.String(),
-		credentialSchemaKeeper,
-		NewMockTrustRegistryKeeper(),
+		csKeeper,
+		trkKeeper,
 	)
 
 	ctx := sdk.NewContext(stateStore, cmtproto.Header{}, false, log.NewNopLogger())
 
+	// Initialize params
 	if err := k.SetParams(ctx, types.DefaultParams()); err != nil {
 		panic(err)
 	}
 
-	return k, credentialSchemaKeeper, ctx
+	return k, csKeeper, trkKeeper, ctx
 }
 
 type MockCredentialSchemaKeeper struct {
@@ -61,6 +64,15 @@ type MockCredentialSchemaKeeper struct {
 func NewMockCredentialSchemaKeeper() *MockCredentialSchemaKeeper {
 	return &MockCredentialSchemaKeeper{
 		credentialSchemas: make(map[uint64]cstypes.CredentialSchema),
+	}
+}
+
+func (k *MockCredentialSchemaKeeper) UpdateMockCredentialSchema(id uint64, trId uint64, issuerPermMode, verifierPermMode cstypes.CredentialSchemaPermManagementMode) {
+	k.credentialSchemas[id] = cstypes.CredentialSchema{
+		Id:                         id,
+		TrId:                       trId,
+		IssuerPermManagementMode:   issuerPermMode,
+		VerifierPermManagementMode: verifierPermMode,
 	}
 }
 

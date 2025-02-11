@@ -14,13 +14,18 @@ import (
 	"github.com/verana-labs/verana-blockchain/x/permission/types"
 )
 
-func setupMsgServer(t testing.TB) (keeper.Keeper, types.MsgServer, *keepertest.MockCredentialSchemaKeeper, context.Context) {
-	k, csKeeper, ctx := keepertest.PermissionKeeper(t)
-	return k, keeper.NewMsgServerImpl(k), csKeeper, ctx
+//func setupMsgServer(t testing.TB) (keeper.Keeper, types.MsgServer, *keepertest.MockCredentialSchemaKeeper, context.Context) {
+//	k, csKeeper, ctx := keepertest.PermissionKeeper(t)
+//	return k, keeper.NewMsgServerImpl(k), csKeeper, ctx
+//}
+
+func setupMsgServer(t testing.TB) (keeper.Keeper, types.MsgServer, *keepertest.MockCredentialSchemaKeeper, *keepertest.MockTrustRegistryKeeper, context.Context) {
+	k, csKeeper, trkKeeper, ctx := keepertest.PermissionKeeper(t)
+	return k, keeper.NewMsgServerImpl(k), csKeeper, trkKeeper, ctx
 }
 
 func TestMsgServer(t *testing.T) {
-	k, ms, _, ctx := setupMsgServer(t)
+	k, ms, _, _, ctx := setupMsgServer(t)
 	require.NotNil(t, ms)
 	require.NotNil(t, ctx)
 	require.NotEmpty(t, k)
@@ -28,7 +33,7 @@ func TestMsgServer(t *testing.T) {
 
 // Test for StartPermissionVP
 func TestStartPermissionVP(t *testing.T) {
-	k, ms, csKeeper, ctx := setupMsgServer(t)
+	k, ms, csKeeper, _, ctx := setupMsgServer(t)
 	creator := sdk.AccAddress([]byte("test_creator")).String()
 
 	// Create mock credential schema
@@ -94,7 +99,7 @@ func TestStartPermissionVP(t *testing.T) {
 				require.Greater(t, resp.PermissionId, uint64(0))
 
 				// Verify created permission
-				perm, err := k.GetPermission(sdk.UnwrapSDKContext(ctx), resp.PermissionId)
+				perm, err := k.GetPermissionByID(sdk.UnwrapSDKContext(ctx), resp.PermissionId)
 				require.NoError(t, err)
 				require.Equal(t, tc.msg.Type, uint32(perm.Type))
 				require.Equal(t, tc.msg.Creator, perm.Grantee)
@@ -105,7 +110,7 @@ func TestStartPermissionVP(t *testing.T) {
 }
 
 func TestRenewPermissionVP(t *testing.T) {
-	k, ms, csKeeper, ctx := setupMsgServer(t)
+	k, ms, csKeeper, _, ctx := setupMsgServer(t)
 	creator := sdk.AccAddress([]byte("test_creator")).String()
 
 	// Create mock credential schema
@@ -182,7 +187,7 @@ func TestRenewPermissionVP(t *testing.T) {
 				require.NotNil(t, resp)
 
 				// Verify updated permission
-				perm, err := k.GetPermission(sdk.UnwrapSDKContext(ctx), tc.msg.Id)
+				perm, err := k.GetPermissionByID(sdk.UnwrapSDKContext(ctx), tc.msg.Id)
 				require.NoError(t, err)
 				require.Equal(t, types.ValidationState_VALIDATION_STATE_PENDING, perm.VpState)
 				require.NotNil(t, perm.VpLastStateChange)
@@ -192,7 +197,7 @@ func TestRenewPermissionVP(t *testing.T) {
 }
 
 func TestSetPermissionVPToValidated(t *testing.T) {
-	k, ms, csKeeper, ctx := setupMsgServer(t)
+	k, ms, csKeeper, _, ctx := setupMsgServer(t)
 	creator := sdk.AccAddress([]byte("test_creator")).String()
 	validatorAddr := sdk.AccAddress([]byte("test_validator")).String()
 
@@ -270,13 +275,126 @@ func TestSetPermissionVPToValidated(t *testing.T) {
 				require.NotNil(t, resp)
 
 				// Verify updated permission
-				perm, err := k.GetPermission(sdk.UnwrapSDKContext(ctx), tc.msg.Id)
+				perm, err := k.GetPermissionByID(sdk.UnwrapSDKContext(ctx), tc.msg.Id)
 				require.NoError(t, err)
 				require.Equal(t, types.ValidationState_VALIDATION_STATE_VALIDATED, perm.VpState)
 				require.Equal(t, tc.msg.ValidationFees, perm.ValidationFees)
 				require.Equal(t, tc.msg.Country, perm.Country)
 				require.NotNil(t, perm.EffectiveFrom)
 				require.Equal(t, tc.msg.EffectiveUntil, perm.EffectiveUntil)
+			}
+		})
+	}
+}
+
+func TestMsgServerCreateRootPermission(t *testing.T) {
+	k, ms, mockCsKeeper, trkKeeper, ctx := setupMsgServer(t)
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+
+	creator := sdk.AccAddress([]byte("test_creator")).String()
+	validDid := "did:example:123456789abcdefghi"
+
+	// First create a trust registry and store its ID
+	trID := trkKeeper.CreateMockTrustRegistry(creator, validDid)
+
+	// Create mock credential schema with specific permission management modes and trust registry ID
+	mockCsKeeper.UpdateMockCredentialSchema(1,
+		trID, // Set the trust registry ID
+		cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION,
+		cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION)
+
+	now := time.Now()
+	futureTime := now.Add(24 * time.Hour)
+
+	testCases := []struct {
+		name    string
+		msg     *types.MsgCreateRootPermission
+		isValid bool
+	}{
+		{
+			name: "Valid Create Root Permission",
+			msg: &types.MsgCreateRootPermission{
+				Creator:          creator,
+				SchemaId:         1,
+				Did:              validDid,
+				ValidationFees:   100,
+				IssuanceFees:     50,
+				VerificationFees: 25,
+				Country:          "US",
+				EffectiveFrom:    &now,
+				EffectiveUntil:   &futureTime,
+			},
+			isValid: true,
+		},
+		{
+			name: "Non-existent Schema ID",
+			msg: &types.MsgCreateRootPermission{
+				Creator:          creator,
+				SchemaId:         999,
+				Did:              validDid,
+				ValidationFees:   100,
+				IssuanceFees:     50,
+				VerificationFees: 25,
+			},
+			isValid: false,
+		},
+		{
+			name: "Wrong Creator (Not Trust Registry Controller)",
+			msg: &types.MsgCreateRootPermission{
+				Creator:          sdk.AccAddress([]byte("wrong_creator")).String(),
+				SchemaId:         1,
+				Did:              validDid,
+				ValidationFees:   100,
+				IssuanceFees:     50,
+				VerificationFees: 25,
+			},
+			isValid: false,
+		},
+	}
+
+	var expectedID uint64 = 1 // Track expected auto-generated ID
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			resp, err := ms.CreateRootPermission(ctx, tc.msg)
+			if tc.isValid {
+				require.NoError(t, err)
+				require.NotNil(t, resp)
+
+				// Verify ID was auto-generated correctly
+				require.Equal(t, expectedID, resp.Id)
+
+				// Get the created permission
+				perm, err := k.GetPermissionByID(sdkCtx, resp.Id)
+				require.NoError(t, err)
+
+				// Verify all fields are set correctly
+				require.Equal(t, tc.msg.SchemaId, perm.SchemaId)
+				require.Equal(t, tc.msg.Did, perm.Did)
+				require.Equal(t, tc.msg.Creator, perm.Grantee)
+				require.Equal(t, types.PermissionType_PERMISSION_TYPE_TRUST_REGISTRY, perm.Type)
+				require.Equal(t, tc.msg.ValidationFees, perm.ValidationFees)
+				require.Equal(t, tc.msg.IssuanceFees, perm.IssuanceFees)
+				require.Equal(t, tc.msg.VerificationFees, perm.VerificationFees)
+				require.Equal(t, tc.msg.Country, perm.Country)
+
+				// Verify time fields if set
+				if tc.msg.EffectiveFrom != nil {
+					require.Equal(t, tc.msg.EffectiveFrom.Unix(), perm.EffectiveFrom.Unix())
+				}
+				if tc.msg.EffectiveUntil != nil {
+					require.Equal(t, tc.msg.EffectiveUntil.Unix(), perm.EffectiveUntil.Unix())
+				}
+
+				// Verify auto-populated fields
+				require.NotNil(t, perm.Created)
+				require.NotNil(t, perm.Modified)
+				require.Equal(t, tc.msg.Creator, perm.CreatedBy)
+
+				expectedID++ // Increment expected ID for next valid creation
+			} else {
+				require.Error(t, err)
+				require.Nil(t, resp)
 			}
 		})
 	}
