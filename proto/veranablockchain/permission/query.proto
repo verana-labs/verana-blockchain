@@ -6,6 +6,8 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "veranablockchain/permission/params.proto";
+import "veranablockchain/permission/types.proto";
+import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/verana-labs/verana-blockchain/x/permission/types";
 
@@ -13,7 +15,10 @@ option go_package = "github.com/verana-labs/verana-blockchain/x/permission/types
 service Query {
   // Parameters queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/verana-labs/verana-blockchain/permission/params";
+    option (google.api.http).get = "/perm/v1/params";
+  }
+  rpc ListPermissions(QueryListPermissionsRequest) returns (QueryListPermissionsResponse) {
+    option (google.api.http).get = "/perm/v1/list";
   }
 }
 
@@ -27,4 +32,13 @@ message QueryParamsResponse {
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
+}
+
+message QueryListPermissionsRequest {
+  google.protobuf.Timestamp modified_after = 1 [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
+  uint32 response_max_size = 2;  // Default 64, min 1, max 1024
+}
+
+message QueryListPermissionsResponse {
+  repeated Permission permissions = 1 [(gogoproto.nullable) = false];
 }
