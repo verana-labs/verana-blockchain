@@ -35,6 +35,17 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 						},
 					},
 				},
+				{
+					RpcMethod: "GetPermission",
+					Use:       "get-permission [id]",
+					Short:     "Get permission by ID",
+					Long:      "Get detailed information about a permission by its ID",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "id",
+						},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},

@@ -20,6 +20,9 @@ service Query {
   rpc ListPermissions(QueryListPermissionsRequest) returns (QueryListPermissionsResponse) {
     option (google.api.http).get = "/perm/v1/list";
   }
+  rpc GetPermission(QueryGetPermissionRequest) returns (QueryGetPermissionResponse) {
+    option (google.api.http).get = "/prem/v1/get/{id}";
+  }
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -41,4 +44,12 @@ message QueryListPermissionsRequest {
 
 message QueryListPermissionsResponse {
   repeated Permission permissions = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryGetPermissionRequest {
+  uint64 id = 1;
+}
+
+message QueryGetPermissionResponse {
+  Permission permission = 1 [(gogoproto.nullable) = false];
 }

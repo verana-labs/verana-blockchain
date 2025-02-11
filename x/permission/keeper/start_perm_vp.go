@@ -9,7 +9,7 @@ import (
 
 func (ms msgServer) validatePermissionChecks(ctx sdk.Context, msg *types.MsgStartPermissionVP) (types.Permission, error) {
 	// Load validator permission
-	validatorPerm, err := ms.Keeper.GetPermission(ctx, msg.ValidatorPermId)
+	validatorPerm, err := ms.Keeper.GetPermissionByID(ctx, msg.ValidatorPermId)
 	if err != nil {
 		return types.Permission{}, fmt.Errorf("validator permission not found: %w", err)
 	}

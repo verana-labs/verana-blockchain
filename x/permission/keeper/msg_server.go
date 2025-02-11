@@ -51,7 +51,7 @@ func (ms msgServer) RenewPermissionVP(goCtx context.Context, msg *types.MsgRenew
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// [MOD-PERM-MSG-2-2-2] Permission checks
-	applicantPerm, err := ms.Keeper.GetPermission(ctx, msg.Id)
+	applicantPerm, err := ms.Keeper.GetPermissionByID(ctx, msg.Id)
 	if err != nil {
 		return nil, fmt.Errorf("permission not found: %w", err)
 	}
@@ -62,7 +62,7 @@ func (ms msgServer) RenewPermissionVP(goCtx context.Context, msg *types.MsgRenew
 	}
 
 	// Get validator permission
-	validatorPerm, err := ms.Keeper.GetPermission(ctx, applicantPerm.ValidatorPermId)
+	validatorPerm, err := ms.Keeper.GetPermissionByID(ctx, applicantPerm.ValidatorPermId)
 	if err != nil {
 		return nil, fmt.Errorf("validator permission not found: %w", err)
 	}
@@ -114,7 +114,7 @@ func (ms msgServer) SetPermissionVPToValidated(goCtx context.Context, msg *types
 	now := ctx.BlockTime()
 
 	// [MOD-PERM-MSG-3-2-1] Basic checks
-	applicantPerm, err := ms.Keeper.GetPermission(ctx, msg.Id)
+	applicantPerm, err := ms.Keeper.GetPermissionByID(ctx, msg.Id)
 	if err != nil {
 		return nil, fmt.Errorf("permission not found: %w", err)
 	}
@@ -141,7 +141,7 @@ func (ms msgServer) SetPermissionVPToValidated(goCtx context.Context, msg *types
 	}
 
 	// [MOD-PERM-MSG-3-2-2] Validator permission checks
-	validatorPerm, err := ms.Keeper.GetPermission(ctx, applicantPerm.ValidatorPermId)
+	validatorPerm, err := ms.Keeper.GetPermissionByID(ctx, applicantPerm.ValidatorPermId)
 	if err != nil {
 		return nil, fmt.Errorf("validator permission not found: %w", err)
 	}
@@ -193,7 +193,7 @@ func (ms msgServer) RequestPermissionVPTermination(goCtx context.Context, msg *t
 	now := ctx.BlockTime()
 
 	// [MOD-PERM-MSG-4-2-1] Basic checks
-	applicantPerm, err := ms.Keeper.GetPermission(ctx, msg.Id)
+	applicantPerm, err := ms.Keeper.GetPermissionByID(ctx, msg.Id)
 	if err != nil {
 		return nil, fmt.Errorf("permission not found: %w", err)
 	}
@@ -205,7 +205,7 @@ func (ms msgServer) RequestPermissionVPTermination(goCtx context.Context, msg *t
 	// Check termination authorization
 	if applicantPerm.VpExp != nil && now.After(*applicantPerm.VpExp) {
 		// VP has expired - either party can terminate
-		validatorPerm, err := ms.Keeper.GetPermission(ctx, applicantPerm.ValidatorPermId)
+		validatorPerm, err := ms.Keeper.GetPermissionByID(ctx, applicantPerm.ValidatorPermId)
 		if err != nil {
 			return nil, fmt.Errorf("validator permission not found: %w", err)
 		}
@@ -282,7 +282,7 @@ func (ms msgServer) ConfirmPermissionVPTermination(goCtx context.Context, msg *t
 	now := ctx.BlockTime()
 
 	// Load applicant permission
-	applicantPerm, err := ms.Keeper.GetPermission(ctx, msg.Id)
+	applicantPerm, err := ms.Keeper.GetPermissionByID(ctx, msg.Id)
 	if err != nil {
 		return nil, fmt.Errorf("permission not found: %w", err)
 	}
@@ -293,7 +293,7 @@ func (ms msgServer) ConfirmPermissionVPTermination(goCtx context.Context, msg *t
 	}
 
 	// [MOD-PERM-MSG-5-2-2] Permission checks
-	validatorPerm, err := ms.Keeper.GetPermission(ctx, applicantPerm.ValidatorPermId)
+	validatorPerm, err := ms.Keeper.GetPermissionByID(ctx, applicantPerm.ValidatorPermId)
 	if err != nil {
 		return nil, fmt.Errorf("validator permission not found: %w", err)
 	}
@@ -357,7 +357,7 @@ func (ms msgServer) CancelPermissionVPLastRequest(goCtx context.Context, msg *ty
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Load applicant permission
-	applicantPerm, err := ms.Keeper.GetPermission(ctx, msg.Id)
+	applicantPerm, err := ms.Keeper.GetPermissionByID(ctx, msg.Id)
 	if err != nil {
 		return nil, fmt.Errorf("permission not found: %w", err)
 	}
@@ -503,7 +503,7 @@ func (ms msgServer) ExtendPermission(goCtx context.Context, msg *types.MsgExtend
 	now := ctx.BlockTime()
 
 	// [MOD-PERM-MSG-8-2-1] Basic checks
-	applicantPerm, err := ms.Keeper.GetPermission(ctx, msg.Id)
+	applicantPerm, err := ms.Keeper.GetPermissionByID(ctx, msg.Id)
 	if err != nil {
 		return nil, fmt.Errorf("permission not found: %w", err)
 	}
@@ -543,7 +543,7 @@ func (ms msgServer) validateExtendPermissionAuthority(ctx sdk.Context, creator s
 		}
 	} else {
 		// For other types, creator must be the validator
-		validatorPerm, err := ms.Keeper.GetPermission(ctx, perm.ValidatorPermId)
+		validatorPerm, err := ms.Keeper.GetPermissionByID(ctx, perm.ValidatorPermId)
 		if err != nil {
 			return fmt.Errorf("validator permission not found: %w", err)
 		}
@@ -569,13 +569,13 @@ func (ms msgServer) RevokePermission(goCtx context.Context, msg *types.MsgRevoke
 	now := ctx.BlockTime()
 
 	// [MOD-PERM-MSG-9-2-1] Basic checks
-	applicantPerm, err := ms.Keeper.GetPermission(ctx, msg.Id)
+	applicantPerm, err := ms.Keeper.GetPermissionByID(ctx, msg.Id)
 	if err != nil {
 		return nil, fmt.Errorf("permission not found: %w", err)
 	}
 
 	// [MOD-PERM-MSG-9-2-2] Validator permission checks
-	validatorPerm, err := ms.Keeper.GetPermission(ctx, applicantPerm.ValidatorPermId)
+	validatorPerm, err := ms.Keeper.GetPermissionByID(ctx, applicantPerm.ValidatorPermId)
 	if err != nil {
 		return nil, fmt.Errorf("validator permission not found: %w", err)
 	}

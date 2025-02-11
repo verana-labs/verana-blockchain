@@ -2,6 +2,9 @@ package keeper
 
 import (
 	"context"
+	"cosmossdk.io/collections"
+	"errors"
+	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/verana-labs/verana-blockchain/x/permission/types"
 	"google.golang.org/grpc/codes"
@@ -51,5 +54,31 @@ func (k Keeper) ListPermissions(goCtx context.Context, req *types.QueryListPermi
 
 	return &types.QueryListPermissionsResponse{
 		Permissions: permissions,
+	}, nil
+}
+
+func (k Keeper) GetPermission(goCtx context.Context, req *types.QueryGetPermissionRequest) (*types.QueryGetPermissionResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "empty request")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// [MOD-PERM-QRY-2-2] Checks
+	if req.Id == 0 {
+		return nil, status.Error(codes.InvalidArgument, "permission ID cannot be 0")
+	}
+
+	// [MOD-PERM-QRY-2-3] Execution
+	permission, err := k.Permission.Get(ctx, req.Id)
+	if err != nil {
+		if errors.Is(collections.ErrNotFound, err) {
+			return nil, status.Error(codes.NotFound, "permission not found")
+		}
+		return nil, status.Error(codes.Internal, fmt.Sprintf("failed to get permission: %v", err))
+	}
+
+	return &types.QueryGetPermissionResponse{
+		Permission: permission,
 	}, nil
 }

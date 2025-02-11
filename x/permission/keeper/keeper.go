@@ -66,7 +66,7 @@ func (k Keeper) Logger() log.Logger {
 	return k.logger.With("module", fmt.Sprintf("x/%s", types.ModuleName))
 }
 
-func (k Keeper) GetPermission(ctx sdk.Context, id uint64) (types.Permission, error) {
+func (k Keeper) GetPermissionByID(ctx sdk.Context, id uint64) (types.Permission, error) {
 	return k.Permission.Get(ctx, id)
 }
 
