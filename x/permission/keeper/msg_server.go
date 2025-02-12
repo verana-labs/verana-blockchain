@@ -5,6 +5,7 @@ import (
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/verana-labs/verana-blockchain/x/permission/types"
+	"strconv"
 	"time"
 )
 
@@ -41,6 +42,16 @@ func (ms msgServer) StartPermissionVP(goCtx context.Context, msg *types.MsgStart
 	if err != nil {
 		return nil, fmt.Errorf("failed to execute permission VP: %w", err)
 	}
+
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeStartPermissionVP,
+			sdk.NewAttribute(types.AttributeKeyPermissionID, strconv.FormatUint(permID, 10)),
+			sdk.NewAttribute(types.AttributeKeyCreator, msg.Creator),
+			sdk.NewAttribute(types.AttributeKeyFees, strconv.FormatUint(fees, 10)),
+			sdk.NewAttribute(types.AttributeKeyDeposit, strconv.FormatUint(deposit, 10)),
+		),
+	})
 
 	return &types.MsgStartPermissionVPResponse{
 		PermissionId: permID,
@@ -442,6 +453,15 @@ func (ms msgServer) CreateRootPermission(goCtx context.Context, msg *types.MsgCr
 	if err != nil {
 		return nil, fmt.Errorf("failed to create root permission: %w", err)
 	}
+
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeCreateRootPermission,
+			sdk.NewAttribute(types.AttributeKeyRootPermissionID, strconv.FormatUint(id, 10)),
+			sdk.NewAttribute(types.AttributeKeySchemaID, strconv.FormatUint(msg.SchemaId, 10)),
+			sdk.NewAttribute(types.AttributeKeyTimestamp, now.String()),
+		),
+	})
 
 	return &types.MsgCreateRootPermissionResponse{
 		Id: id,

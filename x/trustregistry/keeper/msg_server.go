@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 	"fmt"
+	"strconv"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/verana-labs/verana-blockchain/x/trustregistry/types"
@@ -41,6 +42,31 @@ func (ms msgServer) CreateTrustRegistry(goCtx context.Context, msg *types.MsgCre
 	if err := ms.persistEntries(ctx, tr, gfv, gfd); err != nil {
 		return nil, err
 	}
+
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeCreateTrustRegistry,
+			sdk.NewAttribute(types.AttributeKeyTrustRegistryID, strconv.FormatUint(tr.Id, 10)),
+			sdk.NewAttribute(types.AttributeKeyDID, tr.Did),
+			sdk.NewAttribute(types.AttributeKeyController, tr.Controller),
+			sdk.NewAttribute(types.AttributeKeyAka, tr.Aka),
+			sdk.NewAttribute(types.AttributeKeyLanguage, tr.Language),
+			sdk.NewAttribute(types.AttributeKeyTimestamp, now.String()),
+		),
+		sdk.NewEvent(
+			types.EventTypeCreateGovernanceFrameworkVersion,
+			sdk.NewAttribute(types.AttributeKeyGFVersionID, strconv.FormatUint(gfv.Id, 10)),
+			sdk.NewAttribute(types.AttributeKeyTrustRegistryID, strconv.FormatUint(gfv.TrId, 10)),
+			sdk.NewAttribute(types.AttributeKeyVersion, strconv.FormatUint(uint64(gfv.Version), 10)),
+		),
+		sdk.NewEvent(
+			types.EventTypeCreateGovernanceFrameworkDocument,
+			sdk.NewAttribute(types.AttributeKeyGFDocumentID, strconv.FormatUint(gfd.Id, 10)),
+			sdk.NewAttribute(types.AttributeKeyGFVersionID, strconv.FormatUint(gfd.GfvId, 10)),
+			sdk.NewAttribute(types.AttributeKeyDocURL, gfd.Url),
+			sdk.NewAttribute(types.AttributeKeyDocHash, gfd.Hash),
+		),
+	})
 
 	return &types.MsgCreateTrustRegistryResponse{}, nil
 }

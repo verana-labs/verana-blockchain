@@ -33,19 +33,26 @@ func TestMsgServer(t *testing.T) {
 
 // Test for StartPermissionVP
 func TestStartPermissionVP(t *testing.T) {
-	k, ms, csKeeper, _, ctx := setupMsgServer(t)
-	creator := sdk.AccAddress([]byte("test_creator")).String()
+	k, ms, csKeeper, trkKeeper, ctx := setupMsgServer(t)
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
-	// Create mock credential schema
-	csKeeper.CreateMockCredentialSchema(1,
+	creator := sdk.AccAddress([]byte("test_creator")).String()
+	validDid := "did:example:123456789abcdefghi"
+
+	// First create a trust registry for our credential schema
+	trID := trkKeeper.CreateMockTrustRegistry(creator, validDid)
+
+	// Create mock credential schema with specific permission management modes
+	csKeeper.UpdateMockCredentialSchema(1, trID,
 		cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION,
 		cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION)
 
-	// Create validator permission
+	// Create validator permission (ISSUER_GRANTOR)
 	now := time.Now()
+	// This should be VALIDATED as it's a prerequisite
 	validatorPerm := types.Permission{
 		SchemaId:   1,
-		Type:       3, // ISSUER_GRANTOR
+		Type:       types.PermissionType_PERMISSION_TYPE_ISSUER_GRANTOR,
 		Grantee:    creator,
 		Created:    &now,
 		CreatedBy:  creator,
@@ -53,9 +60,25 @@ func TestStartPermissionVP(t *testing.T) {
 		ExtendedBy: creator,
 		Modified:   &now,
 		Country:    "US",
+		VpState:    types.ValidationState_VALIDATION_STATE_VALIDATED, // validator must be validated
+	}
+	validatorPermID, err := k.CreatePermission(sdkCtx, validatorPerm)
+	require.NoError(t, err)
+
+	// Create another validator permission (VERIFIER_GRANTOR with different country)
+	verifierGrantorPerm := types.Permission{
+		SchemaId:   1,
+		Type:       types.PermissionType_PERMISSION_TYPE_VERIFIER_GRANTOR,
+		Grantee:    creator,
+		Created:    &now,
+		CreatedBy:  creator,
+		Extended:   &now,
+		ExtendedBy: creator,
+		Modified:   &now,
+		Country:    "FR", // Different country
 		VpState:    types.ValidationState_VALIDATION_STATE_VALIDATED,
 	}
-	validatorPermID, err := k.CreatePermission(sdk.UnwrapSDKContext(ctx), validatorPerm)
+	verifierGrantorPermID, err := k.CreatePermission(sdkCtx, verifierGrantorPerm)
 	require.NoError(t, err)
 
 	testCases := []struct {
@@ -64,13 +87,13 @@ func TestStartPermissionVP(t *testing.T) {
 		err  string
 	}{
 		{
-			name: "Valid Permission VP Request",
+			name: "Valid ISSUER Permission Request",
 			msg: &types.MsgStartPermissionVP{
 				Creator:         creator,
-				Type:            1, // ISSUER
+				Type:            uint32(types.PermissionType_PERMISSION_TYPE_ISSUER),
 				ValidatorPermId: validatorPermID,
 				Country:         "US",
-				Did:             "did:example:123",
+				Did:             validDid,
 			},
 			err: "",
 		},
@@ -78,11 +101,34 @@ func TestStartPermissionVP(t *testing.T) {
 			name: "Non-existent Validator Permission",
 			msg: &types.MsgStartPermissionVP{
 				Creator:         creator,
-				Type:            1,
+				Type:            uint32(types.PermissionType_PERMISSION_TYPE_ISSUER),
 				ValidatorPermId: 999,
 				Country:         "US",
+				Did:             validDid,
 			},
 			err: "validator permission not found",
+		},
+		{
+			name: "Country Mismatch",
+			msg: &types.MsgStartPermissionVP{
+				Creator:         creator,
+				Type:            uint32(types.PermissionType_PERMISSION_TYPE_ISSUER),
+				ValidatorPermId: validatorPermID,
+				Country:         "FR", // Different from validator's country
+				Did:             validDid,
+			},
+			err: "validator permission country mismatch",
+		},
+		{
+			name: "Invalid Permission Type Combination - ISSUER with wrong validator",
+			msg: &types.MsgStartPermissionVP{
+				Creator:         creator,
+				Type:            uint32(types.PermissionType_PERMISSION_TYPE_ISSUER),
+				ValidatorPermId: verifierGrantorPermID, // Wrong validator type
+				Country:         "FR",
+				Did:             validDid,
+			},
+			err: "issuer permission requires ISSUER_GRANTOR validator",
 		},
 	}
 
@@ -99,11 +145,16 @@ func TestStartPermissionVP(t *testing.T) {
 				require.Greater(t, resp.PermissionId, uint64(0))
 
 				// Verify created permission
-				perm, err := k.GetPermissionByID(sdk.UnwrapSDKContext(ctx), resp.PermissionId)
+				perm, err := k.GetPermissionByID(sdkCtx, resp.PermissionId)
 				require.NoError(t, err)
 				require.Equal(t, tc.msg.Type, uint32(perm.Type))
 				require.Equal(t, tc.msg.Creator, perm.Grantee)
 				require.Equal(t, tc.msg.Country, perm.Country)
+				require.Equal(t, tc.msg.ValidatorPermId, perm.ValidatorPermId)
+				require.Equal(t, types.ValidationState_VALIDATION_STATE_PENDING, perm.VpState)
+				require.NotNil(t, perm.Created)
+				require.NotNil(t, perm.Modified)
+				require.NotNil(t, perm.VpLastStateChange)
 			}
 		})
 	}
