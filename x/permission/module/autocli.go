@@ -46,6 +46,35 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 						},
 					},
 				},
+				{
+					RpcMethod: "GetPermissionSession",
+					Use:       "get-permission-session [id]",
+					Short:     "Get permission session by ID",
+					Long:      "Get details about a specific permission session by its ID",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "id",
+						},
+					},
+				},
+				{
+					RpcMethod: "ListPermissionSessions",
+					Use:       "list-permission-sessions",
+					Short:     "List permission sessions",
+					Long:      "List all permission sessions with optional filtering and pagination",
+					FlagOptions: map[string]*autocliv1.FlagOptions{
+						"modified_after": {
+							Name:         "modified-after",
+							Usage:        "Filter by modified time (RFC3339 format)",
+							DefaultValue: "",
+						},
+						"response_max_size": {
+							Name:         "response-max-size",
+							Usage:        "Maximum number of results to return (1-1024)",
+							DefaultValue: "64",
+						},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},

@@ -19,9 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Query_Params_FullMethodName          = "/veranablockchain.permission.Query/Params"
-	Query_ListPermissions_FullMethodName = "/veranablockchain.permission.Query/ListPermissions"
-	Query_GetPermission_FullMethodName   = "/veranablockchain.permission.Query/GetPermission"
+	Query_Params_FullMethodName                 = "/veranablockchain.permission.Query/Params"
+	Query_ListPermissions_FullMethodName        = "/veranablockchain.permission.Query/ListPermissions"
+	Query_GetPermission_FullMethodName          = "/veranablockchain.permission.Query/GetPermission"
+	Query_GetPermissionSession_FullMethodName   = "/veranablockchain.permission.Query/GetPermissionSession"
+	Query_ListPermissionSessions_FullMethodName = "/veranablockchain.permission.Query/ListPermissionSessions"
 )
 
 // QueryClient is the client API for Query service.
@@ -32,6 +34,8 @@ type QueryClient interface {
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
 	ListPermissions(ctx context.Context, in *QueryListPermissionsRequest, opts ...grpc.CallOption) (*QueryListPermissionsResponse, error)
 	GetPermission(ctx context.Context, in *QueryGetPermissionRequest, opts ...grpc.CallOption) (*QueryGetPermissionResponse, error)
+	GetPermissionSession(ctx context.Context, in *QueryGetPermissionSessionRequest, opts ...grpc.CallOption) (*QueryGetPermissionSessionResponse, error)
+	ListPermissionSessions(ctx context.Context, in *QueryListPermissionSessionsRequest, opts ...grpc.CallOption) (*QueryListPermissionSessionsResponse, error)
 }
 
 type queryClient struct {
@@ -69,6 +73,24 @@ func (c *queryClient) GetPermission(ctx context.Context, in *QueryGetPermissionR
 	return out, nil
 }
 
+func (c *queryClient) GetPermissionSession(ctx context.Context, in *QueryGetPermissionSessionRequest, opts ...grpc.CallOption) (*QueryGetPermissionSessionResponse, error) {
+	out := new(QueryGetPermissionSessionResponse)
+	err := c.cc.Invoke(ctx, Query_GetPermissionSession_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) ListPermissionSessions(ctx context.Context, in *QueryListPermissionSessionsRequest, opts ...grpc.CallOption) (*QueryListPermissionSessionsResponse, error) {
+	out := new(QueryListPermissionSessionsResponse)
+	err := c.cc.Invoke(ctx, Query_ListPermissionSessions_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -77,6 +99,8 @@ type QueryServer interface {
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
 	ListPermissions(context.Context, *QueryListPermissionsRequest) (*QueryListPermissionsResponse, error)
 	GetPermission(context.Context, *QueryGetPermissionRequest) (*QueryGetPermissionResponse, error)
+	GetPermissionSession(context.Context, *QueryGetPermissionSessionRequest) (*QueryGetPermissionSessionResponse, error)
+	ListPermissionSessions(context.Context, *QueryListPermissionSessionsRequest) (*QueryListPermissionSessionsResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -92,6 +116,12 @@ func (UnimplementedQueryServer) ListPermissions(context.Context, *QueryListPermi
 }
 func (UnimplementedQueryServer) GetPermission(context.Context, *QueryGetPermissionRequest) (*QueryGetPermissionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPermission not implemented")
+}
+func (UnimplementedQueryServer) GetPermissionSession(context.Context, *QueryGetPermissionSessionRequest) (*QueryGetPermissionSessionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPermissionSession not implemented")
+}
+func (UnimplementedQueryServer) ListPermissionSessions(context.Context, *QueryListPermissionSessionsRequest) (*QueryListPermissionSessionsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListPermissionSessions not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -160,6 +190,42 @@ func _Query_GetPermission_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_GetPermissionSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryGetPermissionSessionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).GetPermissionSession(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_GetPermissionSession_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).GetPermissionSession(ctx, req.(*QueryGetPermissionSessionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_ListPermissionSessions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryListPermissionSessionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).ListPermissionSessions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_ListPermissionSessions_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).ListPermissionSessions(ctx, req.(*QueryListPermissionSessionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -178,6 +244,14 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetPermission",
 			Handler:    _Query_GetPermission_Handler,
+		},
+		{
+			MethodName: "GetPermissionSession",
+			Handler:    _Query_GetPermissionSession_Handler,
+		},
+		{
+			MethodName: "ListPermissionSessions",
+			Handler:    _Query_ListPermissionSessions_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

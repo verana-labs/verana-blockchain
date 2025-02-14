@@ -82,3 +82,66 @@ func (k Keeper) GetPermission(goCtx context.Context, req *types.QueryGetPermissi
 		Permission: permission,
 	}, nil
 }
+
+func (k Keeper) GetPermissionSession(ctx context.Context, req *types.QueryGetPermissionSessionRequest) (*types.QueryGetPermissionSessionResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "empty request")
+	}
+
+	if req.Id == "" {
+		return nil, status.Error(codes.InvalidArgument, "session ID is required")
+	}
+
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	session, err := k.PermissionSession.Get(sdkCtx, req.Id)
+	if err != nil {
+		if errors.Is(err, collections.ErrNotFound) {
+			return nil, status.Error(codes.NotFound, "session not found")
+		}
+		return nil, status.Error(codes.Internal, "failed to get session")
+	}
+
+	return &types.QueryGetPermissionSessionResponse{
+		Session: &session,
+	}, nil
+}
+
+func (k Keeper) ListPermissionSessions(ctx context.Context, req *types.QueryListPermissionSessionsRequest) (*types.QueryListPermissionSessionsResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "empty request")
+	}
+
+	// Validate response_max_size
+	if req.ResponseMaxSize == 0 {
+		req.ResponseMaxSize = 64 // Default value
+	}
+	if req.ResponseMaxSize < 1 || req.ResponseMaxSize > 1024 {
+		return nil, status.Error(codes.InvalidArgument, "response_max_size must be between 1 and 1,024")
+	}
+
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	var sessions []types.PermissionSession
+
+	err := k.PermissionSession.Walk(sdkCtx, nil, func(key string, session types.PermissionSession) (bool, error) {
+		// Apply modified_after filter if provided
+		if req.ModifiedAfter != nil && !session.Modified.After(*req.ModifiedAfter) {
+			return false, nil
+		}
+
+		sessions = append(sessions, session)
+		return len(sessions) >= int(req.ResponseMaxSize), nil
+	})
+
+	if err != nil {
+		return nil, status.Error(codes.Internal, "failed to list sessions")
+	}
+
+	// Sort by modified time ascending
+	sort.Slice(sessions, func(i, j int) bool {
+		return sessions[i].Modified.Before(*sessions[j].Modified)
+	})
+
+	return &types.QueryListPermissionSessionsResponse{
+		Sessions: sessions,
+	}, nil
+}

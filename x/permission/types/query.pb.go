@@ -302,6 +302,190 @@ func (m *QueryGetPermissionResponse) GetPermission() Permission {
 	return Permission{}
 }
 
+type QueryGetPermissionSessionRequest struct {
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+}
+
+func (m *QueryGetPermissionSessionRequest) Reset()         { *m = QueryGetPermissionSessionRequest{} }
+func (m *QueryGetPermissionSessionRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryGetPermissionSessionRequest) ProtoMessage()    {}
+func (*QueryGetPermissionSessionRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e10f93c705c1fbc8, []int{6}
+}
+func (m *QueryGetPermissionSessionRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryGetPermissionSessionRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryGetPermissionSessionRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryGetPermissionSessionRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryGetPermissionSessionRequest.Merge(m, src)
+}
+func (m *QueryGetPermissionSessionRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryGetPermissionSessionRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryGetPermissionSessionRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryGetPermissionSessionRequest proto.InternalMessageInfo
+
+func (m *QueryGetPermissionSessionRequest) GetId() string {
+	if m != nil {
+		return m.Id
+	}
+	return ""
+}
+
+type QueryGetPermissionSessionResponse struct {
+	Session *PermissionSession `protobuf:"bytes,1,opt,name=session,proto3" json:"session,omitempty"`
+}
+
+func (m *QueryGetPermissionSessionResponse) Reset()         { *m = QueryGetPermissionSessionResponse{} }
+func (m *QueryGetPermissionSessionResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryGetPermissionSessionResponse) ProtoMessage()    {}
+func (*QueryGetPermissionSessionResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e10f93c705c1fbc8, []int{7}
+}
+func (m *QueryGetPermissionSessionResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryGetPermissionSessionResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryGetPermissionSessionResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryGetPermissionSessionResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryGetPermissionSessionResponse.Merge(m, src)
+}
+func (m *QueryGetPermissionSessionResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryGetPermissionSessionResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryGetPermissionSessionResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryGetPermissionSessionResponse proto.InternalMessageInfo
+
+func (m *QueryGetPermissionSessionResponse) GetSession() *PermissionSession {
+	if m != nil {
+		return m.Session
+	}
+	return nil
+}
+
+type QueryListPermissionSessionsRequest struct {
+	ModifiedAfter   *time.Time `protobuf:"bytes,1,opt,name=modified_after,json=modifiedAfter,proto3,stdtime" json:"modified_after,omitempty"`
+	ResponseMaxSize uint32     `protobuf:"varint,2,opt,name=response_max_size,json=responseMaxSize,proto3" json:"response_max_size,omitempty"`
+}
+
+func (m *QueryListPermissionSessionsRequest) Reset()         { *m = QueryListPermissionSessionsRequest{} }
+func (m *QueryListPermissionSessionsRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryListPermissionSessionsRequest) ProtoMessage()    {}
+func (*QueryListPermissionSessionsRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e10f93c705c1fbc8, []int{8}
+}
+func (m *QueryListPermissionSessionsRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryListPermissionSessionsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryListPermissionSessionsRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryListPermissionSessionsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryListPermissionSessionsRequest.Merge(m, src)
+}
+func (m *QueryListPermissionSessionsRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryListPermissionSessionsRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryListPermissionSessionsRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryListPermissionSessionsRequest proto.InternalMessageInfo
+
+func (m *QueryListPermissionSessionsRequest) GetModifiedAfter() *time.Time {
+	if m != nil {
+		return m.ModifiedAfter
+	}
+	return nil
+}
+
+func (m *QueryListPermissionSessionsRequest) GetResponseMaxSize() uint32 {
+	if m != nil {
+		return m.ResponseMaxSize
+	}
+	return 0
+}
+
+type QueryListPermissionSessionsResponse struct {
+	Sessions []PermissionSession `protobuf:"bytes,1,rep,name=sessions,proto3" json:"sessions"`
+}
+
+func (m *QueryListPermissionSessionsResponse) Reset()         { *m = QueryListPermissionSessionsResponse{} }
+func (m *QueryListPermissionSessionsResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryListPermissionSessionsResponse) ProtoMessage()    {}
+func (*QueryListPermissionSessionsResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e10f93c705c1fbc8, []int{9}
+}
+func (m *QueryListPermissionSessionsResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryListPermissionSessionsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryListPermissionSessionsResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryListPermissionSessionsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryListPermissionSessionsResponse.Merge(m, src)
+}
+func (m *QueryListPermissionSessionsResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryListPermissionSessionsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryListPermissionSessionsResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryListPermissionSessionsResponse proto.InternalMessageInfo
+
+func (m *QueryListPermissionSessionsResponse) GetSessions() []PermissionSession {
+	if m != nil {
+		return m.Sessions
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*QueryParamsRequest)(nil), "veranablockchain.permission.QueryParamsRequest")
 	proto.RegisterType((*QueryParamsResponse)(nil), "veranablockchain.permission.QueryParamsResponse")
@@ -309,6 +493,10 @@ func init() {
 	proto.RegisterType((*QueryListPermissionsResponse)(nil), "veranablockchain.permission.QueryListPermissionsResponse")
 	proto.RegisterType((*QueryGetPermissionRequest)(nil), "veranablockchain.permission.QueryGetPermissionRequest")
 	proto.RegisterType((*QueryGetPermissionResponse)(nil), "veranablockchain.permission.QueryGetPermissionResponse")
+	proto.RegisterType((*QueryGetPermissionSessionRequest)(nil), "veranablockchain.permission.QueryGetPermissionSessionRequest")
+	proto.RegisterType((*QueryGetPermissionSessionResponse)(nil), "veranablockchain.permission.QueryGetPermissionSessionResponse")
+	proto.RegisterType((*QueryListPermissionSessionsRequest)(nil), "veranablockchain.permission.QueryListPermissionSessionsRequest")
+	proto.RegisterType((*QueryListPermissionSessionsResponse)(nil), "veranablockchain.permission.QueryListPermissionSessionsResponse")
 }
 
 func init() {
@@ -316,45 +504,53 @@ func init() {
 }
 
 var fileDescriptor_e10f93c705c1fbc8 = []byte{
-	// 597 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x54, 0x4d, 0x6b, 0x13, 0x4d,
-	0x1c, 0xcf, 0xa4, 0x7d, 0xca, 0xe3, 0x84, 0x34, 0x64, 0x5a, 0xb1, 0xdd, 0x96, 0x4d, 0x59, 0x0f,
-	0x0d, 0x11, 0x77, 0x4c, 0x04, 0x5f, 0xf0, 0x64, 0x0e, 0x7a, 0xd0, 0x62, 0x5d, 0xf5, 0x22, 0x48,
-	0x98, 0x4d, 0x26, 0xdb, 0xa1, 0xd9, 0x9d, 0xed, 0xce, 0x24, 0xa4, 0x15, 0x2f, 0xe2, 0x07, 0x28,
-	0x08, 0x5e, 0xc4, 0xbb, 0x47, 0x3f, 0x46, 0x0e, 0x1e, 0x0a, 0x5e, 0x3c, 0x55, 0x49, 0x04, 0xbf,
-	0x86, 0x64, 0x76, 0x36, 0x49, 0xdb, 0x90, 0x5a, 0x2f, 0x61, 0xb2, 0xfb, 0x7b, 0xfd, 0xcf, 0xec,
-	0xc0, 0xcd, 0x0e, 0x8d, 0x48, 0x40, 0xdc, 0x16, 0xaf, 0xef, 0xd6, 0x77, 0x08, 0x0b, 0x70, 0x48,
-	0x23, 0x9f, 0x09, 0xc1, 0x78, 0x80, 0xf7, 0xda, 0x34, 0xda, 0xb7, 0xc3, 0x88, 0x4b, 0x8e, 0xd6,
-	0x4e, 0x03, 0xed, 0x31, 0xd0, 0xc8, 0x13, 0x9f, 0x05, 0x1c, 0xab, 0xdf, 0x18, 0x6f, 0x2c, 0x7b,
-	0xdc, 0xe3, 0x6a, 0x89, 0x87, 0x2b, 0xfd, 0x74, 0xdd, 0xe3, 0xdc, 0x6b, 0x51, 0x4c, 0x42, 0x86,
-	0x49, 0x10, 0x70, 0x49, 0x24, 0xe3, 0x81, 0xd0, 0x6f, 0x4b, 0x75, 0x2e, 0x7c, 0x2e, 0xb0, 0x4b,
-	0x04, 0x8d, 0xcd, 0x71, 0xa7, 0xec, 0x52, 0x49, 0xca, 0x38, 0x24, 0x1e, 0x0b, 0x14, 0x58, 0x63,
-	0x8b, 0xb3, 0x82, 0x87, 0x24, 0x22, 0x7e, 0xa2, 0x3a, 0xb3, 0xa2, 0xdc, 0x0f, 0x69, 0x02, 0x2c,
-	0xe8, 0x70, 0xea, 0x9f, 0xdb, 0x6e, 0x62, 0xc9, 0x7c, 0x2a, 0x24, 0xf1, 0xc3, 0x18, 0x60, 0x2d,
-	0x43, 0xf4, 0x74, 0x98, 0x6a, 0x5b, 0xc9, 0x3b, 0x74, 0xaf, 0x4d, 0x85, 0xb4, 0x5e, 0xc1, 0xa5,
-	0x13, 0x4f, 0x45, 0xc8, 0x03, 0x41, 0xd1, 0x03, 0xb8, 0x10, 0xc7, 0x58, 0x01, 0x1b, 0xa0, 0x98,
-	0xa9, 0x5c, 0xb5, 0x67, 0x4c, 0xd0, 0x8e, 0xc9, 0xd5, 0x4b, 0xbd, 0xe3, 0x42, 0xea, 0xf3, 0xef,
-	0x2f, 0x25, 0xe0, 0x68, 0xb6, 0xf5, 0x01, 0xc0, 0x35, 0xa5, 0xff, 0x98, 0x09, 0xb9, 0x3d, 0x62,
-	0x24, 0xf6, 0xe8, 0x11, 0x5c, 0xf4, 0x79, 0x83, 0x35, 0x19, 0x6d, 0xd4, 0x48, 0x53, 0xd2, 0x48,
-	0xfb, 0x19, 0x76, 0x5c, 0xc7, 0x4e, 0xea, 0xd8, 0xcf, 0x93, 0x3a, 0xd5, 0xff, 0x7b, 0xc7, 0x05,
-	0x70, 0xf8, 0xa3, 0x00, 0x9c, 0x6c, 0xc2, 0xbd, 0x3f, 0xa4, 0xa2, 0x12, 0xcc, 0x47, 0xba, 0x40,
-	0xcd, 0x27, 0xdd, 0x9a, 0x60, 0x07, 0x74, 0x25, 0xbd, 0x01, 0x8a, 0x59, 0x27, 0x97, 0xbc, 0xd8,
-	0x22, 0xdd, 0x67, 0xec, 0x80, 0x5a, 0x1c, 0xae, 0x4f, 0xcf, 0xa5, 0x07, 0xf0, 0x04, 0x66, 0xc6,
-	0x05, 0x87, 0x53, 0x98, 0x2b, 0x66, 0x2a, 0x9b, 0xb3, 0xa7, 0x30, 0x5a, 0x56, 0xe7, 0x87, 0x93,
-	0x70, 0x26, 0x15, 0xac, 0x6b, 0x70, 0x55, 0x19, 0x3e, 0xa4, 0x13, 0x7e, 0xc9, 0x18, 0x16, 0x61,
-	0x9a, 0x35, 0x54, 0xf5, 0x79, 0x27, 0xcd, 0x1a, 0xd6, 0x2e, 0x34, 0xa6, 0x81, 0x75, 0xb6, 0x2d,
-	0x08, 0xc7, 0xca, 0x7a, 0x60, 0x17, 0x8c, 0x36, 0x21, 0x50, 0xf9, 0x3a, 0x07, 0xff, 0x53, 0x6e,
-	0xe8, 0x1d, 0x80, 0x0b, 0xf1, 0x5e, 0x22, 0x3c, 0x53, 0xef, 0xec, 0x41, 0x32, 0x6e, 0xfc, 0x3d,
-	0x21, 0xae, 0x61, 0x5d, 0x79, 0xfb, 0xed, 0xd7, 0xfb, 0x74, 0x1e, 0xe5, 0xd4, 0x91, 0xc6, 0x9d,
-	0xb2, 0x3e, 0xf9, 0xe8, 0x13, 0x80, 0xb9, 0x53, 0xfb, 0x82, 0xee, 0x9c, 0x2f, 0x3f, 0xfd, 0x88,
-	0x19, 0x77, 0xff, 0x81, 0xa9, 0x13, 0x5e, 0x56, 0x09, 0x73, 0x28, 0x3b, 0x4a, 0xd8, 0x62, 0x42,
-	0xa2, 0x8f, 0x00, 0x66, 0x4f, 0xec, 0x0c, 0xba, 0x75, 0xbe, 0xc7, 0xb4, 0x7d, 0x37, 0x6e, 0x5f,
-	0x98, 0xa7, 0x93, 0xad, 0xaa, 0x64, 0x4b, 0x28, 0x8f, 0xc3, 0x88, 0xaa, 0x64, 0x1e, 0x95, 0xf8,
-	0x35, 0x6b, 0xbc, 0xa9, 0xbe, 0xe8, 0xf5, 0x4d, 0x70, 0xd4, 0x37, 0xc1, 0xcf, 0xbe, 0x09, 0x0e,
-	0x07, 0x66, 0xea, 0x68, 0x60, 0xa6, 0xbe, 0x0f, 0xcc, 0xd4, 0xcb, 0x7b, 0x1e, 0x93, 0x3b, 0x6d,
-	0xd7, 0xae, 0x73, 0x1f, 0xc7, 0xbe, 0xd7, 0x5b, 0xc4, 0x15, 0xc9, 0x7a, 0xe2, 0x8e, 0xe9, 0x9e,
-	0xb9, 0x65, 0xdc, 0x05, 0xf5, 0x25, 0xde, 0xfc, 0x13, 0x00, 0x00, 0xff, 0xff, 0x33, 0xec, 0xf2,
-	0xe9, 0x74, 0x05, 0x00, 0x00,
+	// 736 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x95, 0xcf, 0x4f, 0x13, 0x4d,
+	0x18, 0xc7, 0x3b, 0x7d, 0x79, 0xfb, 0xc2, 0x90, 0xd2, 0x74, 0x80, 0x17, 0x58, 0xb0, 0x85, 0xe5,
+	0x40, 0x83, 0x71, 0x47, 0x6a, 0xe2, 0x8f, 0x18, 0x7f, 0xf5, 0xa0, 0x26, 0x4a, 0xc4, 0xa2, 0x17,
+	0x13, 0xd3, 0x4c, 0xdb, 0x61, 0x99, 0xd0, 0xdd, 0x59, 0x76, 0xa6, 0x08, 0x18, 0x2f, 0xc6, 0x3f,
+	0x80, 0xc4, 0xc4, 0x8b, 0xe1, 0xee, 0xd1, 0xa3, 0xf1, 0xec, 0x81, 0x23, 0x89, 0x17, 0x4f, 0x68,
+	0xc0, 0xc4, 0x7f, 0xc3, 0x74, 0x76, 0xb6, 0xb4, 0x50, 0x17, 0xca, 0xc5, 0x4b, 0x33, 0xdd, 0x7d,
+	0x9e, 0xef, 0xf3, 0xf9, 0x3e, 0x33, 0xcf, 0x2c, 0x9c, 0x59, 0xa3, 0x3e, 0x71, 0x49, 0xb9, 0xc6,
+	0x2b, 0x2b, 0x95, 0x65, 0xc2, 0x5c, 0xec, 0x51, 0xdf, 0x61, 0x42, 0x30, 0xee, 0xe2, 0xd5, 0x3a,
+	0xf5, 0x37, 0x2c, 0xcf, 0xe7, 0x92, 0xa3, 0xf1, 0xa3, 0x81, 0xd6, 0x61, 0xa0, 0x91, 0x26, 0x0e,
+	0x73, 0x39, 0x56, 0xbf, 0x41, 0xbc, 0x31, 0x64, 0x73, 0x9b, 0xab, 0x25, 0x6e, 0xac, 0xf4, 0xd3,
+	0x09, 0x9b, 0x73, 0xbb, 0x46, 0x31, 0xf1, 0x18, 0x26, 0xae, 0xcb, 0x25, 0x91, 0x8c, 0xbb, 0x42,
+	0xbf, 0x9d, 0xad, 0x70, 0xe1, 0x70, 0x81, 0xcb, 0x44, 0xd0, 0xa0, 0x38, 0x5e, 0x9b, 0x2b, 0x53,
+	0x49, 0xe6, 0xb0, 0x47, 0x6c, 0xe6, 0xaa, 0x60, 0x1d, 0x9b, 0x8b, 0x02, 0xf7, 0x88, 0x4f, 0x9c,
+	0x50, 0x35, 0xd2, 0xa2, 0xdc, 0xf0, 0x68, 0x18, 0x98, 0xd5, 0x70, 0xea, 0x5f, 0xb9, 0xbe, 0x84,
+	0x25, 0x73, 0xa8, 0x90, 0xc4, 0xf1, 0x82, 0x00, 0x73, 0x08, 0xa2, 0xc7, 0x0d, 0xaa, 0x05, 0x25,
+	0x5f, 0xa4, 0xab, 0x75, 0x2a, 0xa4, 0xf9, 0x1c, 0x0e, 0xb6, 0x3d, 0x15, 0x1e, 0x77, 0x05, 0x45,
+	0x77, 0x61, 0x22, 0xc0, 0x18, 0x05, 0x93, 0x20, 0xd7, 0x9f, 0x9f, 0xb6, 0x22, 0x3a, 0x68, 0x05,
+	0xc9, 0x85, 0xbe, 0x9d, 0xbd, 0x6c, 0xec, 0xc3, 0xaf, 0x8f, 0xb3, 0xa0, 0xa8, 0xb3, 0xcd, 0x77,
+	0x00, 0x8e, 0x2b, 0xfd, 0x87, 0x4c, 0xc8, 0x85, 0x66, 0x46, 0x58, 0x1e, 0x3d, 0x80, 0x03, 0x0e,
+	0xaf, 0xb2, 0x25, 0x46, 0xab, 0x25, 0xb2, 0x24, 0xa9, 0xaf, 0xeb, 0x19, 0x56, 0x60, 0xc7, 0x0a,
+	0xed, 0x58, 0x4f, 0x42, 0x3b, 0x85, 0xde, 0x9d, 0xbd, 0x2c, 0xd8, 0xfa, 0x9e, 0x05, 0xc5, 0x64,
+	0x98, 0x7b, 0xa7, 0x91, 0x8a, 0x66, 0x61, 0xda, 0xd7, 0x06, 0x4a, 0x0e, 0x59, 0x2f, 0x09, 0xb6,
+	0x49, 0x47, 0xe3, 0x93, 0x20, 0x97, 0x2c, 0xa6, 0xc2, 0x17, 0xf3, 0x64, 0x7d, 0x91, 0x6d, 0x52,
+	0x93, 0xc3, 0x89, 0xce, 0x5c, 0xba, 0x01, 0x8f, 0x60, 0xff, 0xa1, 0xc1, 0x46, 0x17, 0xfe, 0xc9,
+	0xf5, 0xe7, 0x67, 0xa2, 0xbb, 0xd0, 0x5c, 0x16, 0x7a, 0x1a, 0x9d, 0x28, 0xb6, 0x2a, 0x98, 0xe7,
+	0xe1, 0x98, 0x2a, 0x78, 0x8f, 0xb6, 0xd4, 0x0b, 0xdb, 0x30, 0x00, 0xe3, 0xac, 0xaa, 0xac, 0xf7,
+	0x14, 0xe3, 0xac, 0x6a, 0xae, 0x40, 0xa3, 0x53, 0xb0, 0x66, 0x9b, 0x87, 0xf0, 0x50, 0x59, 0x37,
+	0xac, 0x4b, 0xb4, 0x16, 0x01, 0x33, 0x0f, 0x27, 0x8f, 0x17, 0x5b, 0xa4, 0x7f, 0x00, 0xec, 0x53,
+	0x80, 0x0e, 0x9c, 0x8a, 0xc8, 0xd1, 0x9c, 0xf7, 0xe1, 0x7f, 0x82, 0xb6, 0x42, 0x5a, 0xa7, 0x84,
+	0x0c, 0x85, 0xc2, 0x74, 0x73, 0x1b, 0x40, 0xb3, 0xc3, 0x76, 0xe9, 0xb8, 0xbf, 0x7f, 0x9a, 0x5e,
+	0xc0, 0xe9, 0x48, 0x3c, 0xdd, 0x90, 0x05, 0xd8, 0xab, 0x1d, 0x85, 0x27, 0xaa, 0xcb, 0x8e, 0xe8,
+	0xdd, 0x6b, 0xaa, 0xe4, 0xbf, 0x24, 0xe0, 0xbf, 0xaa, 0x32, 0x7a, 0x03, 0x60, 0x22, 0x98, 0x43,
+	0x84, 0x23, 0x45, 0x8f, 0x5f, 0x02, 0xc6, 0xc5, 0xd3, 0x27, 0x04, 0x4e, 0xcc, 0x91, 0xd7, 0x5f,
+	0x7f, 0xbe, 0x8d, 0xa7, 0x51, 0x4a, 0x5d, 0x47, 0x78, 0x6d, 0x4e, 0xdf, 0x5a, 0x68, 0x1b, 0xc0,
+	0xd4, 0x91, 0x99, 0x42, 0x57, 0x4f, 0x96, 0xef, 0x7c, 0x3d, 0x18, 0xd7, 0xce, 0x90, 0xa9, 0x09,
+	0x87, 0x15, 0x61, 0x0a, 0x25, 0x9b, 0x84, 0x35, 0x26, 0x24, 0x7a, 0x0f, 0x60, 0xb2, 0xed, 0xd0,
+	0xa2, 0xcb, 0x27, 0xd7, 0xe8, 0x34, 0xb3, 0xc6, 0x95, 0xae, 0xf3, 0x34, 0xd9, 0x98, 0x22, 0x1b,
+	0x44, 0x69, 0xec, 0xf9, 0x54, 0x91, 0xd9, 0x54, 0xe2, 0x97, 0xac, 0xfa, 0x0a, 0x7d, 0x02, 0x70,
+	0xa8, 0xd3, 0x48, 0xa1, 0x1b, 0x5d, 0x16, 0x6b, 0x1f, 0x5f, 0xe3, 0xe6, 0x59, 0xd3, 0x35, 0xf2,
+	0x94, 0x42, 0x1e, 0x47, 0x63, 0xcd, 0x66, 0xda, 0x54, 0x96, 0xf4, 0x29, 0x0c, 0xd0, 0x3f, 0x03,
+	0xf8, 0x7f, 0xe7, 0xe3, 0x8f, 0x6e, 0x75, 0xbb, 0x8b, 0x47, 0xe6, 0xda, 0xb8, 0x7d, 0x76, 0x01,
+	0x6d, 0xe0, 0x9c, 0x32, 0x30, 0x82, 0x86, 0xdb, 0x4e, 0x43, 0xe8, 0xa0, 0xf0, 0x74, 0x67, 0x3f,
+	0x03, 0x76, 0xf7, 0x33, 0xe0, 0xc7, 0x7e, 0x06, 0x6c, 0x1d, 0x64, 0x62, 0xbb, 0x07, 0x99, 0xd8,
+	0xb7, 0x83, 0x4c, 0xec, 0xd9, 0x75, 0x9b, 0xc9, 0xe5, 0x7a, 0xd9, 0xaa, 0x70, 0x07, 0x07, 0x10,
+	0x17, 0x6a, 0xa4, 0x2c, 0xc2, 0x75, 0xcb, 0x77, 0x79, 0xfd, 0xd8, 0x97, 0xb9, 0x9c, 0x50, 0xf7,
+	0xcd, 0xa5, 0xdf, 0x01, 0x00, 0x00, 0xff, 0xff, 0xf8, 0x9c, 0x96, 0x6b, 0xa8, 0x08, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -373,6 +569,8 @@ type QueryClient interface {
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
 	ListPermissions(ctx context.Context, in *QueryListPermissionsRequest, opts ...grpc.CallOption) (*QueryListPermissionsResponse, error)
 	GetPermission(ctx context.Context, in *QueryGetPermissionRequest, opts ...grpc.CallOption) (*QueryGetPermissionResponse, error)
+	GetPermissionSession(ctx context.Context, in *QueryGetPermissionSessionRequest, opts ...grpc.CallOption) (*QueryGetPermissionSessionResponse, error)
+	ListPermissionSessions(ctx context.Context, in *QueryListPermissionSessionsRequest, opts ...grpc.CallOption) (*QueryListPermissionSessionsResponse, error)
 }
 
 type queryClient struct {
@@ -410,12 +608,32 @@ func (c *queryClient) GetPermission(ctx context.Context, in *QueryGetPermissionR
 	return out, nil
 }
 
+func (c *queryClient) GetPermissionSession(ctx context.Context, in *QueryGetPermissionSessionRequest, opts ...grpc.CallOption) (*QueryGetPermissionSessionResponse, error) {
+	out := new(QueryGetPermissionSessionResponse)
+	err := c.cc.Invoke(ctx, "/veranablockchain.permission.Query/GetPermissionSession", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) ListPermissionSessions(ctx context.Context, in *QueryListPermissionSessionsRequest, opts ...grpc.CallOption) (*QueryListPermissionSessionsResponse, error) {
+	out := new(QueryListPermissionSessionsResponse)
+	err := c.cc.Invoke(ctx, "/veranablockchain.permission.Query/ListPermissionSessions", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 type QueryServer interface {
 	// Parameters queries the parameters of the module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
 	ListPermissions(context.Context, *QueryListPermissionsRequest) (*QueryListPermissionsResponse, error)
 	GetPermission(context.Context, *QueryGetPermissionRequest) (*QueryGetPermissionResponse, error)
+	GetPermissionSession(context.Context, *QueryGetPermissionSessionRequest) (*QueryGetPermissionSessionResponse, error)
+	ListPermissionSessions(context.Context, *QueryListPermissionSessionsRequest) (*QueryListPermissionSessionsResponse, error)
 }
 
 // UnimplementedQueryServer can be embedded to have forward compatible implementations.
@@ -430,6 +648,12 @@ func (*UnimplementedQueryServer) ListPermissions(ctx context.Context, req *Query
 }
 func (*UnimplementedQueryServer) GetPermission(ctx context.Context, req *QueryGetPermissionRequest) (*QueryGetPermissionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPermission not implemented")
+}
+func (*UnimplementedQueryServer) GetPermissionSession(ctx context.Context, req *QueryGetPermissionSessionRequest) (*QueryGetPermissionSessionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPermissionSession not implemented")
+}
+func (*UnimplementedQueryServer) ListPermissionSessions(ctx context.Context, req *QueryListPermissionSessionsRequest) (*QueryListPermissionSessionsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListPermissionSessions not implemented")
 }
 
 func RegisterQueryServer(s grpc1.Server, srv QueryServer) {
@@ -490,6 +714,42 @@ func _Query_GetPermission_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_GetPermissionSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryGetPermissionSessionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).GetPermissionSession(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/veranablockchain.permission.Query/GetPermissionSession",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).GetPermissionSession(ctx, req.(*QueryGetPermissionSessionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_ListPermissionSessions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryListPermissionSessionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).ListPermissionSessions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/veranablockchain.permission.Query/ListPermissionSessions",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).ListPermissionSessions(ctx, req.(*QueryListPermissionSessionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var Query_serviceDesc = _Query_serviceDesc
 var _Query_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "veranablockchain.permission.Query",
@@ -506,6 +766,14 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetPermission",
 			Handler:    _Query_GetPermission_Handler,
+		},
+		{
+			MethodName: "GetPermissionSession",
+			Handler:    _Query_GetPermissionSession_Handler,
+		},
+		{
+			MethodName: "ListPermissionSessions",
+			Handler:    _Query_ListPermissionSessions_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -704,6 +972,146 @@ func (m *QueryGetPermissionResponse) MarshalToSizedBuffer(dAtA []byte) (int, err
 	return len(dAtA) - i, nil
 }
 
+func (m *QueryGetPermissionSessionRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryGetPermissionSessionRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryGetPermissionSessionRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Id) > 0 {
+		i -= len(m.Id)
+		copy(dAtA[i:], m.Id)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.Id)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryGetPermissionSessionResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryGetPermissionSessionResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryGetPermissionSessionResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Session != nil {
+		{
+			size, err := m.Session.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuery(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryListPermissionSessionsRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryListPermissionSessionsRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryListPermissionSessionsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ResponseMaxSize != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.ResponseMaxSize))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.ModifiedAfter != nil {
+		n5, err5 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(*m.ModifiedAfter, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(*m.ModifiedAfter):])
+		if err5 != nil {
+			return 0, err5
+		}
+		i -= n5
+		i = encodeVarintQuery(dAtA, i, uint64(n5))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryListPermissionSessionsResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryListPermissionSessionsResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryListPermissionSessionsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Sessions) > 0 {
+		for iNdEx := len(m.Sessions) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Sessions[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintQuery(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintQuery(dAtA []byte, offset int, v uint64) int {
 	offset -= sovQuery(v)
 	base := offset
@@ -786,6 +1194,63 @@ func (m *QueryGetPermissionResponse) Size() (n int) {
 	_ = l
 	l = m.Permission.Size()
 	n += 1 + l + sovQuery(uint64(l))
+	return n
+}
+
+func (m *QueryGetPermissionSessionRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Id)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryGetPermissionSessionResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Session != nil {
+		l = m.Session.Size()
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryListPermissionSessionsRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ModifiedAfter != nil {
+		l = github_com_cosmos_gogoproto_types.SizeOfStdTime(*m.ModifiedAfter)
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	if m.ResponseMaxSize != 0 {
+		n += 1 + sovQuery(uint64(m.ResponseMaxSize))
+	}
+	return n
+}
+
+func (m *QueryListPermissionSessionsResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Sessions) > 0 {
+		for _, e := range m.Sessions {
+			l = e.Size()
+			n += 1 + l + sovQuery(uint64(l))
+		}
+	}
 	return n
 }
 
@@ -1245,6 +1710,363 @@ func (m *QueryGetPermissionResponse) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if err := m.Permission.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryGetPermissionSessionRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryGetPermissionSessionRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryGetPermissionSessionRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Id = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryGetPermissionSessionResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryGetPermissionSessionResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryGetPermissionSessionResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Session", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Session == nil {
+				m.Session = &PermissionSession{}
+			}
+			if err := m.Session.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryListPermissionSessionsRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryListPermissionSessionsRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryListPermissionSessionsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ModifiedAfter", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ModifiedAfter == nil {
+				m.ModifiedAfter = new(time.Time)
+			}
+			if err := github_com_cosmos_gogoproto_types.StdTimeUnmarshal(m.ModifiedAfter, dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ResponseMaxSize", wireType)
+			}
+			m.ResponseMaxSize = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ResponseMaxSize |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryListPermissionSessionsResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryListPermissionSessionsResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryListPermissionSessionsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sessions", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Sessions = append(m.Sessions, PermissionSession{})
+			if err := m.Sessions[len(m.Sessions)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
