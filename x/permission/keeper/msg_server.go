@@ -619,3 +619,77 @@ func (ms msgServer) executeRevokePermission(ctx sdk.Context, perm types.Permissi
 
 	return ms.Keeper.UpdatePermission(ctx, perm)
 }
+
+type PermissionSet []types.Permission
+
+func (ps PermissionSet) contains(id uint64) bool {
+	for _, perm := range ps {
+		if perm.Id == id {
+			return true
+		}
+	}
+	return false
+}
+
+func (ms msgServer) CreateOrUpdatePermissionSession(goCtx context.Context, msg *types.MsgCreateOrUpdatePermissionSession) (*types.MsgCreateOrUpdatePermissionSessionResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	now := ctx.BlockTime()
+
+	// Validate session access
+	if err := ms.validateSessionAccess(ctx, msg); err != nil {
+		return nil, err
+	}
+
+	// Validate executor permission
+	executorPerm, err := ms.validateExecutorPermission(ctx, msg)
+	if err != nil {
+		return nil, err
+	}
+
+	// Validate agent permission
+	if err := ms.validateAgentPermission(ctx, msg); err != nil {
+		return nil, err
+	}
+
+	// Validate wallet agent permission if provided
+	if err := ms.validateWalletAgentPermission(ctx, msg); err != nil {
+		return nil, err
+	}
+
+	// Build permission set and calculate fees
+	_, err = ms.buildPermissionSet(ctx, executorPerm, msg.BeneficiaryPermId)
+	if err != nil {
+		return nil, fmt.Errorf("failed to build permission set: %w", err)
+	}
+
+	// Calculate and validate fees
+	//fees, err := ms.calculateAndValidateFees(ctx, msg.Creator, permSet, executorPerm.Type)
+	//if err != nil {
+	//	return nil, err
+	//}
+
+	// Process fees and create/update session
+	//if err := ms.processFees(ctx, msg.Creator, permSet, executorPerm.Type, fees); err != nil {
+	//	return nil, err
+	//}
+
+	// Create or update session
+	if err := ms.createOrUpdateSession(ctx, msg, now); err != nil {
+		return nil, err
+	}
+
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeCreateOrUpdatePermissionSession,
+			sdk.NewAttribute(types.AttributeKeySessionID, msg.Id),
+			sdk.NewAttribute(types.AttributeKeyExecutorPermID, strconv.FormatUint(msg.ExecutorPermId, 10)),
+			sdk.NewAttribute(types.AttributeKeyBeneficiaryPermID, strconv.FormatUint(msg.BeneficiaryPermId, 10)),
+			sdk.NewAttribute(types.AttributeKeyAgentPermID, strconv.FormatUint(msg.AgentPermId, 10)),
+			sdk.NewAttribute(types.AttributeKeyTimestamp, now.String()),
+		),
+	})
+
+	return &types.MsgCreateOrUpdatePermissionSessionResponse{
+		Id: msg.Id,
+	}, nil
+}

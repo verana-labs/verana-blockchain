@@ -60,3 +60,18 @@ message Permission {
   string vp_summary_digest_sri = 29;
   google.protobuf.Timestamp vp_term_requested = 30 [(gogoproto.stdtime) = true];
 }
+
+message PermissionSession {
+  string id = 1;
+  string controller = 2;
+  uint64 agent_perm_id = 3;
+  repeated SessionAuthz authz = 4;
+  google.protobuf.Timestamp created = 5 [(gogoproto.stdtime) = true];
+  google.protobuf.Timestamp modified = 6 [(gogoproto.stdtime) = true];
+}
+
+message SessionAuthz {
+  uint64 executor_perm_id = 1;
+  uint64 beneficiary_perm_id = 2;
+  uint64 wallet_agent_perm_id = 3;
+}

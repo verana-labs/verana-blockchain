@@ -19,6 +19,7 @@ func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	legacy.RegisterAminoMsg(cdc, &MsgCreateRootPermission{}, "/perm/v1/create-root-permission")
 	legacy.RegisterAminoMsg(cdc, &MsgExtendPermission{}, "/perm/v1/extend-permission")
 	legacy.RegisterAminoMsg(cdc, &MsgRevokePermission{}, "/perm/v1/revoke-permission")
+	legacy.RegisterAminoMsg(cdc, &MsgCreateOrUpdatePermissionSession{}, "/perm/v1/create-or-update-perm-session")
 }
 
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
@@ -35,6 +36,7 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 		&MsgCreateRootPermission{},
 		&MsgExtendPermission{},
 		&MsgRevokePermission{},
+		&MsgCreateOrUpdatePermissionSession{},
 	)
 	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)
 }

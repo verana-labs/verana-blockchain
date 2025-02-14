@@ -17,6 +17,7 @@ var (
 	ParamsKey            = []byte("p_permission")
 	PermissionKey        = collections.NewPrefix(0)
 	PermissionCounterKey = collections.NewPrefix(1)
+	PermissionSessionKey = collections.NewPrefix(2)
 )
 
 func KeyPrefix(p string) []byte {

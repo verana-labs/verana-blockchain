@@ -24,6 +24,8 @@ type (
 		// state
 		Permission        collections.Map[uint64, types.Permission]
 		PermissionCounter collections.Item[uint64]
+		PermissionSession collections.Map[string, types.PermissionSession]
+
 		// external keeper
 		credentialSchemaKeeper types.CredentialSchemaKeeper
 		trustRegistryKeeper    types.TrustRegistryKeeper
@@ -51,6 +53,7 @@ func NewKeeper(
 		logger:                 logger,
 		Permission:             collections.NewMap(sb, types.PermissionKey, "permission", collections.Uint64Key, codec.CollValue[types.Permission](cdc)),
 		PermissionCounter:      collections.NewItem(sb, types.PermissionCounterKey, "permission_counter", collections.Uint64Value),
+		PermissionSession:      collections.NewMap(sb, types.PermissionSessionKey, "permission_session", collections.StringKey, codec.CollValue[types.PermissionSession](cdc)),
 		credentialSchemaKeeper: credentialSchemaKeeper,
 		trustRegistryKeeper:    trustRegistryKeeper,
 	}

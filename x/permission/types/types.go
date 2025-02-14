@@ -3,6 +3,8 @@ package types
 import (
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"github.com/google/uuid"
 	"regexp"
 	"time"
 )
@@ -222,6 +224,28 @@ func (msg *MsgRevokePermission) ValidateBasic() error {
 	// Validate permission ID
 	if msg.Id == 0 {
 		return fmt.Errorf("permission ID cannot be 0")
+	}
+
+	return nil
+}
+
+func (msg *MsgCreateOrUpdatePermissionSession) ValidateBasic() error {
+	if _, err := sdk.AccAddressFromBech32(msg.Creator); err != nil {
+		return sdkerrors.ErrInvalidAddress.Wrapf("invalid creator address: %s", err)
+	}
+
+	// Validate UUID format
+	if _, err := uuid.Parse(msg.Id); err != nil {
+		return sdkerrors.ErrInvalidRequest.Wrap("invalid session ID: must be valid UUID")
+	}
+
+	// Validate required fields
+	if msg.ExecutorPermId == 0 {
+		return sdkerrors.ErrInvalidRequest.Wrap("executor permission ID required")
+	}
+
+	if msg.AgentPermId == 0 {
+		return sdkerrors.ErrInvalidRequest.Wrap("agent permission ID required")
 	}
 
 	return nil

@@ -9420,6 +9420,1102 @@ func (x *fastReflection_MsgRevokePermissionResponse) ProtoMethods() *protoiface.
 	}
 }
 
+var (
+	md_MsgCreateOrUpdatePermissionSession                      protoreflect.MessageDescriptor
+	fd_MsgCreateOrUpdatePermissionSession_creator              protoreflect.FieldDescriptor
+	fd_MsgCreateOrUpdatePermissionSession_id                   protoreflect.FieldDescriptor
+	fd_MsgCreateOrUpdatePermissionSession_executor_perm_id     protoreflect.FieldDescriptor
+	fd_MsgCreateOrUpdatePermissionSession_beneficiary_perm_id  protoreflect.FieldDescriptor
+	fd_MsgCreateOrUpdatePermissionSession_agent_perm_id        protoreflect.FieldDescriptor
+	fd_MsgCreateOrUpdatePermissionSession_wallet_agent_perm_id protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_veranablockchain_permission_tx_proto_init()
+	md_MsgCreateOrUpdatePermissionSession = File_veranablockchain_permission_tx_proto.Messages().ByName("MsgCreateOrUpdatePermissionSession")
+	fd_MsgCreateOrUpdatePermissionSession_creator = md_MsgCreateOrUpdatePermissionSession.Fields().ByName("creator")
+	fd_MsgCreateOrUpdatePermissionSession_id = md_MsgCreateOrUpdatePermissionSession.Fields().ByName("id")
+	fd_MsgCreateOrUpdatePermissionSession_executor_perm_id = md_MsgCreateOrUpdatePermissionSession.Fields().ByName("executor_perm_id")
+	fd_MsgCreateOrUpdatePermissionSession_beneficiary_perm_id = md_MsgCreateOrUpdatePermissionSession.Fields().ByName("beneficiary_perm_id")
+	fd_MsgCreateOrUpdatePermissionSession_agent_perm_id = md_MsgCreateOrUpdatePermissionSession.Fields().ByName("agent_perm_id")
+	fd_MsgCreateOrUpdatePermissionSession_wallet_agent_perm_id = md_MsgCreateOrUpdatePermissionSession.Fields().ByName("wallet_agent_perm_id")
+}
+
+var _ protoreflect.Message = (*fastReflection_MsgCreateOrUpdatePermissionSession)(nil)
+
+type fastReflection_MsgCreateOrUpdatePermissionSession MsgCreateOrUpdatePermissionSession
+
+func (x *MsgCreateOrUpdatePermissionSession) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgCreateOrUpdatePermissionSession)(x)
+}
+
+func (x *MsgCreateOrUpdatePermissionSession) slowProtoReflect() protoreflect.Message {
+	mi := &file_veranablockchain_permission_tx_proto_msgTypes[20]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_MsgCreateOrUpdatePermissionSession_messageType fastReflection_MsgCreateOrUpdatePermissionSession_messageType
+var _ protoreflect.MessageType = fastReflection_MsgCreateOrUpdatePermissionSession_messageType{}
+
+type fastReflection_MsgCreateOrUpdatePermissionSession_messageType struct{}
+
+func (x fastReflection_MsgCreateOrUpdatePermissionSession_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgCreateOrUpdatePermissionSession)(nil)
+}
+func (x fastReflection_MsgCreateOrUpdatePermissionSession_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgCreateOrUpdatePermissionSession)
+}
+func (x fastReflection_MsgCreateOrUpdatePermissionSession_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgCreateOrUpdatePermissionSession
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_MsgCreateOrUpdatePermissionSession) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgCreateOrUpdatePermissionSession
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_MsgCreateOrUpdatePermissionSession) Type() protoreflect.MessageType {
+	return _fastReflection_MsgCreateOrUpdatePermissionSession_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_MsgCreateOrUpdatePermissionSession) New() protoreflect.Message {
+	return new(fastReflection_MsgCreateOrUpdatePermissionSession)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_MsgCreateOrUpdatePermissionSession) Interface() protoreflect.ProtoMessage {
+	return (*MsgCreateOrUpdatePermissionSession)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_MsgCreateOrUpdatePermissionSession) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Creator != "" {
+		value := protoreflect.ValueOfString(x.Creator)
+		if !f(fd_MsgCreateOrUpdatePermissionSession_creator, value) {
+			return
+		}
+	}
+	if x.Id != "" {
+		value := protoreflect.ValueOfString(x.Id)
+		if !f(fd_MsgCreateOrUpdatePermissionSession_id, value) {
+			return
+		}
+	}
+	if x.ExecutorPermId != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.ExecutorPermId)
+		if !f(fd_MsgCreateOrUpdatePermissionSession_executor_perm_id, value) {
+			return
+		}
+	}
+	if x.BeneficiaryPermId != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.BeneficiaryPermId)
+		if !f(fd_MsgCreateOrUpdatePermissionSession_beneficiary_perm_id, value) {
+			return
+		}
+	}
+	if x.AgentPermId != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.AgentPermId)
+		if !f(fd_MsgCreateOrUpdatePermissionSession_agent_perm_id, value) {
+			return
+		}
+	}
+	if x.WalletAgentPermId != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.WalletAgentPermId)
+		if !f(fd_MsgCreateOrUpdatePermissionSession_wallet_agent_perm_id, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_MsgCreateOrUpdatePermissionSession) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.creator":
+		return x.Creator != ""
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.id":
+		return x.Id != ""
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.executor_perm_id":
+		return x.ExecutorPermId != uint64(0)
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.beneficiary_perm_id":
+		return x.BeneficiaryPermId != uint64(0)
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.agent_perm_id":
+		return x.AgentPermId != uint64(0)
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.wallet_agent_perm_id":
+		return x.WalletAgentPermId != uint64(0)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgCreateOrUpdatePermissionSession"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgCreateOrUpdatePermissionSession does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgCreateOrUpdatePermissionSession) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.creator":
+		x.Creator = ""
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.id":
+		x.Id = ""
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.executor_perm_id":
+		x.ExecutorPermId = uint64(0)
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.beneficiary_perm_id":
+		x.BeneficiaryPermId = uint64(0)
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.agent_perm_id":
+		x.AgentPermId = uint64(0)
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.wallet_agent_perm_id":
+		x.WalletAgentPermId = uint64(0)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgCreateOrUpdatePermissionSession"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgCreateOrUpdatePermissionSession does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_MsgCreateOrUpdatePermissionSession) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.creator":
+		value := x.Creator
+		return protoreflect.ValueOfString(value)
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.id":
+		value := x.Id
+		return protoreflect.ValueOfString(value)
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.executor_perm_id":
+		value := x.ExecutorPermId
+		return protoreflect.ValueOfUint64(value)
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.beneficiary_perm_id":
+		value := x.BeneficiaryPermId
+		return protoreflect.ValueOfUint64(value)
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.agent_perm_id":
+		value := x.AgentPermId
+		return protoreflect.ValueOfUint64(value)
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.wallet_agent_perm_id":
+		value := x.WalletAgentPermId
+		return protoreflect.ValueOfUint64(value)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgCreateOrUpdatePermissionSession"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgCreateOrUpdatePermissionSession does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgCreateOrUpdatePermissionSession) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.creator":
+		x.Creator = value.Interface().(string)
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.id":
+		x.Id = value.Interface().(string)
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.executor_perm_id":
+		x.ExecutorPermId = value.Uint()
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.beneficiary_perm_id":
+		x.BeneficiaryPermId = value.Uint()
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.agent_perm_id":
+		x.AgentPermId = value.Uint()
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.wallet_agent_perm_id":
+		x.WalletAgentPermId = value.Uint()
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgCreateOrUpdatePermissionSession"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgCreateOrUpdatePermissionSession does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgCreateOrUpdatePermissionSession) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.creator":
+		panic(fmt.Errorf("field creator of message veranablockchain.permission.MsgCreateOrUpdatePermissionSession is not mutable"))
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.id":
+		panic(fmt.Errorf("field id of message veranablockchain.permission.MsgCreateOrUpdatePermissionSession is not mutable"))
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.executor_perm_id":
+		panic(fmt.Errorf("field executor_perm_id of message veranablockchain.permission.MsgCreateOrUpdatePermissionSession is not mutable"))
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.beneficiary_perm_id":
+		panic(fmt.Errorf("field beneficiary_perm_id of message veranablockchain.permission.MsgCreateOrUpdatePermissionSession is not mutable"))
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.agent_perm_id":
+		panic(fmt.Errorf("field agent_perm_id of message veranablockchain.permission.MsgCreateOrUpdatePermissionSession is not mutable"))
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.wallet_agent_perm_id":
+		panic(fmt.Errorf("field wallet_agent_perm_id of message veranablockchain.permission.MsgCreateOrUpdatePermissionSession is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgCreateOrUpdatePermissionSession"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgCreateOrUpdatePermissionSession does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_MsgCreateOrUpdatePermissionSession) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.creator":
+		return protoreflect.ValueOfString("")
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.id":
+		return protoreflect.ValueOfString("")
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.executor_perm_id":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.beneficiary_perm_id":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.agent_perm_id":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSession.wallet_agent_perm_id":
+		return protoreflect.ValueOfUint64(uint64(0))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgCreateOrUpdatePermissionSession"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgCreateOrUpdatePermissionSession does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_MsgCreateOrUpdatePermissionSession) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in veranablockchain.permission.MsgCreateOrUpdatePermissionSession", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_MsgCreateOrUpdatePermissionSession) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgCreateOrUpdatePermissionSession) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_MsgCreateOrUpdatePermissionSession) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_MsgCreateOrUpdatePermissionSession) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*MsgCreateOrUpdatePermissionSession)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		l = len(x.Creator)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.Id)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.ExecutorPermId != 0 {
+			n += 1 + runtime.Sov(uint64(x.ExecutorPermId))
+		}
+		if x.BeneficiaryPermId != 0 {
+			n += 1 + runtime.Sov(uint64(x.BeneficiaryPermId))
+		}
+		if x.AgentPermId != 0 {
+			n += 1 + runtime.Sov(uint64(x.AgentPermId))
+		}
+		if x.WalletAgentPermId != 0 {
+			n += 1 + runtime.Sov(uint64(x.WalletAgentPermId))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*MsgCreateOrUpdatePermissionSession)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.WalletAgentPermId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.WalletAgentPermId))
+			i--
+			dAtA[i] = 0x30
+		}
+		if x.AgentPermId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.AgentPermId))
+			i--
+			dAtA[i] = 0x28
+		}
+		if x.BeneficiaryPermId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.BeneficiaryPermId))
+			i--
+			dAtA[i] = 0x20
+		}
+		if x.ExecutorPermId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.ExecutorPermId))
+			i--
+			dAtA[i] = 0x18
+		}
+		if len(x.Id) > 0 {
+			i -= len(x.Id)
+			copy(dAtA[i:], x.Id)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Id)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if len(x.Creator) > 0 {
+			i -= len(x.Creator)
+			copy(dAtA[i:], x.Creator)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Creator)))
+			i--
+			dAtA[i] = 0xa
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*MsgCreateOrUpdatePermissionSession)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgCreateOrUpdatePermissionSession: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgCreateOrUpdatePermissionSession: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Creator", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Creator = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Id = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 3:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ExecutorPermId", wireType)
+				}
+				x.ExecutorPermId = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.ExecutorPermId |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 4:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field BeneficiaryPermId", wireType)
+				}
+				x.BeneficiaryPermId = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.BeneficiaryPermId |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 5:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field AgentPermId", wireType)
+				}
+				x.AgentPermId = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.AgentPermId |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 6:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field WalletAgentPermId", wireType)
+				}
+				x.WalletAgentPermId = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.WalletAgentPermId |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_MsgCreateOrUpdatePermissionSessionResponse    protoreflect.MessageDescriptor
+	fd_MsgCreateOrUpdatePermissionSessionResponse_id protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_veranablockchain_permission_tx_proto_init()
+	md_MsgCreateOrUpdatePermissionSessionResponse = File_veranablockchain_permission_tx_proto.Messages().ByName("MsgCreateOrUpdatePermissionSessionResponse")
+	fd_MsgCreateOrUpdatePermissionSessionResponse_id = md_MsgCreateOrUpdatePermissionSessionResponse.Fields().ByName("id")
+}
+
+var _ protoreflect.Message = (*fastReflection_MsgCreateOrUpdatePermissionSessionResponse)(nil)
+
+type fastReflection_MsgCreateOrUpdatePermissionSessionResponse MsgCreateOrUpdatePermissionSessionResponse
+
+func (x *MsgCreateOrUpdatePermissionSessionResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgCreateOrUpdatePermissionSessionResponse)(x)
+}
+
+func (x *MsgCreateOrUpdatePermissionSessionResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_veranablockchain_permission_tx_proto_msgTypes[21]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_MsgCreateOrUpdatePermissionSessionResponse_messageType fastReflection_MsgCreateOrUpdatePermissionSessionResponse_messageType
+var _ protoreflect.MessageType = fastReflection_MsgCreateOrUpdatePermissionSessionResponse_messageType{}
+
+type fastReflection_MsgCreateOrUpdatePermissionSessionResponse_messageType struct{}
+
+func (x fastReflection_MsgCreateOrUpdatePermissionSessionResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgCreateOrUpdatePermissionSessionResponse)(nil)
+}
+func (x fastReflection_MsgCreateOrUpdatePermissionSessionResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgCreateOrUpdatePermissionSessionResponse)
+}
+func (x fastReflection_MsgCreateOrUpdatePermissionSessionResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgCreateOrUpdatePermissionSessionResponse
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_MsgCreateOrUpdatePermissionSessionResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgCreateOrUpdatePermissionSessionResponse
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_MsgCreateOrUpdatePermissionSessionResponse) Type() protoreflect.MessageType {
+	return _fastReflection_MsgCreateOrUpdatePermissionSessionResponse_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_MsgCreateOrUpdatePermissionSessionResponse) New() protoreflect.Message {
+	return new(fastReflection_MsgCreateOrUpdatePermissionSessionResponse)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_MsgCreateOrUpdatePermissionSessionResponse) Interface() protoreflect.ProtoMessage {
+	return (*MsgCreateOrUpdatePermissionSessionResponse)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_MsgCreateOrUpdatePermissionSessionResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Id != "" {
+		value := protoreflect.ValueOfString(x.Id)
+		if !f(fd_MsgCreateOrUpdatePermissionSessionResponse_id, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_MsgCreateOrUpdatePermissionSessionResponse) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSessionResponse.id":
+		return x.Id != ""
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgCreateOrUpdatePermissionSessionResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgCreateOrUpdatePermissionSessionResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgCreateOrUpdatePermissionSessionResponse) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSessionResponse.id":
+		x.Id = ""
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgCreateOrUpdatePermissionSessionResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgCreateOrUpdatePermissionSessionResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_MsgCreateOrUpdatePermissionSessionResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSessionResponse.id":
+		value := x.Id
+		return protoreflect.ValueOfString(value)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgCreateOrUpdatePermissionSessionResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgCreateOrUpdatePermissionSessionResponse does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgCreateOrUpdatePermissionSessionResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSessionResponse.id":
+		x.Id = value.Interface().(string)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgCreateOrUpdatePermissionSessionResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgCreateOrUpdatePermissionSessionResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgCreateOrUpdatePermissionSessionResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSessionResponse.id":
+		panic(fmt.Errorf("field id of message veranablockchain.permission.MsgCreateOrUpdatePermissionSessionResponse is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgCreateOrUpdatePermissionSessionResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgCreateOrUpdatePermissionSessionResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_MsgCreateOrUpdatePermissionSessionResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "veranablockchain.permission.MsgCreateOrUpdatePermissionSessionResponse.id":
+		return protoreflect.ValueOfString("")
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.permission.MsgCreateOrUpdatePermissionSessionResponse"))
+		}
+		panic(fmt.Errorf("message veranablockchain.permission.MsgCreateOrUpdatePermissionSessionResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_MsgCreateOrUpdatePermissionSessionResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in veranablockchain.permission.MsgCreateOrUpdatePermissionSessionResponse", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_MsgCreateOrUpdatePermissionSessionResponse) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgCreateOrUpdatePermissionSessionResponse) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_MsgCreateOrUpdatePermissionSessionResponse) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_MsgCreateOrUpdatePermissionSessionResponse) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*MsgCreateOrUpdatePermissionSessionResponse)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		l = len(x.Id)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*MsgCreateOrUpdatePermissionSessionResponse)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.Id) > 0 {
+			i -= len(x.Id)
+			copy(dAtA[i:], x.Id)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Id)))
+			i--
+			dAtA[i] = 0xa
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*MsgCreateOrUpdatePermissionSessionResponse)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgCreateOrUpdatePermissionSessionResponse: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgCreateOrUpdatePermissionSessionResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Id = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
 // Code generated by protoc-gen-go. DO NOT EDIT.
 // versions:
 // 	protoc-gen-go v1.27.0
@@ -10292,6 +11388,116 @@ func (*MsgRevokePermissionResponse) Descriptor() ([]byte, []int) {
 	return file_veranablockchain_permission_tx_proto_rawDescGZIP(), []int{19}
 }
 
+type MsgCreateOrUpdatePermissionSession struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Creator           string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	Id                string `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"` // UUID
+	ExecutorPermId    uint64 `protobuf:"varint,3,opt,name=executor_perm_id,json=executorPermId,proto3" json:"executor_perm_id,omitempty"`
+	BeneficiaryPermId uint64 `protobuf:"varint,4,opt,name=beneficiary_perm_id,json=beneficiaryPermId,proto3" json:"beneficiary_perm_id,omitempty"`
+	AgentPermId       uint64 `protobuf:"varint,5,opt,name=agent_perm_id,json=agentPermId,proto3" json:"agent_perm_id,omitempty"`
+	WalletAgentPermId uint64 `protobuf:"varint,6,opt,name=wallet_agent_perm_id,json=walletAgentPermId,proto3" json:"wallet_agent_perm_id,omitempty"`
+}
+
+func (x *MsgCreateOrUpdatePermissionSession) Reset() {
+	*x = MsgCreateOrUpdatePermissionSession{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_veranablockchain_permission_tx_proto_msgTypes[20]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *MsgCreateOrUpdatePermissionSession) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MsgCreateOrUpdatePermissionSession) ProtoMessage() {}
+
+// Deprecated: Use MsgCreateOrUpdatePermissionSession.ProtoReflect.Descriptor instead.
+func (*MsgCreateOrUpdatePermissionSession) Descriptor() ([]byte, []int) {
+	return file_veranablockchain_permission_tx_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *MsgCreateOrUpdatePermissionSession) GetCreator() string {
+	if x != nil {
+		return x.Creator
+	}
+	return ""
+}
+
+func (x *MsgCreateOrUpdatePermissionSession) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *MsgCreateOrUpdatePermissionSession) GetExecutorPermId() uint64 {
+	if x != nil {
+		return x.ExecutorPermId
+	}
+	return 0
+}
+
+func (x *MsgCreateOrUpdatePermissionSession) GetBeneficiaryPermId() uint64 {
+	if x != nil {
+		return x.BeneficiaryPermId
+	}
+	return 0
+}
+
+func (x *MsgCreateOrUpdatePermissionSession) GetAgentPermId() uint64 {
+	if x != nil {
+		return x.AgentPermId
+	}
+	return 0
+}
+
+func (x *MsgCreateOrUpdatePermissionSession) GetWalletAgentPermId() uint64 {
+	if x != nil {
+		return x.WalletAgentPermId
+	}
+	return 0
+}
+
+type MsgCreateOrUpdatePermissionSessionResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+}
+
+func (x *MsgCreateOrUpdatePermissionSessionResponse) Reset() {
+	*x = MsgCreateOrUpdatePermissionSessionResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_veranablockchain_permission_tx_proto_msgTypes[21]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *MsgCreateOrUpdatePermissionSessionResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MsgCreateOrUpdatePermissionSessionResponse) ProtoMessage() {}
+
+// Deprecated: Use MsgCreateOrUpdatePermissionSessionResponse.ProtoReflect.Descriptor instead.
+func (*MsgCreateOrUpdatePermissionSessionResponse) Descriptor() ([]byte, []int) {
+	return file_veranablockchain_permission_tx_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *MsgCreateOrUpdatePermissionSessionResponse) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
 var File_veranablockchain_permission_tx_proto protoreflect.FileDescriptor
 
 var file_veranablockchain_permission_tx_proto_rawDesc = []byte{
@@ -10464,115 +11670,148 @@ var file_veranablockchain_permission_tx_proto_rawDesc = []byte{
 	0x02, 0x69, 0x64, 0x3a, 0x0c, 0x82, 0xe7, 0xb0, 0x2a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f,
 	0x72, 0x22, 0x1d, 0x0a, 0x1b, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x76, 0x6f, 0x6b, 0x65, 0x50, 0x65,
 	0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x32, 0xb2, 0x0b, 0x0a, 0x03, 0x4d, 0x73, 0x67, 0x12, 0x72, 0x0a, 0x0c, 0x55, 0x70, 0x64, 0x61,
-	0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x2c, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e,
-	0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d,
-	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65,
-	0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x1a, 0x34, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62,
-	0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73,
-	0x73, 0x69, 0x6f, 0x6e, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61,
-	0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x81, 0x01, 0x0a,
-	0x11, 0x53, 0x74, 0x61, 0x72, 0x74, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e,
+	0x22, 0xab, 0x02, 0x0a, 0x22, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x4f, 0x72,
+	0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e,
+	0x53, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x32, 0x0a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74,
+	0x6f, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f,
+	0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69,
+	0x6e, 0x67, 0x52, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x12, 0x0e, 0x0a, 0x02, 0x69,
+	0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x28, 0x0a, 0x10, 0x65,
+	0x78, 0x65, 0x63, 0x75, 0x74, 0x6f, 0x72, 0x5f, 0x70, 0x65, 0x72, 0x6d, 0x5f, 0x69, 0x64, 0x18,
+	0x03, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0e, 0x65, 0x78, 0x65, 0x63, 0x75, 0x74, 0x6f, 0x72, 0x50,
+	0x65, 0x72, 0x6d, 0x49, 0x64, 0x12, 0x2e, 0x0a, 0x13, 0x62, 0x65, 0x6e, 0x65, 0x66, 0x69, 0x63,
+	0x69, 0x61, 0x72, 0x79, 0x5f, 0x70, 0x65, 0x72, 0x6d, 0x5f, 0x69, 0x64, 0x18, 0x04, 0x20, 0x01,
+	0x28, 0x04, 0x52, 0x11, 0x62, 0x65, 0x6e, 0x65, 0x66, 0x69, 0x63, 0x69, 0x61, 0x72, 0x79, 0x50,
+	0x65, 0x72, 0x6d, 0x49, 0x64, 0x12, 0x22, 0x0a, 0x0d, 0x61, 0x67, 0x65, 0x6e, 0x74, 0x5f, 0x70,
+	0x65, 0x72, 0x6d, 0x5f, 0x69, 0x64, 0x18, 0x05, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0b, 0x61, 0x67,
+	0x65, 0x6e, 0x74, 0x50, 0x65, 0x72, 0x6d, 0x49, 0x64, 0x12, 0x35, 0x0a, 0x14, 0x77, 0x61, 0x6c,
+	0x6c, 0x65, 0x74, 0x5f, 0x61, 0x67, 0x65, 0x6e, 0x74, 0x5f, 0x70, 0x65, 0x72, 0x6d, 0x5f, 0x69,
+	0x64, 0x18, 0x06, 0x20, 0x01, 0x28, 0x04, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x01, 0x52, 0x11, 0x77,
+	0x61, 0x6c, 0x6c, 0x65, 0x74, 0x41, 0x67, 0x65, 0x6e, 0x74, 0x50, 0x65, 0x72, 0x6d, 0x49, 0x64,
+	0x3a, 0x0c, 0x82, 0xe7, 0xb0, 0x2a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x22, 0x3c,
+	0x0a, 0x2a, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x4f, 0x72, 0x55, 0x70, 0x64,
+	0x61, 0x74, 0x65, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x53, 0x65, 0x73,
+	0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x0e, 0x0a, 0x02,
+	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x32, 0xe0, 0x0c, 0x0a,
+	0x03, 0x4d, 0x73, 0x67, 0x12, 0x72, 0x0a, 0x0c, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61,
+	0x72, 0x61, 0x6d, 0x73, 0x12, 0x2c, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f,
+	0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69,
+	0x6f, 0x6e, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61,
+	0x6d, 0x73, 0x1a, 0x34, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b,
+	0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e,
+	0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x81, 0x01, 0x0a, 0x11, 0x53, 0x74, 0x61,
+	0x72, 0x74, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x56, 0x50, 0x12, 0x31,
+	0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69,
+	0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2e, 0x4d, 0x73, 0x67,
+	0x53, 0x74, 0x61, 0x72, 0x74, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x56,
+	0x50, 0x1a, 0x39, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63,
+	0x68, 0x61, 0x69, 0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2e,
+	0x4d, 0x73, 0x67, 0x53, 0x74, 0x61, 0x72, 0x74, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69,
+	0x6f, 0x6e, 0x56, 0x50, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x81, 0x01, 0x0a,
+	0x11, 0x52, 0x65, 0x6e, 0x65, 0x77, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e,
 	0x56, 0x50, 0x12, 0x31, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b,
 	0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e,
-	0x2e, 0x4d, 0x73, 0x67, 0x53, 0x74, 0x61, 0x72, 0x74, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73,
+	0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x6e, 0x65, 0x77, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73,
 	0x69, 0x6f, 0x6e, 0x56, 0x50, 0x1a, 0x39, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c,
 	0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73,
-	0x69, 0x6f, 0x6e, 0x2e, 0x4d, 0x73, 0x67, 0x53, 0x74, 0x61, 0x72, 0x74, 0x50, 0x65, 0x72, 0x6d,
+	0x69, 0x6f, 0x6e, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x6e, 0x65, 0x77, 0x50, 0x65, 0x72, 0x6d,
 	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x56, 0x50, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x12, 0x81, 0x01, 0x0a, 0x11, 0x52, 0x65, 0x6e, 0x65, 0x77, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73,
-	0x73, 0x69, 0x6f, 0x6e, 0x56, 0x50, 0x12, 0x31, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62,
-	0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73,
-	0x73, 0x69, 0x6f, 0x6e, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x6e, 0x65, 0x77, 0x50, 0x65, 0x72,
-	0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x56, 0x50, 0x1a, 0x39, 0x2e, 0x76, 0x65, 0x72, 0x61,
-	0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x70, 0x65, 0x72,
-	0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x6e, 0x65, 0x77,
-	0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x56, 0x50, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x9c, 0x01, 0x0a, 0x1a, 0x53, 0x65, 0x74, 0x50, 0x65, 0x72, 0x6d,
-	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x56, 0x50, 0x54, 0x6f, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61,
-	0x74, 0x65, 0x64, 0x12, 0x3a, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63,
-	0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f,
-	0x6e, 0x2e, 0x4d, 0x73, 0x67, 0x53, 0x65, 0x74, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69,
-	0x6f, 0x6e, 0x56, 0x50, 0x54, 0x6f, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x65, 0x64, 0x1a,
-	0x42, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61,
+	0x12, 0x9c, 0x01, 0x0a, 0x1a, 0x53, 0x65, 0x74, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69,
+	0x6f, 0x6e, 0x56, 0x50, 0x54, 0x6f, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x65, 0x64, 0x12,
+	0x3a, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61,
 	0x69, 0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2e, 0x4d, 0x73,
 	0x67, 0x53, 0x65, 0x74, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x56, 0x50,
-	0x54, 0x6f, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x65, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x12, 0xa8, 0x01, 0x0a, 0x1e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x50,
-	0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x56, 0x50, 0x54, 0x65, 0x72, 0x6d, 0x69,
-	0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x3e, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62,
-	0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73,
-	0x73, 0x69, 0x6f, 0x6e, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x50,
-	0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x56, 0x50, 0x54, 0x65, 0x72, 0x6d, 0x69,
-	0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x1a, 0x46, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62,
-	0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73,
-	0x73, 0x69, 0x6f, 0x6e, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x50,
-	0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x56, 0x50, 0x54, 0x65, 0x72, 0x6d, 0x69,
-	0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0xa8,
-	0x01, 0x0a, 0x1e, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73,
-	0x73, 0x69, 0x6f, 0x6e, 0x56, 0x50, 0x54, 0x65, 0x72, 0x6d, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x12, 0x3e, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63,
-	0x68, 0x61, 0x69, 0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2e,
-	0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73,
-	0x73, 0x69, 0x6f, 0x6e, 0x56, 0x50, 0x54, 0x65, 0x72, 0x6d, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x1a, 0x46, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63,
-	0x68, 0x61, 0x69, 0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2e,
-	0x4d, 0x73, 0x67, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73,
-	0x73, 0x69, 0x6f, 0x6e, 0x56, 0x50, 0x54, 0x65, 0x72, 0x6d, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0xa5, 0x01, 0x0a, 0x1d, 0x43, 0x61,
-	0x6e, 0x63, 0x65, 0x6c, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x56, 0x50,
-	0x4c, 0x61, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x3d, 0x2e, 0x76, 0x65,
+	0x54, 0x6f, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x65, 0x64, 0x1a, 0x42, 0x2e, 0x76, 0x65,
 	0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x70,
-	0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x61, 0x6e,
-	0x63, 0x65, 0x6c, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x56, 0x50, 0x4c,
-	0x61, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x45, 0x2e, 0x76, 0x65, 0x72,
-	0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x70, 0x65,
-	0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x61, 0x6e, 0x63,
-	0x65, 0x6c, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x56, 0x50, 0x4c, 0x61,
-	0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x12, 0x8a, 0x01, 0x0a, 0x14, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x52, 0x6f, 0x6f, 0x74,
-	0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x34, 0x2e, 0x76, 0x65, 0x72,
-	0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x70, 0x65,
-	0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61,
-	0x74, 0x65, 0x52, 0x6f, 0x6f, 0x74, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e,
-	0x1a, 0x3c, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68,
+	0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2e, 0x4d, 0x73, 0x67, 0x53, 0x65, 0x74,
+	0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x56, 0x50, 0x54, 0x6f, 0x56, 0x61,
+	0x6c, 0x69, 0x64, 0x61, 0x74, 0x65, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
+	0xa8, 0x01, 0x0a, 0x1e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x50, 0x65, 0x72, 0x6d, 0x69,
+	0x73, 0x73, 0x69, 0x6f, 0x6e, 0x56, 0x50, 0x54, 0x65, 0x72, 0x6d, 0x69, 0x6e, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x12, 0x3e, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b,
+	0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e,
+	0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x50, 0x65, 0x72, 0x6d, 0x69,
+	0x73, 0x73, 0x69, 0x6f, 0x6e, 0x56, 0x50, 0x54, 0x65, 0x72, 0x6d, 0x69, 0x6e, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x1a, 0x46, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b,
+	0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e,
+	0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x50, 0x65, 0x72, 0x6d, 0x69,
+	0x73, 0x73, 0x69, 0x6f, 0x6e, 0x56, 0x50, 0x54, 0x65, 0x72, 0x6d, 0x69, 0x6e, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0xa8, 0x01, 0x0a, 0x1e, 0x43,
+	0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e,
+	0x56, 0x50, 0x54, 0x65, 0x72, 0x6d, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x3e, 0x2e,
+	0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e,
+	0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2e, 0x4d, 0x73, 0x67, 0x43,
+	0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e,
+	0x56, 0x50, 0x54, 0x65, 0x72, 0x6d, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x1a, 0x46, 0x2e,
+	0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e,
+	0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2e, 0x4d, 0x73, 0x67, 0x43,
+	0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e,
+	0x56, 0x50, 0x54, 0x65, 0x72, 0x6d, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0xa5, 0x01, 0x0a, 0x1d, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c,
+	0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x56, 0x50, 0x4c, 0x61, 0x73, 0x74,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x3d, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61,
+	0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69,
+	0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x50,
+	0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x56, 0x50, 0x4c, 0x61, 0x73, 0x74, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x45, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62,
+	0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73,
+	0x73, 0x69, 0x6f, 0x6e, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x50, 0x65,
+	0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x56, 0x50, 0x4c, 0x61, 0x73, 0x74, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x8a, 0x01,
+	0x0a, 0x14, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x52, 0x6f, 0x6f, 0x74, 0x50, 0x65, 0x72, 0x6d,
+	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x34, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62,
+	0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73,
+	0x73, 0x69, 0x6f, 0x6e, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x52, 0x6f,
+	0x6f, 0x74, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x1a, 0x3c, 0x2e, 0x76,
+	0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e,
+	0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x72,
+	0x65, 0x61, 0x74, 0x65, 0x52, 0x6f, 0x6f, 0x74, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69,
+	0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x7e, 0x0a, 0x10, 0x45, 0x78,
+	0x74, 0x65, 0x6e, 0x64, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x30,
+	0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69,
+	0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2e, 0x4d, 0x73, 0x67,
+	0x45, 0x78, 0x74, 0x65, 0x6e, 0x64, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e,
+	0x1a, 0x38, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68,
 	0x61, 0x69, 0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2e, 0x4d,
-	0x73, 0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x52, 0x6f, 0x6f, 0x74, 0x50, 0x65, 0x72, 0x6d,
-	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x7e,
-	0x0a, 0x10, 0x45, 0x78, 0x74, 0x65, 0x6e, 0x64, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69,
-	0x6f, 0x6e, 0x12, 0x30, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b,
-	0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e,
-	0x2e, 0x4d, 0x73, 0x67, 0x45, 0x78, 0x74, 0x65, 0x6e, 0x64, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73,
-	0x73, 0x69, 0x6f, 0x6e, 0x1a, 0x38, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f,
-	0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69,
-	0x6f, 0x6e, 0x2e, 0x4d, 0x73, 0x67, 0x45, 0x78, 0x74, 0x65, 0x6e, 0x64, 0x50, 0x65, 0x72, 0x6d,
-	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x7e,
-	0x0a, 0x10, 0x52, 0x65, 0x76, 0x6f, 0x6b, 0x65, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69,
-	0x6f, 0x6e, 0x12, 0x30, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b,
-	0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e,
-	0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x76, 0x6f, 0x6b, 0x65, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73,
-	0x73, 0x69, 0x6f, 0x6e, 0x1a, 0x38, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f,
-	0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69,
-	0x6f, 0x6e, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x76, 0x6f, 0x6b, 0x65, 0x50, 0x65, 0x72, 0x6d,
-	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05,
-	0x80, 0xe7, 0xb0, 0x2a, 0x01, 0x42, 0x81, 0x02, 0x0a, 0x1f, 0x63, 0x6f, 0x6d, 0x2e, 0x76, 0x65,
-	0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x70,
-	0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x42, 0x07, 0x54, 0x78, 0x50, 0x72, 0x6f,
-	0x74, 0x6f, 0x50, 0x01, 0x5a, 0x48, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d,
-	0x2f, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x2d, 0x6c, 0x61, 0x62, 0x73, 0x2f, 0x76, 0x65, 0x72,
-	0x61, 0x6e, 0x61, 0x2d, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2f, 0x61,
-	0x70, 0x69, 0x2f, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68,
-	0x61, 0x69, 0x6e, 0x2f, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0xa2, 0x02,
-	0x03, 0x56, 0x50, 0x58, 0xaa, 0x02, 0x1b, 0x56, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f,
-	0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69,
-	0x6f, 0x6e, 0xca, 0x02, 0x1b, 0x56, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b,
-	0x63, 0x68, 0x61, 0x69, 0x6e, 0x5c, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e,
-	0xe2, 0x02, 0x27, 0x56, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68,
-	0x61, 0x69, 0x6e, 0x5c, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5c, 0x47,
-	0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x1c, 0x56, 0x65, 0x72,
-	0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x3a, 0x3a, 0x50,
-	0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x33,
+	0x73, 0x67, 0x45, 0x78, 0x74, 0x65, 0x6e, 0x64, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69,
+	0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x7e, 0x0a, 0x10, 0x52, 0x65,
+	0x76, 0x6f, 0x6b, 0x65, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x30,
+	0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69,
+	0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2e, 0x4d, 0x73, 0x67,
+	0x52, 0x65, 0x76, 0x6f, 0x6b, 0x65, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e,
+	0x1a, 0x38, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68,
+	0x61, 0x69, 0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2e, 0x4d,
+	0x73, 0x67, 0x52, 0x65, 0x76, 0x6f, 0x6b, 0x65, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69,
+	0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0xab, 0x01, 0x0a, 0x1f, 0x43,
+	0x72, 0x65, 0x61, 0x74, 0x65, 0x4f, 0x72, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x65, 0x72,
+	0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x53, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x3f,
+	0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69,
+	0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2e, 0x4d, 0x73, 0x67,
+	0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x4f, 0x72, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x65,
+	0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x53, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x1a,
+	0x47, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61,
+	0x69, 0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x2e, 0x4d, 0x73,
+	0x67, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x4f, 0x72, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50,
+	0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x53, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05, 0x80, 0xe7, 0xb0, 0x2a, 0x01, 0x42,
+	0x81, 0x02, 0x0a, 0x1f, 0x63, 0x6f, 0x6d, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c,
+	0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73,
+	0x69, 0x6f, 0x6e, 0x42, 0x07, 0x54, 0x78, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x48,
+	0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x76, 0x65, 0x72, 0x61, 0x6e,
+	0x61, 0x2d, 0x6c, 0x61, 0x62, 0x73, 0x2f, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x2d, 0x62, 0x6c,
+	0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x76, 0x65, 0x72,
+	0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2f, 0x70, 0x65,
+	0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0xa2, 0x02, 0x03, 0x56, 0x50, 0x58, 0xaa, 0x02,
+	0x1b, 0x56, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69,
+	0x6e, 0x2e, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0xca, 0x02, 0x1b, 0x56,
+	0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x5c,
+	0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0xe2, 0x02, 0x27, 0x56, 0x65, 0x72,
+	0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x5c, 0x50, 0x65,
+	0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61,
+	0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x1c, 0x56, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f,
+	0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x3a, 0x3a, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73,
+	0x69, 0x6f, 0x6e, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -10587,37 +11826,39 @@ func file_veranablockchain_permission_tx_proto_rawDescGZIP() []byte {
 	return file_veranablockchain_permission_tx_proto_rawDescData
 }
 
-var file_veranablockchain_permission_tx_proto_msgTypes = make([]protoimpl.MessageInfo, 20)
+var file_veranablockchain_permission_tx_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
 var file_veranablockchain_permission_tx_proto_goTypes = []interface{}{
-	(*MsgUpdateParams)(nil),                           // 0: veranablockchain.permission.MsgUpdateParams
-	(*MsgUpdateParamsResponse)(nil),                   // 1: veranablockchain.permission.MsgUpdateParamsResponse
-	(*MsgStartPermissionVP)(nil),                      // 2: veranablockchain.permission.MsgStartPermissionVP
-	(*MsgStartPermissionVPResponse)(nil),              // 3: veranablockchain.permission.MsgStartPermissionVPResponse
-	(*MsgRenewPermissionVP)(nil),                      // 4: veranablockchain.permission.MsgRenewPermissionVP
-	(*MsgRenewPermissionVPResponse)(nil),              // 5: veranablockchain.permission.MsgRenewPermissionVPResponse
-	(*MsgSetPermissionVPToValidated)(nil),             // 6: veranablockchain.permission.MsgSetPermissionVPToValidated
-	(*MsgSetPermissionVPToValidatedResponse)(nil),     // 7: veranablockchain.permission.MsgSetPermissionVPToValidatedResponse
-	(*MsgRequestPermissionVPTermination)(nil),         // 8: veranablockchain.permission.MsgRequestPermissionVPTermination
-	(*MsgRequestPermissionVPTerminationResponse)(nil), // 9: veranablockchain.permission.MsgRequestPermissionVPTerminationResponse
-	(*MsgConfirmPermissionVPTermination)(nil),         // 10: veranablockchain.permission.MsgConfirmPermissionVPTermination
-	(*MsgConfirmPermissionVPTerminationResponse)(nil), // 11: veranablockchain.permission.MsgConfirmPermissionVPTerminationResponse
-	(*MsgCancelPermissionVPLastRequest)(nil),          // 12: veranablockchain.permission.MsgCancelPermissionVPLastRequest
-	(*MsgCancelPermissionVPLastRequestResponse)(nil),  // 13: veranablockchain.permission.MsgCancelPermissionVPLastRequestResponse
-	(*MsgCreateRootPermission)(nil),                   // 14: veranablockchain.permission.MsgCreateRootPermission
-	(*MsgCreateRootPermissionResponse)(nil),           // 15: veranablockchain.permission.MsgCreateRootPermissionResponse
-	(*MsgExtendPermission)(nil),                       // 16: veranablockchain.permission.MsgExtendPermission
-	(*MsgExtendPermissionResponse)(nil),               // 17: veranablockchain.permission.MsgExtendPermissionResponse
-	(*MsgRevokePermission)(nil),                       // 18: veranablockchain.permission.MsgRevokePermission
-	(*MsgRevokePermissionResponse)(nil),               // 19: veranablockchain.permission.MsgRevokePermissionResponse
-	(*Params)(nil),                                    // 20: veranablockchain.permission.Params
-	(*timestamppb.Timestamp)(nil),                     // 21: google.protobuf.Timestamp
+	(*MsgUpdateParams)(nil),                            // 0: veranablockchain.permission.MsgUpdateParams
+	(*MsgUpdateParamsResponse)(nil),                    // 1: veranablockchain.permission.MsgUpdateParamsResponse
+	(*MsgStartPermissionVP)(nil),                       // 2: veranablockchain.permission.MsgStartPermissionVP
+	(*MsgStartPermissionVPResponse)(nil),               // 3: veranablockchain.permission.MsgStartPermissionVPResponse
+	(*MsgRenewPermissionVP)(nil),                       // 4: veranablockchain.permission.MsgRenewPermissionVP
+	(*MsgRenewPermissionVPResponse)(nil),               // 5: veranablockchain.permission.MsgRenewPermissionVPResponse
+	(*MsgSetPermissionVPToValidated)(nil),              // 6: veranablockchain.permission.MsgSetPermissionVPToValidated
+	(*MsgSetPermissionVPToValidatedResponse)(nil),      // 7: veranablockchain.permission.MsgSetPermissionVPToValidatedResponse
+	(*MsgRequestPermissionVPTermination)(nil),          // 8: veranablockchain.permission.MsgRequestPermissionVPTermination
+	(*MsgRequestPermissionVPTerminationResponse)(nil),  // 9: veranablockchain.permission.MsgRequestPermissionVPTerminationResponse
+	(*MsgConfirmPermissionVPTermination)(nil),          // 10: veranablockchain.permission.MsgConfirmPermissionVPTermination
+	(*MsgConfirmPermissionVPTerminationResponse)(nil),  // 11: veranablockchain.permission.MsgConfirmPermissionVPTerminationResponse
+	(*MsgCancelPermissionVPLastRequest)(nil),           // 12: veranablockchain.permission.MsgCancelPermissionVPLastRequest
+	(*MsgCancelPermissionVPLastRequestResponse)(nil),   // 13: veranablockchain.permission.MsgCancelPermissionVPLastRequestResponse
+	(*MsgCreateRootPermission)(nil),                    // 14: veranablockchain.permission.MsgCreateRootPermission
+	(*MsgCreateRootPermissionResponse)(nil),            // 15: veranablockchain.permission.MsgCreateRootPermissionResponse
+	(*MsgExtendPermission)(nil),                        // 16: veranablockchain.permission.MsgExtendPermission
+	(*MsgExtendPermissionResponse)(nil),                // 17: veranablockchain.permission.MsgExtendPermissionResponse
+	(*MsgRevokePermission)(nil),                        // 18: veranablockchain.permission.MsgRevokePermission
+	(*MsgRevokePermissionResponse)(nil),                // 19: veranablockchain.permission.MsgRevokePermissionResponse
+	(*MsgCreateOrUpdatePermissionSession)(nil),         // 20: veranablockchain.permission.MsgCreateOrUpdatePermissionSession
+	(*MsgCreateOrUpdatePermissionSessionResponse)(nil), // 21: veranablockchain.permission.MsgCreateOrUpdatePermissionSessionResponse
+	(*Params)(nil),                // 22: veranablockchain.permission.Params
+	(*timestamppb.Timestamp)(nil), // 23: google.protobuf.Timestamp
 }
 var file_veranablockchain_permission_tx_proto_depIdxs = []int32{
-	20, // 0: veranablockchain.permission.MsgUpdateParams.params:type_name -> veranablockchain.permission.Params
-	21, // 1: veranablockchain.permission.MsgSetPermissionVPToValidated.effective_until:type_name -> google.protobuf.Timestamp
-	21, // 2: veranablockchain.permission.MsgCreateRootPermission.effective_from:type_name -> google.protobuf.Timestamp
-	21, // 3: veranablockchain.permission.MsgCreateRootPermission.effective_until:type_name -> google.protobuf.Timestamp
-	21, // 4: veranablockchain.permission.MsgExtendPermission.effective_until:type_name -> google.protobuf.Timestamp
+	22, // 0: veranablockchain.permission.MsgUpdateParams.params:type_name -> veranablockchain.permission.Params
+	23, // 1: veranablockchain.permission.MsgSetPermissionVPToValidated.effective_until:type_name -> google.protobuf.Timestamp
+	23, // 2: veranablockchain.permission.MsgCreateRootPermission.effective_from:type_name -> google.protobuf.Timestamp
+	23, // 3: veranablockchain.permission.MsgCreateRootPermission.effective_until:type_name -> google.protobuf.Timestamp
+	23, // 4: veranablockchain.permission.MsgExtendPermission.effective_until:type_name -> google.protobuf.Timestamp
 	0,  // 5: veranablockchain.permission.Msg.UpdateParams:input_type -> veranablockchain.permission.MsgUpdateParams
 	2,  // 6: veranablockchain.permission.Msg.StartPermissionVP:input_type -> veranablockchain.permission.MsgStartPermissionVP
 	4,  // 7: veranablockchain.permission.Msg.RenewPermissionVP:input_type -> veranablockchain.permission.MsgRenewPermissionVP
@@ -10628,18 +11869,20 @@ var file_veranablockchain_permission_tx_proto_depIdxs = []int32{
 	14, // 12: veranablockchain.permission.Msg.CreateRootPermission:input_type -> veranablockchain.permission.MsgCreateRootPermission
 	16, // 13: veranablockchain.permission.Msg.ExtendPermission:input_type -> veranablockchain.permission.MsgExtendPermission
 	18, // 14: veranablockchain.permission.Msg.RevokePermission:input_type -> veranablockchain.permission.MsgRevokePermission
-	1,  // 15: veranablockchain.permission.Msg.UpdateParams:output_type -> veranablockchain.permission.MsgUpdateParamsResponse
-	3,  // 16: veranablockchain.permission.Msg.StartPermissionVP:output_type -> veranablockchain.permission.MsgStartPermissionVPResponse
-	5,  // 17: veranablockchain.permission.Msg.RenewPermissionVP:output_type -> veranablockchain.permission.MsgRenewPermissionVPResponse
-	7,  // 18: veranablockchain.permission.Msg.SetPermissionVPToValidated:output_type -> veranablockchain.permission.MsgSetPermissionVPToValidatedResponse
-	9,  // 19: veranablockchain.permission.Msg.RequestPermissionVPTermination:output_type -> veranablockchain.permission.MsgRequestPermissionVPTerminationResponse
-	11, // 20: veranablockchain.permission.Msg.ConfirmPermissionVPTermination:output_type -> veranablockchain.permission.MsgConfirmPermissionVPTerminationResponse
-	13, // 21: veranablockchain.permission.Msg.CancelPermissionVPLastRequest:output_type -> veranablockchain.permission.MsgCancelPermissionVPLastRequestResponse
-	15, // 22: veranablockchain.permission.Msg.CreateRootPermission:output_type -> veranablockchain.permission.MsgCreateRootPermissionResponse
-	17, // 23: veranablockchain.permission.Msg.ExtendPermission:output_type -> veranablockchain.permission.MsgExtendPermissionResponse
-	19, // 24: veranablockchain.permission.Msg.RevokePermission:output_type -> veranablockchain.permission.MsgRevokePermissionResponse
-	15, // [15:25] is the sub-list for method output_type
-	5,  // [5:15] is the sub-list for method input_type
+	20, // 15: veranablockchain.permission.Msg.CreateOrUpdatePermissionSession:input_type -> veranablockchain.permission.MsgCreateOrUpdatePermissionSession
+	1,  // 16: veranablockchain.permission.Msg.UpdateParams:output_type -> veranablockchain.permission.MsgUpdateParamsResponse
+	3,  // 17: veranablockchain.permission.Msg.StartPermissionVP:output_type -> veranablockchain.permission.MsgStartPermissionVPResponse
+	5,  // 18: veranablockchain.permission.Msg.RenewPermissionVP:output_type -> veranablockchain.permission.MsgRenewPermissionVPResponse
+	7,  // 19: veranablockchain.permission.Msg.SetPermissionVPToValidated:output_type -> veranablockchain.permission.MsgSetPermissionVPToValidatedResponse
+	9,  // 20: veranablockchain.permission.Msg.RequestPermissionVPTermination:output_type -> veranablockchain.permission.MsgRequestPermissionVPTerminationResponse
+	11, // 21: veranablockchain.permission.Msg.ConfirmPermissionVPTermination:output_type -> veranablockchain.permission.MsgConfirmPermissionVPTerminationResponse
+	13, // 22: veranablockchain.permission.Msg.CancelPermissionVPLastRequest:output_type -> veranablockchain.permission.MsgCancelPermissionVPLastRequestResponse
+	15, // 23: veranablockchain.permission.Msg.CreateRootPermission:output_type -> veranablockchain.permission.MsgCreateRootPermissionResponse
+	17, // 24: veranablockchain.permission.Msg.ExtendPermission:output_type -> veranablockchain.permission.MsgExtendPermissionResponse
+	19, // 25: veranablockchain.permission.Msg.RevokePermission:output_type -> veranablockchain.permission.MsgRevokePermissionResponse
+	21, // 26: veranablockchain.permission.Msg.CreateOrUpdatePermissionSession:output_type -> veranablockchain.permission.MsgCreateOrUpdatePermissionSessionResponse
+	16, // [16:27] is the sub-list for method output_type
+	5,  // [5:16] is the sub-list for method input_type
 	5,  // [5:5] is the sub-list for extension type_name
 	5,  // [5:5] is the sub-list for extension extendee
 	0,  // [0:5] is the sub-list for field type_name
@@ -10893,6 +12136,30 @@ func file_veranablockchain_permission_tx_proto_init() {
 				return nil
 			}
 		}
+		file_veranablockchain_permission_tx_proto_msgTypes[20].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MsgCreateOrUpdatePermissionSession); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_veranablockchain_permission_tx_proto_msgTypes[21].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MsgCreateOrUpdatePermissionSessionResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -10900,7 +12167,7 @@ func file_veranablockchain_permission_tx_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_veranablockchain_permission_tx_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   20,
+			NumMessages:   22,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

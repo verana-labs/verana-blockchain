@@ -27,6 +27,7 @@ service Msg {
   rpc CreateRootPermission(MsgCreateRootPermission) returns (MsgCreateRootPermissionResponse);
   rpc ExtendPermission(MsgExtendPermission) returns (MsgExtendPermissionResponse);
   rpc RevokePermission(MsgRevokePermission) returns (MsgRevokePermissionResponse);
+  rpc CreateOrUpdatePermissionSession(MsgCreateOrUpdatePermissionSession) returns (MsgCreateOrUpdatePermissionSessionResponse);
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
@@ -160,3 +161,18 @@ message MsgRevokePermission {
 }
 
 message MsgRevokePermissionResponse {}
+
+message MsgCreateOrUpdatePermissionSession {
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string id = 2; // UUID
+  uint64 executor_perm_id = 3;
+  uint64 beneficiary_perm_id = 4;
+  uint64 agent_perm_id = 5;
+  uint64 wallet_agent_perm_id = 6 [(gogoproto.nullable) = true];
+}
+
+message MsgCreateOrUpdatePermissionSessionResponse {
+  string id = 1;
+}
