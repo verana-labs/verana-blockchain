@@ -75,6 +75,83 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 						},
 					},
 				},
+				{
+					RpcMethod: "IsAuthorizedIssuer",
+					Use:       "is-authorized-issuer [issuer-did] [agent-did] [wallet-agent-did] [schema-id]",
+					Short:     "Check if a DID is authorized to issue credentials",
+					Long:      "Check if a DID is authorized to issue credentials of a given schema for a specific agent and wallet agent",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "issuer_did",
+						},
+						{
+							ProtoField: "agent_did",
+						},
+						{
+							ProtoField: "wallet_agent_did",
+						},
+						{
+							ProtoField: "schema_id",
+						},
+					},
+					FlagOptions: map[string]*autocliv1.FlagOptions{
+						"country": {
+							Name:         "country",
+							DefaultValue: "",
+							Usage:        "Optional country code (ISO 3166-1 alpha-2)",
+						},
+						"when": {
+							Name:         "when",
+							DefaultValue: "",
+							Usage:        "Optional timestamp to check authorization at (RFC3339)",
+						},
+						"session_id": {
+							Name:         "session-id",
+							DefaultValue: "0",
+							Usage:        "Optional session ID if payment is required",
+						},
+					},
+				},
+				{
+					RpcMethod: "IsAuthorizedVerifier",
+					Use:       "is-authorized-verifier [verifier-did] [issuer-did] [agent-did] [wallet-agent-did] [schema-id]",
+					Short:     "Check if a DID is authorized to verify credentials",
+					Long:      "Check if a DID is authorized to verify credentials of a given schema for a specific issuer",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "verifier_did",
+						},
+						{
+							ProtoField: "issuer_did",
+						},
+						{
+							ProtoField: "agent_did",
+						},
+						{
+							ProtoField: "wallet_agent_did",
+						},
+						{
+							ProtoField: "schema_id",
+						},
+					},
+					FlagOptions: map[string]*autocliv1.FlagOptions{
+						"country": {
+							Name:         "country",
+							DefaultValue: "",
+							Usage:        "Optional country code (ISO 3166-1 alpha-2)",
+						},
+						"when": {
+							Name:         "when",
+							DefaultValue: "",
+							Usage:        "Optional timestamp to check authorization at (RFC3339)",
+						},
+						"session_id": {
+							Name:         "session-id",
+							DefaultValue: "0",
+							Usage:        "Optional session ID if payment is required",
+						},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},

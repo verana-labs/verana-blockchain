@@ -24,6 +24,8 @@ const (
 	Query_GetPermission_FullMethodName          = "/veranablockchain.permission.Query/GetPermission"
 	Query_GetPermissionSession_FullMethodName   = "/veranablockchain.permission.Query/GetPermissionSession"
 	Query_ListPermissionSessions_FullMethodName = "/veranablockchain.permission.Query/ListPermissionSessions"
+	Query_IsAuthorizedIssuer_FullMethodName     = "/veranablockchain.permission.Query/IsAuthorizedIssuer"
+	Query_IsAuthorizedVerifier_FullMethodName   = "/veranablockchain.permission.Query/IsAuthorizedVerifier"
 )
 
 // QueryClient is the client API for Query service.
@@ -36,6 +38,8 @@ type QueryClient interface {
 	GetPermission(ctx context.Context, in *QueryGetPermissionRequest, opts ...grpc.CallOption) (*QueryGetPermissionResponse, error)
 	GetPermissionSession(ctx context.Context, in *QueryGetPermissionSessionRequest, opts ...grpc.CallOption) (*QueryGetPermissionSessionResponse, error)
 	ListPermissionSessions(ctx context.Context, in *QueryListPermissionSessionsRequest, opts ...grpc.CallOption) (*QueryListPermissionSessionsResponse, error)
+	IsAuthorizedIssuer(ctx context.Context, in *QueryIsAuthorizedIssuerRequest, opts ...grpc.CallOption) (*QueryIsAuthorizedIssuerResponse, error)
+	IsAuthorizedVerifier(ctx context.Context, in *QueryIsAuthorizedVerifierRequest, opts ...grpc.CallOption) (*QueryIsAuthorizedVerifierResponse, error)
 }
 
 type queryClient struct {
@@ -91,6 +95,24 @@ func (c *queryClient) ListPermissionSessions(ctx context.Context, in *QueryListP
 	return out, nil
 }
 
+func (c *queryClient) IsAuthorizedIssuer(ctx context.Context, in *QueryIsAuthorizedIssuerRequest, opts ...grpc.CallOption) (*QueryIsAuthorizedIssuerResponse, error) {
+	out := new(QueryIsAuthorizedIssuerResponse)
+	err := c.cc.Invoke(ctx, Query_IsAuthorizedIssuer_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) IsAuthorizedVerifier(ctx context.Context, in *QueryIsAuthorizedVerifierRequest, opts ...grpc.CallOption) (*QueryIsAuthorizedVerifierResponse, error) {
+	out := new(QueryIsAuthorizedVerifierResponse)
+	err := c.cc.Invoke(ctx, Query_IsAuthorizedVerifier_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -101,6 +123,8 @@ type QueryServer interface {
 	GetPermission(context.Context, *QueryGetPermissionRequest) (*QueryGetPermissionResponse, error)
 	GetPermissionSession(context.Context, *QueryGetPermissionSessionRequest) (*QueryGetPermissionSessionResponse, error)
 	ListPermissionSessions(context.Context, *QueryListPermissionSessionsRequest) (*QueryListPermissionSessionsResponse, error)
+	IsAuthorizedIssuer(context.Context, *QueryIsAuthorizedIssuerRequest) (*QueryIsAuthorizedIssuerResponse, error)
+	IsAuthorizedVerifier(context.Context, *QueryIsAuthorizedVerifierRequest) (*QueryIsAuthorizedVerifierResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -122,6 +146,12 @@ func (UnimplementedQueryServer) GetPermissionSession(context.Context, *QueryGetP
 }
 func (UnimplementedQueryServer) ListPermissionSessions(context.Context, *QueryListPermissionSessionsRequest) (*QueryListPermissionSessionsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListPermissionSessions not implemented")
+}
+func (UnimplementedQueryServer) IsAuthorizedIssuer(context.Context, *QueryIsAuthorizedIssuerRequest) (*QueryIsAuthorizedIssuerResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method IsAuthorizedIssuer not implemented")
+}
+func (UnimplementedQueryServer) IsAuthorizedVerifier(context.Context, *QueryIsAuthorizedVerifierRequest) (*QueryIsAuthorizedVerifierResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method IsAuthorizedVerifier not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -226,6 +256,42 @@ func _Query_ListPermissionSessions_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_IsAuthorizedIssuer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryIsAuthorizedIssuerRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).IsAuthorizedIssuer(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_IsAuthorizedIssuer_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).IsAuthorizedIssuer(ctx, req.(*QueryIsAuthorizedIssuerRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_IsAuthorizedVerifier_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryIsAuthorizedVerifierRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).IsAuthorizedVerifier(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_IsAuthorizedVerifier_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).IsAuthorizedVerifier(ctx, req.(*QueryIsAuthorizedVerifierRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -252,6 +318,14 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListPermissionSessions",
 			Handler:    _Query_ListPermissionSessions_Handler,
+		},
+		{
+			MethodName: "IsAuthorizedIssuer",
+			Handler:    _Query_IsAuthorizedIssuer_Handler,
+		},
+		{
+			MethodName: "IsAuthorizedVerifier",
+			Handler:    _Query_IsAuthorizedVerifier_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
