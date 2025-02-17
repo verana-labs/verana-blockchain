@@ -1,0 +1,128 @@
+syntax = "proto3";
+package veranablockchain.permission;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "veranablockchain/permission/params.proto";
+import "veranablockchain/permission/types.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/verana-labs/verana-blockchain/x/permission/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Parameters queries the parameters of the module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/perm/v1/params";
+  }
+  rpc ListPermissions(QueryListPermissionsRequest) returns (QueryListPermissionsResponse) {
+    option (google.api.http).get = "/perm/v1/list";
+  }
+  rpc GetPermission(QueryGetPermissionRequest) returns (QueryGetPermissionResponse) {
+    option (google.api.http).get = "/prem/v1/get/{id}";
+  }
+  rpc GetPermissionSession(QueryGetPermissionSessionRequest) returns (QueryGetPermissionSessionResponse) {
+    option (google.api.http).get = "/perm/v1/get_session/{id}";
+  }
+
+  rpc ListPermissionSessions(QueryListPermissionSessionsRequest) returns (QueryListPermissionSessionsResponse) {
+    option (google.api.http).get = "/perm/v1/list_session";
+  }
+
+  rpc IsAuthorizedIssuer(QueryIsAuthorizedIssuerRequest) returns (QueryIsAuthorizedIssuerResponse) {
+    option (google.api.http).get = "/perm/v1/authorized_issuer";
+  }
+
+  rpc IsAuthorizedVerifier(QueryIsAuthorizedVerifierRequest) returns (QueryIsAuthorizedVerifierResponse) {
+    option (google.api.http).get = "/perm/v1/authorized_verifier";
+  }
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params holds all the parameters of this module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+message QueryListPermissionsRequest {
+  google.protobuf.Timestamp modified_after = 1 [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
+  uint32 response_max_size = 2;  // Default 64, min 1, max 1024
+}
+
+message QueryListPermissionsResponse {
+  repeated Permission permissions = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryGetPermissionRequest {
+  uint64 id = 1;
+}
+
+message QueryGetPermissionResponse {
+  Permission permission = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryGetPermissionSessionRequest {
+  string id = 1;  // UUID
+}
+
+message QueryGetPermissionSessionResponse {
+  PermissionSession session = 1;
+}
+
+message QueryListPermissionSessionsRequest {
+  google.protobuf.Timestamp modified_after = 1 [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
+  uint32 response_max_size = 2;
+}
+
+message QueryListPermissionSessionsResponse {
+  repeated PermissionSession sessions = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryIsAuthorizedIssuerRequest is the request type for the Query/IsAuthorizedIssuer method
+message QueryIsAuthorizedIssuerRequest {
+  string issuer_did = 1;
+  string agent_did = 2;
+  string wallet_agent_did = 3;
+  uint64 schema_id = 4;
+  string country = 5 [(gogoproto.nullable) = true];
+  google.protobuf.Timestamp when = 6 [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
+  string session_id = 7 [(gogoproto.nullable) = true];
+}
+
+// QueryIsAuthorizedIssuerResponse is the response type for the Query/IsAuthorizedIssuer method
+message QueryIsAuthorizedIssuerResponse {
+  AuthorizationResult result = 1;
+}
+
+// AuthorizationResult defines the possible results of an authorization check
+enum AuthorizationResult {
+  AUTHORIZATION_RESULT_UNSPECIFIED = 0;
+  AUTHORIZATION_RESULT_AUTHORIZED = 1;
+  AUTHORIZATION_RESULT_FORBIDDEN = 2;
+  AUTHORIZATION_RESULT_SESSION_REQUIRED = 3;
+}
+
+// QueryIsAuthorizedVerifierRequest is the request type for the Query/IsAuthorizedVerifier method
+message QueryIsAuthorizedVerifierRequest {
+  string verifier_did = 1;
+  string issuer_did = 2;
+  string agent_did = 3;
+  string wallet_agent_did = 4;
+  uint64 schema_id = 5;
+  string country = 6 [(gogoproto.nullable) = true];
+  google.protobuf.Timestamp when = 7 [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
+  string session_id = 8 [(gogoproto.nullable) = true];
+}
+
+// QueryIsAuthorizedVerifierResponse is the response type for the Query/IsAuthorizedVerifier method
+message QueryIsAuthorizedVerifierResponse {
+  AuthorizationResult result = 1;
+}

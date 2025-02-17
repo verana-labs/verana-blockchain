@@ -1,0 +1,17 @@
+syntax = "proto3";
+package veranablockchain.permission;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "veranablockchain/permission/params.proto";
+
+option go_package = "github.com/verana-labs/verana-blockchain/x/permission/types";
+
+// GenesisState defines the permission module's genesis state.
+message GenesisState {
+  // params defines all the parameters of the module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
