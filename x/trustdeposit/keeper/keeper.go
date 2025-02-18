@@ -48,6 +48,7 @@ func NewKeeper(
 		authority:    authority,
 		logger:       logger,
 		TrustDeposit: collections.NewMap(sb, types.TrustDepositKey, "trust_deposit", collections.StringKey, codec.CollValue[types.TrustDeposit](cdc)),
+		bankKeeper:   bankKeeper,
 	}
 }
 

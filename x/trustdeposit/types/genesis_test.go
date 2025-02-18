@@ -19,15 +19,60 @@ func TestGenesisState_Validate(t *testing.T) {
 			valid:    true,
 		},
 		{
-			desc:     "valid genesis state",
+			desc: "valid genesis state",
 			genState: &types.GenesisState{
-
-				// this line is used by starport scaffolding # types/genesis/validField
+				Params: types.Params{
+					TrustDepositReclaimBurnRate: uint32(60), // 60%
+					TrustDepositShareValue:      uint64(1),  // Initial value: 1
+					TrustDepositRate:            uint32(20), // 20%
+					WalletUserAgentRewardRate:   uint32(20), // 20%
+					UserAgentRewardRate:         uint32(20), // 20%
+				},
+				// Add other genesis state fields as needed
 			},
 			valid: true,
 		},
-		// this line is used by starport scaffolding # types/genesis/testcase
+		{
+			desc: "invalid trust deposit reclaim burn rate",
+			genState: &types.GenesisState{
+				Params: types.Params{
+					TrustDepositReclaimBurnRate: uint32(101), // Invalid: > 100%
+					TrustDepositShareValue:      uint64(1),
+					TrustDepositRate:            uint32(20),
+					WalletUserAgentRewardRate:   uint32(20),
+					UserAgentRewardRate:         uint32(20),
+				},
+			},
+			valid: false,
+		},
+		{
+			desc: "invalid trust deposit share value",
+			genState: &types.GenesisState{
+				Params: types.Params{
+					TrustDepositReclaimBurnRate: uint32(60),
+					TrustDepositShareValue:      uint64(0), // Invalid: cannot be 0
+					TrustDepositRate:            uint32(20),
+					WalletUserAgentRewardRate:   uint32(20),
+					UserAgentRewardRate:         uint32(20),
+				},
+			},
+			valid: false,
+		},
+		{
+			desc: "invalid trust deposit rate",
+			genState: &types.GenesisState{
+				Params: types.Params{
+					TrustDepositReclaimBurnRate: uint32(60),
+					TrustDepositShareValue:      uint64(1),
+					TrustDepositRate:            uint32(101), // Invalid: > 100%
+					WalletUserAgentRewardRate:   uint32(20),
+					UserAgentRewardRate:         uint32(20),
+				},
+			},
+			valid: false,
+		},
 	}
+
 	for _, tc := range tests {
 		t.Run(tc.desc, func(t *testing.T) {
 			err := tc.genState.Validate()

@@ -17,6 +17,17 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Use:       "params",
 					Short:     "Shows the parameters of the module",
 				},
+				{
+					RpcMethod: "GetTrustDeposit",
+					Use:       "get-trust-deposit [account]",
+					Short:     "Query trust deposit for an account",
+					Long:      "Get the trust deposit information for a given account address",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "account",
+						},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/query
 			},
 		},

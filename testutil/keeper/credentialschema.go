@@ -28,7 +28,7 @@ type MockBankKeeper struct {
 	bankBalances map[string]sdk.Coins
 }
 
-func (k *MockBankKeeper) SendCoinsFromModuleToAccount(ctx sdk.Context, senderModule string, recipientAddr sdk.AccAddress, amt sdk.Coins) error {
+func (k *MockBankKeeper) SendCoinsFromModuleToAccount(ctx context.Context, senderModule string, recipientAddr sdk.AccAddress, amt sdk.Coins) error {
 	//TODO implement me
 	panic("implement me")
 }
@@ -55,7 +55,7 @@ func NewMockBankKeeper() *MockBankKeeper {
 }
 
 // Implement required methods from types.BankKeeper interface
-func (k *MockBankKeeper) SendCoinsFromAccountToModule(ctx sdk.Context, senderAddr sdk.AccAddress, recipientModule string, amt sdk.Coins) error {
+func (k *MockBankKeeper) SendCoinsFromAccountToModule(ctx context.Context, senderAddr sdk.AccAddress, recipientModule string, amt sdk.Coins) error {
 	return nil
 }
 
