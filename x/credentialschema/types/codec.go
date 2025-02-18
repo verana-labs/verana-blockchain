@@ -10,7 +10,9 @@ import (
 )
 
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	legacy.RegisterAminoMsg(cdc, &MsgCreateCredentialSchema{}, "/dtr/v1/cs/create-credential-schema")
+	legacy.RegisterAminoMsg(cdc, &MsgCreateCredentialSchema{}, "/vpr/v1/cs/create-credential-schema")
+	legacy.RegisterAminoMsg(cdc, &MsgUpdateCredentialSchema{}, "/vpr/v1/cs/update-credential-schema")
+	legacy.RegisterAminoMsg(cdc, &MsgArchiveCredentialSchema{}, "/vpr/v1/cs/archive-credential-schema")
 }
 
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
@@ -19,6 +21,8 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgUpdateParams{},
 		&MsgCreateCredentialSchema{},
+		&MsgUpdateCredentialSchema{},
+		&MsgArchiveCredentialSchema{},
 	)
 	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)
 }

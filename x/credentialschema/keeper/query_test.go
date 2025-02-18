@@ -34,6 +34,7 @@ func TestQueries(t *testing.T) {
 		Id:                                      1,
 		TrId:                                    1,
 		Created:                                 time.Now().Add(-24 * time.Hour),
+		Modified:                                time.Now().Add(-24 * time.Hour),
 		JsonSchema:                              validJsonSchema,
 		IssuerGrantorValidationValidityPeriod:   365,
 		VerifierGrantorValidationValidityPeriod: 365,
@@ -48,6 +49,7 @@ func TestQueries(t *testing.T) {
 		Id:                                      2,
 		TrId:                                    1,
 		Created:                                 time.Now(),
+		Modified:                                time.Now(),
 		JsonSchema:                              validJsonSchema,
 		IssuerGrantorValidationValidityPeriod:   365,
 		VerifierGrantorValidationValidityPeriod: 365,
@@ -57,7 +59,7 @@ func TestQueries(t *testing.T) {
 		IssuerPermManagementMode:                2,
 		VerifierPermManagementMode:              2,
 	}
-	createdAfterTime := schema1.Created.Add(time.Hour)
+	modifiedAfterTime := schema1.Created.Add(time.Hour)
 	require.NoError(t, k.CredentialSchema.Set(ctx, schema1.Id, schema1))
 	require.NoError(t, k.CredentialSchema.Set(ctx, schema2.Id, schema2))
 
@@ -86,9 +88,9 @@ func TestQueries(t *testing.T) {
 				expectErr:     false,
 			},
 			{
-				name: "Filter By Created After",
+				name: "Filter By Modified After",
 				request: &types.QueryListCredentialSchemasRequest{
-					CreatedAfter:    &createdAfterTime,
+					ModifiedAfter:   &modifiedAfterTime,
 					ResponseMaxSize: 64,
 				},
 				expectedCount: 1,

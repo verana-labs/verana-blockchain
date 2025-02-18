@@ -24,16 +24,16 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Long: `List credential schemas with optional filters.
 Example:
 $ veranad query credentialschema list-schemas
-$ veranad query credentialschema list-schemas --tr_id 1 --created_after 2024-01-01T00:00:00Z --response_max_size 100`,
+$ veranad query credentialschema list-schemas --tr_id 1 --modified_after 2024-01-01T00:00:00Z --response_max_size 100`,
 					FlagOptions: map[string]*autocliv1.FlagOptions{
 						"tr_id": {
 							Name:         "tr_id",
 							Usage:        "Filter by trust registry ID",
 							DefaultValue: "0",
 						},
-						"created_after": {
-							Name:         "created_after",
-							Usage:        "Show schemas created after this datetime (RFC3339 format)",
+						"modified_after": {
+							Name:         "modified_after",
+							Usage:        "Show schemas modified after this datetime (RFC3339 format)",
 							DefaultValue: "",
 						},
 						"response_max_size": {
@@ -125,6 +125,46 @@ $ veranad tx credentialschema create-credential-schema 1 schema.json 365 365 180
 						},
 						{
 							ProtoField: "verifier_perm_management_mode",
+						},
+					},
+				},
+				{
+					RpcMethod: "UpdateCredentialSchema",
+					Use:       "update [id] [issuer-grantor-period] [verifier-grantor-period] [issuer-period] [verifier-period] [holder-period]",
+					Short:     "Update a credential schema's validity periods",
+					Long:      "Update the validity periods of an existing credential schema",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "id",
+						},
+						{
+							ProtoField: "issuer_grantor_validation_validity_period",
+						},
+						{
+							ProtoField: "verifier_grantor_validation_validity_period",
+						},
+						{
+							ProtoField: "issuer_validation_validity_period",
+						},
+						{
+							ProtoField: "verifier_validation_validity_period",
+						},
+						{
+							ProtoField: "holder_validation_validity_period",
+						},
+					},
+				},
+				{
+					RpcMethod: "ArchiveCredentialSchema",
+					Use:       "archive [id] [archive]",
+					Short:     "Archive or unarchive a credential schema",
+					Long:      "Set the archive status of a credential schema. Use true to archive, false to unarchive",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "id",
+						},
+						{
+							ProtoField: "archive",
 						},
 					},
 				},

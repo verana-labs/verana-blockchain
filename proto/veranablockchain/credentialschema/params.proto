@@ -18,4 +18,5 @@ message Params {
   uint32 credential_schema_issuer_validation_validity_period_max_days = 5;
   uint32 credential_schema_verifier_validation_validity_period_max_days = 6;
   uint32 credential_schema_holder_validation_validity_period_max_days = 7;
+  uint64 trust_unit_price = 8;
 }

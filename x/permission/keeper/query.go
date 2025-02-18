@@ -166,7 +166,7 @@ func (k Keeper) IsAuthorizedIssuer(ctx context.Context, req *types.QueryIsAuthor
 	}
 
 	// Check if issuance is open
-	if cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_OPEN {
+	if cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_OPEN {
 		return &types.QueryIsAuthorizedIssuerResponse{
 			Result: types.AuthorizationResult_AUTHORIZATION_RESULT_AUTHORIZED,
 		}, nil
@@ -369,7 +369,7 @@ func (k Keeper) IsAuthorizedVerifier(ctx context.Context, req *types.QueryIsAuth
 	}
 
 	// Check if verification is open
-	if cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_OPEN {
+	if cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_OPEN {
 		return &types.QueryIsAuthorizedVerifierResponse{
 			Result: types.AuthorizationResult_AUTHORIZATION_RESULT_AUTHORIZED,
 		}, nil

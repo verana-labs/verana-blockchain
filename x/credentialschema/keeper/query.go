@@ -2,6 +2,8 @@ package keeper
 
 import (
 	"context"
+	"fmt"
+	"sort"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/verana-labs/verana-blockchain/x/credentialschema/types"
@@ -19,37 +21,37 @@ func (k Keeper) ListCredentialSchemas(goCtx context.Context, req *types.QueryLis
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Validate response_max_size
-	maxSize := uint32(64) // default
-	if req.ResponseMaxSize > 0 {
-		if req.ResponseMaxSize > 1024 {
-			return nil, status.Error(codes.InvalidArgument, "response_max_size must be between 1 and 1024")
-		}
-		maxSize = req.ResponseMaxSize
+	if req.ResponseMaxSize == 0 {
+		req.ResponseMaxSize = 64
+	}
+	if req.ResponseMaxSize > 1024 {
+		return nil, fmt.Errorf("response_max_size must be between 1 and 1024")
 	}
 
 	var schemas []types.CredentialSchema
-	var err error
-
-	err = k.CredentialSchema.Walk(ctx, nil, func(key uint64, schema types.CredentialSchema) (bool, error) {
+	err := k.CredentialSchema.Walk(ctx, nil, func(key uint64, schema types.CredentialSchema) (bool, error) {
 		// Filter by trust registry if specified
 		if req.TrId != 0 && schema.TrId != req.TrId {
 			return false, nil
 		}
 
-		// Filter by created_after if specified
-		if req.CreatedAfter != nil && schema.Created.Before(*req.CreatedAfter) {
+		// Filter by modification time if specified
+		if req.ModifiedAfter != nil && schema.Modified.Before(*req.ModifiedAfter) {
 			return false, nil
 		}
 
 		schemas = append(schemas, schema)
-
-		// Stop if we've reached max size
-		return len(schemas) >= int(maxSize), nil
+		return len(schemas) >= int(req.ResponseMaxSize), nil
 	})
 
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
+
+	// Sort by created timestamp ascending
+	sort.Slice(schemas, func(i, j int) bool {
+		return schemas[i].Created.Before(schemas[j].Created)
+	})
 
 	return &types.QueryListCredentialSchemasResponse{
 		Schemas: schemas,
