@@ -11,5 +11,9 @@ message Params {
   option (amino.name) = "veranablockchain/x/trustdeposit/Params";
   option (gogoproto.equal) = true;
 
-  
+  uint32 trust_deposit_reclaim_burn_rate = 1;
+  uint64 trust_deposit_share_value = 2;
+  uint32 trust_deposit_rate = 3;
+  uint32 wallet_user_agent_reward_rate = 4;
+  uint32 user_agent_reward_rate = 5;
 }

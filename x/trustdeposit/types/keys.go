@@ -1,5 +1,7 @@
 package types
 
+import "cosmossdk.io/collections"
+
 const (
 	// ModuleName defines the module name
 	ModuleName = "trustdeposit"
@@ -12,7 +14,12 @@ const (
 )
 
 var (
-	ParamsKey = []byte("p_trustdeposit")
+	ParamsKey       = []byte("p_trustdeposit")
+	TrustDepositKey = collections.NewPrefix(1)
+)
+
+const (
+	BondDenom = "uvna"
 )
 
 func KeyPrefix(p string) []byte {

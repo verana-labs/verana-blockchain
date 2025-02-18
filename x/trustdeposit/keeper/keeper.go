@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"cosmossdk.io/collections"
 	"fmt"
 
 	"cosmossdk.io/core/store"
@@ -20,6 +21,10 @@ type (
 		// the address capable of executing a MsgUpdateParams message. Typically, this
 		// should be the x/gov module account.
 		authority string
+		// state
+		TrustDeposit collections.Map[string, types.TrustDeposit]
+		// external keeper
+		bankKeeper types.BankKeeper
 	}
 )
 
@@ -28,8 +33,11 @@ func NewKeeper(
 	storeService store.KVStoreService,
 	logger log.Logger,
 	authority string,
+	bankKeeper types.BankKeeper,
 
 ) Keeper {
+	sb := collections.NewSchemaBuilder(storeService)
+
 	if _, err := sdk.AccAddressFromBech32(authority); err != nil {
 		panic(fmt.Sprintf("invalid authority address: %s", authority))
 	}
@@ -39,6 +47,7 @@ func NewKeeper(
 		storeService: storeService,
 		authority:    authority,
 		logger:       logger,
+		TrustDeposit: collections.NewMap(sb, types.TrustDepositKey, "trust_deposit", collections.StringKey, codec.CollValue[types.TrustDeposit](cdc)),
 	}
 }
 

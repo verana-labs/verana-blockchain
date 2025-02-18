@@ -2,26 +2,35 @@
 package trustdeposit
 
 import (
-	fmt "fmt"
-	io "io"
-	reflect "reflect"
-	sync "sync"
-
 	_ "cosmossdk.io/api/amino"
+	fmt "fmt"
 	runtime "github.com/cosmos/cosmos-proto/runtime"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	io "io"
+	reflect "reflect"
+	sync "sync"
 )
 
 var (
-	md_Params protoreflect.MessageDescriptor
+	md_Params                                 protoreflect.MessageDescriptor
+	fd_Params_trust_deposit_reclaim_burn_rate protoreflect.FieldDescriptor
+	fd_Params_trust_deposit_share_value       protoreflect.FieldDescriptor
+	fd_Params_trust_deposit_rate              protoreflect.FieldDescriptor
+	fd_Params_wallet_user_agent_reward_rate   protoreflect.FieldDescriptor
+	fd_Params_user_agent_reward_rate          protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_veranablockchain_trustdeposit_params_proto_init()
 	md_Params = File_veranablockchain_trustdeposit_params_proto.Messages().ByName("Params")
+	fd_Params_trust_deposit_reclaim_burn_rate = md_Params.Fields().ByName("trust_deposit_reclaim_burn_rate")
+	fd_Params_trust_deposit_share_value = md_Params.Fields().ByName("trust_deposit_share_value")
+	fd_Params_trust_deposit_rate = md_Params.Fields().ByName("trust_deposit_rate")
+	fd_Params_wallet_user_agent_reward_rate = md_Params.Fields().ByName("wallet_user_agent_reward_rate")
+	fd_Params_user_agent_reward_rate = md_Params.Fields().ByName("user_agent_reward_rate")
 }
 
 var _ protoreflect.Message = (*fastReflection_Params)(nil)
@@ -89,6 +98,36 @@ func (x *fastReflection_Params) Interface() protoreflect.ProtoMessage {
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.TrustDepositReclaimBurnRate != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.TrustDepositReclaimBurnRate)
+		if !f(fd_Params_trust_deposit_reclaim_burn_rate, value) {
+			return
+		}
+	}
+	if x.TrustDepositShareValue != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.TrustDepositShareValue)
+		if !f(fd_Params_trust_deposit_share_value, value) {
+			return
+		}
+	}
+	if x.TrustDepositRate != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.TrustDepositRate)
+		if !f(fd_Params_trust_deposit_rate, value) {
+			return
+		}
+	}
+	if x.WalletUserAgentRewardRate != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.WalletUserAgentRewardRate)
+		if !f(fd_Params_wallet_user_agent_reward_rate, value) {
+			return
+		}
+	}
+	if x.UserAgentRewardRate != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.UserAgentRewardRate)
+		if !f(fd_Params_user_agent_reward_rate, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -104,6 +143,16 @@ func (x *fastReflection_Params) Range(f func(protoreflect.FieldDescriptor, proto
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
+	case "veranablockchain.trustdeposit.Params.trust_deposit_reclaim_burn_rate":
+		return x.TrustDepositReclaimBurnRate != uint32(0)
+	case "veranablockchain.trustdeposit.Params.trust_deposit_share_value":
+		return x.TrustDepositShareValue != uint64(0)
+	case "veranablockchain.trustdeposit.Params.trust_deposit_rate":
+		return x.TrustDepositRate != uint32(0)
+	case "veranablockchain.trustdeposit.Params.wallet_user_agent_reward_rate":
+		return x.WalletUserAgentRewardRate != uint32(0)
+	case "veranablockchain.trustdeposit.Params.user_agent_reward_rate":
+		return x.UserAgentRewardRate != uint32(0)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustdeposit.Params"))
@@ -120,6 +169,16 @@ func (x *fastReflection_Params) Has(fd protoreflect.FieldDescriptor) bool {
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
+	case "veranablockchain.trustdeposit.Params.trust_deposit_reclaim_burn_rate":
+		x.TrustDepositReclaimBurnRate = uint32(0)
+	case "veranablockchain.trustdeposit.Params.trust_deposit_share_value":
+		x.TrustDepositShareValue = uint64(0)
+	case "veranablockchain.trustdeposit.Params.trust_deposit_rate":
+		x.TrustDepositRate = uint32(0)
+	case "veranablockchain.trustdeposit.Params.wallet_user_agent_reward_rate":
+		x.WalletUserAgentRewardRate = uint32(0)
+	case "veranablockchain.trustdeposit.Params.user_agent_reward_rate":
+		x.UserAgentRewardRate = uint32(0)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustdeposit.Params"))
@@ -136,6 +195,21 @@ func (x *fastReflection_Params) Clear(fd protoreflect.FieldDescriptor) {
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
+	case "veranablockchain.trustdeposit.Params.trust_deposit_reclaim_burn_rate":
+		value := x.TrustDepositReclaimBurnRate
+		return protoreflect.ValueOfUint32(value)
+	case "veranablockchain.trustdeposit.Params.trust_deposit_share_value":
+		value := x.TrustDepositShareValue
+		return protoreflect.ValueOfUint64(value)
+	case "veranablockchain.trustdeposit.Params.trust_deposit_rate":
+		value := x.TrustDepositRate
+		return protoreflect.ValueOfUint32(value)
+	case "veranablockchain.trustdeposit.Params.wallet_user_agent_reward_rate":
+		value := x.WalletUserAgentRewardRate
+		return protoreflect.ValueOfUint32(value)
+	case "veranablockchain.trustdeposit.Params.user_agent_reward_rate":
+		value := x.UserAgentRewardRate
+		return protoreflect.ValueOfUint32(value)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustdeposit.Params"))
@@ -156,6 +230,16 @@ func (x *fastReflection_Params) Get(descriptor protoreflect.FieldDescriptor) pro
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
+	case "veranablockchain.trustdeposit.Params.trust_deposit_reclaim_burn_rate":
+		x.TrustDepositReclaimBurnRate = uint32(value.Uint())
+	case "veranablockchain.trustdeposit.Params.trust_deposit_share_value":
+		x.TrustDepositShareValue = value.Uint()
+	case "veranablockchain.trustdeposit.Params.trust_deposit_rate":
+		x.TrustDepositRate = uint32(value.Uint())
+	case "veranablockchain.trustdeposit.Params.wallet_user_agent_reward_rate":
+		x.WalletUserAgentRewardRate = uint32(value.Uint())
+	case "veranablockchain.trustdeposit.Params.user_agent_reward_rate":
+		x.UserAgentRewardRate = uint32(value.Uint())
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustdeposit.Params"))
@@ -176,6 +260,16 @@ func (x *fastReflection_Params) Set(fd protoreflect.FieldDescriptor, value proto
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "veranablockchain.trustdeposit.Params.trust_deposit_reclaim_burn_rate":
+		panic(fmt.Errorf("field trust_deposit_reclaim_burn_rate of message veranablockchain.trustdeposit.Params is not mutable"))
+	case "veranablockchain.trustdeposit.Params.trust_deposit_share_value":
+		panic(fmt.Errorf("field trust_deposit_share_value of message veranablockchain.trustdeposit.Params is not mutable"))
+	case "veranablockchain.trustdeposit.Params.trust_deposit_rate":
+		panic(fmt.Errorf("field trust_deposit_rate of message veranablockchain.trustdeposit.Params is not mutable"))
+	case "veranablockchain.trustdeposit.Params.wallet_user_agent_reward_rate":
+		panic(fmt.Errorf("field wallet_user_agent_reward_rate of message veranablockchain.trustdeposit.Params is not mutable"))
+	case "veranablockchain.trustdeposit.Params.user_agent_reward_rate":
+		panic(fmt.Errorf("field user_agent_reward_rate of message veranablockchain.trustdeposit.Params is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustdeposit.Params"))
@@ -189,6 +283,16 @@ func (x *fastReflection_Params) Mutable(fd protoreflect.FieldDescriptor) protore
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_Params) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "veranablockchain.trustdeposit.Params.trust_deposit_reclaim_burn_rate":
+		return protoreflect.ValueOfUint32(uint32(0))
+	case "veranablockchain.trustdeposit.Params.trust_deposit_share_value":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "veranablockchain.trustdeposit.Params.trust_deposit_rate":
+		return protoreflect.ValueOfUint32(uint32(0))
+	case "veranablockchain.trustdeposit.Params.wallet_user_agent_reward_rate":
+		return protoreflect.ValueOfUint32(uint32(0))
+	case "veranablockchain.trustdeposit.Params.user_agent_reward_rate":
+		return protoreflect.ValueOfUint32(uint32(0))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustdeposit.Params"))
@@ -258,6 +362,21 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		var n int
 		var l int
 		_ = l
+		if x.TrustDepositReclaimBurnRate != 0 {
+			n += 1 + runtime.Sov(uint64(x.TrustDepositReclaimBurnRate))
+		}
+		if x.TrustDepositShareValue != 0 {
+			n += 1 + runtime.Sov(uint64(x.TrustDepositShareValue))
+		}
+		if x.TrustDepositRate != 0 {
+			n += 1 + runtime.Sov(uint64(x.TrustDepositRate))
+		}
+		if x.WalletUserAgentRewardRate != 0 {
+			n += 1 + runtime.Sov(uint64(x.WalletUserAgentRewardRate))
+		}
+		if x.UserAgentRewardRate != 0 {
+			n += 1 + runtime.Sov(uint64(x.UserAgentRewardRate))
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -286,6 +405,31 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.UserAgentRewardRate != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.UserAgentRewardRate))
+			i--
+			dAtA[i] = 0x28
+		}
+		if x.WalletUserAgentRewardRate != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.WalletUserAgentRewardRate))
+			i--
+			dAtA[i] = 0x20
+		}
+		if x.TrustDepositRate != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.TrustDepositRate))
+			i--
+			dAtA[i] = 0x18
+		}
+		if x.TrustDepositShareValue != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.TrustDepositShareValue))
+			i--
+			dAtA[i] = 0x10
+		}
+		if x.TrustDepositReclaimBurnRate != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.TrustDepositReclaimBurnRate))
+			i--
+			dAtA[i] = 0x8
 		}
 		if input.Buf != nil {
 			input.Buf = append(input.Buf, dAtA...)
@@ -336,6 +480,101 @@ func (x *fastReflection_Params) ProtoMethods() *protoiface.Methods {
 				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: Params: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
+			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TrustDepositReclaimBurnRate", wireType)
+				}
+				x.TrustDepositReclaimBurnRate = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.TrustDepositReclaimBurnRate |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 2:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TrustDepositShareValue", wireType)
+				}
+				x.TrustDepositShareValue = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.TrustDepositShareValue |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 3:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TrustDepositRate", wireType)
+				}
+				x.TrustDepositRate = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.TrustDepositRate |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 4:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field WalletUserAgentRewardRate", wireType)
+				}
+				x.WalletUserAgentRewardRate = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.WalletUserAgentRewardRate |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 5:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field UserAgentRewardRate", wireType)
+				}
+				x.UserAgentRewardRate = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.UserAgentRewardRate |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -389,6 +628,12 @@ type Params struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
+
+	TrustDepositReclaimBurnRate uint32 `protobuf:"varint,1,opt,name=trust_deposit_reclaim_burn_rate,json=trustDepositReclaimBurnRate,proto3" json:"trust_deposit_reclaim_burn_rate,omitempty"`
+	TrustDepositShareValue      uint64 `protobuf:"varint,2,opt,name=trust_deposit_share_value,json=trustDepositShareValue,proto3" json:"trust_deposit_share_value,omitempty"`
+	TrustDepositRate            uint32 `protobuf:"varint,3,opt,name=trust_deposit_rate,json=trustDepositRate,proto3" json:"trust_deposit_rate,omitempty"`
+	WalletUserAgentRewardRate   uint32 `protobuf:"varint,4,opt,name=wallet_user_agent_reward_rate,json=walletUserAgentRewardRate,proto3" json:"wallet_user_agent_reward_rate,omitempty"`
+	UserAgentRewardRate         uint32 `protobuf:"varint,5,opt,name=user_agent_reward_rate,json=userAgentRewardRate,proto3" json:"user_agent_reward_rate,omitempty"`
 }
 
 func (x *Params) Reset() {
@@ -411,6 +656,41 @@ func (*Params) Descriptor() ([]byte, []int) {
 	return file_veranablockchain_trustdeposit_params_proto_rawDescGZIP(), []int{0}
 }
 
+func (x *Params) GetTrustDepositReclaimBurnRate() uint32 {
+	if x != nil {
+		return x.TrustDepositReclaimBurnRate
+	}
+	return 0
+}
+
+func (x *Params) GetTrustDepositShareValue() uint64 {
+	if x != nil {
+		return x.TrustDepositShareValue
+	}
+	return 0
+}
+
+func (x *Params) GetTrustDepositRate() uint32 {
+	if x != nil {
+		return x.TrustDepositRate
+	}
+	return 0
+}
+
+func (x *Params) GetWalletUserAgentRewardRate() uint32 {
+	if x != nil {
+		return x.WalletUserAgentRewardRate
+	}
+	return 0
+}
+
+func (x *Params) GetUserAgentRewardRate() uint32 {
+	if x != nil {
+		return x.UserAgentRewardRate
+	}
+	return 0
+}
+
 var File_veranablockchain_trustdeposit_params_proto protoreflect.FileDescriptor
 
 var file_veranablockchain_trustdeposit_params_proto_rawDesc = []byte{
@@ -421,28 +701,47 @@ var file_veranablockchain_trustdeposit_params_proto_rawDesc = []byte{
 	0x72, 0x75, 0x73, 0x74, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x1a, 0x11, 0x61, 0x6d, 0x69,
 	0x6e, 0x6f, 0x2f, 0x61, 0x6d, 0x69, 0x6e, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x14,
 	0x67, 0x6f, 0x67, 0x6f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x22, 0x39, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x3a, 0x2f,
-	0xe8, 0xa0, 0x1f, 0x01, 0x8a, 0xe7, 0xb0, 0x2a, 0x26, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62,
-	0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2f, 0x78, 0x2f, 0x74, 0x72, 0x75, 0x73,
-	0x74, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x2f, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42,
-	0x91, 0x02, 0x0a, 0x21, 0x63, 0x6f, 0x6d, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c,
-	0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x74, 0x72, 0x75, 0x73, 0x74, 0x64, 0x65,
-	0x70, 0x6f, 0x73, 0x69, 0x74, 0x42, 0x0b, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x50, 0x72, 0x6f,
-	0x74, 0x6f, 0x50, 0x01, 0x5a, 0x4a, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d,
-	0x2f, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x2d, 0x6c, 0x61, 0x62, 0x73, 0x2f, 0x76, 0x65, 0x72,
-	0x61, 0x6e, 0x61, 0x2d, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2f, 0x61,
-	0x70, 0x69, 0x2f, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68,
-	0x61, 0x69, 0x6e, 0x2f, 0x74, 0x72, 0x75, 0x73, 0x74, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74,
-	0xa2, 0x02, 0x03, 0x56, 0x54, 0x58, 0xaa, 0x02, 0x1d, 0x56, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62,
-	0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x54, 0x72, 0x75, 0x73, 0x74, 0x64,
-	0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0xca, 0x02, 0x1d, 0x56, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62,
-	0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x5c, 0x54, 0x72, 0x75, 0x73, 0x74, 0x64,
-	0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0xe2, 0x02, 0x29, 0x56, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62,
-	0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x5c, 0x54, 0x72, 0x75, 0x73, 0x74, 0x64,
-	0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61,
-	0x74, 0x61, 0xea, 0x02, 0x1e, 0x56, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b,
-	0x63, 0x68, 0x61, 0x69, 0x6e, 0x3a, 0x3a, 0x54, 0x72, 0x75, 0x73, 0x74, 0x64, 0x65, 0x70, 0x6f,
-	0x73, 0x69, 0x74, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x72, 0x6f, 0x74, 0x6f, 0x22, 0xdf, 0x02, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12,
+	0x44, 0x0a, 0x1f, 0x74, 0x72, 0x75, 0x73, 0x74, 0x5f, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74,
+	0x5f, 0x72, 0x65, 0x63, 0x6c, 0x61, 0x69, 0x6d, 0x5f, 0x62, 0x75, 0x72, 0x6e, 0x5f, 0x72, 0x61,
+	0x74, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x1b, 0x74, 0x72, 0x75, 0x73, 0x74, 0x44,
+	0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x52, 0x65, 0x63, 0x6c, 0x61, 0x69, 0x6d, 0x42, 0x75, 0x72,
+	0x6e, 0x52, 0x61, 0x74, 0x65, 0x12, 0x39, 0x0a, 0x19, 0x74, 0x72, 0x75, 0x73, 0x74, 0x5f, 0x64,
+	0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x5f, 0x73, 0x68, 0x61, 0x72, 0x65, 0x5f, 0x76, 0x61, 0x6c,
+	0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x16, 0x74, 0x72, 0x75, 0x73, 0x74, 0x44,
+	0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x53, 0x68, 0x61, 0x72, 0x65, 0x56, 0x61, 0x6c, 0x75, 0x65,
+	0x12, 0x2c, 0x0a, 0x12, 0x74, 0x72, 0x75, 0x73, 0x74, 0x5f, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69,
+	0x74, 0x5f, 0x72, 0x61, 0x74, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x10, 0x74, 0x72,
+	0x75, 0x73, 0x74, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x52, 0x61, 0x74, 0x65, 0x12, 0x40,
+	0x0a, 0x1d, 0x77, 0x61, 0x6c, 0x6c, 0x65, 0x74, 0x5f, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x61, 0x67,
+	0x65, 0x6e, 0x74, 0x5f, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x5f, 0x72, 0x61, 0x74, 0x65, 0x18,
+	0x04, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x19, 0x77, 0x61, 0x6c, 0x6c, 0x65, 0x74, 0x55, 0x73, 0x65,
+	0x72, 0x41, 0x67, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x52, 0x61, 0x74, 0x65,
+	0x12, 0x33, 0x0a, 0x16, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x61, 0x67, 0x65, 0x6e, 0x74, 0x5f, 0x72,
+	0x65, 0x77, 0x61, 0x72, 0x64, 0x5f, 0x72, 0x61, 0x74, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0d,
+	0x52, 0x13, 0x75, 0x73, 0x65, 0x72, 0x41, 0x67, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x77, 0x61, 0x72,
+	0x64, 0x52, 0x61, 0x74, 0x65, 0x3a, 0x2f, 0xe8, 0xa0, 0x1f, 0x01, 0x8a, 0xe7, 0xb0, 0x2a, 0x26,
+	0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e,
+	0x2f, 0x78, 0x2f, 0x74, 0x72, 0x75, 0x73, 0x74, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x2f,
+	0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x91, 0x02, 0x0a, 0x21, 0x63, 0x6f, 0x6d, 0x2e, 0x76,
+	0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e,
+	0x74, 0x72, 0x75, 0x73, 0x74, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x42, 0x0b, 0x50, 0x61,
+	0x72, 0x61, 0x6d, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x4a, 0x67, 0x69, 0x74,
+	0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x2d, 0x6c,
+	0x61, 0x62, 0x73, 0x2f, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x2d, 0x62, 0x6c, 0x6f, 0x63, 0x6b,
+	0x63, 0x68, 0x61, 0x69, 0x6e, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61,
+	0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2f, 0x74, 0x72, 0x75, 0x73, 0x74,
+	0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0xa2, 0x02, 0x03, 0x56, 0x54, 0x58, 0xaa, 0x02, 0x1d,
+	0x56, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e,
+	0x2e, 0x54, 0x72, 0x75, 0x73, 0x74, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0xca, 0x02, 0x1d,
+	0x56, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e,
+	0x5c, 0x54, 0x72, 0x75, 0x73, 0x74, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0xe2, 0x02, 0x29,
+	0x56, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e,
+	0x5c, 0x54, 0x72, 0x75, 0x73, 0x74, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x5c, 0x47, 0x50,
+	0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x1e, 0x56, 0x65, 0x72, 0x61,
+	0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x3a, 0x3a, 0x54, 0x72,
+	0x75, 0x73, 0x74, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x33,
 }
 
 var (
