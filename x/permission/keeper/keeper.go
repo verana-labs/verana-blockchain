@@ -1,8 +1,9 @@
 package keeper
 
 import (
-	"cosmossdk.io/collections"
 	"fmt"
+
+	"cosmossdk.io/collections"
 
 	"cosmossdk.io/core/store"
 	"cosmossdk.io/log"

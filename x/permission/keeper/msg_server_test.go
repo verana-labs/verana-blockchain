@@ -2,10 +2,11 @@ package keeper_test
 
 import (
 	"context"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	cstypes "github.com/verana-labs/verana-blockchain/x/credentialschema/types"
 	"testing"
 	"time"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	cstypes "github.com/verana-labs/verana-blockchain/x/credentialschema/types"
 
 	"github.com/stretchr/testify/require"
 

@@ -3,10 +3,11 @@ package keeper
 import (
 	"context"
 	"fmt"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/verana-labs/verana-blockchain/x/permission/types"
 	"strconv"
 	"time"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/verana-labs/verana-blockchain/x/permission/types"
 )
 
 type msgServer struct {

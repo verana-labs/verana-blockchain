@@ -2,19 +2,20 @@ package keeper
 
 import (
 	"context"
-	"cosmossdk.io/collections"
-	"cosmossdk.io/errors"
 	errors2 "errors"
 	"fmt"
+	"regexp"
+	"sort"
+	"time"
+
+	"cosmossdk.io/collections"
+	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	credentialschematypes "github.com/verana-labs/verana-blockchain/x/credentialschema/types"
 	"github.com/verana-labs/verana-blockchain/x/permission/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"regexp"
-	"sort"
-	"time"
 )
 
 var _ types.QueryServer = Keeper{}

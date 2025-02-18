@@ -2,6 +2,7 @@ package types
 
 import (
 	"context"
+
 	credentialschematypes "github.com/verana-labs/verana-blockchain/x/credentialschema/types"
 	trustregistrytypes "github.com/verana-labs/verana-blockchain/x/trustregistry/types"
 

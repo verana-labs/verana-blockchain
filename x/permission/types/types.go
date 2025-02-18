@@ -2,11 +2,12 @@ package types
 
 import (
 	"fmt"
+	"regexp"
+	"time"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/google/uuid"
-	"regexp"
-	"time"
 )
 
 func (msg *MsgStartPermissionVP) ValidateBasic() error {
