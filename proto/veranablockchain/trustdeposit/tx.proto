@@ -16,6 +16,8 @@ service Msg {
   // UpdateParams defines a (governance) operation for updating the module
   // parameters. The authority defaults to the x/gov module account.
   rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
+  rpc ReclaimTrustDepositInterests(MsgReclaimTrustDepositInterests) returns (MsgReclaimTrustDepositInterestsResponse);
+
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
@@ -38,3 +40,15 @@ message MsgUpdateParams {
 // MsgUpdateParamsResponse defines the response structure for executing a
 // MsgUpdateParams message.
 message MsgUpdateParamsResponse {}
+
+// MsgReclaimTrustDepositInterests defines the request type
+message MsgReclaimTrustDepositInterests {
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+
+// MsgReclaimTrustDepositInterestsResponse defines the response type
+message MsgReclaimTrustDepositInterestsResponse {
+  uint64 claimed_amount = 1;
+}

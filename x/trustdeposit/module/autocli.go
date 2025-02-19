@@ -39,6 +39,12 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					RpcMethod: "UpdateParams",
 					Skip:      true, // skipped because authority gated
 				},
+				{
+					RpcMethod: "ReclaimTrustDepositInterests",
+					Use:       "reclaim-interests",
+					Short:     "Reclaim earned interest from trust deposits",
+					Long:      "Reclaim any available interest earned from trust deposits. The interest is calculated based on share value and current deposit amount.",
+				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},

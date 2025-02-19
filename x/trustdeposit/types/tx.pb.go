@@ -126,9 +126,103 @@ func (m *MsgUpdateParamsResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgUpdateParamsResponse proto.InternalMessageInfo
 
+// MsgReclaimTrustDepositInterests defines the request type
+type MsgReclaimTrustDepositInterests struct {
+	Creator string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+}
+
+func (m *MsgReclaimTrustDepositInterests) Reset()         { *m = MsgReclaimTrustDepositInterests{} }
+func (m *MsgReclaimTrustDepositInterests) String() string { return proto.CompactTextString(m) }
+func (*MsgReclaimTrustDepositInterests) ProtoMessage()    {}
+func (*MsgReclaimTrustDepositInterests) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ecf9f31152d5bd50, []int{2}
+}
+func (m *MsgReclaimTrustDepositInterests) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgReclaimTrustDepositInterests) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgReclaimTrustDepositInterests.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgReclaimTrustDepositInterests) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgReclaimTrustDepositInterests.Merge(m, src)
+}
+func (m *MsgReclaimTrustDepositInterests) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgReclaimTrustDepositInterests) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgReclaimTrustDepositInterests.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgReclaimTrustDepositInterests proto.InternalMessageInfo
+
+func (m *MsgReclaimTrustDepositInterests) GetCreator() string {
+	if m != nil {
+		return m.Creator
+	}
+	return ""
+}
+
+// MsgReclaimTrustDepositInterestsResponse defines the response type
+type MsgReclaimTrustDepositInterestsResponse struct {
+	ClaimedAmount uint64 `protobuf:"varint,1,opt,name=claimed_amount,json=claimedAmount,proto3" json:"claimed_amount,omitempty"`
+}
+
+func (m *MsgReclaimTrustDepositInterestsResponse) Reset() {
+	*m = MsgReclaimTrustDepositInterestsResponse{}
+}
+func (m *MsgReclaimTrustDepositInterestsResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgReclaimTrustDepositInterestsResponse) ProtoMessage()    {}
+func (*MsgReclaimTrustDepositInterestsResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ecf9f31152d5bd50, []int{3}
+}
+func (m *MsgReclaimTrustDepositInterestsResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgReclaimTrustDepositInterestsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgReclaimTrustDepositInterestsResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgReclaimTrustDepositInterestsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgReclaimTrustDepositInterestsResponse.Merge(m, src)
+}
+func (m *MsgReclaimTrustDepositInterestsResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgReclaimTrustDepositInterestsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgReclaimTrustDepositInterestsResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgReclaimTrustDepositInterestsResponse proto.InternalMessageInfo
+
+func (m *MsgReclaimTrustDepositInterestsResponse) GetClaimedAmount() uint64 {
+	if m != nil {
+		return m.ClaimedAmount
+	}
+	return 0
+}
+
 func init() {
 	proto.RegisterType((*MsgUpdateParams)(nil), "veranablockchain.trustdeposit.MsgUpdateParams")
 	proto.RegisterType((*MsgUpdateParamsResponse)(nil), "veranablockchain.trustdeposit.MsgUpdateParamsResponse")
+	proto.RegisterType((*MsgReclaimTrustDepositInterests)(nil), "veranablockchain.trustdeposit.MsgReclaimTrustDepositInterests")
+	proto.RegisterType((*MsgReclaimTrustDepositInterestsResponse)(nil), "veranablockchain.trustdeposit.MsgReclaimTrustDepositInterestsResponse")
 }
 
 func init() {
@@ -136,7 +230,7 @@ func init() {
 }
 
 var fileDescriptor_ecf9f31152d5bd50 = []byte{
-	// 358 bytes of a gzipped FileDescriptorProto
+	// 463 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x52, 0x2b, 0x4b, 0x2d, 0x4a,
 	0xcc, 0x4b, 0x4c, 0xca, 0xc9, 0x4f, 0xce, 0x4e, 0xce, 0x48, 0xcc, 0xcc, 0xd3, 0x2f, 0x29, 0x2a,
 	0x2d, 0x2e, 0x49, 0x49, 0x2d, 0xc8, 0x2f, 0xce, 0x2c, 0xd1, 0x2f, 0xa9, 0xd0, 0x2b, 0x28, 0xca,
@@ -152,14 +246,20 @@ var fileDescriptor_ecf9f31152d5bd50 = []byte{
 	0x48, 0x55, 0x0f, 0x6f, 0x20, 0xe8, 0x41, 0xac, 0x73, 0xe2, 0x3c, 0x71, 0x4f, 0x9e, 0x61, 0xc5,
 	0xf3, 0x0d, 0x5a, 0x8c, 0x41, 0x50, 0xfd, 0x56, 0x4e, 0x4d, 0xcf, 0x37, 0x68, 0x21, 0x4c, 0xee,
 	0x7a, 0xbe, 0x41, 0x4b, 0x1f, 0xc3, 0x53, 0x15, 0xa8, 0xde, 0x42, 0xf3, 0x85, 0x92, 0x24, 0x97,
-	0x38, 0x9a, 0x50, 0x50, 0x6a, 0x71, 0x41, 0x7e, 0x5e, 0x71, 0xaa, 0x51, 0x0b, 0x23, 0x17, 0xb3,
-	0x6f, 0x71, 0xba, 0x50, 0x19, 0x17, 0x0f, 0x8a, 0xc7, 0xf5, 0x08, 0x38, 0x18, 0xcd, 0x3c, 0x29,
-	0x33, 0xd2, 0xd4, 0xc3, 0xec, 0x97, 0x62, 0x6d, 0x00, 0xf9, 0xd6, 0x29, 0xfc, 0xc4, 0x23, 0x39,
-	0xc6, 0x0b, 0x8f, 0xe4, 0x18, 0x1f, 0x3c, 0x92, 0x63, 0x9c, 0xf0, 0x58, 0x8e, 0xe1, 0xc2, 0x63,
-	0x39, 0x86, 0x1b, 0x8f, 0xe5, 0x18, 0xa2, 0x6c, 0xd3, 0x33, 0x4b, 0x32, 0x4a, 0x93, 0xf4, 0x92,
-	0xf3, 0x73, 0xa1, 0xfe, 0xd6, 0xcd, 0x49, 0x4c, 0x2a, 0x86, 0xb1, 0x71, 0x07, 0x42, 0x49, 0x65,
-	0x41, 0x6a, 0x71, 0x12, 0x1b, 0x38, 0x6e, 0x8d, 0x01, 0x01, 0x00, 0x00, 0xff, 0xff, 0x0d, 0xa0,
-	0x50, 0x4b, 0xad, 0x02, 0x00, 0x00,
+	0x38, 0x9a, 0x50, 0x50, 0x6a, 0x71, 0x41, 0x7e, 0x5e, 0x71, 0xaa, 0x52, 0x32, 0x97, 0xbc, 0x6f,
+	0x71, 0x7a, 0x50, 0x6a, 0x72, 0x4e, 0x62, 0x66, 0x6e, 0x08, 0xc8, 0x10, 0x17, 0x88, 0x21, 0x9e,
+	0x79, 0x25, 0xa9, 0x45, 0xa9, 0xc5, 0x25, 0xc5, 0x42, 0x46, 0x5c, 0xec, 0xc9, 0x45, 0xa9, 0x89,
+	0x25, 0xf9, 0x45, 0x04, 0x43, 0x00, 0xa6, 0xd0, 0x8a, 0x07, 0xe4, 0x6a, 0x18, 0x4f, 0x29, 0x80,
+	0x4b, 0x9d, 0x80, 0x25, 0x30, 0xf7, 0x08, 0xa9, 0x72, 0xf1, 0x81, 0x55, 0xa5, 0xa6, 0xc4, 0x27,
+	0xe6, 0xe6, 0x97, 0xe6, 0x95, 0x80, 0xed, 0x64, 0x09, 0xe2, 0x85, 0x8a, 0x3a, 0x82, 0x05, 0x8d,
+	0xd6, 0x32, 0x71, 0x31, 0xfb, 0x16, 0xa7, 0x0b, 0x95, 0x71, 0xf1, 0xa0, 0xc4, 0x97, 0x1e, 0x81,
+	0x70, 0x46, 0x0b, 0x06, 0x29, 0x33, 0xd2, 0xd4, 0xc3, 0x9d, 0xb9, 0x8c, 0x91, 0x4b, 0x06, 0x6f,
+	0xa0, 0xd9, 0x11, 0x36, 0x18, 0x9f, 0x7e, 0x29, 0x37, 0xca, 0xf4, 0xc3, 0x1c, 0x2a, 0xc5, 0xda,
+	0x00, 0x4a, 0x4d, 0x4e, 0xe1, 0x27, 0x1e, 0xc9, 0x31, 0x5e, 0x78, 0x24, 0xc7, 0xf8, 0xe0, 0x91,
+	0x1c, 0xe3, 0x84, 0xc7, 0x72, 0x0c, 0x17, 0x1e, 0xcb, 0x31, 0xdc, 0x78, 0x2c, 0xc7, 0x10, 0x65,
+	0x9b, 0x9e, 0x59, 0x92, 0x51, 0x9a, 0xa4, 0x97, 0x9c, 0x9f, 0x0b, 0x4d, 0x57, 0xba, 0x39, 0x89,
+	0x49, 0xc5, 0x30, 0x36, 0xee, 0x44, 0x56, 0x52, 0x59, 0x90, 0x5a, 0x9c, 0xc4, 0x06, 0xce, 0x3b,
+	0xc6, 0x80, 0x00, 0x00, 0x00, 0xff, 0xff, 0xed, 0x17, 0xc4, 0xdd, 0x0d, 0x04, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -177,6 +277,7 @@ type MsgClient interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
+	ReclaimTrustDepositInterests(ctx context.Context, in *MsgReclaimTrustDepositInterests, opts ...grpc.CallOption) (*MsgReclaimTrustDepositInterestsResponse, error)
 }
 
 type msgClient struct {
@@ -196,11 +297,21 @@ func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts 
 	return out, nil
 }
 
+func (c *msgClient) ReclaimTrustDepositInterests(ctx context.Context, in *MsgReclaimTrustDepositInterests, opts ...grpc.CallOption) (*MsgReclaimTrustDepositInterestsResponse, error) {
+	out := new(MsgReclaimTrustDepositInterestsResponse)
+	err := c.cc.Invoke(ctx, "/veranablockchain.trustdeposit.Msg/ReclaimTrustDepositInterests", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
+	ReclaimTrustDepositInterests(context.Context, *MsgReclaimTrustDepositInterests) (*MsgReclaimTrustDepositInterestsResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -209,6 +320,9 @@ type UnimplementedMsgServer struct {
 
 func (*UnimplementedMsgServer) UpdateParams(ctx context.Context, req *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
+}
+func (*UnimplementedMsgServer) ReclaimTrustDepositInterests(ctx context.Context, req *MsgReclaimTrustDepositInterests) (*MsgReclaimTrustDepositInterestsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ReclaimTrustDepositInterests not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
@@ -233,6 +347,24 @@ func _Msg_UpdateParams_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_ReclaimTrustDepositInterests_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgReclaimTrustDepositInterests)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).ReclaimTrustDepositInterests(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/veranablockchain.trustdeposit.Msg/ReclaimTrustDepositInterests",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).ReclaimTrustDepositInterests(ctx, req.(*MsgReclaimTrustDepositInterests))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var Msg_serviceDesc = _Msg_serviceDesc
 var _Msg_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "veranablockchain.trustdeposit.Msg",
@@ -241,6 +373,10 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateParams",
 			Handler:    _Msg_UpdateParams_Handler,
+		},
+		{
+			MethodName: "ReclaimTrustDepositInterests",
+			Handler:    _Msg_ReclaimTrustDepositInterests_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -310,6 +446,64 @@ func (m *MsgUpdateParamsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	return len(dAtA) - i, nil
 }
 
+func (m *MsgReclaimTrustDepositInterests) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgReclaimTrustDepositInterests) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgReclaimTrustDepositInterests) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Creator) > 0 {
+		i -= len(m.Creator)
+		copy(dAtA[i:], m.Creator)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Creator)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgReclaimTrustDepositInterestsResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgReclaimTrustDepositInterestsResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgReclaimTrustDepositInterestsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ClaimedAmount != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.ClaimedAmount))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTx(v)
 	base := offset
@@ -342,6 +536,31 @@ func (m *MsgUpdateParamsResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
+	return n
+}
+
+func (m *MsgReclaimTrustDepositInterests) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Creator)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgReclaimTrustDepositInterestsResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ClaimedAmount != 0 {
+		n += 1 + sovTx(uint64(m.ClaimedAmount))
+	}
 	return n
 }
 
@@ -495,6 +714,157 @@ func (m *MsgUpdateParamsResponse) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: MsgUpdateParamsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgReclaimTrustDepositInterests) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgReclaimTrustDepositInterests: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgReclaimTrustDepositInterests: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Creator", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Creator = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgReclaimTrustDepositInterestsResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgReclaimTrustDepositInterestsResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgReclaimTrustDepositInterestsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClaimedAmount", wireType)
+			}
+			m.ClaimedAmount = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ClaimedAmount |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTx(dAtA[iNdEx:])
