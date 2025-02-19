@@ -17,6 +17,7 @@ service Msg {
   // parameters. The authority defaults to the x/gov module account.
   rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
   rpc ReclaimTrustDepositInterests(MsgReclaimTrustDepositInterests) returns (MsgReclaimTrustDepositInterestsResponse);
+  rpc ReclaimTrustDeposit(MsgReclaimTrustDeposit) returns (MsgReclaimTrustDepositResponse);
 
 }
 
@@ -44,11 +45,21 @@ message MsgUpdateParamsResponse {}
 // MsgReclaimTrustDepositInterests defines the request type
 message MsgReclaimTrustDepositInterests {
   option (cosmos.msg.v1.signer) = "creator";
-
   string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 }
 
 // MsgReclaimTrustDepositInterestsResponse defines the response type
 message MsgReclaimTrustDepositInterestsResponse {
   uint64 claimed_amount = 1;
+}
+
+message MsgReclaimTrustDeposit {
+  option (cosmos.msg.v1.signer) = "creator";
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint64 claimed = 2;  // Amount to reclaim in denom
+}
+
+message MsgReclaimTrustDepositResponse {
+  uint64 burned_amount = 1;     // Amount burned
+  uint64 claimed_amount = 2;    // Amount transferred to account
 }

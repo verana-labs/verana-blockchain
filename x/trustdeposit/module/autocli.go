@@ -45,6 +45,17 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:     "Reclaim earned interest from trust deposits",
 					Long:      "Reclaim any available interest earned from trust deposits. The interest is calculated based on share value and current deposit amount.",
 				},
+				{
+					RpcMethod: "ReclaimTrustDeposit",
+					Use:       "reclaim-deposit [amount]",
+					Short:     "Reclaim trust deposit",
+					Long:      "Reclaim a specified amount from your claimable trust deposit balance. Note that a portion will be burned according to the reclaim burn rate.",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "claimed",
+						},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},

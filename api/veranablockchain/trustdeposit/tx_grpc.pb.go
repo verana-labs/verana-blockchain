@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	Msg_UpdateParams_FullMethodName                 = "/veranablockchain.trustdeposit.Msg/UpdateParams"
 	Msg_ReclaimTrustDepositInterests_FullMethodName = "/veranablockchain.trustdeposit.Msg/ReclaimTrustDepositInterests"
+	Msg_ReclaimTrustDeposit_FullMethodName          = "/veranablockchain.trustdeposit.Msg/ReclaimTrustDeposit"
 )
 
 // MsgClient is the client API for Msg service.
@@ -31,6 +32,7 @@ type MsgClient interface {
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
 	ReclaimTrustDepositInterests(ctx context.Context, in *MsgReclaimTrustDepositInterests, opts ...grpc.CallOption) (*MsgReclaimTrustDepositInterestsResponse, error)
+	ReclaimTrustDeposit(ctx context.Context, in *MsgReclaimTrustDeposit, opts ...grpc.CallOption) (*MsgReclaimTrustDepositResponse, error)
 }
 
 type msgClient struct {
@@ -59,6 +61,15 @@ func (c *msgClient) ReclaimTrustDepositInterests(ctx context.Context, in *MsgRec
 	return out, nil
 }
 
+func (c *msgClient) ReclaimTrustDeposit(ctx context.Context, in *MsgReclaimTrustDeposit, opts ...grpc.CallOption) (*MsgReclaimTrustDepositResponse, error) {
+	out := new(MsgReclaimTrustDepositResponse)
+	err := c.cc.Invoke(ctx, Msg_ReclaimTrustDeposit_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
@@ -67,6 +78,7 @@ type MsgServer interface {
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
 	ReclaimTrustDepositInterests(context.Context, *MsgReclaimTrustDepositInterests) (*MsgReclaimTrustDepositInterestsResponse, error)
+	ReclaimTrustDeposit(context.Context, *MsgReclaimTrustDeposit) (*MsgReclaimTrustDepositResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -79,6 +91,9 @@ func (UnimplementedMsgServer) UpdateParams(context.Context, *MsgUpdateParams) (*
 }
 func (UnimplementedMsgServer) ReclaimTrustDepositInterests(context.Context, *MsgReclaimTrustDepositInterests) (*MsgReclaimTrustDepositInterestsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ReclaimTrustDepositInterests not implemented")
+}
+func (UnimplementedMsgServer) ReclaimTrustDeposit(context.Context, *MsgReclaimTrustDeposit) (*MsgReclaimTrustDepositResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ReclaimTrustDeposit not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -129,6 +144,24 @@ func _Msg_ReclaimTrustDepositInterests_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_ReclaimTrustDeposit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgReclaimTrustDeposit)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).ReclaimTrustDeposit(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_ReclaimTrustDeposit_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).ReclaimTrustDeposit(ctx, req.(*MsgReclaimTrustDeposit))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -143,6 +176,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ReclaimTrustDepositInterests",
 			Handler:    _Msg_ReclaimTrustDepositInterests_Handler,
+		},
+		{
+			MethodName: "ReclaimTrustDeposit",
+			Handler:    _Msg_ReclaimTrustDeposit_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
