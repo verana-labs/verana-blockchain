@@ -110,3 +110,8 @@ func (k Keeper) GetNextID(ctx sdk.Context, entityType string) (uint64, error) {
 
 	return nextID, nil
 }
+
+func (k Keeper) GetTrustUnitPrice(ctx sdk.Context) uint64 {
+	params := k.GetParams(ctx)
+	return params.TrustUnitPrice
+}

@@ -60,7 +60,7 @@ func (ms msgServer) UpdateCredentialSchema(goCtx context.Context, msg *types.Msg
 	}
 
 	// Check trust registry controller
-	tr, err := ms.trustregistryKeeper.GetTrustRegistry(ctx, cs.TrId)
+	tr, err := ms.trustRegistryKeeper.GetTrustRegistry(ctx, cs.TrId)
 	if err != nil {
 		return nil, fmt.Errorf("trust registry not found: %w", err)
 	}
@@ -122,7 +122,7 @@ func (ms msgServer) ArchiveCredentialSchema(goCtx context.Context, msg *types.Ms
 	}
 
 	// Check trust registry controller
-	tr, err := ms.trustregistryKeeper.GetTrustRegistry(ctx, cs.TrId)
+	tr, err := ms.trustRegistryKeeper.GetTrustRegistry(ctx, cs.TrId)
 	if err != nil {
 		return nil, fmt.Errorf("trust registry not found: %w", err)
 	}

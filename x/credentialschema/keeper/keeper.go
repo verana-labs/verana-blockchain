@@ -23,13 +23,14 @@ type (
 		// should be the x/gov module account.
 		authority           string
 		bankKeeper          types.BankKeeper
-		trustregistryKeeper types.TrustRegistryKeeper
+		trustRegistryKeeper types.TrustRegistryKeeper
 
 		// State management
 		Schema collections.Schema
 		//Params           collections.Item[types.Params]
 		CredentialSchema collections.Map[uint64, types.CredentialSchema]
 		Counter          collections.Map[string, uint64]
+		trustDeposit     types.TrustDepositKeeper
 	}
 )
 
@@ -39,7 +40,8 @@ func NewKeeper(
 	logger log.Logger,
 	authority string,
 	bankKeeper types.BankKeeper,
-	trustregistryKeeper types.TrustRegistryKeeper,
+	trustRegistryKeeper types.TrustRegistryKeeper,
+	trustDeposit types.TrustDepositKeeper,
 ) Keeper {
 	if _, err := sdk.AccAddressFromBech32(authority); err != nil {
 		panic(fmt.Sprintf("invalid authority address: %s", authority))
@@ -53,7 +55,7 @@ func NewKeeper(
 		logger:              logger,
 		authority:           authority,
 		bankKeeper:          bankKeeper,
-		trustregistryKeeper: trustregistryKeeper,
+		trustRegistryKeeper: trustRegistryKeeper,
 
 		// Initialize collections
 		CredentialSchema: collections.NewMap(
@@ -70,6 +72,7 @@ func NewKeeper(
 			collections.StringKey,
 			collections.Uint64Value,
 		),
+		trustDeposit: trustDeposit,
 	}
 
 	schema, err := sb.Build()

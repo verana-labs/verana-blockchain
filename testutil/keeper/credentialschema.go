@@ -69,6 +69,10 @@ type MockTrustRegistryKeeper struct {
 	trustRegistries map[uint64]trtypes.TrustRegistry
 }
 
+func (k *MockTrustRegistryKeeper) GetTrustUnitPrice(ctx sdk.Context) uint64 {
+	return 1
+}
+
 func NewMockTrustRegistryKeeper() *MockTrustRegistryKeeper {
 	return &MockTrustRegistryKeeper{
 		trustRegistries: make(map[uint64]trtypes.TrustRegistry),
@@ -109,7 +113,7 @@ func CredentialschemaKeeper(t testing.TB) (keeper.Keeper, *MockTrustRegistryKeep
 	// Create mock keepers
 	bankKeeper := NewMockBankKeeper()
 	trustRegistryKeeper := NewMockTrustRegistryKeeper()
-
+	mockTrustDepositKeeper := &MockTrustDepositKeeper{}
 	k := keeper.NewKeeper(
 		cdc,
 		runtime.NewKVStoreService(storeKey),
@@ -117,6 +121,7 @@ func CredentialschemaKeeper(t testing.TB) (keeper.Keeper, *MockTrustRegistryKeep
 		authority.String(),
 		bankKeeper,
 		trustRegistryKeeper,
+		mockTrustDepositKeeper,
 	)
 
 	ctx := sdk.NewContext(stateStore, cmtproto.Header{}, false, log.NewNopLogger())
