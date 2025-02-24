@@ -11,5 +11,6 @@ message Params {
   option (amino.name) = "veranablockchain/x/trustregistry/Params";
   option (gogoproto.equal) = true;
 
-  
+  uint64 trust_registry_trust_deposit = 1;
+  uint64 trust_unit_price = 2;
 }

@@ -29,15 +29,25 @@ func (ms msgServer) CreateTrustRegistry(goCtx context.Context, msg *types.MsgCre
 		return nil, err
 	}
 
-	// TODO: Implement trust deposit functionality when trust deposit module is available
-	// Required deposit: GlobalVariables.trust_registry_trust_deposit * GlobalVariables.trust_unit_price
-
 	// [MOD-TR-MSG-1-3] Create New Trust Registry execution
 	now := ctx.BlockTime()
+
+	// Calculate trust deposit amount
+	params := ms.Keeper.GetParams(ctx)
+	trustDeposit := params.TrustRegistryTrustDeposit * params.TrustUnitPrice
+
+	// Increase trust deposit
+	if err := ms.Keeper.trustDeposit.AdjustTrustDeposit(ctx, msg.Creator, int64(trustDeposit)); err != nil {
+		return nil, fmt.Errorf("failed to adjust trust deposit: %w", err)
+	}
+
 	tr, gfv, gfd, err := ms.createTrustRegistryEntries(ctx, msg, now)
 	if err != nil {
 		return nil, err
 	}
+
+	// Update trust deposit amount in the trust registry entry
+	tr.Deposit = int64(trustDeposit)
 
 	if err := ms.persistEntries(ctx, tr, gfv, gfd); err != nil {
 		return nil, err
@@ -51,6 +61,7 @@ func (ms msgServer) CreateTrustRegistry(goCtx context.Context, msg *types.MsgCre
 			sdk.NewAttribute(types.AttributeKeyController, tr.Controller),
 			sdk.NewAttribute(types.AttributeKeyAka, tr.Aka),
 			sdk.NewAttribute(types.AttributeKeyLanguage, tr.Language),
+			sdk.NewAttribute(types.AttributeKeyDeposit, strconv.FormatUint(uint64(tr.Deposit), 10)),
 			sdk.NewAttribute(types.AttributeKeyTimestamp, now.String()),
 		),
 		sdk.NewEvent(

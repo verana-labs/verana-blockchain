@@ -33,11 +33,15 @@ func TrustregistryKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
 	cdc := codec.NewProtoCodec(registry)
 	authority := authtypes.NewModuleAddress(govtypes.ModuleName)
 
+	// Create mock TrustDepositKeeper
+	mockTrustDepositKeeper := &MockTrustDepositKeeper{}
+
 	k := keeper.NewKeeper(
 		cdc,
 		runtime.NewKVStoreService(storeKey),
 		log.NewNopLogger(),
 		authority.String(),
+		mockTrustDepositKeeper,
 	)
 
 	ctx := sdk.NewContext(stateStore, cmtproto.Header{}, false, log.NewNopLogger())
@@ -48,4 +52,13 @@ func TrustregistryKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
 	}
 
 	return k, ctx
+}
+
+// MockTrustDepositKeeper is a mock implementation of the TrustDepositKeeper interface for testing
+type MockTrustDepositKeeper struct{}
+
+// AdjustTrustDeposit implements the TrustDepositKeeper interface
+func (m *MockTrustDepositKeeper) AdjustTrustDeposit(ctx sdk.Context, account string, augend int64) error {
+	// For testing, always succeed
+	return nil
 }

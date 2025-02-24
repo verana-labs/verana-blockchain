@@ -19,12 +19,35 @@ func TestGenesisState_Validate(t *testing.T) {
 			valid:    true,
 		},
 		{
-			desc:     "valid genesis state",
+			desc: "valid genesis state",
 			genState: &types.GenesisState{
-
+				Params: types.Params{
+					TrustUnitPrice:            types.DefaultTrustUnitPrice,
+					TrustRegistryTrustDeposit: types.DefaultTrustRegistryTrustDeposit,
+				},
 				// this line is used by starport scaffolding # types/genesis/validField
 			},
 			valid: true,
+		},
+		{
+			desc: "invalid trust unit price",
+			genState: &types.GenesisState{
+				Params: types.Params{
+					TrustUnitPrice:            0, // Invalid value
+					TrustRegistryTrustDeposit: types.DefaultTrustRegistryTrustDeposit,
+				},
+			},
+			valid: false,
+		},
+		{
+			desc: "invalid trust registry deposit",
+			genState: &types.GenesisState{
+				Params: types.Params{
+					TrustUnitPrice:            types.DefaultTrustUnitPrice,
+					TrustRegistryTrustDeposit: 0, // Invalid value
+				},
+			},
+			valid: false,
 		},
 		// this line is used by starport scaffolding # types/genesis/testcase
 	}

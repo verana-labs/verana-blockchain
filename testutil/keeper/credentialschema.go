@@ -28,6 +28,11 @@ type MockBankKeeper struct {
 	bankBalances map[string]sdk.Coins
 }
 
+func (k *MockBankKeeper) BurnCoins(ctx context.Context, name string, amt sdk.Coins) error {
+	//TODO implement me
+	panic("implement me")
+}
+
 func (k *MockBankKeeper) SendCoinsFromModuleToAccount(ctx context.Context, senderModule string, recipientAddr sdk.AccAddress, amt sdk.Coins) error {
 	//TODO implement me
 	panic("implement me")
