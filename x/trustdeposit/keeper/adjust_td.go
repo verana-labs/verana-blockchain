@@ -8,6 +8,10 @@ import (
 
 func (k Keeper) AdjustTrustDeposit(ctx sdk.Context, account string, augend int64) error {
 	// Basic validation
+	senderAcc, err := sdk.AccAddressFromBech32(account)
+	if err != nil {
+		return fmt.Errorf("invalid account address: %w", err)
+	}
 	if account == "" {
 		return fmt.Errorf("account cannot be empty")
 	}
@@ -51,7 +55,7 @@ func (k Keeper) AdjustTrustDeposit(ctx sdk.Context, account string, augend int64
 				// Transfer tokens from account to module
 				if err := k.bankKeeper.SendCoinsFromAccountToModule(
 					ctx,
-					sdk.AccAddress(account),
+					senderAcc,
 					types.ModuleName,
 					sdk.NewCoins(sdk.NewInt64Coin(types.BondDenom, int64(neededDeposit))),
 				); err != nil {
@@ -69,7 +73,7 @@ func (k Keeper) AdjustTrustDeposit(ctx sdk.Context, account string, augend int64
 			// Transfer tokens from account to module
 			if err := k.bankKeeper.SendCoinsFromAccountToModule(
 				ctx,
-				sdk.AccAddress(account),
+				senderAcc,
 				types.ModuleName,
 				sdk.NewCoins(sdk.NewInt64Coin(types.BondDenom, augend)),
 			); err != nil {
