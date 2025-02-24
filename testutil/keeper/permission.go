@@ -37,7 +37,7 @@ func PermissionKeeper(t testing.TB) (keeper.Keeper, *MockCredentialSchemaKeeper,
 	// Create mock keepers
 	csKeeper := NewMockCredentialSchemaKeeper()
 	trkKeeper := NewMockTrustRegistryKeeper()
-
+	mockTrustDepositKeeper := &MockTrustDepositKeeper{}
 	k := keeper.NewKeeper(
 		cdc,
 		runtime.NewKVStoreService(storeKey),
@@ -45,6 +45,7 @@ func PermissionKeeper(t testing.TB) (keeper.Keeper, *MockCredentialSchemaKeeper,
 		authority.String(),
 		csKeeper,
 		trkKeeper,
+		mockTrustDepositKeeper,
 	)
 
 	ctx := sdk.NewContext(stateStore, cmtproto.Header{}, false, log.NewNopLogger())

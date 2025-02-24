@@ -30,6 +30,7 @@ type (
 		// external keeper
 		credentialSchemaKeeper types.CredentialSchemaKeeper
 		trustRegistryKeeper    types.TrustRegistryKeeper
+		trustDeposit           types.TrustDepositKeeper
 	}
 )
 
@@ -40,6 +41,7 @@ func NewKeeper(
 	authority string,
 	credentialSchemaKeeper types.CredentialSchemaKeeper,
 	trustRegistryKeeper types.TrustRegistryKeeper,
+	trustDeposit types.TrustDepositKeeper,
 ) Keeper {
 	sb := collections.NewSchemaBuilder(storeService)
 
@@ -57,6 +59,7 @@ func NewKeeper(
 		PermissionSession:      collections.NewMap(sb, types.PermissionSessionKey, "permission_session", collections.StringKey, codec.CollValue[types.PermissionSession](cdc)),
 		credentialSchemaKeeper: credentialSchemaKeeper,
 		trustRegistryKeeper:    trustRegistryKeeper,
+		trustDeposit:           trustDeposit,
 	}
 }
 

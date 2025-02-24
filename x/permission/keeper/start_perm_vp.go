@@ -61,18 +61,12 @@ func (ms msgServer) validateAndCalculateFees(ctx sdk.Context, creator string, va
 }
 
 func (ms msgServer) executeStartPermissionVP(ctx sdk.Context, msg *types.MsgStartPermissionVP, validatorPerm types.Permission, fees, deposit uint64) (uint64, error) {
-	// TODO: After trustdeposit module
-	// Increment trust deposit
-	//if err := ms.trustDepositKeeper.IncreaseTrustDeposit(ctx, msg.Creator, deposit); err != nil {
-	//	return 0, fmt.Errorf("failed to increase trust deposit: %w", err)
-	//}
-
-	// Send validation fees to escrow if greater than 0
-	//if fees > 0 {
-	//	if err := ms.transferToEscrow(ctx, msg.Creator, fees); err != nil {
-	//		return 0, fmt.Errorf("failed to transfer fees to escrow: %w", err)
-	//	}
-	//}
+	// Increment trust deposit if deposit is greater than 0
+	if deposit > 0 {
+		if err := ms.trustDeposit.AdjustTrustDeposit(ctx, msg.Creator, int64(deposit)); err != nil {
+			return 0, fmt.Errorf("failed to increase trust deposit: %w", err)
+		}
+	}
 
 	// Create new permission entry
 	now := ctx.BlockTime()
