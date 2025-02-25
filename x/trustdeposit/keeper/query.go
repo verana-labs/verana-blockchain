@@ -18,21 +18,16 @@ func (k Keeper) GetTrustDeposit(goCtx context.Context, req *types.QueryGetTrustD
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	// Validate account address
+	// [MOD-TD-QRY-1-2] Validate account address
 	if _, err := sdk.AccAddressFromBech32(req.Account); err != nil {
 		return nil, status.Error(codes.InvalidArgument, fmt.Sprintf("invalid account address: %s", err))
 	}
 
-	// Get trust deposit for account
+	// [MOD-TD-QRY-1-3] Get trust deposit for account
 	trustDeposit, err := k.TrustDeposit.Get(ctx, req.Account)
 	if err != nil {
-		// If not found, return zero values
-		trustDeposit = types.TrustDeposit{
-			Account:   req.Account,
-			Share:     0,
-			Amount:    0,
-			Claimable: 0,
-		}
+		// Per spec: if not found, return not found error instead of zero values
+		return nil, status.Error(codes.NotFound, fmt.Sprintf("trust deposit not found for account %s", req.Account))
 	}
 
 	return &types.QueryGetTrustDepositResponse{

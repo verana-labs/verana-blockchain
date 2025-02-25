@@ -76,79 +76,43 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					},
 				},
 				{
-					RpcMethod: "IsAuthorizedIssuer",
-					Use:       "is-authorized-issuer [issuer-did] [agent-did] [wallet-agent-did] [schema-id]",
-					Short:     "Check if a DID is authorized to issue credentials",
-					Long:      "Check if a DID is authorized to issue credentials of a given schema for a specific agent and wallet agent",
+					RpcMethod: "FindPermissionsWithDID",
+					Use:       "find-permissions-with-did [did] [type] [schema-id]",
+					Short:     "Find permissions with DID",
+					Long:      "Find permissions matching the specified DID, type, and schema ID with optional filtering by country and timestamp",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
-						{
-							ProtoField: "issuer_did",
-						},
-						{
-							ProtoField: "agent_did",
-						},
-						{
-							ProtoField: "wallet_agent_did",
-						},
-						{
-							ProtoField: "schema_id",
-						},
+						{ProtoField: "did"},
+						{ProtoField: "type"},
+						{ProtoField: "schema_id"},
 					},
 					FlagOptions: map[string]*autocliv1.FlagOptions{
 						"country": {
 							Name:         "country",
 							DefaultValue: "",
-							Usage:        "Optional country code (ISO 3166-1 alpha-2)",
+							Usage:        "Filter by country code (ISO 3166-1 alpha-2)",
 						},
 						"when": {
 							Name:         "when",
 							DefaultValue: "",
-							Usage:        "Optional timestamp to check authorization at (RFC3339)",
-						},
-						"session_id": {
-							Name:         "session-id",
-							DefaultValue: "0",
-							Usage:        "Optional session ID if payment is required",
+							Usage:        "Filter by validity at specified timestamp (RFC3339 format)",
 						},
 					},
 				},
 				{
-					RpcMethod: "IsAuthorizedVerifier",
-					Use:       "is-authorized-verifier [verifier-did] [issuer-did] [agent-did] [wallet-agent-did] [schema-id]",
-					Short:     "Check if a DID is authorized to verify credentials",
-					Long:      "Check if a DID is authorized to verify credentials of a given schema for a specific issuer",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
-						{
-							ProtoField: "verifier_did",
-						},
-						{
-							ProtoField: "issuer_did",
-						},
-						{
-							ProtoField: "agent_did",
-						},
-						{
-							ProtoField: "wallet_agent_did",
-						},
-						{
-							ProtoField: "schema_id",
-						},
-					},
+					RpcMethod: "FindBeneficiaries",
+					Use:       "find-beneficiaries",
+					Short:     "Find beneficiary permissions in the permission tree",
+					Long:      "Find beneficiary permissions by traversing the permission tree for issuer and/or verifier permissions",
 					FlagOptions: map[string]*autocliv1.FlagOptions{
-						"country": {
-							Name:         "country",
-							DefaultValue: "",
-							Usage:        "Optional country code (ISO 3166-1 alpha-2)",
-						},
-						"when": {
-							Name:         "when",
-							DefaultValue: "",
-							Usage:        "Optional timestamp to check authorization at (RFC3339)",
-						},
-						"session_id": {
-							Name:         "session-id",
+						"issuer_perm_id": {
+							Name:         "issuer-perm-id",
 							DefaultValue: "0",
-							Usage:        "Optional session ID if payment is required",
+							Usage:        "ID of the issuer permission",
+						},
+						"verifier_perm_id": {
+							Name:         "verifier-perm-id",
+							DefaultValue: "0",
+							Usage:        "ID of the verifier permission",
 						},
 					},
 				},

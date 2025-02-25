@@ -5,6 +5,8 @@ import (
 	"github.com/stretchr/testify/require"
 	keepertest "github.com/verana-labs/verana-blockchain/testutil/keeper"
 	"github.com/verana-labs/verana-blockchain/x/trustdeposit/types"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"testing"
 )
 
@@ -15,14 +17,13 @@ func TestGetTrustDeposit(t *testing.T) {
 	// Create test account address
 	testAddr := sdk.AccAddress([]byte("test_address")).String()
 
-	// Test with non-existent trust deposit
-	resp1, err := keeper.GetTrustDeposit(wctx, &types.QueryGetTrustDepositRequest{
+	// Test with non-existent trust deposit - should return NotFound error
+	_, err := keeper.GetTrustDeposit(wctx, &types.QueryGetTrustDepositRequest{
 		Account: testAddr,
 	})
-	require.NoError(t, err)
-	require.Equal(t, uint64(0), resp1.TrustDeposit.Amount)
-	require.Equal(t, uint64(0), resp1.TrustDeposit.Share)
-	require.Equal(t, uint64(0), resp1.TrustDeposit.Claimable)
+	require.Error(t, err)
+	require.Contains(t, err.Error(), "trust deposit not found")
+	require.Contains(t, status.Code(err).String(), codes.NotFound.String())
 
 	// Create a trust deposit
 	trustDeposit := types.TrustDeposit{
@@ -35,15 +36,17 @@ func TestGetTrustDeposit(t *testing.T) {
 	require.NoError(t, err)
 
 	// Test with existing trust deposit
-	resp2, err := keeper.GetTrustDeposit(wctx, &types.QueryGetTrustDepositRequest{
+	resp, err := keeper.GetTrustDeposit(wctx, &types.QueryGetTrustDepositRequest{
 		Account: testAddr,
 	})
 	require.NoError(t, err)
-	require.Equal(t, trustDeposit, resp2.TrustDeposit)
+	require.Equal(t, trustDeposit, resp.TrustDeposit)
 
 	// Test with invalid account address
 	_, err = keeper.GetTrustDeposit(wctx, &types.QueryGetTrustDepositRequest{
 		Account: "invalid_address",
 	})
 	require.Error(t, err)
+	require.Contains(t, err.Error(), "invalid account address")
+	require.Contains(t, status.Code(err).String(), codes.InvalidArgument.String())
 }
