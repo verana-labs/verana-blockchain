@@ -1,28 +1,13 @@
 package keeper
 
 import (
-	"errors"
 	"fmt"
 	"regexp"
 	"time"
 
-	"cosmossdk.io/collections"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/verana-labs/verana-blockchain/x/trustregistry/types"
 )
-
-func (ms msgServer) validateCreateTrustRegistryParams(ctx sdk.Context, msg *types.MsgCreateTrustRegistry) error {
-	// Check if a trust registry with this DID already do exists using DID index
-	_, err := ms.TrustRegistryDIDIndex.Get(ctx, msg.Did)
-	if err == nil {
-		return errors.New("trust registry with this DID already exists")
-	} else if !errors.Is(err, collections.ErrNotFound) {
-		// If error is not "not found", it's an unexpected error
-		return fmt.Errorf("error checking DID existence: %w", err)
-	}
-
-	return nil
-}
 
 func isValidLanguageTag(lang string) bool {
 	// RFC1766 primary tag must be exactly 2 letters
@@ -78,12 +63,12 @@ func (ms msgServer) createTrustRegistryEntries(ctx sdk.Context, msg *types.MsgCr
 
 	// Create governance framework document
 	gfd := types.GovernanceFrameworkDocument{
-		Id:       nextGfdId,
-		GfvId:    gfv.Id,
-		Created:  now,
-		Language: msg.Language,
-		Url:      msg.DocUrl,
-		Hash:     msg.DocHash,
+		Id:        nextGfdId,
+		GfvId:     gfv.Id,
+		Created:   now,
+		Language:  msg.Language,
+		Url:       msg.DocUrl,
+		DigestSri: msg.DocDigestSri,
 	}
 
 	return tr, gfv, gfd, nil

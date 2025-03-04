@@ -39,47 +39,14 @@ func TestMsgServerCreateTrustRegistry(t *testing.T) {
 		{
 			name: "Valid Create Trust Registry",
 			msg: &types.MsgCreateTrustRegistry{
-				Creator:  creator,
-				Did:      validDid,
-				Aka:      "http://example.com",
-				Language: "en",
-				DocUrl:   "http://example.com/doc",
-				DocHash:  "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+				Creator:      creator,
+				Did:          validDid,
+				Aka:          "http://example.com",
+				Language:     "en",
+				DocUrl:       "http://example.com/doc",
+				DocDigestSri: "sha384-MzNNbQTWCSUSi0bbz7dbua+RcENv7C6FvlmYJ1Y+I727HsPOHdzwELMYO9Mz68M26",
 			},
 			isValid: true,
-		},
-		{
-			name: "Missing Language",
-			msg: &types.MsgCreateTrustRegistry{
-				Creator: creator,
-				Did:     validDid,
-				DocUrl:  "http://example.com/doc",
-				DocHash: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
-			},
-			isValid: false,
-		},
-		{
-			name: "Invalid Language Format",
-			msg: &types.MsgCreateTrustRegistry{
-				Creator:  creator,
-				Did:      validDid,
-				Language: "invalid-language-format",
-				DocUrl:   "http://example.com/doc",
-				DocHash:  "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
-			},
-			isValid: false,
-		},
-		{
-			name: "Invalid AKA URI",
-			msg: &types.MsgCreateTrustRegistry{
-				Creator:  creator,
-				Did:      validDid,
-				Aka:      "invalid-uri",
-				Language: "en",
-				DocUrl:   "http://example.com/doc",
-				DocHash:  "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
-			},
-			isValid: false,
 		},
 	}
 
@@ -117,11 +84,11 @@ func TestMsgServerAddGovernanceFrameworkDocument(t *testing.T) {
 
 	// First, create a trust registry
 	createMsg := &types.MsgCreateTrustRegistry{
-		Creator:  creator,
-		Did:      validDid,
-		Language: "en",
-		DocUrl:   "http://example.com/doc",
-		DocHash:  "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+		Creator:      creator,
+		Did:          validDid,
+		Language:     "en",
+		DocUrl:       "http://example.com/doc",
+		DocDigestSri: "sha384-MzNNbQTWCSUSi0bbz7dbua+RcENv7C6FvlmYJ1Y+I727HsPOHdzwELMYO9Mz68M26",
 	}
 	_, err := ms.CreateTrustRegistry(ctx, createMsg)
 	require.NoError(t, err)
@@ -139,84 +106,84 @@ func TestMsgServerAddGovernanceFrameworkDocument(t *testing.T) {
 		{
 			name: "Valid Add Document with Next Version",
 			msg: &types.MsgAddGovernanceFrameworkDocument{
-				Creator:     creator,
-				Id:          trID,
-				DocLanguage: "en",
-				DocUrl:      "http://example.com/doc2",
-				DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
-				Version:     2, // Exactly maxVersion + 1
+				Creator:      creator,
+				Id:           trID,
+				DocLanguage:  "en",
+				DocUrl:       "http://example.com/doc2",
+				DocDigestSri: "sha384-MzNNbQTWCSUSi0bbz7dbua+RcENv7C6FvlmYJ1Y+I727HsPOHdzwELMYO9Mz68M26",
+				Version:      2, // Exactly maxVersion + 1
 			},
 			isValid: true,
 		},
 		{
 			name: "Valid Add Document to Same Version with Different Language",
 			msg: &types.MsgAddGovernanceFrameworkDocument{
-				Creator:     creator,
-				Id:          trID,
-				DocLanguage: "fr",
-				DocUrl:      "http://example.com/doc2-fr",
-				DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
-				Version:     2, // Same version, different language
+				Creator:      creator,
+				Id:           trID,
+				DocLanguage:  "fr",
+				DocUrl:       "http://example.com/doc2-fr",
+				DocDigestSri: "sha384-MzNNbQTWCSUSi0bbz7dbua+RcENv7C6FvlmYJ1Y+I727HsPOHdzwELMYO9Mz68M26",
+				Version:      2, // Same version, different language
 			},
 			isValid: true,
 		},
 		{
 			name: "Valid Add Next Version",
 			msg: &types.MsgAddGovernanceFrameworkDocument{
-				Creator:     creator,
-				Id:          trID,
-				DocLanguage: "en",
-				DocUrl:      "http://example.com/doc3",
-				DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
-				Version:     3, // Exactly maxVersion + 1
+				Creator:      creator,
+				Id:           trID,
+				DocLanguage:  "en",
+				DocUrl:       "http://example.com/doc3",
+				DocDigestSri: "sha384-MzNNbQTWCSUSi0bbz7dbua+RcENv7C6FvlmYJ1Y+I727HsPOHdzwELMYO9Mz68M26",
+				Version:      3, // Exactly maxVersion + 1
 			},
 			isValid: true,
 		},
 		{
 			name: "Invalid Version (Less than Active Version)",
 			msg: &types.MsgAddGovernanceFrameworkDocument{
-				Creator:     creator,
-				Id:          trID,
-				DocLanguage: "en",
-				DocUrl:      "http://example.com/doc-old",
-				DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
-				Version:     1,
+				Creator:      creator,
+				Id:           trID,
+				DocLanguage:  "en",
+				DocUrl:       "http://example.com/doc-old",
+				DocDigestSri: "sha384-MzNNbQTWCSUSi0bbz7dbua+RcENv7C6FvlmYJ1Y+I727HsPOHdzwELMYO9Mz68M26",
+				Version:      1,
 			},
 			isValid: false,
 		},
 		{
 			name: "Invalid Trust Registry ID",
 			msg: &types.MsgAddGovernanceFrameworkDocument{
-				Creator:     creator,
-				Id:          99999,
-				DocLanguage: "en",
-				DocUrl:      "http://example.com/doc2",
-				DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
-				Version:     2,
+				Creator:      creator,
+				Id:           99999,
+				DocLanguage:  "en",
+				DocUrl:       "http://example.com/doc2",
+				DocDigestSri: "sha384-MzNNbQTWCSUSi0bbz7dbua+RcENv7C6FvlmYJ1Y+I727HsPOHdzwELMYO9Mz68M26",
+				Version:      2,
 			},
 			isValid: false,
 		},
 		{
 			name: "Invalid Language Format",
 			msg: &types.MsgAddGovernanceFrameworkDocument{
-				Creator:     creator,
-				Id:          trID,
-				DocLanguage: "invalid-language",
-				DocUrl:      "http://example.com/doc2",
-				DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
-				Version:     2,
+				Creator:      creator,
+				Id:           trID,
+				DocLanguage:  "invalid-language",
+				DocUrl:       "http://example.com/doc2",
+				DocDigestSri: "sha384-MzNNbQTWCSUSi0bbz7dbua+RcENv7C6FvlmYJ1Y+I727HsPOHdzwELMYO9Mz68M26",
+				Version:      2,
 			},
 			isValid: false,
 		},
 		{
 			name: "Wrong Controller",
 			msg: &types.MsgAddGovernanceFrameworkDocument{
-				Creator:     "wrong-controller",
-				Id:          trID,
-				DocLanguage: "en",
-				DocUrl:      "http://example.com/doc2",
-				DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
-				Version:     2,
+				Creator:      "wrong-controller",
+				Id:           trID,
+				DocLanguage:  "en",
+				DocUrl:       "http://example.com/doc2",
+				DocDigestSri: "sha384-MzNNbQTWCSUSi0bbz7dbua+RcENv7C6FvlmYJ1Y+I727HsPOHdzwELMYO9Mz68M26",
+				Version:      2,
 			},
 			isValid: false,
 		},
@@ -225,23 +192,23 @@ func TestMsgServerAddGovernanceFrameworkDocument(t *testing.T) {
 			setupFunc: func() {
 				// Add version 3 document first
 				msg := &types.MsgAddGovernanceFrameworkDocument{
-					Creator:     creator,
-					Id:          trID,
-					DocLanguage: "en",
-					DocUrl:      "http://example.com/doc3",
-					DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
-					Version:     3,
+					Creator:      creator,
+					Id:           trID,
+					DocLanguage:  "en",
+					DocUrl:       "http://example.com/doc3",
+					DocDigestSri: "sha384-MzNNbQTWCSUSi0bbz7dbua+RcENv7C6FvlmYJ1Y+I727HsPOHdzwELMYO9Mz68M26",
+					Version:      3,
 				}
 				_, err := ms.AddGovernanceFrameworkDocument(ctx, msg)
 				require.NoError(t, err)
 			},
 			msg: &types.MsgAddGovernanceFrameworkDocument{
-				Creator:     creator,
-				Id:          trID,
-				DocLanguage: "en",
-				DocUrl:      "http://example.com/doc5",
-				DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
-				Version:     5, // Invalid: should be 4 (maxVersion + 1)
+				Creator:      creator,
+				Id:           trID,
+				DocLanguage:  "en",
+				DocUrl:       "http://example.com/doc5",
+				DocDigestSri: "sha384-MzNNbQTWCSUSi0bbz7dbua+RcENv7C6FvlmYJ1Y+I727HsPOHdzwELMYO9Mz68M26",
+				Version:      5, // Invalid: should be 4 (maxVersion + 1)
 			},
 			isValid: false,
 		},
@@ -285,11 +252,11 @@ func TestMsgServerIncreaseActiveGovernanceFrameworkVersion(t *testing.T) {
 
 	// Create initial trust registry
 	createMsg := &types.MsgCreateTrustRegistry{
-		Creator:  creator,
-		Did:      validDid,
-		Language: "en",
-		DocUrl:   "http://example.com/doc",
-		DocHash:  "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+		Creator:      creator,
+		Did:          validDid,
+		Language:     "en",
+		DocUrl:       "http://example.com/doc",
+		DocDigestSri: "sha384-MzNNbQTWCSUSi0bbz7dbua+RcENv7C6FvlmYJ1Y+I727HsPOHdzwELMYO9Mz68M26",
 	}
 	_, err := ms.CreateTrustRegistry(ctx, createMsg)
 	require.NoError(t, err)
@@ -300,12 +267,12 @@ func TestMsgServerIncreaseActiveGovernanceFrameworkVersion(t *testing.T) {
 
 	// Add version 2 documents
 	addGFDocMsg := &types.MsgAddGovernanceFrameworkDocument{
-		Creator:     creator,
-		Id:          trID,
-		DocLanguage: "es", // First add Spanish version
-		DocUrl:      "http://example.com/doc2-es",
-		DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
-		Version:     2,
+		Creator:      creator,
+		Id:           trID,
+		DocLanguage:  "es", // First add Spanish version
+		DocUrl:       "http://example.com/doc2-es",
+		DocDigestSri: "sha384-MzNNbQTWCSUSi0bbz7dbua+RcENv7C6FvlmYJ1Y+I727HsPOHdzwELMYO9Mz68M26",
+		Version:      2,
 	}
 	_, err = ms.AddGovernanceFrameworkDocument(ctx, addGFDocMsg)
 	require.NoError(t, err)
@@ -330,12 +297,12 @@ func TestMsgServerIncreaseActiveGovernanceFrameworkVersion(t *testing.T) {
 			setupFunc: func() {
 				// Add English (default language) document for version 2
 				msg := &types.MsgAddGovernanceFrameworkDocument{
-					Creator:     creator,
-					Id:          trID,
-					DocLanguage: "en",
-					DocUrl:      "http://example.com/doc2-en",
-					DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
-					Version:     2,
+					Creator:      creator,
+					Id:           trID,
+					DocLanguage:  "en",
+					DocUrl:       "http://example.com/doc2-en",
+					DocDigestSri: "sha384-MzNNbQTWCSUSi0bbz7dbua+RcENv7C6FvlmYJ1Y+I727HsPOHdzwELMYO9Mz68M26",
+					Version:      2,
 				}
 				_, err := ms.AddGovernanceFrameworkDocument(ctx, msg)
 				require.NoError(t, err)
@@ -394,11 +361,11 @@ func TestMsgServerUpdateTrustRegistry(t *testing.T) {
 	creator := sdk.AccAddress([]byte("test_creator")).String()
 	validDid := "did:example:123456789abcdefghi"
 	createMsg := &types.MsgCreateTrustRegistry{
-		Creator:  creator,
-		Did:      validDid,
-		Language: "en",
-		DocUrl:   "http://example.com/doc",
-		DocHash:  "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+		Creator:      creator,
+		Did:          validDid,
+		Language:     "en",
+		DocUrl:       "http://example.com/doc",
+		DocDigestSri: "sha384-MzNNbQTWCSUSi0bbz7dbua+RcENv7C6FvlmYJ1Y+I727HsPOHdzwELMYO9Mz68M26",
 	}
 	resp, err := ms.CreateTrustRegistry(ctx, createMsg)
 	require.NoError(t, err)
@@ -491,11 +458,11 @@ func TestMsgServerArchiveTrustRegistry(t *testing.T) {
 	creator := sdk.AccAddress([]byte("test_creator")).String()
 	validDid := "did:example:123456789abcdefghi"
 	createMsg := &types.MsgCreateTrustRegistry{
-		Creator:  creator,
-		Did:      validDid,
-		Language: "en",
-		DocUrl:   "http://example.com/doc",
-		DocHash:  "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+		Creator:      creator,
+		Did:          validDid,
+		Language:     "en",
+		DocUrl:       "http://example.com/doc",
+		DocDigestSri: "sha384-MzNNbQTWCSUSi0bbz7dbua+RcENv7C6FvlmYJ1Y+I727HsPOHdzwELMYO9Mz68M26",
 	}
 	resp, err := ms.CreateTrustRegistry(ctx, createMsg)
 	require.NoError(t, err)

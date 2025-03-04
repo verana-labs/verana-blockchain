@@ -10,7 +10,7 @@ import (
 )
 
 func (msg *MsgCreateTrustRegistry) ValidateBasic() error {
-	if msg.Did == "" || msg.Language == "" || msg.DocUrl == "" || msg.DocHash == "" {
+	if msg.Did == "" || msg.Language == "" || msg.DocUrl == "" || msg.DocDigestSri == "" {
 		return fmt.Errorf("missing mandatory parameter")
 	}
 
@@ -38,9 +38,9 @@ func (msg *MsgCreateTrustRegistry) ValidateBasic() error {
 		return fmt.Errorf("invalid document URL")
 	}
 
-	// Validate hash
-	if !isValidHash(msg.DocHash) {
-		return fmt.Errorf("invalid document hash")
+	// Validate document digest sri
+	if !isValidDigestSRI(msg.DocDigestSri) {
+		return fmt.Errorf("invalid document digest sri")
 	}
 
 	return nil
@@ -57,7 +57,7 @@ func isValidLanguageTagForCreateTrustRegistry(lang string) bool {
 }
 
 func (msg *MsgAddGovernanceFrameworkDocument) ValidateBasic() error {
-	if msg.Id == 0 || msg.DocLanguage == "" || msg.DocUrl == "" || msg.DocHash == "" || msg.Version == 0 {
+	if msg.Id == 0 || msg.DocLanguage == "" || msg.DocUrl == "" || msg.DocDigestSri == "" || msg.Version == 0 {
 		return fmt.Errorf("missing mandatory parameter")
 	}
 
@@ -75,10 +75,9 @@ func (msg *MsgAddGovernanceFrameworkDocument) ValidateBasic() error {
 		return fmt.Errorf("invalid document URL")
 	}
 
-	// SHA-256 hash validation
-	hashRegex := regexp.MustCompile(`^[a-fA-F0-9]{64}$`)
-	if !hashRegex.MatchString(msg.DocHash) {
-		return fmt.Errorf("invalid document hash")
+	// Validate document digest sri
+	if !isValidDigestSRI(msg.DocDigestSri) {
+		return fmt.Errorf("invalid document digest sri")
 	}
 
 	return nil
@@ -168,9 +167,8 @@ func isValidURL(urlStr string) bool {
 	return err == nil
 }
 
-func isValidHash(hash string) bool {
-	// This is a basic check for a SHA-256 hash (64 hexadecimal characters)
-	// Adjust this based on your specific hash requirements
-	hashRegex := regexp.MustCompile(`^[a-fA-F0-9]{64}$`)
-	return hashRegex.MatchString(hash)
+func isValidDigestSRI(digestSRI string) bool {
+	// sha256-[base64], sha384-[base64], or sha512-[base64]
+	sriRegex := regexp.MustCompile(`^(sha256|sha384|sha512)-[A-Za-z0-9+/]+[=]{0,2}$`)
+	return sriRegex.MatchString(digestSRI)
 }

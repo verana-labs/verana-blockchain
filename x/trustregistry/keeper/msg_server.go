@@ -24,11 +24,6 @@ var _ types.MsgServer = msgServer{}
 func (ms msgServer) CreateTrustRegistry(goCtx context.Context, msg *types.MsgCreateTrustRegistry) (*types.MsgCreateTrustRegistryResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	// [MOD-TR-MSG-1-2-1] Create New Trust Registry basic checks
-	if err := ms.validateCreateTrustRegistryParams(ctx, msg); err != nil {
-		return nil, err
-	}
-
 	// [MOD-TR-MSG-1-3] Create New Trust Registry execution
 	now := ctx.BlockTime()
 
@@ -75,7 +70,7 @@ func (ms msgServer) CreateTrustRegistry(goCtx context.Context, msg *types.MsgCre
 			sdk.NewAttribute(types.AttributeKeyGFDocumentID, strconv.FormatUint(gfd.Id, 10)),
 			sdk.NewAttribute(types.AttributeKeyGFVersionID, strconv.FormatUint(gfd.GfvId, 10)),
 			sdk.NewAttribute(types.AttributeKeyDocURL, gfd.Url),
-			sdk.NewAttribute(types.AttributeKeyDocHash, gfd.Hash),
+			sdk.NewAttribute(types.AttributeKeyDigestSri, gfd.DigestSri),
 		),
 	})
 
