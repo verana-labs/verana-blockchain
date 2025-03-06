@@ -83,7 +83,7 @@ func (k Keeper) CreatePermission(ctx sdk.Context, perm types.Permission) (uint64
 	if err != nil {
 		return 0, err
 	}
-
+	perm.Id = id
 	if err := k.Permission.Set(ctx, id, perm); err != nil {
 		return 0, err
 	}
