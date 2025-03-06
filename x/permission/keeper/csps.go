@@ -1,13 +1,15 @@
 package keeper
 
 import (
-	"cosmossdk.io/collections"
 	"errors"
+
+	"cosmossdk.io/collections"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
+	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/verana-labs/verana-blockchain/x/permission/types"
-	"time"
 )
 
 func (ms msgServer) validateSessionAccess(ctx sdk.Context, msg *types.MsgCreateOrUpdatePermissionSession) error {

@@ -24,8 +24,8 @@ const (
 	Query_GetPermission_FullMethodName          = "/veranablockchain.permission.Query/GetPermission"
 	Query_GetPermissionSession_FullMethodName   = "/veranablockchain.permission.Query/GetPermissionSession"
 	Query_ListPermissionSessions_FullMethodName = "/veranablockchain.permission.Query/ListPermissionSessions"
-	Query_IsAuthorizedIssuer_FullMethodName     = "/veranablockchain.permission.Query/IsAuthorizedIssuer"
-	Query_IsAuthorizedVerifier_FullMethodName   = "/veranablockchain.permission.Query/IsAuthorizedVerifier"
+	Query_FindPermissionsWithDID_FullMethodName = "/veranablockchain.permission.Query/FindPermissionsWithDID"
+	Query_FindBeneficiaries_FullMethodName      = "/veranablockchain.permission.Query/FindBeneficiaries"
 )
 
 // QueryClient is the client API for Query service.
@@ -38,8 +38,8 @@ type QueryClient interface {
 	GetPermission(ctx context.Context, in *QueryGetPermissionRequest, opts ...grpc.CallOption) (*QueryGetPermissionResponse, error)
 	GetPermissionSession(ctx context.Context, in *QueryGetPermissionSessionRequest, opts ...grpc.CallOption) (*QueryGetPermissionSessionResponse, error)
 	ListPermissionSessions(ctx context.Context, in *QueryListPermissionSessionsRequest, opts ...grpc.CallOption) (*QueryListPermissionSessionsResponse, error)
-	IsAuthorizedIssuer(ctx context.Context, in *QueryIsAuthorizedIssuerRequest, opts ...grpc.CallOption) (*QueryIsAuthorizedIssuerResponse, error)
-	IsAuthorizedVerifier(ctx context.Context, in *QueryIsAuthorizedVerifierRequest, opts ...grpc.CallOption) (*QueryIsAuthorizedVerifierResponse, error)
+	FindPermissionsWithDID(ctx context.Context, in *QueryFindPermissionsWithDIDRequest, opts ...grpc.CallOption) (*QueryFindPermissionsWithDIDResponse, error)
+	FindBeneficiaries(ctx context.Context, in *QueryFindBeneficiariesRequest, opts ...grpc.CallOption) (*QueryFindBeneficiariesResponse, error)
 }
 
 type queryClient struct {
@@ -95,18 +95,18 @@ func (c *queryClient) ListPermissionSessions(ctx context.Context, in *QueryListP
 	return out, nil
 }
 
-func (c *queryClient) IsAuthorizedIssuer(ctx context.Context, in *QueryIsAuthorizedIssuerRequest, opts ...grpc.CallOption) (*QueryIsAuthorizedIssuerResponse, error) {
-	out := new(QueryIsAuthorizedIssuerResponse)
-	err := c.cc.Invoke(ctx, Query_IsAuthorizedIssuer_FullMethodName, in, out, opts...)
+func (c *queryClient) FindPermissionsWithDID(ctx context.Context, in *QueryFindPermissionsWithDIDRequest, opts ...grpc.CallOption) (*QueryFindPermissionsWithDIDResponse, error) {
+	out := new(QueryFindPermissionsWithDIDResponse)
+	err := c.cc.Invoke(ctx, Query_FindPermissionsWithDID_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *queryClient) IsAuthorizedVerifier(ctx context.Context, in *QueryIsAuthorizedVerifierRequest, opts ...grpc.CallOption) (*QueryIsAuthorizedVerifierResponse, error) {
-	out := new(QueryIsAuthorizedVerifierResponse)
-	err := c.cc.Invoke(ctx, Query_IsAuthorizedVerifier_FullMethodName, in, out, opts...)
+func (c *queryClient) FindBeneficiaries(ctx context.Context, in *QueryFindBeneficiariesRequest, opts ...grpc.CallOption) (*QueryFindBeneficiariesResponse, error) {
+	out := new(QueryFindBeneficiariesResponse)
+	err := c.cc.Invoke(ctx, Query_FindBeneficiaries_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -123,8 +123,8 @@ type QueryServer interface {
 	GetPermission(context.Context, *QueryGetPermissionRequest) (*QueryGetPermissionResponse, error)
 	GetPermissionSession(context.Context, *QueryGetPermissionSessionRequest) (*QueryGetPermissionSessionResponse, error)
 	ListPermissionSessions(context.Context, *QueryListPermissionSessionsRequest) (*QueryListPermissionSessionsResponse, error)
-	IsAuthorizedIssuer(context.Context, *QueryIsAuthorizedIssuerRequest) (*QueryIsAuthorizedIssuerResponse, error)
-	IsAuthorizedVerifier(context.Context, *QueryIsAuthorizedVerifierRequest) (*QueryIsAuthorizedVerifierResponse, error)
+	FindPermissionsWithDID(context.Context, *QueryFindPermissionsWithDIDRequest) (*QueryFindPermissionsWithDIDResponse, error)
+	FindBeneficiaries(context.Context, *QueryFindBeneficiariesRequest) (*QueryFindBeneficiariesResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -147,11 +147,11 @@ func (UnimplementedQueryServer) GetPermissionSession(context.Context, *QueryGetP
 func (UnimplementedQueryServer) ListPermissionSessions(context.Context, *QueryListPermissionSessionsRequest) (*QueryListPermissionSessionsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListPermissionSessions not implemented")
 }
-func (UnimplementedQueryServer) IsAuthorizedIssuer(context.Context, *QueryIsAuthorizedIssuerRequest) (*QueryIsAuthorizedIssuerResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method IsAuthorizedIssuer not implemented")
+func (UnimplementedQueryServer) FindPermissionsWithDID(context.Context, *QueryFindPermissionsWithDIDRequest) (*QueryFindPermissionsWithDIDResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindPermissionsWithDID not implemented")
 }
-func (UnimplementedQueryServer) IsAuthorizedVerifier(context.Context, *QueryIsAuthorizedVerifierRequest) (*QueryIsAuthorizedVerifierResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method IsAuthorizedVerifier not implemented")
+func (UnimplementedQueryServer) FindBeneficiaries(context.Context, *QueryFindBeneficiariesRequest) (*QueryFindBeneficiariesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindBeneficiaries not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -256,38 +256,38 @@ func _Query_ListPermissionSessions_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_IsAuthorizedIssuer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryIsAuthorizedIssuerRequest)
+func _Query_FindPermissionsWithDID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryFindPermissionsWithDIDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).IsAuthorizedIssuer(ctx, in)
+		return srv.(QueryServer).FindPermissionsWithDID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Query_IsAuthorizedIssuer_FullMethodName,
+		FullMethod: Query_FindPermissionsWithDID_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).IsAuthorizedIssuer(ctx, req.(*QueryIsAuthorizedIssuerRequest))
+		return srv.(QueryServer).FindPermissionsWithDID(ctx, req.(*QueryFindPermissionsWithDIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_IsAuthorizedVerifier_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryIsAuthorizedVerifierRequest)
+func _Query_FindBeneficiaries_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryFindBeneficiariesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).IsAuthorizedVerifier(ctx, in)
+		return srv.(QueryServer).FindBeneficiaries(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Query_IsAuthorizedVerifier_FullMethodName,
+		FullMethod: Query_FindBeneficiaries_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).IsAuthorizedVerifier(ctx, req.(*QueryIsAuthorizedVerifierRequest))
+		return srv.(QueryServer).FindBeneficiaries(ctx, req.(*QueryFindBeneficiariesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -320,12 +320,12 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Query_ListPermissionSessions_Handler,
 		},
 		{
-			MethodName: "IsAuthorizedIssuer",
-			Handler:    _Query_IsAuthorizedIssuer_Handler,
+			MethodName: "FindPermissionsWithDID",
+			Handler:    _Query_FindPermissionsWithDID_Handler,
 		},
 		{
-			MethodName: "IsAuthorizedVerifier",
-			Handler:    _Query_IsAuthorizedVerifier_Handler,
+			MethodName: "FindBeneficiaries",
+			Handler:    _Query_FindBeneficiaries_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -3,10 +3,11 @@ package keeper
 import (
 	"context"
 	"fmt"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/verana-labs/verana-blockchain/x/permission/types"
 	"strconv"
 	"time"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/verana-labs/verana-blockchain/x/permission/types"
 )
 
 type msgServer struct {
@@ -93,18 +94,12 @@ func (ms msgServer) RenewPermissionVP(goCtx context.Context, msg *types.MsgRenew
 }
 
 func (ms msgServer) executeRenewPermissionVP(ctx sdk.Context, perm types.Permission, fees, deposit uint64) error {
-	// TODO: After trustdeposit module
-	// Increment trust deposit
-	//if err := ms.trustDepositKeeper.IncreaseTrustDeposit(ctx, perm.Grantee, deposit); err != nil {
-	//    return fmt.Errorf("failed to increase trust deposit: %w", err)
-	//}
-
-	// Send validation fees to escrow if greater than 0
-	//if fees > 0 {
-	//    if err := ms.transferToEscrow(ctx, perm.Grantee, fees); err != nil {
-	//        return fmt.Errorf("failed to transfer fees to escrow: %w", err)
-	//    }
-	//}
+	// Increment trust deposit if deposit is greater than 0
+	if deposit > 0 {
+		if err := ms.trustDeposit.AdjustTrustDeposit(ctx, perm.Grantee, int64(deposit)); err != nil {
+			return fmt.Errorf("failed to increase trust deposit: %w", err)
+		}
+	}
 
 	now := ctx.BlockTime()
 

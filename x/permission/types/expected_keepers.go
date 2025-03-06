@@ -2,6 +2,7 @@ package types
 
 import (
 	"context"
+
 	credentialschematypes "github.com/verana-labs/verana-blockchain/x/credentialschema/types"
 	trustregistrytypes "github.com/verana-labs/verana-blockchain/x/trustregistry/types"
 
@@ -33,4 +34,9 @@ type CredentialSchemaKeeper interface {
 // TrustRegistryKeeper defines the expected trust registry keeper
 type TrustRegistryKeeper interface {
 	GetTrustRegistry(ctx sdk.Context, id uint64) (trustregistrytypes.TrustRegistry, error)
+}
+
+// TrustDepositKeeper defines the expected interface for the Trust Deposit module.
+type TrustDepositKeeper interface {
+	AdjustTrustDeposit(ctx sdk.Context, account string, augend int64) error
 }

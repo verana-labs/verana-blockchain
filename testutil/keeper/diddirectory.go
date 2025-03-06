@@ -33,11 +33,15 @@ func DiddirectoryKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
 	cdc := codec.NewProtoCodec(registry)
 	authority := authtypes.NewModuleAddress(govtypes.ModuleName)
 
+	trustRegistryKeeper := NewMockTrustRegistryKeeper()
+	mockTrustDepositKeeper := &MockTrustDepositKeeper{}
 	k := keeper.NewKeeper(
 		cdc,
 		runtime.NewKVStoreService(storeKey),
 		log.NewNopLogger(),
 		authority.String(),
+		mockTrustDepositKeeper,
+		trustRegistryKeeper,
 	)
 
 	ctx := sdk.NewContext(stateStore, cmtproto.Header{}, false, log.NewNopLogger())

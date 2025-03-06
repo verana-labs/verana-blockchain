@@ -15,5 +15,6 @@ const (
 	AttributeKeyVersion         = "version"
 	AttributeKeyGFDocumentID    = "gf_document_id"
 	AttributeKeyDocURL          = "doc_url"
-	AttributeKeyDocHash         = "doc_hash"
+	AttributeKeyDigestSri       = "digest_sri"
+	AttributeKeyDeposit         = "deposit"
 )

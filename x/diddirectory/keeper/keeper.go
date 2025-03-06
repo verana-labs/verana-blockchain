@@ -23,8 +23,10 @@ type (
 		// should be the x/gov module account.
 		authority string
 		// state management
-		Schema       collections.Schema
-		DIDDirectory collections.Map[string, types.DIDDirectory]
+		Schema              collections.Schema
+		DIDDirectory        collections.Map[string, types.DIDDirectory]
+		trustDeposit        types.TrustDepositKeeper
+		trustRegistryKeeper types.TrustRegistryKeeper
 	}
 )
 
@@ -33,18 +35,21 @@ func NewKeeper(
 	storeService store.KVStoreService,
 	logger log.Logger,
 	authority string,
-
+	trustDeposit types.TrustDepositKeeper,
+	trustRegistryKeeper types.TrustRegistryKeeper,
 ) Keeper {
 	if _, err := sdk.AccAddressFromBech32(authority); err != nil {
 		panic(fmt.Sprintf("invalid authority address: %s", authority))
 	}
 	sb := collections.NewSchemaBuilder(storeService)
 	return Keeper{
-		cdc:          cdc,
-		storeService: storeService,
-		authority:    authority,
-		logger:       logger,
-		DIDDirectory: collections.NewMap(sb, types.DIDDirectoryKey, "did_directory", collections.StringKey, codec.CollValue[types.DIDDirectory](cdc)),
+		cdc:                 cdc,
+		storeService:        storeService,
+		authority:           authority,
+		logger:              logger,
+		DIDDirectory:        collections.NewMap(sb, types.DIDDirectoryKey, "did_directory", collections.StringKey, codec.CollValue[types.DIDDirectory](cdc)),
+		trustDeposit:        trustDeposit,
+		trustRegistryKeeper: trustRegistryKeeper,
 	}
 }
 

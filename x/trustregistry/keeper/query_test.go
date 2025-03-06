@@ -19,11 +19,11 @@ func setupTestData(t *testing.T) (keeper.Keeper, types.QueryServer, context.Cont
 	// Create a trust registry
 	creator := sdk.AccAddress([]byte("test_creator")).String()
 	createMsg := &types.MsgCreateTrustRegistry{
-		Creator:  creator,
-		Did:      "did:example:123",
-		Language: "en",
-		DocUrl:   "http://example.com/doc1",
-		DocHash:  "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+		Creator:      creator,
+		Did:          "did:example:123",
+		Language:     "en",
+		DocUrl:       "http://example.com/doc1",
+		DocDigestSri: "sha384-MzNNbQTWCSUSi0bbz7dbua+RcENv7C6FvlmYJ1Y+I727HsPOHdzwELMYO9Mz68M26",
 	}
 	_, err := ms.CreateTrustRegistry(ctx, createMsg)
 	require.NoError(t, err)
@@ -34,12 +34,12 @@ func setupTestData(t *testing.T) (keeper.Keeper, types.QueryServer, context.Cont
 
 	// Add documents in different languages for version 2
 	addDocMsg := &types.MsgAddGovernanceFrameworkDocument{
-		Creator:     creator,
-		Id:          trID,
-		DocLanguage: "en",
-		DocUrl:      "http://example.com/doc2-en",
-		DocHash:     "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
-		Version:     2,
+		Creator:      creator,
+		Id:           trID,
+		DocLanguage:  "en",
+		DocUrl:       "http://example.com/doc2-en",
+		DocDigestSri: "sha384-MzNNbQTWCSUSi0bbz7dbua+RcENv7C6FvlmYJ1Y+I727HsPOHdzwELMYO9Mz68M26",
+		Version:      2,
 	}
 	_, err = ms.AddGovernanceFrameworkDocument(ctx, addDocMsg)
 	require.NoError(t, err)
@@ -145,11 +145,11 @@ func TestListTrustRegistries(t *testing.T) {
 	// Create additional trust registry for testing
 	ms := keeper.NewMsgServerImpl(k)
 	createMsg := &types.MsgCreateTrustRegistry{
-		Creator:  "another_creator",
-		Did:      "did:example:456",
-		Language: "fr",
-		DocUrl:   "http://example.com/doc-fr",
-		DocHash:  "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+		Creator:      "another_creator",
+		Did:          "did:example:456",
+		Language:     "fr",
+		DocUrl:       "http://example.com/doc-fr",
+		DocDigestSri: "sha384-MzNNbQTWCSUSi0bbz7dbua+RcENv7C6FvlmYJ1Y+I727HsPOHdzwELMYO9Mz68M26",
 	}
 	_, err := ms.CreateTrustRegistry(ctx, createMsg)
 	require.NoError(t, err)

@@ -54,7 +54,7 @@ message MsgCreateTrustRegistry {
   string aka = 3 [(gogoproto.nullable) = true];
   string language = 4;
   string doc_url = 5;
-  string doc_hash = 6;
+  string doc_digest_sri = 6;
 }
 
 // MsgCreateTrustRegistryResponse defines the Msg/CreateTrustRegistry response type.
@@ -68,7 +68,7 @@ message MsgAddGovernanceFrameworkDocument {
   uint64 id = 2;
   string doc_language = 3;
   string doc_url = 4;
-  string doc_hash = 5;
+  string doc_digest_sri = 5;
   int32 version = 6;
 }
 

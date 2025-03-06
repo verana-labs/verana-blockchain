@@ -22,7 +22,7 @@ const jsonSchemaMetaSchema = `{
     "$id": {
       "type": "string",
       "format": "uri-reference",
-      "pattern": "^/dtr/v1/cs/js/\\d+$",
+      "pattern": "^/vpr/v1/cs/js/\\d+$",
       "description": "$id must be a URI matching the rendering URL format"
     },
     "$schema": {
@@ -78,7 +78,7 @@ const jsonSchemaMetaSchema = `{
   "examples": [
     {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "$id": "/dtr/v1/cs/js/1",
+      "$id": "/vpr/v1/cs/js/1",
       "type": "object",
       "properties": {
         "name": {
@@ -179,14 +179,14 @@ func validateJSONSchema(schemaJSON string) error {
 		return fmt.Errorf("json schema cannot be empty")
 	}
 
+	if len(schemaJSON) > int(DefaultCredentialSchemaSchemaMaxSize) {
+		return fmt.Errorf("json schema exceeds maximum size of %d bytes", DefaultCredentialSchemaSchemaMaxSize)
+	}
+
 	// Parse JSON
 	var schemaDoc map[string]interface{}
 	if err := json.Unmarshal([]byte(schemaJSON), &schemaDoc); err != nil {
 		return fmt.Errorf("invalid JSON format: %w", err)
-	}
-
-	if len(schemaJSON) > int(DefaultCredentialSchemaSchemaMaxSize) {
-		return fmt.Errorf("json schema exceeds maximum size of %d bytes", DefaultCredentialSchemaSchemaMaxSize)
 	}
 
 	// Check for $id field
@@ -197,7 +197,7 @@ func validateJSONSchema(schemaJSON string) error {
 
 	// Only validate that $id follows the basic pattern, actual ID will be set later
 	if !isValidSchemaIdPattern(schemaId) {
-		return fmt.Errorf("$id must match the pattern '/dtr/v1/cs/js/{number}'")
+		return fmt.Errorf("$id must match the pattern '/vpr/v1/cs/js/{number}'")
 	}
 
 	// Load the meta-schema and validate
@@ -238,17 +238,21 @@ func validateJSONSchema(schemaJSON string) error {
 }
 
 func isValidSchemaIdPattern(schemaId string) bool {
-	pattern := regexp.MustCompile(`^/dtr/v1/cs/js/\d+$`)
+	pattern := regexp.MustCompile(`^/vpr/v1/cs/js/\d+$`)
 	return pattern.MatchString(schemaId)
 }
 
 func validateValidityPeriods(msg *MsgCreateCredentialSchema) error {
+	// A value of 0 indicates no expiration (never expire)
+	// All other values must be within the allowed range
+
 	if msg.IssuerGrantorValidationValidityPeriod < 0 {
 		return fmt.Errorf("issuer grantor validation validity period cannot be negative")
 	}
 	if msg.VerifierGrantorValidationValidityPeriod < 0 {
 		return fmt.Errorf("verifier grantor validation validity period cannot be negative")
 	}
+
 	// Add maximum value checks
 	if msg.IssuerGrantorValidationValidityPeriod > 0 &&
 		msg.IssuerGrantorValidationValidityPeriod > DefaultCredentialSchemaIssuerGrantorValidationValidityPeriodMaxDays {
@@ -287,6 +291,41 @@ func validatePermManagementModes(msg *MsgCreateCredentialSchema) error {
 	}
 	if msg.VerifierPermManagementMode > 3 {
 		return fmt.Errorf("invalid verifier permission management mode: must be between 1 and 3")
+	}
+
+	return nil
+}
+
+func (msg *MsgUpdateCredentialSchema) ValidateBasic() error {
+	// Validate creator address
+	_, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+	}
+
+	// Check mandatory parameters
+	if msg.Id == 0 {
+		return errors.Wrap(sdkerrors.ErrInvalidRequest, "id cannot be 0")
+	}
+
+	if msg.Id == 0 {
+		return fmt.Errorf("credential schema id is required")
+	}
+
+	return nil
+}
+
+func (msg *MsgArchiveCredentialSchema) ValidateBasic() error {
+	if msg.Creator == "" {
+		return fmt.Errorf("creator address is required")
+	}
+
+	if _, err := sdk.AccAddressFromBech32(msg.Creator); err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+	}
+
+	if msg.Id == 0 {
+		return fmt.Errorf("credential schema id is required")
 	}
 
 	return nil

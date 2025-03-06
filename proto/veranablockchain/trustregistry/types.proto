@@ -35,7 +35,7 @@ message GovernanceFrameworkDocument {
   google.protobuf.Timestamp created = 3 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
   string language = 4;
   string url = 5;
-  string hash = 6;
+  string digest_sri = 6;
 }
 
 // GovernanceFrameworkVersionWithDocs extends GovernanceFrameworkVersion to include its documents

@@ -43,6 +43,7 @@ func (ms msgServer) validateRenewDIDParams(ctx sdk.Context, msg *types.MsgRenewD
 
 func (ms msgServer) executeRenewDID(ctx sdk.Context, msg *types.MsgRenewDID) error {
 	params := ms.GetParams(ctx)
+	trustUnitPrice := ms.trustRegistryKeeper.GetTrustUnitPrice(ctx)
 
 	// Get existing DID entry
 	didEntry, err := ms.DIDDirectory.Get(ctx, msg.Did)
@@ -60,19 +61,33 @@ func (ms msgServer) executeRenewDID(ctx sdk.Context, msg *types.MsgRenewDID) err
 	newExpiration := didEntry.Exp.AddDate(int(years), 0, 0)
 
 	// Calculate additional deposit
-	additionalDeposit := int64(params.DidDirectoryTrustDeposit * uint64(years))
+	additionalDeposit := params.DidDirectoryTrustDeposit * trustUnitPrice * uint64(years)
+
+	// Increase trust deposit
+	if err := ms.trustDeposit.AdjustTrustDeposit(ctx, msg.Creator, int64(additionalDeposit)); err != nil {
+		return fmt.Errorf("failed to adjust trust deposit: %w", err)
+	}
 
 	// Update DID entry
 	didEntry.Modified = now
 	didEntry.Exp = newExpiration
-	didEntry.Deposit += additionalDeposit
-
-	// Lock additional trust deposit
+	didEntry.Deposit += int64(additionalDeposit)
 
 	// Store the updated DID entry
 	if err = ms.DIDDirectory.Set(ctx, msg.Did, didEntry); err != nil {
 		return fmt.Errorf("failed to update DID: %w", err)
 	}
+
+	// Emit event
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeRenewDID,
+			sdk.NewAttribute(types.AttributeKeyDID, msg.Did),
+			sdk.NewAttribute(types.AttributeKeyController, msg.Creator),
+			sdk.NewAttribute(types.AttributeKeyDeposit, fmt.Sprintf("%d", additionalDeposit)),
+			sdk.NewAttribute(types.AttributeKeyYears, fmt.Sprintf("%d", years)),
+		),
+	)
 
 	return nil
 }

@@ -3,12 +3,9 @@ package keeper
 import (
 	"context"
 	"cosmossdk.io/collections"
-	"cosmossdk.io/errors"
 	errors2 "errors"
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	credentialschematypes "github.com/verana-labs/verana-blockchain/x/credentialschema/types"
 	"github.com/verana-labs/verana-blockchain/x/permission/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -151,424 +148,230 @@ func (k Keeper) ListPermissionSessions(ctx context.Context, req *types.QueryList
 	}, nil
 }
 
-// IsAuthorizedIssuer implements the Is Authorized Issuer query
-func (k Keeper) IsAuthorizedIssuer(ctx context.Context, req *types.QueryIsAuthorizedIssuerRequest) (*types.QueryIsAuthorizedIssuerResponse, error) {
-	if err := validateIsAuthorizedIssuerRequest(req); err != nil {
-		return nil, err
+func (k Keeper) FindPermissionsWithDID(goCtx context.Context, req *types.QueryFindPermissionsWithDIDRequest) (*types.QueryFindPermissionsWithDIDResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	// Load credential schema
-	cs, err := k.credentialSchemaKeeper.GetCredentialSchemaById(sdkCtx, req.SchemaId)
+	// [MOD-PERM-QRY-3-2] Checks
+	if req.Did == "" {
+		return nil, status.Error(codes.InvalidArgument, "DID is required")
+	}
+	if !isValidDID(req.Did) {
+		return nil, status.Error(codes.InvalidArgument, "invalid DID format")
+	}
+
+	// Check type - convert uint32 to PermissionType
+	if req.Type == 0 {
+		return nil, status.Error(codes.InvalidArgument, "permission type is required")
+	}
+
+	// Validate permission type value is in range
+	permType := types.PermissionType(req.Type)
+	if permType < types.PermissionType_PERMISSION_TYPE_ISSUER ||
+		permType > types.PermissionType_PERMISSION_TYPE_HOLDER {
+		return nil, status.Error(codes.InvalidArgument,
+			fmt.Sprintf("invalid permission type value: %d, must be between 1 and 6", req.Type))
+	}
+
+	// Check schema ID
+	if req.SchemaId == 0 {
+		return nil, status.Error(codes.InvalidArgument, "schema ID is required")
+	}
+
+	// Check schema exists
+	_, err := k.credentialSchemaKeeper.GetCredentialSchemaById(ctx, req.SchemaId)
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to load credential schema")
+		return nil, status.Error(codes.NotFound, fmt.Sprintf("credential schema not found: %v", err))
 	}
 
-	// Check if issuance is open
-	if cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_OPEN {
-		return &types.QueryIsAuthorizedIssuerResponse{
-			Result: types.AuthorizationResult_AUTHORIZATION_RESULT_AUTHORIZED,
-		}, nil
+	// Check country code if provided
+	if req.Country != "" && !isValidCountryCode(req.Country) {
+		return nil, status.Error(codes.InvalidArgument, "invalid country code format")
 	}
 
-	// Define time point
-	timePoint := req.When
-	if timePoint == nil {
-		now := sdkCtx.BlockTime()
-		timePoint = &now
-	}
+	// [MOD-PERM-QRY-3-3] Execution
+	var foundPerms []types.Permission
 
-	// Find matching issuer permission
-	var issuerPerm *types.Permission
-	err = k.Permission.Walk(sdkCtx, nil, func(id uint64, perm types.Permission) (bool, error) {
-		if perm.Did == req.IssuerDid &&
-			perm.Type == types.PermissionType_PERMISSION_TYPE_ISSUER &&
-			perm.SchemaId == req.SchemaId {
+	// TODO: If index is implemented, use it here to get permission IDs by schema and hash
+	// For now, we'll scan all permissions
 
-			// Check country match
-			if req.Country != "" {
-				if perm.Country != "" && perm.Country != req.Country {
-					return false, nil
-				}
-			}
-
-			// Check time validity
-			if perm.EffectiveFrom != nil && timePoint.Before(*perm.EffectiveFrom) {
-				return false, nil
-			}
-			if perm.EffectiveUntil != nil && timePoint.After(*perm.EffectiveUntil) {
-				return false, nil
-			}
-			if perm.Revoked != nil && timePoint.After(*perm.Revoked) {
-				return false, nil
-			}
-			if perm.Terminated != nil && timePoint.After(*perm.Terminated) {
-				return false, nil
-			}
-
-			issuerPerm = &perm
-			return true, nil
+	err = k.Permission.Walk(ctx, nil, func(id uint64, perm types.Permission) (bool, error) {
+		// Filter by schema ID
+		if perm.SchemaId != req.SchemaId {
+			return false, nil
 		}
+
+		// Filter by DID and type
+		if perm.Did != req.Did || perm.Type != permType {
+			return false, nil
+		}
+
+		// Filter by country
+		if req.Country != "" && perm.Country != "" && perm.Country != req.Country {
+			return false, nil
+		}
+
+		// If "when" is not specified, add all matching permissions
+		if req.When == nil {
+			foundPerms = append(foundPerms, perm)
+			return false, nil
+		}
+
+		// Filter by time validity
+		if isPermissionValidAtTime(perm, *req.When) {
+			foundPerms = append(foundPerms, perm)
+		}
+
 		return false, nil
 	})
+
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to search permissions")
+		return nil, status.Error(codes.Internal, fmt.Sprintf("failed to query permissions: %v", err))
 	}
 
-	if issuerPerm == nil {
-		return &types.QueryIsAuthorizedIssuerResponse{
-			Result: types.AuthorizationResult_AUTHORIZATION_RESULT_FORBIDDEN,
-		}, nil
-	}
-
-	// Calculate permission set and fees
-	permSet, err := k.buildPermissionSet(sdkCtx, issuerPerm)
-	if err != nil {
-		return nil, err
-	}
-
-	trustFees := uint64(0)
-	for _, perm := range permSet {
-		trustFees += perm.IssuanceFees
-	}
-
-	// If no fees required, return authorized
-	if trustFees == 0 {
-		return &types.QueryIsAuthorizedIssuerResponse{
-			Result: types.AuthorizationResult_AUTHORIZATION_RESULT_AUTHORIZED,
-		}, nil
-	}
-
-	// Session check
-	//if req.SessionId == 0 {
-	//	return &types.QueryIsAuthorizedIssuerResponse{
-	//		Result: types.AuthorizationResult_AUTHORIZATION_RESULT_SESSION_REQUIRED,
-	//	}, nil
-	//}
-
-	// Load session
-	session, err := k.PermissionSession.Get(sdkCtx, req.SessionId)
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to load session")
-	}
-
-	// Check session authorization exactly as specified
-	//TODO: after specs update
-	//if session.AgentDid != req.AgentDid {
-	//	return &types.QueryIsAuthorizedIssuerResponse{
-	//		Result: types.AuthorizationResult_AUTHORIZATION_RESULT_SESSION_REQUIRED,
-	//	}, nil
-	//}
-
-	// Check if authz contains (issuer_perm.id, null, wallet_agent_did)
-	for _, authz := range session.Authz {
-		if authz.ExecutorPermId == issuerPerm.Id &&
-			authz.BeneficiaryPermId == 0 &&
-			authz.WalletAgentPermId == 0 {
-			return &types.QueryIsAuthorizedIssuerResponse{
-				Result: types.AuthorizationResult_AUTHORIZATION_RESULT_AUTHORIZED,
-			}, nil
-		}
-	}
-
-	return &types.QueryIsAuthorizedIssuerResponse{
-		Result: types.AuthorizationResult_AUTHORIZATION_RESULT_SESSION_REQUIRED,
+	return &types.QueryFindPermissionsWithDIDResponse{
+		Permissions: foundPerms,
 	}, nil
 }
 
-func (k Keeper) buildPermissionSet(ctx sdk.Context, perm *types.Permission) (PermissionSet, error) {
-	permSet := make(PermissionSet, 0)
-	currentPerm := perm
-
-	// Process ancestors of executor perm
-	for currentPerm.ValidatorPermId != 0 {
-		validatorPerm, err := k.Permission.Get(ctx, currentPerm.ValidatorPermId)
-		if err != nil {
-			return nil, errors.Wrapf(sdkerrors.ErrNotFound, "validator permission not found: %d", currentPerm.ValidatorPermId)
-		}
-
-		// Add to set if not revoked and not terminated
-		if validatorPerm.Revoked == nil && validatorPerm.Terminated == nil {
-			permSet.add(validatorPerm)
-		}
-
-		currentPerm = &validatorPerm
+// Helper function to check if a permission is valid at a specific time
+func isPermissionValidAtTime(perm types.Permission, when time.Time) bool {
+	// Check effective_from
+	if perm.EffectiveFrom != nil && when.Before(*perm.EffectiveFrom) {
+		return false
 	}
 
-	return permSet, nil
-}
-
-func validateIsAuthorizedIssuerRequest(req *types.QueryIsAuthorizedIssuerRequest) error {
-	if req == nil {
-		return errors.Wrap(sdkerrors.ErrInvalidRequest, "empty request")
+	// Check effective_until
+	if perm.EffectiveUntil != nil && !when.Before(*perm.EffectiveUntil) {
+		return false
 	}
 
-	if !isValidDID(req.IssuerDid) {
-		return errors.Wrap(sdkerrors.ErrInvalidRequest, "invalid issuer DID")
+	// Check revoked
+	if perm.Revoked != nil && !when.Before(*perm.Revoked) {
+		return false
 	}
 
-	if !isValidDID(req.AgentDid) {
-		return errors.Wrap(sdkerrors.ErrInvalidRequest, "invalid agent DID")
+	// Check terminated
+	if perm.Terminated != nil && !when.Before(*perm.Terminated) {
+		return false
 	}
 
-	if !isValidDID(req.WalletAgentDid) {
-		return errors.Wrap(sdkerrors.ErrInvalidRequest, "invalid wallet agent DID")
-	}
-
-	if req.SchemaId == 0 {
-		return errors.Wrap(sdkerrors.ErrInvalidRequest, "schema ID required")
-	}
-
-	if req.Country != "" && !isValidCountryCode(req.Country) {
-		return errors.Wrap(sdkerrors.ErrInvalidRequest, "invalid country code")
-	}
-
-	return nil
+	return true
 }
 
 func isValidDID(did string) bool {
-	if did == "" {
-		return false
-	}
-	match, _ := regexp.MatchString(`^did:[a-zA-Z0-9]+:[a-zA-Z0-9._-]+$`, did)
-	return match
+	// Basic DID validation regex
+	// This is a simplified version and may need to be expanded based on specific DID method requirements
+	didRegex := regexp.MustCompile(`^did:[a-zA-Z0-9]+:[a-zA-Z0-9._-]+$`)
+	return didRegex.MatchString(did)
 }
 
 func isValidCountryCode(code string) bool {
-	if code == "" {
-		return false
-	}
+	// Basic check for ISO 3166-1 alpha-2 format
 	match, _ := regexp.MatchString(`^[A-Z]{2}$`, code)
 	return match
 }
 
-// add adds a permission to the set if it doesn't already exist
-func (ps *PermissionSet) add(perm types.Permission) {
-	if !ps.contains(perm.Id) {
-		*ps = append(*ps, perm)
-	}
-}
-
-func (k Keeper) IsAuthorizedVerifier(ctx context.Context, req *types.QueryIsAuthorizedVerifierRequest) (*types.QueryIsAuthorizedVerifierResponse, error) {
-	if err := validateIsAuthorizedVerifierRequest(req); err != nil {
-		return nil, err
-	}
-
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	timePoint := req.When
-	if timePoint == nil {
-		now := sdkCtx.BlockTime()
-		timePoint = &now
-	}
-
-	// Load credential schema
-	cs, err := k.credentialSchemaKeeper.GetCredentialSchemaById(sdkCtx, req.SchemaId)
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to load credential schema")
-	}
-
-	// Check if verification is open
-	if cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_OPEN {
-		return &types.QueryIsAuthorizedVerifierResponse{
-			Result: types.AuthorizationResult_AUTHORIZATION_RESULT_AUTHORIZED,
-		}, nil
-	}
-
-	// Find matching verifier permission
-	var verifierPerm *types.Permission
-	err = k.Permission.Walk(sdkCtx, nil, func(id uint64, perm types.Permission) (bool, error) {
-		if perm.Did == req.VerifierDid &&
-			perm.Type == types.PermissionType_PERMISSION_TYPE_VERIFIER &&
-			perm.SchemaId == req.SchemaId {
-
-			// Check country match
-			if req.Country != "" {
-				if perm.Country != "" && perm.Country != req.Country {
-					return false, nil
-				}
-			}
-
-			// Check time validity
-			if !isPermissionValidAtTime(perm, timePoint) {
-				return false, nil
-			}
-
-			verifierPerm = &perm
-			return true, nil
-		}
-		return false, nil
-	})
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to search verifier permissions")
-	}
-
-	if verifierPerm == nil {
-		return &types.QueryIsAuthorizedVerifierResponse{
-			Result: types.AuthorizationResult_AUTHORIZATION_RESULT_FORBIDDEN,
-		}, nil
-	}
-
-	// Find matching issuer permission
-	var issuerPerm *types.Permission
-	err = k.Permission.Walk(sdkCtx, nil, func(id uint64, perm types.Permission) (bool, error) {
-		if perm.Did == req.IssuerDid &&
-			perm.Type == types.PermissionType_PERMISSION_TYPE_ISSUER &&
-			perm.SchemaId == req.SchemaId {
-
-			// Check country match
-			if req.Country != "" {
-				if perm.Country != "" && perm.Country != req.Country {
-					return false, nil
-				}
-			}
-
-			// Check time validity
-			if !isPermissionValidAtTime(perm, timePoint) {
-				return false, nil
-			}
-
-			issuerPerm = &perm
-			return true, nil
-		}
-		return false, nil
-	})
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to search issuer permissions")
-	}
-
-	if issuerPerm == nil {
-		return &types.QueryIsAuthorizedVerifierResponse{
-			Result: types.AuthorizationResult_AUTHORIZATION_RESULT_FORBIDDEN,
-		}, nil
-	}
-
-	// Calculate permission set and fees
-	permSet, err := k.buildPermissionSet2(sdkCtx, verifierPerm, issuerPerm)
-	if err != nil {
-		return nil, err
-	}
-
-	// Calculate total fees
-	trustFees := uint64(0)
-	for _, perm := range permSet {
-		trustFees += perm.VerificationFees
-	}
-
-	// If no fees required, return authorized
-	if trustFees == 0 {
-		return &types.QueryIsAuthorizedVerifierResponse{
-			Result: types.AuthorizationResult_AUTHORIZATION_RESULT_AUTHORIZED,
-		}, nil
-	}
-
-	// Session required if fees exist but no session provided
-	//if req.SessionId == 0 {
-	//	return &types.QueryIsAuthorizedVerifierResponse{
-	//		Result: types.AuthorizationResult_AUTHORIZATION_RESULT_SESSION_REQUIRED,
-	//	}, nil
-	//}
-
-	// Verify session
-	session, err := k.PermissionSession.Get(sdkCtx, req.SessionId)
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to get session")
-	}
-
-	for _, authz := range session.Authz {
-		if authz.ExecutorPermId == verifierPerm.Id &&
-			authz.BeneficiaryPermId == issuerPerm.Id {
-			return &types.QueryIsAuthorizedVerifierResponse{
-				Result: types.AuthorizationResult_AUTHORIZATION_RESULT_AUTHORIZED,
-			}, nil
-		}
-	}
-
-	return &types.QueryIsAuthorizedVerifierResponse{
-		Result: types.AuthorizationResult_AUTHORIZATION_RESULT_SESSION_REQUIRED,
-	}, nil
-}
-
-func (k Keeper) buildPermissionSet2(ctx sdk.Context, verifierPerm, issuerPerm *types.Permission) (PermissionSet, error) {
-	permSet := make(PermissionSet, 0)
-
-	// Process verifier ancestors
-	currentPerm := verifierPerm
-	for currentPerm.ValidatorPermId != 0 {
-		validatorPerm, err := k.Permission.Get(ctx, currentPerm.ValidatorPermId)
-		if err != nil {
-			return nil, errors.Wrapf(sdkerrors.ErrNotFound, "validator permission not found: %d", currentPerm.ValidatorPermId)
-		}
-
-		if validatorPerm.Revoked == nil && validatorPerm.Terminated == nil {
-			permSet.add(validatorPerm)
-		}
-
-		currentPerm = &validatorPerm
-	}
-
-	// Process issuer ancestors
-	currentPerm = issuerPerm
-	for currentPerm.ValidatorPermId != 0 {
-		validatorPerm, err := k.Permission.Get(ctx, currentPerm.ValidatorPermId)
-		if err != nil {
-			return nil, errors.Wrapf(sdkerrors.ErrNotFound, "validator permission not found: %d", currentPerm.ValidatorPermId)
-		}
-
-		if validatorPerm.Revoked == nil && validatorPerm.Terminated == nil {
-			permSet.add(validatorPerm)
-		}
-
-		currentPerm = &validatorPerm
-	}
-
-	return permSet, nil
-}
-
-func validateIsAuthorizedVerifierRequest(req *types.QueryIsAuthorizedVerifierRequest) error {
+func (k Keeper) FindBeneficiaries(goCtx context.Context, req *types.QueryFindBeneficiariesRequest) (*types.QueryFindBeneficiariesResponse, error) {
 	if req == nil {
-		return errors.Wrap(sdkerrors.ErrInvalidRequest, "empty request")
+		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
-	if !isValidDID(req.VerifierDid) {
-		return errors.Wrap(sdkerrors.ErrInvalidRequest, "invalid verifier DID")
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// [MOD-PERM-QRY-4-2] Checks
+	// At least one of issuer_perm_id or verifier_perm_id must be provided
+	if req.IssuerPermId == 0 && req.VerifierPermId == 0 {
+		return nil, status.Error(codes.InvalidArgument, "at least one of issuer_perm_id or verifier_perm_id must be provided")
 	}
 
-	if !isValidDID(req.IssuerDid) {
-		return errors.Wrap(sdkerrors.ErrInvalidRequest, "invalid issuer DID")
+	var issuerPerm, verifierPerm *types.Permission
+
+	// Load issuer permission if specified
+	if req.IssuerPermId != 0 {
+		perm, err := k.Permission.Get(ctx, req.IssuerPermId)
+		if err != nil {
+			return nil, status.Error(codes.NotFound, fmt.Sprintf("issuer permission not found: %v", err))
+		}
+		issuerPerm = &perm
 	}
 
-	if !isValidDID(req.AgentDid) {
-		return errors.Wrap(sdkerrors.ErrInvalidRequest, "invalid agent DID")
+	// Load verifier permission if specified
+	if req.VerifierPermId != 0 {
+		perm, err := k.Permission.Get(ctx, req.VerifierPermId)
+		if err != nil {
+			return nil, status.Error(codes.NotFound, fmt.Sprintf("verifier permission not found: %v", err))
+		}
+		verifierPerm = &perm
 	}
 
-	if !isValidDID(req.WalletAgentDid) {
-		return errors.Wrap(sdkerrors.ErrInvalidRequest, "invalid wallet agent DID")
+	// [MOD-PERM-QRY-4-3] Execution
+	// Use a map to implement the set functionality
+	foundPermMap := make(map[uint64]types.Permission)
+
+	// Process issuer permission hierarchy
+	if issuerPerm != nil {
+		// Start with the validator of issuer_perm
+		if issuerPerm.ValidatorPermId != 0 {
+			currentPermID := issuerPerm.ValidatorPermId
+
+			// Traverse up the validator chain
+			for currentPermID != 0 {
+				currentPerm, err := k.Permission.Get(ctx, currentPermID)
+				if err != nil {
+					return nil, status.Error(codes.Internal, fmt.Sprintf("failed to get permission: %v", err))
+				}
+
+				// Add to set if not revoked or terminated
+				if currentPerm.Revoked == nil && currentPerm.Terminated == nil {
+					foundPermMap[currentPermID] = currentPerm
+				}
+
+				// Move up to the next validator
+				currentPermID = currentPerm.ValidatorPermId
+			}
+		}
 	}
 
-	if req.SchemaId == 0 {
-		return errors.Wrap(sdkerrors.ErrInvalidRequest, "schema ID required")
+	// Process verifier permission hierarchy
+	if verifierPerm != nil {
+		// First add issuer_perm to the set if it exists
+		if issuerPerm != nil && issuerPerm.Revoked == nil && issuerPerm.Terminated == nil {
+			foundPermMap[req.IssuerPermId] = *issuerPerm
+		}
+
+		// Start with the validator of verifier_perm
+		if verifierPerm.ValidatorPermId != 0 {
+			currentPermID := verifierPerm.ValidatorPermId
+
+			// Traverse up the validator chain
+			for currentPermID != 0 {
+				currentPerm, err := k.Permission.Get(ctx, currentPermID)
+				if err != nil {
+					return nil, status.Error(codes.Internal, fmt.Sprintf("failed to get permission: %v", err))
+				}
+
+				// Add to set if not revoked or terminated
+				if currentPerm.Revoked == nil && currentPerm.Terminated == nil {
+					foundPermMap[currentPermID] = currentPerm
+				}
+
+				// Move up to the next validator
+				currentPermID = currentPerm.ValidatorPermId
+			}
+		}
 	}
 
-	if req.Country != "" && !isValidCountryCode(req.Country) {
-		return errors.Wrap(sdkerrors.ErrInvalidRequest, "invalid country code")
+	// Convert map to array
+	permissions := make([]types.Permission, 0, len(foundPermMap))
+	for _, perm := range foundPermMap {
+		permissions = append(permissions, perm)
 	}
 
-	return nil
-}
-
-func isPermissionValidAtTime(perm types.Permission, timePoint *time.Time) bool {
-	if perm.EffectiveFrom != nil && timePoint.Before(*perm.EffectiveFrom) {
-		return false
-	}
-	if perm.EffectiveUntil != nil && timePoint.After(*perm.EffectiveUntil) {
-		return false
-	}
-	if perm.Revoked != nil && timePoint.After(*perm.Revoked) {
-		return false
-	}
-	if perm.Terminated != nil && timePoint.After(*perm.Terminated) {
-		return false
-	}
-	return true
+	return &types.QueryFindBeneficiariesResponse{
+		Permissions: permissions,
+	}, nil
 }

@@ -100,12 +100,12 @@ func (ms msgServer) executeAddGovernanceFrameworkDocument(ctx sdk.Context, msg *
 	}
 
 	gfd := types.GovernanceFrameworkDocument{
-		Id:       nextGfdId,
-		GfvId:    gfv.Id,
-		Created:  ctx.BlockTime(),
-		Language: msg.DocLanguage,
-		Url:      msg.DocUrl,
-		Hash:     msg.DocHash,
+		Id:        nextGfdId,
+		GfvId:     gfv.Id,
+		Created:   ctx.BlockTime(),
+		Language:  msg.DocLanguage,
+		Url:       msg.DocUrl,
+		DigestSri: msg.DocDigestSri,
 	}
 
 	if err := ms.GFDocument.Set(ctx, gfd.Id, gfd); err != nil {

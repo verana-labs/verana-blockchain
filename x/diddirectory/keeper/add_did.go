@@ -50,12 +50,15 @@ func (ms msgServer) checkSufficientFees(_ sdk.Context, _ string, _ uint32) error
 
 func (ms msgServer) executeAddDID(ctx sdk.Context, msg *types.MsgAddDID) error {
 	params := ms.GetParams(ctx)
+	trustUnitPrice := ms.trustRegistryKeeper.GetTrustUnitPrice(ctx)
 
+	// Verify creator address
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
 		return fmt.Errorf("invalid creator address: %w", err)
 	}
 
+	// Set years (default to 1 if not specified)
 	years := msg.Years
 	if years == 0 {
 		years = 1
@@ -64,6 +67,14 @@ func (ms msgServer) executeAddDID(ctx sdk.Context, msg *types.MsgAddDID) error {
 	now := ctx.BlockTime()
 	expiration := now.AddDate(int(years), 0, 0)
 
+	// Calculate trust deposit
+	trustDeposit := params.DidDirectoryTrustDeposit * trustUnitPrice * uint64(years)
+
+	// Increase trust deposit
+	if err := ms.trustDeposit.AdjustTrustDeposit(ctx, msg.Creator, int64(trustDeposit)); err != nil {
+		return fmt.Errorf("failed to adjust trust deposit: %w", err)
+	}
+
 	// Create DID entry
 	didEntry := types.DIDDirectory{
 		Did:        msg.Did,
@@ -71,17 +82,25 @@ func (ms msgServer) executeAddDID(ctx sdk.Context, msg *types.MsgAddDID) error {
 		Created:    now,
 		Modified:   now,
 		Exp:        expiration,
-		Deposit:    int64(params.DidDirectoryTrustDeposit * uint64(years)),
+		Deposit:    int64(trustDeposit),
 	}
-
-	// Lock trust deposit
-
-	// Lock removal gas in escrow
 
 	// Store the DID entry
 	if err = ms.DIDDirectory.Set(ctx, msg.Did, didEntry); err != nil {
 		return fmt.Errorf("failed to store DID: %w", err)
 	}
+
+	// Emit event
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeAddDID,
+			sdk.NewAttribute(types.AttributeKeyDID, msg.Did),
+			sdk.NewAttribute(types.AttributeKeyController, msg.Creator),
+			sdk.NewAttribute(types.AttributeKeyExpiration, expiration.String()),
+			sdk.NewAttribute(types.AttributeKeyDeposit, fmt.Sprintf("%d", trustDeposit)),
+			sdk.NewAttribute(types.AttributeKeyYears, fmt.Sprintf("%d", years)),
+		),
+	)
 
 	return nil
 }

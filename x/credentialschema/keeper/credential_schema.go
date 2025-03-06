@@ -11,7 +11,7 @@ func (ms msgServer) validateCreateCredentialSchemaParams(ctx sdk.Context, msg *t
 	params := ms.GetParams(ctx)
 
 	// Validate trust registry ownership
-	tr, err := ms.trustregistryKeeper.GetTrustRegistry(ctx, msg.TrId)
+	tr, err := ms.trustRegistryKeeper.GetTrustRegistry(ctx, msg.TrId)
 	if err != nil {
 		return fmt.Errorf("trust registry not found: %w", err)
 	}
@@ -65,15 +65,21 @@ func (ms msgServer) executeCreateCredentialSchema(ctx sdk.Context, schemaID uint
 	// Get params using the getter method
 	params := ms.GetParams(ctx)
 
-	// Calculate trust deposit
-	trustDeposit := params.CredentialSchemaTrustDeposit
+	// Calculate trust deposit amount
+	trustDepositAmount := params.CredentialSchemaTrustDeposit * ms.trustRegistryKeeper.GetTrustUnitPrice(ctx)
+
+	// Increase trust deposit
+	if err := ms.trustDeposit.AdjustTrustDeposit(ctx, msg.Creator, int64(trustDepositAmount)); err != nil {
+		return fmt.Errorf("failed to adjust trust deposit: %w", err)
+	}
 
 	// Create the credential schema
 	credentialSchema := types.CredentialSchema{
 		Id:                                      schemaID, // Use the generated ID
 		TrId:                                    msg.TrId,
 		Created:                                 ctx.BlockTime(),
-		Deposit:                                 trustDeposit,
+		Modified:                                ctx.BlockTime(),
+		Deposit:                                 trustDepositAmount,
 		JsonSchema:                              msg.JsonSchema,
 		IssuerGrantorValidationValidityPeriod:   msg.IssuerGrantorValidationValidityPeriod,
 		VerifierGrantorValidationValidityPeriod: msg.VerifierGrantorValidationValidityPeriod,
@@ -83,8 +89,6 @@ func (ms msgServer) executeCreateCredentialSchema(ctx sdk.Context, schemaID uint
 		IssuerPermManagementMode:                types.CredentialSchemaPermManagementMode(msg.IssuerPermManagementMode),
 		VerifierPermManagementMode:              types.CredentialSchemaPermManagementMode(msg.VerifierPermManagementMode),
 	}
-
-	// TODO:Handle trust deposit
 
 	// Persist the credential schema using keeper method
 	if err := ms.SetCredentialSchema(ctx, credentialSchema); err != nil {
@@ -98,6 +102,7 @@ func (ms msgServer) executeCreateCredentialSchema(ctx sdk.Context, schemaID uint
 			sdk.NewAttribute(types.AttributeKeyId, fmt.Sprintf("%d", schemaID)),
 			sdk.NewAttribute(types.AttributeKeyTrId, fmt.Sprintf("%d", msg.TrId)),
 			sdk.NewAttribute(types.AttributeKeyCreator, msg.Creator),
+			sdk.NewAttribute(types.AttributeKeyDeposit, fmt.Sprintf("%d", trustDepositAmount)),
 		),
 	)
 

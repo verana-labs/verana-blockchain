@@ -78,14 +78,14 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 			RpcCommandOptions: []*autocliv1.RpcCommandOptions{
 				{
 					RpcMethod: "CreateTrustRegistry",
-					Use:       "create-trust-registry [did] [language] [doc-url] [doc-hash]",
+					Use:       "create-trust-registry [did] [language] [doc-url] [doc-digest-sri]",
 					Short:     "Create a new trust registry",
 					Long:      "Create a new trust registry with the specified DID, language, and initial governance framework document",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "did"},
 						{ProtoField: "language"},
 						{ProtoField: "doc_url"},
-						{ProtoField: "doc_hash"},
+						{ProtoField: "doc_digest_sri"},
 					},
 					FlagOptions: map[string]*autocliv1.FlagOptions{
 						"aka": {
@@ -97,14 +97,14 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod: "AddGovernanceFrameworkDocument",
-					Use:       "add-governance-framework-document [id] [doc-language] [url] [hash] [version]",
+					Use:       "add-governance-framework-document [id] [doc-language] [url] [doc-digest-sri] [version]",
 					Short:     "Add a governance framework document",
 					Long:      "Add a new governance framework document to a trust registry",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "id"},
 						{ProtoField: "doc_language"},
 						{ProtoField: "doc_url"},
-						{ProtoField: "doc_hash"},
+						{ProtoField: "doc_digest_sri"},
 						{ProtoField: "version"},
 					},
 				},

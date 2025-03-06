@@ -1,10 +1,11 @@
 package keeper
 
 import (
+	"time"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	cstypes "github.com/verana-labs/verana-blockchain/x/credentialschema/types"
 	"github.com/verana-labs/verana-blockchain/x/permission/types"
-	"time"
 )
 
 func getValidityPeriod(permType uint32, cs cstypes.CredentialSchema) uint32 {

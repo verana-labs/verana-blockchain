@@ -1,8 +1,9 @@
 package keeper
 
 import (
-	"cosmossdk.io/collections"
 	"fmt"
+
+	"cosmossdk.io/collections"
 
 	"cosmossdk.io/core/store"
 	"cosmossdk.io/log"
@@ -29,6 +30,7 @@ type (
 		// external keeper
 		credentialSchemaKeeper types.CredentialSchemaKeeper
 		trustRegistryKeeper    types.TrustRegistryKeeper
+		trustDeposit           types.TrustDepositKeeper
 	}
 )
 
@@ -39,6 +41,7 @@ func NewKeeper(
 	authority string,
 	credentialSchemaKeeper types.CredentialSchemaKeeper,
 	trustRegistryKeeper types.TrustRegistryKeeper,
+	trustDeposit types.TrustDepositKeeper,
 ) Keeper {
 	sb := collections.NewSchemaBuilder(storeService)
 
@@ -56,6 +59,7 @@ func NewKeeper(
 		PermissionSession:      collections.NewMap(sb, types.PermissionSessionKey, "permission_session", collections.StringKey, codec.CollValue[types.PermissionSession](cdc)),
 		credentialSchemaKeeper: credentialSchemaKeeper,
 		trustRegistryKeeper:    trustRegistryKeeper,
+		trustDeposit:           trustDeposit,
 	}
 }
 
@@ -79,7 +83,7 @@ func (k Keeper) CreatePermission(ctx sdk.Context, perm types.Permission) (uint64
 	if err != nil {
 		return 0, err
 	}
-
+	perm.Id = id
 	if err := k.Permission.Set(ctx, id, perm); err != nil {
 		return 0, err
 	}

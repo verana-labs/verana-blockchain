@@ -28,7 +28,12 @@ type MockBankKeeper struct {
 	bankBalances map[string]sdk.Coins
 }
 
-func (k *MockBankKeeper) SendCoinsFromModuleToAccount(ctx sdk.Context, senderModule string, recipientAddr sdk.AccAddress, amt sdk.Coins) error {
+func (k *MockBankKeeper) BurnCoins(ctx context.Context, name string, amt sdk.Coins) error {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (k *MockBankKeeper) SendCoinsFromModuleToAccount(ctx context.Context, senderModule string, recipientAddr sdk.AccAddress, amt sdk.Coins) error {
 	//TODO implement me
 	panic("implement me")
 }
@@ -55,13 +60,17 @@ func NewMockBankKeeper() *MockBankKeeper {
 }
 
 // Implement required methods from types.BankKeeper interface
-func (k *MockBankKeeper) SendCoinsFromAccountToModule(ctx sdk.Context, senderAddr sdk.AccAddress, recipientModule string, amt sdk.Coins) error {
+func (k *MockBankKeeper) SendCoinsFromAccountToModule(ctx context.Context, senderAddr sdk.AccAddress, recipientModule string, amt sdk.Coins) error {
 	return nil
 }
 
 // MockTrustRegistryKeeper is a mock implementation of types.TrustRegistryKeeper
 type MockTrustRegistryKeeper struct {
 	trustRegistries map[uint64]trtypes.TrustRegistry
+}
+
+func (k *MockTrustRegistryKeeper) GetTrustUnitPrice(ctx sdk.Context) uint64 {
+	return 1
 }
 
 func NewMockTrustRegistryKeeper() *MockTrustRegistryKeeper {
@@ -104,7 +113,7 @@ func CredentialschemaKeeper(t testing.TB) (keeper.Keeper, *MockTrustRegistryKeep
 	// Create mock keepers
 	bankKeeper := NewMockBankKeeper()
 	trustRegistryKeeper := NewMockTrustRegistryKeeper()
-
+	mockTrustDepositKeeper := &MockTrustDepositKeeper{}
 	k := keeper.NewKeeper(
 		cdc,
 		runtime.NewKVStoreService(storeKey),
@@ -112,6 +121,7 @@ func CredentialschemaKeeper(t testing.TB) (keeper.Keeper, *MockTrustRegistryKeep
 		authority.String(),
 		bankKeeper,
 		trustRegistryKeeper,
+		mockTrustDepositKeeper,
 	)
 
 	ctx := sdk.NewContext(stateStore, cmtproto.Header{}, false, log.NewNopLogger())

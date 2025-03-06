@@ -9,4 +9,5 @@ const (
 	AttributeKeyId      = "credential_schema_id"
 	AttributeKeyTrId    = "trust_registry_id"
 	AttributeKeyCreator = "creator"
+	AttributeKeyDeposit = "deposit"
 )

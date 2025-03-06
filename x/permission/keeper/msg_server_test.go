@@ -2,10 +2,11 @@ package keeper_test
 
 import (
 	"context"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	cstypes "github.com/verana-labs/verana-blockchain/x/credentialschema/types"
 	"testing"
 	"time"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	cstypes "github.com/verana-labs/verana-blockchain/x/credentialschema/types"
 
 	"github.com/stretchr/testify/require"
 
@@ -44,8 +45,8 @@ func TestStartPermissionVP(t *testing.T) {
 
 	// Create mock credential schema with specific permission management modes
 	csKeeper.UpdateMockCredentialSchema(1, trID,
-		cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION,
-		cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION)
+		cstypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION,
+		cstypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION)
 
 	// Create validator permission (ISSUER_GRANTOR)
 	now := time.Now()
@@ -166,8 +167,8 @@ func TestRenewPermissionVP(t *testing.T) {
 
 	// Create mock credential schema
 	csKeeper.CreateMockCredentialSchema(1,
-		cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION,
-		cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION)
+		cstypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION,
+		cstypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION)
 
 	// Create validator permission
 	now := time.Now()
@@ -254,8 +255,8 @@ func TestSetPermissionVPToValidated(t *testing.T) {
 
 	// Create mock credential schema with validation periods
 	csKeeper.CreateMockCredentialSchema(1,
-		cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION,
-		cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION)
+		cstypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION,
+		cstypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION)
 
 	// Create validator permission
 	now := time.Now()
@@ -351,8 +352,8 @@ func TestMsgServerCreateRootPermission(t *testing.T) {
 	// Create mock credential schema with specific permission management modes and trust registry ID
 	mockCsKeeper.UpdateMockCredentialSchema(1,
 		trID, // Set the trust registry ID
-		cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION,
-		cstypes.CredentialSchemaPermManagementMode_PERM_MANAGEMENT_MODE_GRANTOR_VALIDATION)
+		cstypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION,
+		cstypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION)
 
 	now := time.Now()
 	futureTime := now.Add(24 * time.Hour)
