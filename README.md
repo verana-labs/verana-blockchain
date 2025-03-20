@@ -10,9 +10,14 @@ This README provides instructions for setting up the Verana blockchain and inter
    cd verana-blockchain
    ```
 
-2. Run the setup script:
+2. compile the chain:
    ```bash
-   ./scripts/setup_verana.sh
+   make install
+   ```   
+
+3. Run the setup script:
+   ```bash
+   ./scripts/setup_primary_validator.sh
    ```
 
    This script initializes the chain and starts the node.
@@ -24,17 +29,9 @@ This README provides instructions for setting up the Verana blockchain and inter
 1. Create a Trust Registry:
    ```bash
    veranad tx trustregistry create-trust-registry \
-   did:example:123456789abcdefghi \
-   "http://example-aka.com" \
-   en \
-   https://example.com/governance-framework.pdf \
-   e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 \
-   --from cooluser \
-   --keyring-backend test \
-   --chain-id vna-local-1 \
-   --gas 800000 \
-   --gas-adjustment 1.3 \
-   --gas-prices 1.1uvna
+     did:example:123456789abcdefghi en \
+     https://example.com/framework.pdf "sha256-315f5bdb76d078c43b8ac00641b2a6ea241e27fcb60e23f9e6acfa2c05b9e36a" \
+     --from cooluser --keyring-backend test --chain-id vna-local-1 --fees 600000uvna
    ```
 
    Note: This operation returns a Trust Registry ID that you'll need for subsequent operations.
@@ -42,20 +39,15 @@ This README provides instructions for setting up the Verana blockchain and inter
 2. Add Governance Framework Document:
    ```bash
    veranad tx trustregistry add-governance-framework-document \
-   <tr_id> \
+   1 \
    en \
    https://example.com/updated-governance-framework.pdf \
-   e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 \
+   sha256-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 \
    2 \
    --from cooluser \
    --keyring-backend test \
-   --chain-id vna-local-1 \
-   --gas 800000 \
-   --gas-adjustment 1.3 \
-   --gas-prices 1.1uvna
+   --chain-id vna-local-1 --fees 600000uvna
    ```
-
-   Note: Replace `<tr_id>` with the actual Trust Registry ID.
 
 3. Increase Active Governance Framework Version:
    ```bash
@@ -64,9 +56,7 @@ This README provides instructions for setting up the Verana blockchain and inter
    --from cooluser \
    --keyring-backend test \
    --chain-id vna-local-1 \
-   --gas 800000 \
-   --gas-adjustment 1.3 \
-   --gas-prices 1.1uvna
+   --fees 600000uvna
    ```
 
 ### Queries
@@ -89,13 +79,7 @@ This README provides instructions for setting up the Verana blockchain and inter
 
 3. List Trust Registries:
    ```bash
-   veranad q trustregistry list-trust-registries \
-   --controller <account_address> \
-   --modified-after "2023-01-01T00:00:00Z" \
-   --active-gf-only \
-   --preferred-language en \
-   --response-max-size 100 \
-   --output json
+   veranad q trustregistry list-trust-registries
    ```
 
 ### Query Parameters
