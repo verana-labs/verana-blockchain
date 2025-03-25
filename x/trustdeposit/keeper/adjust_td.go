@@ -21,6 +21,10 @@ func (k Keeper) AdjustTrustDeposit(ctx sdk.Context, account string, augend int64
 
 	// Load existing trust deposit if it exists
 	td, err := k.TrustDeposit.Get(ctx, account)
+
+	// Get total shares and total deposits across all accounts
+	totalShares, totalDeposits := k.GetTotalSharesAndDeposits(ctx)
+
 	if err != nil {
 		// If trust deposit doesn't exist and trying to decrease, abort
 		if augend < 0 {
@@ -29,73 +33,131 @@ func (k Keeper) AdjustTrustDeposit(ctx sdk.Context, account string, augend int64
 
 		// Initialize new trust deposit
 		td = types.TrustDeposit{
-			Account: account,
-			Share:   0,
-			Amount:  0,
+			Account:   account,
+			Share:     0,
+			Amount:    0,
+			Claimable: 0,
 		}
 	}
 
-	// Get module params for share value calculation
-	params := k.GetParams(ctx)
+	// Convert uint fields to int64 for calculations
+	amount := int64(td.Amount)
+	claimable := int64(td.Claimable)
+	share := int64(td.Share)
 
 	if augend > 0 {
 		// Handle positive adjustment (increase)
-		neededDeposit := uint64(augend)
-		if td.Claimable > 0 {
-			if td.Claimable >= uint64(augend) {
+		if claimable > 0 {
+			if claimable >= augend {
 				// Can cover from claimable amount
-				td.Claimable -= uint64(augend)
+				claimable -= augend
 			} else {
 				// Need to transfer additional funds
-				neededDeposit = uint64(augend) - td.Claimable
+				int64NeededDeposit := augend - claimable
 
-				// Calculate new shares for the additional deposit
-				newShares := (neededDeposit * 100) / params.TrustDepositShareValue
+				// Calculate new shares using dynamic share calculation
+				// Shares per Token = TotalShares / TotalDeposits
+				var newShares int64
+				if totalDeposits > 0 {
+					// Use dynamic ratio based on total shares and deposits
+					newShares = (int64NeededDeposit * totalShares) / totalDeposits
+				} else {
+					// If no total deposits yet, use 1:1 ratio (first deposit)
+					newShares = int64NeededDeposit
+				}
 
 				// Transfer tokens from account to module
-				if err := k.bankKeeper.SendCoinsFromAccountToModule(
+				err := k.bankKeeper.SendCoinsFromAccountToModule(
 					ctx,
 					senderAcc,
 					types.ModuleName,
-					sdk.NewCoins(sdk.NewInt64Coin(types.BondDenom, int64(neededDeposit))),
-				); err != nil {
+					sdk.NewCoins(sdk.NewInt64Coin(types.BondDenom, int64NeededDeposit)),
+				)
+				if err != nil {
 					return fmt.Errorf("failed to transfer tokens: %w", err)
 				}
 
-				td.Amount += neededDeposit
-				td.Share += newShares
-				td.Claimable = 0
+				amount += int64NeededDeposit
+				share += newShares
+				claimable = 0
 			}
 		} else {
 			// No claimable amount, need to transfer full amount
-			newShares := (uint64(augend) * 100) / params.TrustDepositShareValue
 
+			// Calculate new shares using dynamic share calculation
+			// Shares per Token = TotalShares / TotalDeposits
+			var newShares int64
+			if totalDeposits > 0 {
+				// Use dynamic ratio based on total shares and deposits
+				newShares = (augend * totalShares) / totalDeposits
+			} else {
+				// If no total deposits yet, use 1:1 ratio (first deposit)
+				newShares = augend
+			}
 			// Transfer tokens from account to module
-			if err := k.bankKeeper.SendCoinsFromAccountToModule(
+			err := k.bankKeeper.SendCoinsFromAccountToModule(
 				ctx,
 				senderAcc,
 				types.ModuleName,
 				sdk.NewCoins(sdk.NewInt64Coin(types.BondDenom, augend)),
-			); err != nil {
+			)
+			if err != nil {
 				return fmt.Errorf("failed to transfer tokens: %w", err)
 			}
 
-			td.Amount += uint64(augend)
-			td.Share += newShares
+			amount += augend
+			share += newShares
 		}
-	} else {
+	} else { // augend < 0
 		// Handle negative adjustment (decrease)
-		// Ensure not trying to decrease more than deposit
-		if uint64(-augend) > td.Amount {
-			return fmt.Errorf("cannot decrease more than deposited amount")
+		// Get absolute value of augend for easier handling
+		absAugend := -augend
+
+		// if augend is negative and td.claimable - augend > td.deposit transaction MUST abort
+		if claimable+absAugend > amount {
+			return fmt.Errorf("claimable after adjustment would exceed deposit: %d > %d", claimable+absAugend, amount)
 		}
-		td.Claimable = td.Claimable - uint64(-augend)
+
+		// Since augend is negative, we add absAugend to claimable
+		// This implements "set td.claimable to td.claimable - augend" when augend is negative
+		claimable += absAugend
 	}
 
+	// Convert back to uint for storage and ensure no negative values
+	if amount < 0 {
+		return fmt.Errorf("amount cannot be negative after adjustment: %d", amount)
+	}
+	if claimable < 0 {
+		return fmt.Errorf("claimable amount cannot be negative after adjustment: %d", claimable)
+	}
+	if share < 0 {
+		return fmt.Errorf("share cannot be negative after adjustment: %d", share)
+	}
+
+	td.Amount = uint64(amount)
+	td.Claimable = uint64(claimable)
+	td.Share = uint64(share)
+
 	// Save updated trust deposit
-	if err := k.TrustDeposit.Set(ctx, account, td); err != nil {
+	err = k.TrustDeposit.Set(ctx, account, td)
+	if err != nil {
 		return fmt.Errorf("failed to save trust deposit: %w", err)
 	}
 
 	return nil
+}
+
+// GetTotalSharesAndDeposits calculates the total shares and total deposits across all accounts
+func (k Keeper) GetTotalSharesAndDeposits(ctx sdk.Context) (int64, int64) {
+	var totalShares int64
+	var totalDeposits int64
+
+	// Use Walk function to iterate through all trust deposits
+	_ = k.TrustDeposit.Walk(ctx, nil, func(key string, value types.TrustDeposit) (bool, error) {
+		totalShares += int64(value.Share)
+		totalDeposits += int64(value.Amount)
+		return false, nil // Continue iteration
+	})
+
+	return totalShares, totalDeposits
 }

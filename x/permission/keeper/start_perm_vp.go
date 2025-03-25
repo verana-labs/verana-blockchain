@@ -35,29 +35,14 @@ func (ms msgServer) validatePermissionChecks(ctx sdk.Context, msg *types.MsgStar
 }
 
 func (ms msgServer) validateAndCalculateFees(ctx sdk.Context, creator string, validatorPerm types.Permission) (uint64, uint64, error) {
-	// TODO: After trust deposit module
 	// Get global variables
-	//trustUnitPrice := ms.Keeper.GetTrustUnitPrice(ctx)
-	//trustDepositRate := ms.Keeper.GetTrustDepositRate(ctx)
+	trustUnitPrice := ms.trustRegistryKeeper.GetTrustUnitPrice(ctx)
+	trustDepositRate := ms.trustDeposit.GetTrustDepositRate(ctx)
 
-	// Calculate validation fees
-	//validationFeesInDenom := validatorPerm.ValidationFees * trustUnitPrice
-	//validationTrustDepositInDenom := validationFeesInDenom * trustDepositRate
+	validationFeesInDenom := validatorPerm.ValidationFees * trustUnitPrice
+	validationTrustDepositInDenom := (validationFeesInDenom) * uint64(trustDepositRate)
 
-	// Check if account has sufficient balance
-	//creatorAddr, err := sdk.AccAddressFromBech32(creator)
-	//if err != nil {
-	//	return 0, 0, fmt.Errorf("invalid creator address: %w", err)
-	//}
-	//
-	//balance := ms.bankKeeper.GetBalance(ctx, creatorAddr, ms.Keeper.GetParams(ctx).FeeDenom)
-	//requiredAmount := validationFeesInDenom + validationTrustDepositInDenom
-	//
-	//if balance.Amount.LT(sdk.NewInt(int64(requiredAmount))) {
-	//	return 0, 0, fmt.Errorf("insufficient funds: required %d, got %d", requiredAmount, balance.Amount.Int64())
-	//}
-
-	return 0, 0, nil
+	return validationFeesInDenom, validationTrustDepositInDenom, nil
 }
 
 func (ms msgServer) executeStartPermissionVP(ctx sdk.Context, msg *types.MsgStartPermissionVP, validatorPerm types.Permission, fees, deposit uint64) (uint64, error) {
