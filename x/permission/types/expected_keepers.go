@@ -34,9 +34,11 @@ type CredentialSchemaKeeper interface {
 // TrustRegistryKeeper defines the expected trust registry keeper
 type TrustRegistryKeeper interface {
 	GetTrustRegistry(ctx sdk.Context, id uint64) (trustregistrytypes.TrustRegistry, error)
+	GetTrustUnitPrice(ctx sdk.Context) uint64
 }
 
 // TrustDepositKeeper defines the expected interface for the Trust Deposit module.
 type TrustDepositKeeper interface {
 	AdjustTrustDeposit(ctx sdk.Context, account string, augend int64) error
+	GetTrustDepositRate(ctx sdk.Context) uint32
 }

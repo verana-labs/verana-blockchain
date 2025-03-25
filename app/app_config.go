@@ -182,8 +182,8 @@ var (
 		{Account: ibctransfertypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
 		{Account: ibcfeetypes.ModuleName},
 		{Account: icatypes.ModuleName},
-		{Account: trustregistrymoduletypes.ModuleName, Permissions: []string{authtypes.Minter}},
-		{Account: trustdepositmoduletypes.ModuleName, Permissions: []string{authtypes.Minter}},
+		{Account: trustregistrymoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
+		{Account: trustdepositmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 

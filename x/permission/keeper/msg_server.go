@@ -261,24 +261,38 @@ func (ms msgServer) executeRequestPermissionVPTermination(ctx sdk.Context, perm 
 }
 
 func (ms msgServer) handleTerminationDeposits(ctx sdk.Context, perm *types.Permission) error {
-	// TODO: After trust deposit module is ready
-	// if perm.Deposit > 0 {
-	//     if err := ms.trustDepositKeeper.DecreaseTrustDeposit(ctx, perm.Grantee, perm.Deposit); err != nil {
-	//         return err
-	//     }
-	//     perm.Deposit = 0
-	// }
-	//
-	// if perm.ValidatorDeposit > 0 {
-	//     validatorPerm, err := ms.Keeper.GetPermission(ctx, perm.ValidatorPermId)
-	//     if err != nil {
-	//         return err
-	//     }
-	//     if err := ms.trustDepositKeeper.DecreaseTrustDeposit(ctx, validatorPerm.Grantee, perm.ValidatorDeposit); err != nil {
-	//         return err
-	//     }
-	//     perm.ValidatorDeposit = 0
-	// }
+	// Handle applicant's deposit
+	if perm.Deposit > 0 {
+		// Convert to signed integer for adjustment
+		depositAmount := int64(perm.Deposit)
+
+		// Use negative value to decrease deposit and increase claimable
+		if err := ms.trustDeposit.AdjustTrustDeposit(ctx, perm.Grantee, -depositAmount); err != nil {
+			return fmt.Errorf("failed to adjust applicant trust deposit: %w", err)
+		}
+
+		// Clear the deposit in the permission
+		perm.Deposit = 0
+	}
+
+	// Handle validator's deposit
+	if perm.VpValidatorDeposit > 0 {
+		validatorPerm, err := ms.Keeper.GetPermissionByID(ctx, perm.ValidatorPermId)
+		if err != nil {
+			return fmt.Errorf("validator permission not found: %w", err)
+		}
+
+		// Convert to signed integer for adjustment
+		validatorDepositAmount := int64(perm.VpValidatorDeposit)
+
+		// Use negative value to decrease deposit and increase claimable
+		if err := ms.trustDeposit.AdjustTrustDeposit(ctx, validatorPerm.Grantee, -validatorDepositAmount); err != nil {
+			return fmt.Errorf("failed to adjust validator trust deposit: %w", err)
+		}
+
+		// Clear the validator deposit in the permission
+		perm.VpValidatorDeposit = 0
+	}
 
 	return nil
 }
@@ -337,26 +351,39 @@ func (ms msgServer) executeConfirmPermissionVPTermination(ctx sdk.Context, appli
 	applicantPerm.Terminated = &now
 	applicantPerm.TerminatedBy = confirmer
 
-	// Handle deposits based on who confirmed
+	// Handle applicant's deposit
 	if applicantPerm.Deposit > 0 {
-		// TODO: After trust deposit module implementation
-		// if err := ms.trustDepositKeeper.DecreaseTrustDeposit(ctx, applicantPerm.Grantee, applicantPerm.Deposit); err != nil {
-		//     return fmt.Errorf("failed to decrease applicant trust deposit: %w", err)
-		// }
+		// Convert to signed integer for adjustment
+		depositAmount := int64(applicantPerm.Deposit)
+
+		// Use negative value to decrease deposit and increase claimable
+		err := ms.trustDeposit.AdjustTrustDeposit(ctx, applicantPerm.Grantee, -depositAmount)
+		if err != nil {
+			return fmt.Errorf("failed to adjust applicant trust deposit: %w", err)
+		}
+
+		// Clear the deposit in the permission
 		applicantPerm.Deposit = 0
 	}
 
 	// Only return validator deposit if validator confirmed
-	if confirmer == validatorPerm.Grantee && applicantPerm.VpValidatorDeposit > 0 {
-		// TODO: After trust deposit module implementation
-		// if err := ms.trustDepositKeeper.DecreaseTrustDeposit(ctx, validatorPerm.Grantee, applicantPerm.ValidatorDeposit); err != nil {
-		//     return fmt.Errorf("failed to decrease validator trust deposit: %w", err)
-		// }
+	if confirmer == validatorPerm.Grantee && validatorPerm.VpValidatorDeposit > 0 {
+		// Convert to signed integer for adjustment
+		validatorDepositAmount := int64(applicantPerm.VpValidatorDeposit)
+
+		// Use negative value to decrease deposit and increase claimable
+		err := ms.trustDeposit.AdjustTrustDeposit(ctx, validatorPerm.Grantee, -validatorDepositAmount)
+		if err != nil {
+			return fmt.Errorf("failed to adjust validator trust deposit: %w", err)
+		}
+
+		// Clear the validator deposit in the permission
 		applicantPerm.VpValidatorDeposit = 0
 	}
 
 	// Persist changes
-	return ms.Keeper.UpdatePermission(ctx, applicantPerm)
+	err := ms.Keeper.UpdatePermission(ctx, applicantPerm)
+	return err
 }
 
 func (ms msgServer) CancelPermissionVPLastRequest(goCtx context.Context, msg *types.MsgCancelPermissionVPLastRequest) (*types.MsgCancelPermissionVPLastRequestResponse, error) {
