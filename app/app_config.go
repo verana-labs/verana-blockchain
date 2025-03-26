@@ -184,6 +184,7 @@ var (
 		{Account: icatypes.ModuleName},
 		{Account: trustregistrymoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
 		{Account: trustdepositmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
+		{Account: permissionmoduletypes.ModuleName},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 
