@@ -101,6 +101,26 @@ func (ms msgServer) executeRenewPermissionVP(ctx sdk.Context, perm types.Permiss
 		}
 	}
 
+	// Send validation fees to escrow account if greater than 0
+	if fees > 0 {
+		// Get grantee address
+		granteeAddr, err := sdk.AccAddressFromBech32(perm.Grantee)
+		if err != nil {
+			return fmt.Errorf("invalid grantee address: %w", err)
+		}
+
+		// Transfer fees to module escrow account
+		err = ms.bankKeeper.SendCoinsFromAccountToModule(
+			ctx,
+			granteeAddr,
+			types.ModuleName, // Using module name as the escrow account
+			sdk.NewCoins(sdk.NewInt64Coin(types.BondDenom, int64(fees))),
+		)
+		if err != nil {
+			return fmt.Errorf("failed to transfer validation fees to escrow: %w", err)
+		}
+	}
+
 	now := ctx.BlockTime()
 
 	// Update permission
@@ -427,25 +447,38 @@ func (ms msgServer) executeCancelPermissionVPLastRequest(ctx sdk.Context, perm t
 
 	// Handle current fees if any
 	if perm.VpCurrentFees > 0 {
-		// TODO: After bank module integration
-		// Transfer fees back from escrow
-		// if err := ms.bankKeeper.SendCoinsFromModuleToAccount(
-		//     ctx,
-		//     types.ModuleName,
-		//     sdk.AccAddress(perm.Grantee),
-		//     sdk.NewCoins(sdk.NewCoin(ms.Keeper.GetParams(ctx).FeeDenom, sdk.NewInt(int64(perm.VpCurrentFees)))),
-		// ); err != nil {
-		//     return fmt.Errorf("failed to refund fees: %w", err)
-		// }
+		// Transfer escrowed fees back to the applicant
+		granteeAddr, err := sdk.AccAddressFromBech32(perm.Grantee)
+		if err != nil {
+			return fmt.Errorf("invalid grantee address: %w", err)
+		}
+
+		// Transfer fees from module escrow account to applicant account
+		err = ms.bankKeeper.SendCoinsFromModuleToAccount(
+			ctx,
+			types.ModuleName, // Module escrow account
+			granteeAddr,      // Applicant account
+			sdk.NewCoins(sdk.NewInt64Coin(types.BondDenom, int64(perm.VpCurrentFees))),
+		)
+		if err != nil {
+			return fmt.Errorf("failed to refund fees: %w", err)
+		}
+
 		perm.VpCurrentFees = 0
 	}
 
 	// Handle current deposit if any
 	if perm.VpCurrentDeposit > 0 {
-		// TODO: After trust deposit module integration
-		// if err := ms.trustDepositKeeper.DecreaseTrustDeposit(ctx, perm.Grantee, perm.VpCurrentDeposit); err != nil {
-		//     return fmt.Errorf("failed to decrease trust deposit: %w", err)
-		// }
+		// Use AdjustTrustDeposit to reduce trust deposit with negative value
+		// to move funds from deposit to claimable
+		if err := ms.trustDeposit.AdjustTrustDeposit(
+			ctx,
+			perm.Grantee,
+			-int64(perm.VpCurrentDeposit), // Negative value to reduce deposit and increase claimable
+		); err != nil {
+			return fmt.Errorf("failed to adjust trust deposit: %w", err)
+		}
+
 		perm.VpCurrentDeposit = 0
 	}
 

@@ -31,6 +31,7 @@ type (
 		credentialSchemaKeeper types.CredentialSchemaKeeper
 		trustRegistryKeeper    types.TrustRegistryKeeper
 		trustDeposit           types.TrustDepositKeeper
+		bankKeeper             types.BankKeeper
 	}
 )
 
@@ -42,6 +43,7 @@ func NewKeeper(
 	credentialSchemaKeeper types.CredentialSchemaKeeper,
 	trustRegistryKeeper types.TrustRegistryKeeper,
 	trustDeposit types.TrustDepositKeeper,
+	bankKeeper types.BankKeeper,
 ) Keeper {
 	sb := collections.NewSchemaBuilder(storeService)
 
@@ -60,6 +62,7 @@ func NewKeeper(
 		credentialSchemaKeeper: credentialSchemaKeeper,
 		trustRegistryKeeper:    trustRegistryKeeper,
 		trustDeposit:           trustDeposit,
+		bankKeeper:             bankKeeper,
 	}
 }
 

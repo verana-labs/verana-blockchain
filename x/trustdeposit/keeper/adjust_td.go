@@ -6,6 +6,19 @@ import (
 	"github.com/verana-labs/verana-blockchain/x/trustdeposit/types"
 )
 
+// AdjustTrustDeposit modifies the trust deposit for an account by the specified amount.
+// If augend is positive, it increases the trust deposit.
+// If augend is negative, it decreases the trust deposit and increases the claimable amount.
+//
+// The function follows the specification [MOD-TD-MSG-1] from the Verana blockchain specs.
+//
+// Parameters:
+// - ctx: The SDK context
+// - account: The account address as a Bech32 string
+// - augend: The amount to adjust (positive for increase, negative for decrease)
+//
+// Returns:
+// - error: If the operation fails
 func (k Keeper) AdjustTrustDeposit(ctx sdk.Context, account string, augend int64) error {
 	// Basic validation
 	senderAcc, err := sdk.AccAddressFromBech32(account)

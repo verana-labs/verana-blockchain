@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"fmt"
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -44,8 +45,6 @@ func (ms msgServer) executeSetPermissionVPToValidated(ctx sdk.Context, perm type
 	perm.Modified = &now
 	perm.VpState = types.ValidationState_VALIDATION_STATE_VALIDATED
 	perm.VpLastStateChange = &now
-	perm.VpCurrentFees = 0
-	perm.VpCurrentDeposit = 0
 	perm.VpSummaryDigestSri = msg.VpSummaryDigestSri
 	perm.VpExp = vpExp
 	perm.EffectiveUntil = msg.EffectiveUntil
@@ -59,11 +58,62 @@ func (ms msgServer) executeSetPermissionVPToValidated(ctx sdk.Context, perm type
 		perm.EffectiveFrom = &now
 	}
 
-	// TODO: Handle fees and trust deposits after trust deposit module is ready
-	// validatorTrustFees := perm.VpCurrentFees * (1 - GlobalVariables.TrustDepositRate)
-	// validatorTrustDeposit := perm.VpCurrentFees - validatorTrustFees
-	// Transfer fees from escrow to validator
-	// Update validator deposit
+	// Handle fees and trust deposits
+	if perm.VpCurrentFees > 0 {
+		// Load validator permission
+		validatorPerm, err := ms.Keeper.GetPermissionByID(ctx, perm.ValidatorPermId)
+		if err != nil {
+			return fmt.Errorf("failed to get validator permission: %w", err)
+		}
+
+		// Get validator address
+		validatorAddr, err := sdk.AccAddressFromBech32(validatorPerm.Grantee)
+		if err != nil {
+			return fmt.Errorf("invalid validator address: %w", err)
+		}
+
+		// Get trust deposit rate - assuming this returns a uint32 value representing a percentage (e.g., 20 for 20%)
+		trustDepositRate := ms.trustDeposit.GetTrustDepositRate(ctx)
+
+		// Calculate trust deposit portion using integer arithmetic
+		// If trustDepositRate is represented as a percentage (e.g., 20 for 20%)
+		validatorTrustDeposit := (perm.VpCurrentFees * uint64(trustDepositRate)) / 100
+
+		// Calculate validator's direct fee portion (excluding trust deposit)
+		validatorTrustFees := perm.VpCurrentFees - validatorTrustDeposit
+
+		// Transfer direct fees from module escrow to validator
+		if validatorTrustFees > 0 {
+			err = ms.bankKeeper.SendCoinsFromModuleToAccount(
+				ctx,
+				types.ModuleName, // Module escrow account
+				validatorAddr,    // Validator account
+				sdk.NewCoins(sdk.NewInt64Coin(types.BondDenom, int64(validatorTrustFees))),
+			)
+			if err != nil {
+				return fmt.Errorf("failed to transfer fees to validator: %w", err)
+			}
+		}
+
+		// Increase validator's trust deposit
+		if validatorTrustDeposit > 0 {
+			err = ms.trustDeposit.AdjustTrustDeposit(
+				ctx,
+				validatorPerm.Grantee,
+				int64(validatorTrustDeposit),
+			)
+			if err != nil {
+				return fmt.Errorf("failed to adjust validator trust deposit: %w", err)
+			}
+
+			// Update validator deposit in applicant permission
+			perm.VpValidatorDeposit += validatorTrustDeposit
+		}
+	}
+
+	// Set current fees and deposit to zero after processing
+	perm.VpCurrentFees = 0
+	perm.VpCurrentDeposit = 0
 
 	return ms.Keeper.UpdatePermission(ctx, perm)
 }

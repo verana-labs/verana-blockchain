@@ -57,6 +57,11 @@ func TrustregistryKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
 // MockTrustDepositKeeper is a mock implementation of the TrustDepositKeeper interface for testing
 type MockTrustDepositKeeper struct{}
 
+func (m *MockTrustDepositKeeper) GetTrustDepositRate(ctx sdk.Context) uint32 {
+	//unimplemented
+	return 0
+}
+
 // AdjustTrustDeposit implements the TrustDepositKeeper interface
 func (m *MockTrustDepositKeeper) AdjustTrustDeposit(ctx sdk.Context, account string, augend int64) error {
 	// For testing, always succeed

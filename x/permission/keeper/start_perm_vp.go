@@ -53,6 +53,26 @@ func (ms msgServer) executeStartPermissionVP(ctx sdk.Context, msg *types.MsgStar
 		}
 	}
 
+	// Send validation fees to escrow account if greater than 0
+	if fees > 0 {
+		// Get sender address
+		senderAddr, err := sdk.AccAddressFromBech32(msg.Creator)
+		if err != nil {
+			return 0, fmt.Errorf("invalid creator address: %w", err)
+		}
+
+		// Transfer fees to module escrow account
+		err = ms.bankKeeper.SendCoinsFromAccountToModule(
+			ctx,
+			senderAddr,
+			types.ModuleName, // Using module name as the escrow account
+			sdk.NewCoins(sdk.NewInt64Coin(types.BondDenom, int64(fees))),
+		)
+		if err != nil {
+			return 0, fmt.Errorf("failed to transfer validation fees to escrow: %w", err)
+		}
+	}
+
 	// Create new permission entry
 	now := ctx.BlockTime()
 	newPerm := types.Permission{
