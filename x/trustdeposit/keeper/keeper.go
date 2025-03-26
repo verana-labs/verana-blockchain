@@ -66,3 +66,13 @@ func (k Keeper) GetTrustDepositRate(ctx sdk.Context) uint32 {
 	params := k.GetParams(ctx)
 	return params.TrustDepositRate
 }
+
+func (k Keeper) GetUserAgentRewardRate(ctx sdk.Context) uint32 {
+	params := k.GetParams(ctx)
+	return params.UserAgentRewardRate
+}
+
+func (k Keeper) GetWalletUserAgentRewardRate(ctx sdk.Context) uint32 {
+	params := k.GetParams(ctx)
+	return params.WalletUserAgentRewardRate
+}

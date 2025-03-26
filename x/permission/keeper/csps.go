@@ -1,7 +1,9 @@
 package keeper
 
 import (
+	"cosmossdk.io/math"
 	"errors"
+	"fmt"
 
 	"cosmossdk.io/collections"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -155,74 +157,115 @@ func (ms msgServer) buildPermissionSet(ctx sdk.Context, executorPerm *types.Perm
 	return permSet, nil
 }
 
-//func (ms msgServer) calculateAndValidateFees(ctx sdk.Context, creator string, permSet PermissionSet, executorType types.PermissionType) (sdk.Coin, error) {
-//	beneficiaryFees := math.NewInt(0)
-//
-//	// Calculate total beneficiary fees
-//	for _, perm := range permSet {
-//		if executorType == types.PermissionType_PERMISSION_TYPE_VERIFIER {
-//			beneficiaryFees = beneficiaryFees.Add(math.NewInt(int64(perm.VerificationFees)))
-//		} else {
-//			beneficiaryFees = beneficiaryFees.Add(math.NewInt(int64(perm.IssuanceFees)))
-//		}
-//	}
-//
-//	// Get global variables
-//	trustUnitPrice := ms.globalVariablesKeeper.GetTrustUnitPrice(ctx)
-//	trustDepositRate := ms.globalVariablesKeeper.GetTrustDepositRate(ctx)
-//	userAgentRewardRate := ms.globalVariablesKeeper.GetUserAgentRewardRate(ctx)
-//	walletUserAgentRewardRate := ms.globalVariablesKeeper.GetWalletUserAgentRewardRate(ctx)
-//
-//	// Calculate total fees including trust deposit and rewards
-//	totalFees := beneficiaryFees.Mul(trustUnitPrice)
-//	trustFees := totalFees.Mul(trustDepositRate)
-//	rewards := totalFees.Mul(userAgentRewardRate.Add(walletUserAgentRewardRate))
-//
-//	requiredAmount := sdk.NewCoin(ms.stakingKeeper.BondDenom(ctx), totalFees.Add(trustFees).Add(rewards))
-//
-//	// Validate sufficient balance
-//	creatorAddr, _ := sdk.AccAddressFromBech32(creator)
-//	if !ms.bankKeeper.HasBalance(ctx, creatorAddr, requiredAmount) {
-//		return sdk.Coin{}, sdkerrors.ErrInsufficientFunds.Wrapf("insufficient funds: required %s", requiredAmount)
-//	}
-//
-//	return requiredAmount, nil
-//}
+func (ms msgServer) calculateAndValidateFees(ctx sdk.Context, creator string, permSet PermissionSet, executorType types.PermissionType) (sdk.Coin, error) {
+	beneficiaryFees := math.NewInt(0)
 
-//func (ms msgServer) processFees(ctx sdk.Context, creator string, permSet PermissionSet, executorType types.PermissionType, totalFees sdk.Coin) error {
-//	creatorAddr, _ := sdk.AccAddressFromBech32(creator)
-//
-//	for _, perm := range permSet {
-//		fees := math.NewInt(0)
-//		if executorType == types.PermissionType_PERMISSION_TYPE_VERIFIER {
-//			fees = math.NewInt(int64(perm.VerificationFees))
-//		} else {
-//			fees = math.NewInt(int64(perm.IssuanceFees))
-//		}
-//
-//		if fees.IsPositive() {
-//			trustUnitPrice := ms.globalVariablesKeeper.GetTrustUnitPrice(ctx)
-//			trustDepositRate := ms.globalVariablesKeeper.GetTrustDepositRate(ctx)
-//
-//			// Calculate direct fees (excluding trust deposit)
-//			directFees := fees.Mul(trustUnitPrice).Mul(sdk.NewInt(1).Sub(trustDepositRate))
-//
-//			// Transfer direct fees to grantee
-//			if err := ms.bankKeeper.SendCoins(
-//				ctx,
-//				creatorAddr,
-//				sdk.AccAddressFromBech32(perm.Grantee),
-//				sdk.NewCoins(sdk.NewCoin(ms.stakingKeeper.BondDenom(ctx), directFees)),
-//			); err != nil {
-//				return err
-//			}
-//
-//			// TODO: Implement trust deposit increases when module is available
-//		}
-//	}
-//
-//	return nil
-//}
+	// Calculate total beneficiary fees
+	for _, perm := range permSet {
+		if executorType == types.PermissionType_PERMISSION_TYPE_VERIFIER {
+			beneficiaryFees = beneficiaryFees.Add(math.NewInt(int64(perm.VerificationFees)))
+		} else {
+			beneficiaryFees = beneficiaryFees.Add(math.NewInt(int64(perm.IssuanceFees)))
+		}
+	}
+
+	// Get global variables
+	trustUnitPrice := ms.trustRegistryKeeper.GetTrustUnitPrice(ctx)
+	trustDepositRate := ms.trustDeposit.GetTrustDepositRate(ctx)
+	userAgentRewardRate := ms.trustDeposit.GetUserAgentRewardRate(ctx)
+	walletUserAgentRewardRate := ms.trustDeposit.GetWalletUserAgentRewardRate(ctx)
+
+	// Calculate total fees including trust deposit and rewards
+	totalFees := beneficiaryFees.Mul(math.NewInt(int64(trustUnitPrice)))
+	trustFees := totalFees.Mul(math.NewInt(int64(trustDepositRate)))
+
+	rewardRateSum := uint64(userAgentRewardRate) + uint64(walletUserAgentRewardRate)
+	rewards := totalFees.Mul(math.NewInt(int64(rewardRateSum)))
+
+	requiredAmount := sdk.NewCoin(types.BondDenom, totalFees.Add(trustFees).Add(rewards))
+
+	// Validate sufficient balance
+	creatorAddr, err := sdk.AccAddressFromBech32(creator)
+	if err != nil {
+		return sdk.Coin{}, fmt.Errorf("invalid creator address: %w", err)
+	}
+
+	if !ms.bankKeeper.HasBalance(ctx, creatorAddr, requiredAmount) {
+		return sdk.Coin{}, sdkerrors.ErrInsufficientFunds.Wrapf("insufficient funds: required %s", requiredAmount)
+	}
+
+	return requiredAmount, nil
+}
+
+// Implemented processFees function
+func (ms msgServer) processFees(ctx sdk.Context, creator string, permSet PermissionSet, executorType types.PermissionType, totalFees sdk.Coin) error {
+	creatorAddr, err := sdk.AccAddressFromBech32(creator)
+	if err != nil {
+		return fmt.Errorf("invalid creator address: %w", err)
+	}
+
+	// Get global variables
+	trustUnitPrice := ms.trustRegistryKeeper.GetTrustUnitPrice(ctx)
+	trustDepositRate := ms.trustDeposit.GetTrustDepositRate(ctx)
+	userAgentRewardRate := ms.trustDeposit.GetUserAgentRewardRate(ctx)
+	walletUserAgentRewardRate := ms.trustDeposit.GetWalletUserAgentRewardRate(ctx)
+
+	for _, perm := range permSet {
+		var fees uint64
+		if executorType == types.PermissionType_PERMISSION_TYPE_VERIFIER {
+			fees = perm.VerificationFees
+		} else {
+			fees = perm.IssuanceFees
+		}
+
+		if fees > 0 {
+			// Calculate direct fees (excluding trust deposit)
+			feesInDenom := fees * trustUnitPrice
+			directFeesInDenom := uint64(float64(feesInDenom) * (1.0 - float64(trustDepositRate)))
+
+			if directFeesInDenom > 0 {
+				// Get grantee address
+				granteeAddr, err := sdk.AccAddressFromBech32(perm.Grantee)
+				if err != nil {
+					return fmt.Errorf("invalid grantee address: %w", err)
+				}
+
+				// Transfer direct fees to grantee
+				err = ms.bankKeeper.SendCoins(
+					ctx,
+					creatorAddr,
+					granteeAddr,
+					sdk.NewCoins(sdk.NewInt64Coin(types.BondDenom, int64(directFeesInDenom))),
+				)
+				if err != nil {
+					return fmt.Errorf("failed to transfer direct fees: %w", err)
+				}
+			}
+
+			// Handle trust deposit for the grantee
+			trustDepositAmount := uint64(float64(feesInDenom) * float64(trustDepositRate))
+			if trustDepositAmount > 0 {
+				err = ms.trustDeposit.AdjustTrustDeposit(
+					ctx,
+					perm.Grantee,
+					int64(trustDepositAmount),
+				)
+				if err != nil {
+					return fmt.Errorf("failed to adjust grantee trust deposit: %w", err)
+				}
+			}
+		}
+	}
+
+	// Handle agent and wallet agent rewards
+	// This would involve calculating the reward amounts and adjusting trust deposits for both agents
+	if userAgentRewardRate > 0 || walletUserAgentRewardRate > 0 {
+		// Implementation for agent rewards would go here
+		// We would need access to the agent permission IDs and their grantees
+	}
+
+	return nil
+}
 
 func (ms msgServer) createOrUpdateSession(ctx sdk.Context, msg *types.MsgCreateOrUpdatePermissionSession, now time.Time) error {
 	session := &types.PermissionSession{

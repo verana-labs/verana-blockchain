@@ -20,6 +20,8 @@ type BankKeeper interface {
 	SpendableCoins(context.Context, sdk.AccAddress) sdk.Coins
 	SendCoinsFromAccountToModule(ctx context.Context, senderAddr sdk.AccAddress, recipientModule string, amt sdk.Coins) error
 	SendCoinsFromModuleToAccount(ctx context.Context, senderModule string, recipientAddr sdk.AccAddress, amt sdk.Coins) error
+	SendCoins(ctx context.Context, from, to sdk.AccAddress, amt sdk.Coins) error
+	HasBalance(ctx context.Context, addr sdk.AccAddress, amt sdk.Coin) bool
 }
 
 // ParamSubspace defines the expected Subspace interface for parameters.
@@ -42,4 +44,6 @@ type TrustRegistryKeeper interface {
 type TrustDepositKeeper interface {
 	AdjustTrustDeposit(ctx sdk.Context, account string, augend int64) error
 	GetTrustDepositRate(ctx sdk.Context) uint32
+	GetUserAgentRewardRate(ctx sdk.Context) uint32
+	GetWalletUserAgentRewardRate(ctx sdk.Context) uint32
 }

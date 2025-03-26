@@ -261,7 +261,7 @@ func (ms msgServer) executeRequestPermissionVPTermination(ctx sdk.Context, perm 
 	perm.VpLastStateChange = &now
 
 	// Set state based on conditions
-	if perm.Type != types.PermissionType_PERMISSION_TYPE_HOLDER && // not HOLDER
+	if perm.Type != types.PermissionType_PERMISSION_TYPE_HOLDER || // not HOLDER
 		(perm.VpExp != nil && now.After(*perm.VpExp)) { // expired
 		// Immediate termination
 		perm.VpState = types.ValidationState_VALIDATION_STATE_TERMINATED
@@ -362,7 +362,7 @@ func (ms msgServer) ConfirmPermissionVPTermination(goCtx context.Context, msg *t
 	return &types.MsgConfirmPermissionVPTerminationResponse{}, nil
 }
 
-func (ms msgServer) executeConfirmPermissionVPTermination(ctx sdk.Context, applicantPerm types.Permission, validatorPerm types.Permission, confirmer string, now time.Time) error {
+func (ms msgServer) executeConfirmPermissionVPTermination(ctx sdk.Context, applicantPerm, validatorPerm types.Permission, confirmer string, now time.Time) error {
 	// Update basic fields
 	applicantPerm.Modified = &now
 	applicantPerm.VpState = types.ValidationState_VALIDATION_STATE_TERMINATED
@@ -386,7 +386,7 @@ func (ms msgServer) executeConfirmPermissionVPTermination(ctx sdk.Context, appli
 	}
 
 	// Only return validator deposit if validator confirmed
-	if confirmer == validatorPerm.Grantee && validatorPerm.VpValidatorDeposit > 0 {
+	if confirmer == validatorPerm.Grantee && applicantPerm.VpValidatorDeposit > 0 {
 		// Convert to signed integer for adjustment
 		validatorDepositAmount := int64(applicantPerm.VpValidatorDeposit)
 
@@ -489,6 +489,11 @@ func (ms msgServer) executeCancelPermissionVPLastRequest(ctx sdk.Context, perm t
 func (ms msgServer) CreateRootPermission(goCtx context.Context, msg *types.MsgCreateRootPermission) (*types.MsgCreateRootPermissionResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	now := ctx.BlockTime()
+
+	// Add this check inside CreateRootPermission after the schema check
+	if msg.EffectiveFrom != nil && !msg.EffectiveFrom.After(now) {
+		return nil, fmt.Errorf("effective_from must be in the future")
+	}
 
 	// Check credential schema exists
 	_, err := ms.credentialSchemaKeeper.GetCredentialSchemaById(ctx, msg.SchemaId)
@@ -710,25 +715,25 @@ func (ms msgServer) CreateOrUpdatePermissionSession(goCtx context.Context, msg *
 	}
 
 	// Build permission set and calculate fees
-	_, err = ms.buildPermissionSet(ctx, executorPerm, msg.BeneficiaryPermId)
+	permSet, err := ms.buildPermissionSet(ctx, executorPerm, msg.BeneficiaryPermId)
 	if err != nil {
 		return nil, fmt.Errorf("failed to build permission set: %w", err)
 	}
 
 	// Calculate and validate fees
-	//fees, err := ms.calculateAndValidateFees(ctx, msg.Creator, permSet, executorPerm.Type)
-	//if err != nil {
-	//	return nil, err
-	//}
+	fees, err := ms.calculateAndValidateFees(ctx, msg.Creator, permSet, executorPerm.Type)
+	if err != nil {
+		return nil, fmt.Errorf("fee validation failed: %w", err)
+	}
 
 	// Process fees and create/update session
-	//if err := ms.processFees(ctx, msg.Creator, permSet, executorPerm.Type, fees); err != nil {
-	//	return nil, err
-	//}
+	if err := ms.processFees(ctx, msg.Creator, permSet, executorPerm.Type, fees); err != nil {
+		return nil, fmt.Errorf("failed to process fees: %w", err)
+	}
 
 	// Create or update session
 	if err := ms.createOrUpdateSession(ctx, msg, now); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to create/update session: %w", err)
 	}
 
 	ctx.EventManager().EmitEvents(sdk.Events{
