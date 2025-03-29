@@ -42,6 +42,8 @@ jobs:
       - name: Run test harness
         run: |
           cd ${{ env.TEST_HARNESS_PATH }}
+          pwd
+          find .
           ./script/run_all.sh
 
       - name: Kill asynchronous setup process
