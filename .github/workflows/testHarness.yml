@@ -53,6 +53,7 @@ jobs:
           cd ${{ env.TEST_HARNESS_PATH }}
           pwd
           find .
+          ./scripts/setup_accounts.sh
           ./scripts/run_all.sh
 
       - name: Kill asynchronous setup process
