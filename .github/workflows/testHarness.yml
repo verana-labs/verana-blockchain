@@ -15,7 +15,6 @@ jobs:
     env:
       VERANA_BLOCKCHAIN_PATH: ./verana-blockchain
       TEST_HARNESS_PATH: ./verana-test-harness
-      VERANA_TEST_HARNESS_CODE_REPO_KEY: ${{ secrets.VERANA_TEST_HARNESS_DEPLOY_KEY }}
 
     steps:
       - name: Checkout this repository
@@ -30,7 +29,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: verana-labs/verana-test-harness
-          ssh-key: ${{ secrets.VERANA_TEST_HARNESS_CODE_REPO_KEY }}
+          ssh-key: ${{ secrets.VERANA_TEST_HARNESS_DEPLOY_KEY }}
           path: ${{ env.TEST_HARNESS_PATH }}
 
       - name: Install dependencies and run setup script asynchronously
