@@ -1,6 +1,7 @@
 name: 2.Test Harness Execution
 
 on:
+  workflow_dispatch:
   pull_request:
     branches:
       - '*' # Trigger on pull requests to any branch
