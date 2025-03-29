@@ -42,8 +42,8 @@ jobs:
         run: |
           cd ${{ env.VERANA_BLOCKCHAIN_PATH }}
           env
-          export PATH=$PATH:$(pwd)/cmd
-          export BINARYPATH=$(pwd)/cmd
+          export PATH=$PATH:$HOME/go/bin
+          export BINARYPATH=$HOME/go/bin
           make install
           echo "BINARYPATH=$BINARYPATH" >> $GITHUB_ENV
           type veranad
