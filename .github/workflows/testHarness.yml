@@ -42,15 +42,18 @@ jobs:
         run: |
           cd ${{ env.VERANA_BLOCKCHAIN_PATH }}
           make install
+          echo ./scripts/setup_primary_validator.sh....
           ./scripts/setup_primary_validator.sh &
           echo $! > /tmp/setup_primary_validator_pid
+          echo "Asynchronous setup process started with PID: $(cat /tmp/setup_primary_validator_pid)"
+          echo "Waiting for setup process to complete..."
 
       - name: Run test harness
         run: |
           cd ${{ env.TEST_HARNESS_PATH }}
           pwd
           find .
-          ./script/run_all.sh
+          ./scripts/run_all.sh
 
       - name: Kill asynchronous setup process
         run: |
