@@ -2,6 +2,11 @@ name: 2.Test Harness Execution
 
 on:
   workflow_dispatch:
+    inputs:
+      TEST_HARNESS_BRANCH:
+        description: 'Branch to use for verana-test-harness checkout (default is main)'
+        required: false
+        default: 'main'
   pull_request:
     branches:
       - '*' # Trigger on pull requests to any branch
@@ -29,6 +34,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: verana-labs/verana-test-harness
+          ref: ${{ github.event.inputs.TEST_HARNESS_BRANCH || 'main' }}
           ssh-key: ${{ secrets.VERANA_TEST_HARNESS_DEPLOY_KEY }}
           path: ${{ env.TEST_HARNESS_PATH }}
 
