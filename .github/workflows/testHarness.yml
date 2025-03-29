@@ -42,6 +42,9 @@ jobs:
         run: |
           cd ${{ env.VERANA_BLOCKCHAIN_PATH }}
           make install
+          export PATH=$PATH:$(pwd)/cmd/bin
+          export BINARYPATH=$(pwd)/cmd/bin
+          echo "BINARYPATH=$BINARYPATH" >> $GITHUB_ENV
           type veranad
           echo ./scripts/setup_primary_validator.sh....
           ./scripts/setup_primary_validator.sh &
@@ -54,6 +57,7 @@ jobs:
           cd ${{ env.TEST_HARNESS_PATH }}
           pwd
           find .
+          export PATH=$PATH:$BINARYPATH
           type veranad
           ./scripts/setup_accounts.sh
           ./scripts/run_all.sh
