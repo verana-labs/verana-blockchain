@@ -41,9 +41,10 @@ jobs:
       - name: Install dependencies and run setup script asynchronously
         run: |
           cd ${{ env.VERANA_BLOCKCHAIN_PATH }}
-          make install
+          env
           export PATH=$PATH:$(pwd)/cmd
           export BINARYPATH=$(pwd)/cmd
+          make install
           echo "BINARYPATH=$BINARYPATH" >> $GITHUB_ENV
           type veranad
           echo ./scripts/setup_primary_validator.sh....
