@@ -26,19 +26,11 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           path: ${{ env.VERANA_BLOCKCHAIN_PATH }}
 
-      - name: Set up SSH for accessing the selected repository
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ env.VERANA_TEST_HARNESS_CODE_REPO_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-
-      - name: Checkout Dockerfiles from verana-deploy
+      - name: Checkout verana-test-harness
         uses: actions/checkout@v3
         with:
           repository: verana-labs/verana-test-harness
-          ref: ${{ github.ref_name }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          ssh-key: ${{ secrets.VERANA_TEST_HARNESS_CODE_REPO_KEY }}
           path: ${{ env.TEST_HARNESS_PATH }}
 
       - name: Install dependencies and run setup script asynchronously
