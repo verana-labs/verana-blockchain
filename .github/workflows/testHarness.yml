@@ -42,6 +42,7 @@ jobs:
         run: |
           cd ${{ env.VERANA_BLOCKCHAIN_PATH }}
           make install
+          type veranad
           echo ./scripts/setup_primary_validator.sh....
           ./scripts/setup_primary_validator.sh &
           echo $! > /tmp/setup_primary_validator_pid
@@ -53,6 +54,7 @@ jobs:
           cd ${{ env.TEST_HARNESS_PATH }}
           pwd
           find .
+          type veranad
           ./scripts/setup_accounts.sh
           ./scripts/run_all.sh
 
