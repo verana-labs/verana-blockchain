@@ -75,36 +75,36 @@ fi
 
 # Update minimum-gas-prices in app.toml
 log "Updating minimum gas prices..."
-$SED_CMD -i '' 's/^minimum-gas-prices = ""/minimum-gas-prices = "0.25uvna"/' "$APP_TOML_PATH"
+$SED_CMD 's/^minimum-gas-prices = ""/minimum-gas-prices = "0.25uvna"/' "$APP_TOML_PATH"
 
 # Configure ports in app.toml
-$SED_CMD -i '' "s/:1317/:$API_PORT/" "$APP_TOML_PATH"
-$SED_CMD -i '' "s/:9090/:$GRPC_PORT/" "$APP_TOML_PATH"
-$SED_CMD -i '' "s/:9091/:$GRPC_WEB_PORT/" "$APP_TOML_PATH"
+$SED_CMD "s/:1317/:$API_PORT/" "$APP_TOML_PATH"
+$SED_CMD "s/:9090/:$GRPC_PORT/" "$APP_TOML_PATH"
+$SED_CMD "s/:9091/:$GRPC_WEB_PORT/" "$APP_TOML_PATH"
 
 # Replace all occurrences of "stake" with "uvna" in genesis.json
 log "Replacing 'stake' with 'uvna' in genesis.json..."
-$SED_CMD -i '' 's/stake/uvna/g' "$GENESIS_JSON_PATH"
+$SED_CMD 's/stake/uvna/g' "$GENESIS_JSON_PATH"
 
 # Update governance params in genesis.json
 log "Updating governance parameters in genesis.json..."
-$SED_CMD -i '' 's/"max_deposit_period": ".*"/"max_deposit_period": "100s"/' "$GENESIS_JSON_PATH"
-$SED_CMD -i '' 's/"voting_period": ".*"/"voting_period": "100s"/' "$GENESIS_JSON_PATH"
+$SED_CMD 's/"max_deposit_period": ".*"/"max_deposit_period": "100s"/' "$GENESIS_JSON_PATH"
+$SED_CMD 's/"voting_period": ".*"/"voting_period": "100s"/' "$GENESIS_JSON_PATH"
 if [ $? -ne 0 ]; then
     log "Error: Failed to update governance parameters in genesis.json."
     exit 1
 fi
 
 # Configure ports in config.toml
-$SED_CMD -i '' "s/:26656/:$P2P_PORT/" "$CONFIG_TOML_PATH"
-$SED_CMD -i '' "s/:26657/:$RPC_PORT/" "$CONFIG_TOML_PATH"
+$SED_CMD "s/:26656/:$P2P_PORT/" "$CONFIG_TOML_PATH"
+$SED_CMD "s/:26657/:$RPC_PORT/" "$CONFIG_TOML_PATH"
 
 # Enable API and CORS
 log "Updating API and CORS settings..."
-$SED_CMD -i '' 's/enable = false/enable = true/' "$APP_TOML_PATH"
-$SED_CMD -i '' 's/swagger = false/swagger = true/' "$APP_TOML_PATH"
-$SED_CMD -i '' 's/enabled-unsafe-cors = false/enabled-unsafe-cors = true/' "$APP_TOML_PATH"
-$SED_CMD -i '' 's/cors_allowed_origins = \[\]/cors_allowed_origins = \["*"\]/' "$CONFIG_TOML_PATH"
+$SED_CMD 's/enable = false/enable = true/' "$APP_TOML_PATH"
+$SED_CMD 's/swagger = false/swagger = true/' "$APP_TOML_PATH"
+$SED_CMD 's/enabled-unsafe-cors = false/enabled-unsafe-cors = true/' "$APP_TOML_PATH"
+$SED_CMD 's/cors_allowed_origins = \[\]/cors_allowed_origins = \["*"\]/' "$CONFIG_TOML_PATH"
 
 # Collect genesis transactions
 log "Collecting genesis transactions..."
