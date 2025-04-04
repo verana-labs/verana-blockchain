@@ -109,42 +109,57 @@ func (ms msgServer) executeStartPermissionVP(ctx sdk.Context, msg *types.MsgStar
 func validatePermissionTypeCombination(requestedType, validatorType types.PermissionType, cs credentialschematypes.CredentialSchema) error {
 	switch requestedType {
 	case types.PermissionType_PERMISSION_TYPE_ISSUER:
-		if cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION &&
-			validatorType != types.PermissionType_PERMISSION_TYPE_ISSUER_GRANTOR {
-			return fmt.Errorf("issuer permission requires ISSUER_GRANTOR validator")
-		}
-		if cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_TRUST_REGISTRY_VALIDATION &&
-			validatorType != types.PermissionType_PERMISSION_TYPE_TRUST_REGISTRY {
-			return fmt.Errorf("issuer permission requires TRUST_REGISTRY validator")
+		if cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION {
+			if validatorType != types.PermissionType_PERMISSION_TYPE_ISSUER_GRANTOR {
+				return fmt.Errorf("issuer permission requires ISSUER_GRANTOR validator")
+			}
+		} else if cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_TRUST_REGISTRY_VALIDATION {
+			if validatorType != types.PermissionType_PERMISSION_TYPE_TRUST_REGISTRY {
+				return fmt.Errorf("issuer permission requires TRUST_REGISTRY validator")
+			}
+		} else {
+			return fmt.Errorf("issuer permission not supported with current schema settings")
 		}
 
 	case types.PermissionType_PERMISSION_TYPE_ISSUER_GRANTOR:
-		if cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION &&
-			validatorType != types.PermissionType_PERMISSION_TYPE_TRUST_REGISTRY {
-			return fmt.Errorf("issuer grantor permission requires TRUST_REGISTRY validator")
+		if cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION {
+			if validatorType != types.PermissionType_PERMISSION_TYPE_TRUST_REGISTRY {
+				return fmt.Errorf("issuer grantor permission requires TRUST_REGISTRY validator")
+			}
+		} else {
+			return fmt.Errorf("issuer grantor permission not supported with current schema settings")
 		}
 
 	case types.PermissionType_PERMISSION_TYPE_VERIFIER:
-		if cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION &&
-			validatorType != types.PermissionType_PERMISSION_TYPE_VERIFIER_GRANTOR {
-			return fmt.Errorf("verifier permission requires VERIFIER_GRANTOR validator")
-		}
-		if cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_TRUST_REGISTRY_VALIDATION &&
-			validatorType != types.PermissionType_PERMISSION_TYPE_TRUST_REGISTRY {
-			return fmt.Errorf("verifier permission requires TRUST_REGISTRY validator")
+		if cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION {
+			if validatorType != types.PermissionType_PERMISSION_TYPE_VERIFIER_GRANTOR {
+				return fmt.Errorf("verifier permission requires VERIFIER_GRANTOR validator")
+			}
+		} else if cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_TRUST_REGISTRY_VALIDATION {
+			if validatorType != types.PermissionType_PERMISSION_TYPE_TRUST_REGISTRY {
+				return fmt.Errorf("verifier permission requires TRUST_REGISTRY validator")
+			}
+		} else {
+			return fmt.Errorf("verifier permission not supported with current schema settings")
 		}
 
 	case types.PermissionType_PERMISSION_TYPE_VERIFIER_GRANTOR:
-		if cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION &&
-			validatorType != types.PermissionType_PERMISSION_TYPE_TRUST_REGISTRY {
-			return fmt.Errorf("verifier grantor permission requires TRUST_REGISTRY validator")
+		if cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION {
+			if validatorType != types.PermissionType_PERMISSION_TYPE_TRUST_REGISTRY {
+				return fmt.Errorf("verifier grantor permission requires TRUST_REGISTRY validator")
+			}
+		} else {
+			return fmt.Errorf("verifier grantor permission not supported with current schema settings")
 		}
 
 	case types.PermissionType_PERMISSION_TYPE_HOLDER:
-		if (cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION ||
-			cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_TRUST_REGISTRY_VALIDATION) &&
-			validatorType != types.PermissionType_PERMISSION_TYPE_ISSUER {
-			return fmt.Errorf("holder permission requires ISSUER validator")
+		if cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION ||
+			cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_TRUST_REGISTRY_VALIDATION {
+			if validatorType != types.PermissionType_PERMISSION_TYPE_ISSUER {
+				return fmt.Errorf("holder permission requires ISSUER validator")
+			}
+		} else {
+			return fmt.Errorf("holder permission not supported with current schema settings")
 		}
 	}
 

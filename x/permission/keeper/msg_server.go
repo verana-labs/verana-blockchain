@@ -721,13 +721,13 @@ func (ms msgServer) CreateOrUpdatePermissionSession(goCtx context.Context, msg *
 	}
 
 	// Calculate and validate fees
-	fees, err := ms.calculateAndValidateFees(ctx, msg.Creator, permSet, executorPerm.Type)
+	_, err = ms.calculateAndValidateFees(ctx, msg.Creator, permSet, executorPerm.Type)
 	if err != nil {
 		return nil, fmt.Errorf("fee validation failed: %w", err)
 	}
 
 	// Process fees and create/update session
-	if err := ms.processFees(ctx, msg.Creator, permSet, executorPerm.Type, fees); err != nil {
+	if err := ms.processFees(ctx, msg.Creator, permSet, executorPerm.Type); err != nil {
 		return nil, fmt.Errorf("failed to process fees: %w", err)
 	}
 

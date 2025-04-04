@@ -198,17 +198,28 @@ func (ms msgServer) calculateAndValidateFees(ctx sdk.Context, creator string, pe
 }
 
 // Implemented processFees function
-func (ms msgServer) processFees(ctx sdk.Context, creator string, permSet PermissionSet, executorType types.PermissionType, totalFees sdk.Coin) error {
+func (ms msgServer) processFees(ctx sdk.Context, creator string, permSet PermissionSet, executorType types.PermissionType) error {
 	creatorAddr, err := sdk.AccAddressFromBech32(creator)
 	if err != nil {
 		return fmt.Errorf("invalid creator address: %w", err)
 	}
 
+	// Get executor permission
+	var executorPerm *types.Permission
+	for _, perm := range permSet {
+		if perm.Grantee == creator {
+			executorPerm = &perm
+			break
+		}
+	}
+
+	if executorPerm == nil {
+		return fmt.Errorf("could not find executor permission in permission set")
+	}
+
 	// Get global variables
 	trustUnitPrice := ms.trustRegistryKeeper.GetTrustUnitPrice(ctx)
 	trustDepositRate := ms.trustDeposit.GetTrustDepositRate(ctx)
-	userAgentRewardRate := ms.trustDeposit.GetUserAgentRewardRate(ctx)
-	walletUserAgentRewardRate := ms.trustDeposit.GetWalletUserAgentRewardRate(ctx)
 
 	for _, perm := range permSet {
 		var fees uint64
@@ -219,18 +230,21 @@ func (ms msgServer) processFees(ctx sdk.Context, creator string, permSet Permiss
 		}
 
 		if fees > 0 {
-			// Calculate direct fees (excluding trust deposit)
+			// Calculate fees in denom
 			feesInDenom := fees * trustUnitPrice
-			directFeesInDenom := uint64(float64(feesInDenom) * (1.0 - float64(trustDepositRate)))
 
+			// Calculate direct fees and trust deposit portions using integer math
+			// trustDepositRate is assumed to be a value like 20 for 20%
+			trustDepositAmount := feesInDenom * uint64(trustDepositRate) / 100
+			directFeesInDenom := feesInDenom - trustDepositAmount
+
+			// 1. Transfer direct fees from creator to grantee
 			if directFeesInDenom > 0 {
-				// Get grantee address
 				granteeAddr, err := sdk.AccAddressFromBech32(perm.Grantee)
 				if err != nil {
 					return fmt.Errorf("invalid grantee address: %w", err)
 				}
 
-				// Transfer direct fees to grantee
 				err = ms.bankKeeper.SendCoins(
 					ctx,
 					creatorAddr,
@@ -242,9 +256,20 @@ func (ms msgServer) processFees(ctx sdk.Context, creator string, permSet Permiss
 				}
 			}
 
-			// Handle trust deposit for the grantee
-			trustDepositAmount := uint64(float64(feesInDenom) * float64(trustDepositRate))
+			// 2. Increase trust deposit for the grantee (FROM CREATOR FUNDS)
 			if trustDepositAmount > 0 {
+				// First transfer funds from creator to module account
+				err = ms.bankKeeper.SendCoinsFromAccountToModule(
+					ctx,
+					creatorAddr,
+					types.ModuleName,
+					sdk.NewCoins(sdk.NewInt64Coin(types.BondDenom, int64(trustDepositAmount))),
+				)
+				if err != nil {
+					return fmt.Errorf("failed to transfer trust deposit funds to module: %w", err)
+				}
+
+				// Then adjust grantee's trust deposit record
 				err = ms.trustDeposit.AdjustTrustDeposit(
 					ctx,
 					perm.Grantee,
@@ -254,14 +279,33 @@ func (ms msgServer) processFees(ctx sdk.Context, creator string, permSet Permiss
 					return fmt.Errorf("failed to adjust grantee trust deposit: %w", err)
 				}
 			}
-		}
-	}
 
-	// Handle agent and wallet agent rewards
-	// This would involve calculating the reward amounts and adjusting trust deposits for both agents
-	if userAgentRewardRate > 0 || walletUserAgentRewardRate > 0 {
-		// Implementation for agent rewards would go here
-		// We would need access to the agent permission IDs and their grantees
+			// 3. ALSO increase trust deposit for the executor's grantee (FROM CREATOR FUNDS)
+			if trustDepositAmount > 0 {
+				// First transfer funds from creator to module account (if not already transferred above)
+				if perm.Grantee != executorPerm.Grantee {
+					err = ms.bankKeeper.SendCoinsFromAccountToModule(
+						ctx,
+						creatorAddr,
+						types.ModuleName,
+						sdk.NewCoins(sdk.NewInt64Coin(types.BondDenom, int64(trustDepositAmount))),
+					)
+					if err != nil {
+						return fmt.Errorf("failed to transfer executor trust deposit funds to module: %w", err)
+					}
+				}
+
+				// Then adjust executor's trust deposit record
+				err = ms.trustDeposit.AdjustTrustDeposit(
+					ctx,
+					executorPerm.Grantee,
+					int64(trustDepositAmount),
+				)
+				if err != nil {
+					return fmt.Errorf("failed to adjust executor trust deposit: %w", err)
+				}
+			}
+		}
 	}
 
 	return nil
