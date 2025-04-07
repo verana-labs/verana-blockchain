@@ -1,6 +1,7 @@
 package types
 
 import (
+	"cosmossdk.io/math"
 	"fmt"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 )
@@ -8,11 +9,11 @@ import (
 var _ paramtypes.ParamSet = (*Params)(nil)
 
 const (
-	DefaultTrustDepositReclaimBurnRate = uint32(60) // 60%
-	DefaultTrustDepositShareValue      = uint64(1)  // Initial value: 1
-	DefaultTrustDepositRate            = uint32(20) // 20%
-	DefaultWalletUserAgentRewardRate   = uint32(20) // 20%
-	DefaultUserAgentRewardRate         = uint32(20) // 20%
+	DefaultTrustDepositReclaimBurnRate = "0.6" // 60%
+	DefaultTrustDepositShareValue      = "1.0" // Initial value: 1
+	DefaultTrustDepositRate            = "0.2" // 20%
+	DefaultWalletUserAgentRewardRate   = "0.2" // 20%
+	DefaultUserAgentRewardRate         = "0.2" // 20%
 )
 
 // ParamKeyTable the param key table for launch module
@@ -22,11 +23,11 @@ func ParamKeyTable() paramtypes.KeyTable {
 
 // NewParams creates a new Params instance
 func NewParams(
-	trustDepositReclaimBurnRate uint32,
-	trustDepositShareValue uint64,
-	trustDepositRate uint32,
-	walletUserAgentRewardRate uint32,
-	userAgentRewardRate uint32,
+	trustDepositReclaimBurnRate math.LegacyDec,
+	trustDepositShareValue math.LegacyDec,
+	trustDepositRate math.LegacyDec,
+	walletUserAgentRewardRate math.LegacyDec,
+	userAgentRewardRate math.LegacyDec,
 ) Params {
 	return Params{
 		TrustDepositReclaimBurnRate: trustDepositReclaimBurnRate,
@@ -39,12 +40,18 @@ func NewParams(
 
 // DefaultParams returns a default set of parameters
 func DefaultParams() Params {
+	TrustDepositReclaimBurnRate, _ := math.LegacyNewDecFromStr(DefaultTrustDepositReclaimBurnRate)
+	TrustDepositShareValue, _ := math.LegacyNewDecFromStr(DefaultTrustDepositShareValue)
+	TrustDepositRate, _ := math.LegacyNewDecFromStr(DefaultTrustDepositRate)
+	WalletUserAgentRewardRate, _ := math.LegacyNewDecFromStr(DefaultWalletUserAgentRewardRate)
+	UserAgentRewardRate, _ := math.LegacyNewDecFromStr(DefaultUserAgentRewardRate)
+
 	return NewParams(
-		DefaultTrustDepositReclaimBurnRate,
-		DefaultTrustDepositShareValue,
-		DefaultTrustDepositRate,
-		DefaultWalletUserAgentRewardRate,
-		DefaultUserAgentRewardRate,
+		TrustDepositReclaimBurnRate,
+		TrustDepositShareValue,
+		TrustDepositRate,
+		WalletUserAgentRewardRate,
+		UserAgentRewardRate,
 	)
 }
 

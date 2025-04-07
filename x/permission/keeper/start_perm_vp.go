@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"cosmossdk.io/math"
 	"fmt"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -40,9 +41,15 @@ func (ms msgServer) validateAndCalculateFees(ctx sdk.Context, creator string, va
 	trustDepositRate := ms.trustDeposit.GetTrustDepositRate(ctx)
 
 	validationFeesInDenom := validatorPerm.ValidationFees * trustUnitPrice
-	validationTrustDepositInDenom := (validationFeesInDenom) * uint64(trustDepositRate)
+	validationTrustDepositInDenom := ms.Keeper.validationTrustDepositInDenomAmount(validationFeesInDenom, trustDepositRate)
 
 	return validationFeesInDenom, validationTrustDepositInDenom, nil
+}
+
+func (k Keeper) validationTrustDepositInDenomAmount(validationFeesInDenom uint64, trustDepositRate math.LegacyDec) uint64 {
+	validationFeesInDenomDec := math.LegacyNewDec(int64(validationFeesInDenom))
+	validationTrustDepositInDenom := validationFeesInDenomDec.Mul(trustDepositRate)
+	return validationTrustDepositInDenom.TruncateInt().Uint64()
 }
 
 func (ms msgServer) executeStartPermissionVP(ctx sdk.Context, msg *types.MsgStartPermissionVP, validatorPerm types.Permission, fees, deposit uint64) (uint64, error) {

@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"cosmossdk.io/math"
 	"fmt"
 	"time"
 
@@ -74,10 +75,7 @@ func (ms msgServer) executeSetPermissionVPToValidated(ctx sdk.Context, perm type
 
 		// Get trust deposit rate - assuming this returns a uint32 value representing a percentage (e.g., 20 for 20%)
 		trustDepositRate := ms.trustDeposit.GetTrustDepositRate(ctx)
-
-		// Calculate trust deposit portion using integer arithmetic
-		// If trustDepositRate is represented as a percentage (e.g., 20 for 20%)
-		validatorTrustDeposit := (perm.VpCurrentFees * uint64(trustDepositRate)) / 100
+		validatorTrustDeposit := ms.Keeper.validatorTrustDepositAmount(perm.VpCurrentFees, trustDepositRate)
 
 		// Calculate validator's direct fee portion (excluding trust deposit)
 		validatorTrustFees := perm.VpCurrentFees - validatorTrustDeposit
@@ -116,4 +114,10 @@ func (ms msgServer) executeSetPermissionVPToValidated(ctx sdk.Context, perm type
 	perm.VpCurrentDeposit = 0
 
 	return ms.Keeper.UpdatePermission(ctx, perm)
+}
+
+func (k Keeper) validatorTrustDepositAmount(vpCurrentFees uint64, trustDepositRate math.LegacyDec) uint64 {
+	vpCurrentFeesDec := math.LegacyNewDec(int64(vpCurrentFees))
+	validatorTrustDeposit := vpCurrentFeesDec.Mul(trustDepositRate)
+	return validatorTrustDeposit.TruncateInt().Uint64()
 }

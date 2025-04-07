@@ -177,10 +177,10 @@ func (ms msgServer) calculateAndValidateFees(ctx sdk.Context, creator string, pe
 
 	// Calculate total fees including trust deposit and rewards
 	totalFees := beneficiaryFees.Mul(math.NewInt(int64(trustUnitPrice)))
-	trustFees := totalFees.Mul(math.NewInt(int64(trustDepositRate)))
+	trustFees := ms.Keeper.trustFeesAmount(totalFees.Int64(), trustDepositRate)
 
-	rewardRateSum := uint64(userAgentRewardRate) + uint64(walletUserAgentRewardRate)
-	rewards := totalFees.Mul(math.NewInt(int64(rewardRateSum)))
+	rewardRateSum := userAgentRewardRate.Add(walletUserAgentRewardRate)
+	rewards := ms.Keeper.rewardsAmount(totalFees.Int64(), rewardRateSum)
 
 	requiredAmount := sdk.NewCoin(types.BondDenom, totalFees.Add(trustFees).Add(rewards))
 
@@ -195,6 +195,18 @@ func (ms msgServer) calculateAndValidateFees(ctx sdk.Context, creator string, pe
 	}
 
 	return requiredAmount, nil
+}
+
+func (k Keeper) trustFeesAmount(totalFees int64, trustDepositRate math.LegacyDec) math.Int {
+	totalFeesDec := math.LegacyNewDec(totalFees)
+	trustFees := totalFeesDec.Mul(trustDepositRate)
+	return trustFees.TruncateInt()
+}
+
+func (k Keeper) rewardsAmount(totalFees int64, rewardRateSum math.LegacyDec) math.Int {
+	totalFeesDec := math.LegacyNewDec(totalFees)
+	rewards := totalFeesDec.Mul(rewardRateSum)
+	return rewards.TruncateInt()
 }
 
 // Implemented processFees function
@@ -232,10 +244,7 @@ func (ms msgServer) processFees(ctx sdk.Context, creator string, permSet Permiss
 		if fees > 0 {
 			// Calculate fees in denom
 			feesInDenom := fees * trustUnitPrice
-
-			// Calculate direct fees and trust deposit portions using integer math
-			// trustDepositRate is assumed to be a value like 20 for 20%
-			trustDepositAmount := feesInDenom * uint64(trustDepositRate) / 100
+			trustDepositAmount := ms.Keeper.trustDepositAmount(feesInDenom, trustDepositRate)
 			directFeesInDenom := feesInDenom - trustDepositAmount
 
 			// 1. Transfer direct fees from creator to grantee
@@ -309,6 +318,12 @@ func (ms msgServer) processFees(ctx sdk.Context, creator string, permSet Permiss
 	}
 
 	return nil
+}
+
+func (k Keeper) trustDepositAmount(feesInDenom uint64, trustDepositRate math.LegacyDec) uint64 {
+	feesInDenomDec := math.LegacyNewDec(int64(feesInDenom))
+	trustDeposit := feesInDenomDec.Mul(trustDepositRate)
+	return trustDeposit.TruncateInt().Uint64()
 }
 
 func (ms msgServer) createOrUpdateSession(ctx sdk.Context, msg *types.MsgCreateOrUpdatePermissionSession, now time.Time) error {
