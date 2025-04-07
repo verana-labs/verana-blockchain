@@ -1,0 +1,74 @@
+name: 2.Test Harness Execution
+
+on:
+  workflow_dispatch:
+    inputs:
+      TEST_HARNESS_BRANCH:
+        description: 'Branch to use for verana-test-harness checkout (default is main)'
+        required: false
+        default: 'main'
+  pull_request:
+    branches:
+      - '*' # Trigger on pull requests to any branch
+  push:
+    branches:
+      - '*' # Trigger on every commit to any branch
+
+jobs:
+  test-harness:
+    runs-on: ubuntu-latest
+    env:
+      VERANA_BLOCKCHAIN_PATH: ./verana-blockchain
+      TEST_HARNESS_PATH: ./verana-test-harness
+
+    steps:
+      - name: Checkout this repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref || github.ref_name }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: ${{ env.VERANA_BLOCKCHAIN_PATH }}
+
+      - name: Checkout verana-test-harness
+        uses: actions/checkout@v3
+        with:
+          repository: verana-labs/verana-test-harness
+          ref: ${{ github.event.inputs.TEST_HARNESS_BRANCH || 'main' }}
+          ssh-key: ${{ secrets.VERANA_TEST_HARNESS_DEPLOY_KEY }}
+          path: ${{ env.TEST_HARNESS_PATH }}
+
+      - name: Install dependencies and run setup script asynchronously
+        run: |
+          cd ${{ env.VERANA_BLOCKCHAIN_PATH }}
+          env
+          export PATH=$PATH:$HOME/go/bin
+          export BINARYPATH=$HOME/go/bin
+          make install
+          echo "BINARYPATH=$BINARYPATH" >> $GITHUB_ENV
+          type veranad
+          echo ./scripts/setup_primary_validator.sh....
+          ./scripts/setup_primary_validator.sh &
+          echo $! > /tmp/setup_primary_validator_pid
+          echo "Asynchronous setup process started with PID: $(cat /tmp/setup_primary_validator_pid)"
+          echo "Waiting for setup process to complete..."
+
+      - name: Run test harness
+        run: |
+          cd ${{ env.TEST_HARNESS_PATH }}
+          pwd
+          find .
+          export PATH=$PATH:$BINARYPATH
+          type veranad
+          ./scripts/setup_accounts.sh
+          ./scripts/run_all.sh
+
+      - name: Kill asynchronous setup process
+        run: |
+          if [ -f /tmp/setup_primary_validator_pid ]; then
+            kill -9 $(cat /tmp/setup_primary_validator_pid) || true
+            rm /tmp/setup_primary_validator_pid
+          fi
+
+      - name: Finalize without error
+        run: echo "Test harness execution completed successfully."
