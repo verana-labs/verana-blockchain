@@ -83,14 +83,11 @@ func (ms msgServer) executeStartPermissionVP(ctx sdk.Context, msg *types.MsgStar
 	// Create new permission entry
 	now := ctx.BlockTime()
 	newPerm := types.Permission{
-		SchemaId:          validatorPerm.SchemaId,
 		Type:              types.PermissionType(msg.Type),
 		Did:               msg.Did,
 		Grantee:           msg.Creator,
 		Created:           &now,
 		CreatedBy:         msg.Creator,
-		Extended:          &now,
-		ExtendedBy:        msg.Creator,
 		Modified:          &now,
 		ValidationFees:    0,
 		IssuanceFees:      0,

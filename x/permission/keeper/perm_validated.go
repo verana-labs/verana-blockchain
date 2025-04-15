@@ -73,25 +73,20 @@ func (ms msgServer) executeSetPermissionVPToValidated(ctx sdk.Context, perm type
 			return fmt.Errorf("invalid validator address: %w", err)
 		}
 
-		// Get trust deposit rate - assuming this returns a uint32 value representing a percentage (e.g., 20 for 20%)
+		// First, transfer the full amount from escrow to validator
+		err = ms.bankKeeper.SendCoinsFromModuleToAccount(
+			ctx,
+			types.ModuleName, // Module escrow account
+			validatorAddr,    // Validator account
+			sdk.NewCoins(sdk.NewInt64Coin(types.BondDenom, int64(perm.VpCurrentFees))),
+		)
+		if err != nil {
+			return fmt.Errorf("failed to transfer fees to validator: %w", err)
+		}
+
+		// Calculate trust deposit portion
 		trustDepositRate := ms.trustDeposit.GetTrustDepositRate(ctx)
 		validatorTrustDeposit := ms.Keeper.validatorTrustDepositAmount(perm.VpCurrentFees, trustDepositRate)
-
-		// Calculate validator's direct fee portion (excluding trust deposit)
-		validatorTrustFees := perm.VpCurrentFees - validatorTrustDeposit
-
-		// Transfer direct fees from module escrow to validator
-		if validatorTrustFees > 0 {
-			err = ms.bankKeeper.SendCoinsFromModuleToAccount(
-				ctx,
-				types.ModuleName, // Module escrow account
-				validatorAddr,    // Validator account
-				sdk.NewCoins(sdk.NewInt64Coin(types.BondDenom, int64(validatorTrustFees))),
-			)
-			if err != nil {
-				return fmt.Errorf("failed to transfer fees to validator: %w", err)
-			}
-		}
 
 		// Increase validator's trust deposit
 		if validatorTrustDeposit > 0 {

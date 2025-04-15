@@ -145,6 +145,11 @@ func (ms msgServer) SetPermissionVPToValidated(goCtx context.Context, msg *types
 		return nil, fmt.Errorf("permission not found: %w", err)
 	}
 
+	// Check permission state - must be PENDING
+	if applicantPerm.VpState != types.ValidationState_VALIDATION_STATE_PENDING {
+		return nil, fmt.Errorf("permission must be in PENDING state to be validated")
+	}
+
 	// Check renewal-specific constraints
 	if applicantPerm.EffectiveFrom != nil {
 		if msg.ValidationFees != applicantPerm.ValidationFees {
@@ -564,7 +569,6 @@ func (ms msgServer) executeCreateRootPermission(ctx sdk.Context, msg *types.MsgC
 		IssuanceFees:     msg.IssuanceFees,
 		VerificationFees: msg.VerificationFees,
 		Deposit:          0,
-		VpState:          types.ValidationState_VALIDATION_STATE_VALIDATED,
 	}
 
 	// Store the permission
