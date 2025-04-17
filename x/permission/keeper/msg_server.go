@@ -2,7 +2,9 @@ package keeper
 
 import (
 	"context"
+	"cosmossdk.io/math"
 	"fmt"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"strconv"
 	"time"
 
@@ -702,36 +704,117 @@ func (ms msgServer) CreateOrUpdatePermissionSession(goCtx context.Context, msg *
 		return nil, err
 	}
 
-	// Validate executor permission
-	executorPerm, err := ms.validateExecutorPermission(ctx, msg)
-	if err != nil {
-		return nil, err
+	// Define variables for issuerPerm and verifierPerm
+	var verifierPerm *types.Permission
+
+	// Load and validate issuer permission if specified
+	if msg.IssuerPermId != 0 {
+		perm, err := ms.Permission.Get(ctx, msg.IssuerPermId)
+		if err != nil {
+			return nil, sdkerrors.ErrNotFound.Wrapf("issuer permission not found: %v", err)
+		}
+
+		if perm.Type != types.PermissionType_PERMISSION_TYPE_ISSUER {
+			return nil, sdkerrors.ErrInvalidRequest.Wrap("issuer permission must be ISSUER type")
+		}
+
+		if perm.Revoked != nil || perm.Terminated != nil {
+			return nil, sdkerrors.ErrInvalidRequest.Wrap("issuer permission is revoked or terminated")
+		}
+	}
+
+	// Load and validate verifier permission if specified
+	if msg.VerifierPermId != 0 {
+		perm, err := ms.Permission.Get(ctx, msg.VerifierPermId)
+		if err != nil {
+			return nil, sdkerrors.ErrNotFound.Wrapf("verifier permission not found: %v", err)
+		}
+
+		if perm.Type != types.PermissionType_PERMISSION_TYPE_VERIFIER {
+			return nil, sdkerrors.ErrInvalidRequest.Wrap("verifier permission must be VERIFIER type")
+		}
+
+		if perm.Revoked != nil || perm.Terminated != nil {
+			return nil, sdkerrors.ErrInvalidRequest.Wrap("verifier permission is revoked or terminated")
+		}
+
+		verifierPerm = &perm
 	}
 
 	// Validate agent permission
-	if err := ms.validateAgentPermission(ctx, msg); err != nil {
-		return nil, err
+	agentPerm, err := ms.Permission.Get(ctx, msg.AgentPermId)
+	if err != nil {
+		return nil, sdkerrors.ErrNotFound.Wrap("agent permission not found")
+	}
+
+	if agentPerm.Type != types.PermissionType_PERMISSION_TYPE_HOLDER {
+		return nil, sdkerrors.ErrInvalidRequest.Wrap("agent permission must be HOLDER type")
+	}
+
+	if agentPerm.Revoked != nil || agentPerm.Terminated != nil {
+		return nil, sdkerrors.ErrInvalidRequest.Wrap("agent permission is revoked or terminated")
 	}
 
 	// Validate wallet agent permission if provided
-	if err := ms.validateWalletAgentPermission(ctx, msg); err != nil {
-		return nil, err
+	if msg.WalletAgentPermId != 0 {
+		perm, err := ms.Permission.Get(ctx, msg.WalletAgentPermId)
+		if err != nil {
+			return nil, sdkerrors.ErrNotFound.Wrap("wallet agent permission not found")
+		}
+
+		if perm.Type != types.PermissionType_PERMISSION_TYPE_HOLDER {
+			return nil, sdkerrors.ErrInvalidRequest.Wrap("wallet agent permission must be HOLDER type")
+		}
+
+		if perm.Revoked != nil || perm.Terminated != nil {
+			return nil, sdkerrors.ErrInvalidRequest.Wrap("wallet agent permission is revoked or terminated")
+		}
+
 	}
 
-	// Build permission set and calculate fees
-	permSet, err := ms.buildPermissionSet(ctx, executorPerm, msg.BeneficiaryPermId)
+	// Get beneficiary permissions set
+	foundPermSet, err := ms.findBeneficiaries(ctx, msg.IssuerPermId, msg.VerifierPermId)
 	if err != nil {
-		return nil, fmt.Errorf("failed to build permission set: %w", err)
+		return nil, fmt.Errorf("failed to find beneficiaries: %w", err)
 	}
 
-	// Calculate and validate fees
-	_, err = ms.calculateAndValidateFees(ctx, msg.Creator, permSet, executorPerm.Type)
+	// Calculate fees
+	trustUnitPrice := ms.trustRegistryKeeper.GetTrustUnitPrice(ctx)
+	trustDepositRate := ms.trustDeposit.GetTrustDepositRate(ctx)
+	userAgentRewardRate := ms.trustDeposit.GetUserAgentRewardRate(ctx)
+	walletUserAgentRewardRate := ms.trustDeposit.GetWalletUserAgentRewardRate(ctx)
+
+	// Calculate beneficiary fees
+	beneficiaryFees := uint64(0)
+	for _, perm := range foundPermSet {
+		if verifierPerm != nil {
+			beneficiaryFees += perm.VerificationFees
+		} else {
+			beneficiaryFees += perm.IssuanceFees
+		}
+	}
+
+	// Calculate total required funds
+	totalFees := beneficiaryFees * trustUnitPrice
+	trustFees := uint64(math.LegacyNewDec(int64(totalFees)).Mul(trustDepositRate).TruncateInt64())
+	rewardRate := userAgentRewardRate.Add(walletUserAgentRewardRate)
+	rewards := uint64(math.LegacyNewDec(int64(totalFees)).Mul(rewardRate).TruncateInt64())
+
+	// Calculate required balance
+	requiredAmount := sdk.NewInt64Coin(types.BondDenom, int64(totalFees+trustFees+rewards))
+
+	// Validate sender has sufficient balance
+	creatorAddr, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
-		return nil, fmt.Errorf("fee validation failed: %w", err)
+		return nil, fmt.Errorf("invalid creator address: %w", err)
 	}
 
-	// Process fees and create/update session
-	if err := ms.processFees(ctx, msg.Creator, permSet, executorPerm.Type); err != nil {
+	if !ms.bankKeeper.HasBalance(ctx, creatorAddr, requiredAmount) {
+		return nil, sdkerrors.ErrInsufficientFunds.Wrapf("insufficient funds: required %s", requiredAmount)
+	}
+
+	// Process fees
+	if err := ms.processFees(ctx, msg.Creator, foundPermSet, verifierPerm != nil, trustUnitPrice, trustDepositRate); err != nil {
 		return nil, fmt.Errorf("failed to process fees: %w", err)
 	}
 
@@ -740,13 +823,15 @@ func (ms msgServer) CreateOrUpdatePermissionSession(goCtx context.Context, msg *
 		return nil, fmt.Errorf("failed to create/update session: %w", err)
 	}
 
+	// Emit events
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeCreateOrUpdatePermissionSession,
 			sdk.NewAttribute(types.AttributeKeySessionID, msg.Id),
-			sdk.NewAttribute(types.AttributeKeyExecutorPermID, strconv.FormatUint(msg.ExecutorPermId, 10)),
-			sdk.NewAttribute(types.AttributeKeyBeneficiaryPermID, strconv.FormatUint(msg.BeneficiaryPermId, 10)),
+			sdk.NewAttribute(types.AttributeKeyIssuerPermID, strconv.FormatUint(msg.IssuerPermId, 10)),
+			sdk.NewAttribute(types.AttributeKeyVerifierPermID, strconv.FormatUint(msg.VerifierPermId, 10)),
 			sdk.NewAttribute(types.AttributeKeyAgentPermID, strconv.FormatUint(msg.AgentPermId, 10)),
+			sdk.NewAttribute(types.AttributeKeyWalletAgentPermID, strconv.FormatUint(msg.WalletAgentPermId, 10)),
 			sdk.NewAttribute(types.AttributeKeyTimestamp, now.String()),
 		),
 	})

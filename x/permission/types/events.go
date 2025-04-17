@@ -12,9 +12,8 @@ const (
 	AttributeKeyDeposit                      = "deposit"
 	EventTypeCreateOrUpdatePermissionSession = "create_update_csps"
 	AttributeKeySessionID                    = "session_id"
-	AttributeKeyExecutorPermID               = "executor_perm_id"
-	AttributeKeyBeneficiaryPermID            = "beneficiary_perm_id"
-	AttributeKeyUserAgentDID                 = "user_agent_did"
-	AttributeKeyTotalFees                    = "total_fees"
 	AttributeKeyAgentPermID                  = "agent_perm_id"
+	AttributeKeyIssuerPermID                 = "issuer_perm_id"
+	AttributeKeyVerifierPermID               = "verifier_perm_id"
+	AttributeKeyWalletAgentPermID            = "wallet_agent_perm_id"
 )

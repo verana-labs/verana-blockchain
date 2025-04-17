@@ -30,34 +30,14 @@ func (ms msgServer) validateSessionAccess(ctx sdk.Context, msg *types.MsgCreateO
 
 	// Check for duplicate authorization
 	for _, authz := range existingSession.Authz {
-		if authz.ExecutorPermId == msg.ExecutorPermId &&
-			authz.BeneficiaryPermId == msg.BeneficiaryPermId &&
+		if authz.ExecutorPermId == msg.IssuerPermId &&
+			authz.BeneficiaryPermId == msg.VerifierPermId &&
 			authz.WalletAgentPermId == msg.WalletAgentPermId {
 			return sdkerrors.ErrInvalidRequest.Wrap("authorization already exists")
 		}
 	}
 
 	return nil
-}
-
-func (ms msgServer) validateExecutorPermission(ctx sdk.Context, msg *types.MsgCreateOrUpdatePermissionSession) (*types.Permission, error) {
-	executorPerm, err := ms.Permission.Get(ctx, msg.ExecutorPermId)
-	if err != nil {
-		return nil, sdkerrors.ErrNotFound.Wrapf("executor permission not found: %v", err)
-	}
-
-	// Executor must be ISSUER or VERIFIER
-	if executorPerm.Type != types.PermissionType_PERMISSION_TYPE_ISSUER &&
-		executorPerm.Type != types.PermissionType_PERMISSION_TYPE_VERIFIER {
-		return nil, sdkerrors.ErrInvalidRequest.Wrap("executor must be ISSUER or VERIFIER")
-	}
-
-	// Must be valid permission (not revoked/terminated)
-	if executorPerm.Revoked != nil || executorPerm.Terminated != nil {
-		return nil, sdkerrors.ErrInvalidRequest.Wrap("executor permission is revoked or terminated")
-	}
-
-	return &executorPerm, nil
 }
 
 func (ms msgServer) validateAgentPermission(ctx sdk.Context, msg *types.MsgCreateOrUpdatePermissionSession) error {
@@ -209,33 +189,23 @@ func (k Keeper) rewardsAmount(totalFees int64, rewardRateSum math.LegacyDec) mat
 	return rewards.TruncateInt()
 }
 
-// Implemented processFees function
-func (ms msgServer) processFees(ctx sdk.Context, creator string, permSet PermissionSet, executorType types.PermissionType) error {
+func (ms msgServer) processFees(
+	ctx sdk.Context,
+	creator string,
+	permSet []types.Permission,
+	isVerifier bool,
+	trustUnitPrice uint64,
+	trustDepositRate math.LegacyDec,
+) error {
 	creatorAddr, err := sdk.AccAddressFromBech32(creator)
 	if err != nil {
 		return fmt.Errorf("invalid creator address: %w", err)
 	}
 
-	// Get executor permission
-	var executorPerm *types.Permission
-	for _, perm := range permSet {
-		if perm.Grantee == creator {
-			executorPerm = &perm
-			break
-		}
-	}
-
-	if executorPerm == nil {
-		return fmt.Errorf("could not find executor permission in permission set")
-	}
-
-	// Get global variables
-	trustUnitPrice := ms.trustRegistryKeeper.GetTrustUnitPrice(ctx)
-	trustDepositRate := ms.trustDeposit.GetTrustDepositRate(ctx)
-
+	// Process each permission's fees
 	for _, perm := range permSet {
 		var fees uint64
-		if executorType == types.PermissionType_PERMISSION_TYPE_VERIFIER {
+		if isVerifier {
 			fees = perm.VerificationFees
 		} else {
 			fees = perm.IssuanceFees
@@ -244,11 +214,15 @@ func (ms msgServer) processFees(ctx sdk.Context, creator string, permSet Permiss
 		if fees > 0 {
 			// Calculate fees in denom
 			feesInDenom := fees * trustUnitPrice
-			trustDepositAmount := ms.Keeper.trustDepositAmount(feesInDenom, trustDepositRate)
-			directFeesInDenom := feesInDenom - trustDepositAmount
 
-			// 1. Transfer direct fees from creator to grantee
-			if directFeesInDenom > 0 {
+			// Calculate trust deposit amount
+			trustDepositAmount := uint64(math.LegacyNewDec(int64(feesInDenom)).Mul(trustDepositRate).TruncateInt64())
+
+			// Calculate direct fees (the portion that goes directly to the grantee)
+			directFeesAmount := feesInDenom - trustDepositAmount
+
+			// 1. Transfer direct fees from creator to permission grantee
+			if directFeesAmount > 0 {
 				granteeAddr, err := sdk.AccAddressFromBech32(perm.Grantee)
 				if err != nil {
 					return fmt.Errorf("invalid grantee address: %w", err)
@@ -258,14 +232,14 @@ func (ms msgServer) processFees(ctx sdk.Context, creator string, permSet Permiss
 					ctx,
 					creatorAddr,
 					granteeAddr,
-					sdk.NewCoins(sdk.NewInt64Coin(types.BondDenom, int64(directFeesInDenom))),
+					sdk.NewCoins(sdk.NewInt64Coin(types.BondDenom, int64(directFeesAmount))),
 				)
 				if err != nil {
 					return fmt.Errorf("failed to transfer direct fees: %w", err)
 				}
 			}
 
-			// 2. Increase trust deposit for the grantee (FROM CREATOR FUNDS)
+			// 2. Increase trust deposit for the grantee
 			if trustDepositAmount > 0 {
 				// First transfer funds from creator to module account
 				err = ms.bankKeeper.SendCoinsFromAccountToModule(
@@ -275,10 +249,10 @@ func (ms msgServer) processFees(ctx sdk.Context, creator string, permSet Permiss
 					sdk.NewCoins(sdk.NewInt64Coin(types.BondDenom, int64(trustDepositAmount))),
 				)
 				if err != nil {
-					return fmt.Errorf("failed to transfer trust deposit funds to module: %w", err)
+					return fmt.Errorf("failed to transfer trust deposit to module: %w", err)
 				}
 
-				// Then adjust grantee's trust deposit record
+				// Then adjust grantee's trust deposit
 				err = ms.trustDeposit.AdjustTrustDeposit(
 					ctx,
 					perm.Grantee,
@@ -286,32 +260,6 @@ func (ms msgServer) processFees(ctx sdk.Context, creator string, permSet Permiss
 				)
 				if err != nil {
 					return fmt.Errorf("failed to adjust grantee trust deposit: %w", err)
-				}
-			}
-
-			// 3. ALSO increase trust deposit for the executor's grantee (FROM CREATOR FUNDS)
-			if trustDepositAmount > 0 {
-				// First transfer funds from creator to module account (if not already transferred above)
-				if perm.Grantee != executorPerm.Grantee {
-					err = ms.bankKeeper.SendCoinsFromAccountToModule(
-						ctx,
-						creatorAddr,
-						types.ModuleName,
-						sdk.NewCoins(sdk.NewInt64Coin(types.BondDenom, int64(trustDepositAmount))),
-					)
-					if err != nil {
-						return fmt.Errorf("failed to transfer executor trust deposit funds to module: %w", err)
-					}
-				}
-
-				// Then adjust executor's trust deposit record
-				err = ms.trustDeposit.AdjustTrustDeposit(
-					ctx,
-					executorPerm.Grantee,
-					int64(trustDepositAmount),
-				)
-				if err != nil {
-					return fmt.Errorf("failed to adjust executor trust deposit: %w", err)
 				}
 			}
 		}
@@ -348,10 +296,89 @@ func (ms msgServer) createOrUpdateSession(ctx sdk.Context, msg *types.MsgCreateO
 
 	// Add new authorization
 	session.Authz = append(session.Authz, &types.SessionAuthz{
-		ExecutorPermId:    msg.ExecutorPermId,
-		BeneficiaryPermId: msg.BeneficiaryPermId,
+		ExecutorPermId:    msg.IssuerPermId,
+		BeneficiaryPermId: msg.VerifierPermId,
 		WalletAgentPermId: msg.WalletAgentPermId,
 	})
 
 	return ms.PermissionSession.Set(ctx, msg.Id, *session)
+}
+
+// findBeneficiaries gets the set of permissions that should receive fees
+func (ms msgServer) findBeneficiaries(ctx sdk.Context, issuerPermId, verifierPermId uint64) ([]types.Permission, error) {
+	var foundPerms []types.Permission
+
+	// Helper function to check if a permission is already in the slice
+	containsPerm := func(id uint64) bool {
+		for _, p := range foundPerms {
+			if p.Id == id {
+				return true
+			}
+		}
+		return false
+	}
+
+	// Process issuer permission hierarchy if provided
+	if issuerPermId != 0 {
+		issuerPerm, err := ms.Permission.Get(ctx, issuerPermId)
+		if err != nil {
+			return nil, fmt.Errorf("issuer permission not found: %w", err)
+		}
+
+		// Follow the validator chain up
+		if issuerPerm.ValidatorPermId != 0 {
+			currentPermID := issuerPerm.ValidatorPermId
+			for currentPermID != 0 {
+				currentPerm, err := ms.Permission.Get(ctx, currentPermID)
+				if err != nil {
+					return nil, fmt.Errorf("failed to get permission: %w", err)
+				}
+
+				// Add to set if valid and not already included
+				if currentPerm.Revoked == nil && currentPerm.Terminated == nil && !containsPerm(currentPermID) {
+					foundPerms = append(foundPerms, currentPerm)
+				}
+
+				// Move up
+				currentPermID = currentPerm.ValidatorPermId
+			}
+		}
+	}
+
+	// Process verifier permission hierarchy if provided
+	if verifierPermId != 0 {
+		// First add issuer permission to the set if provided
+		if issuerPermId != 0 {
+			issuerPerm, err := ms.Permission.Get(ctx, issuerPermId)
+			if err == nil && issuerPerm.Revoked == nil && issuerPerm.Terminated == nil && !containsPerm(issuerPermId) {
+				foundPerms = append(foundPerms, issuerPerm)
+			}
+		}
+
+		// Then process verifier's validator chain
+		verifierPerm, err := ms.Permission.Get(ctx, verifierPermId)
+		if err != nil {
+			return nil, fmt.Errorf("verifier permission not found: %w", err)
+		}
+
+		if verifierPerm.ValidatorPermId != 0 {
+			currentPermID := verifierPerm.ValidatorPermId
+			for currentPermID != 0 {
+				currentPerm, err := ms.Permission.Get(ctx, currentPermID)
+				if err != nil {
+					return nil, fmt.Errorf("failed to get permission: %w", err)
+				}
+
+				// Add to set if valid and not already included
+				if currentPerm.Revoked == nil && currentPerm.Terminated == nil && !containsPerm(currentPermID) {
+					foundPerms = append(foundPerms, currentPerm)
+				}
+
+				// Move up
+				currentPermID = currentPerm.ValidatorPermId
+			}
+		}
+	}
+
+	return foundPerms, nil
 }
