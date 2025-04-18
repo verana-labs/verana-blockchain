@@ -1,13 +1,24 @@
 package types_test
 
 import (
+	"cosmossdk.io/math"
 	"testing"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 	"github.com/verana-labs/verana-blockchain/x/trustdeposit/types"
 )
 
 func TestGenesisState_Validate(t *testing.T) {
+	// Setup valid addresses for testing
+	validAddr1 := sdk.AccAddress([]byte("test_address1")).String()
+	validAddr2 := sdk.AccAddress([]byte("test_address2")).String()
+
+	// Create a custom invalid param for testing
+	invalidParams := types.DefaultParams()
+	invalidShareValue, _ := math.LegacyNewDecFromStr("0.0") // Zero is invalid
+	invalidParams.TrustDepositShareValue = invalidShareValue
+
 	tests := []struct {
 		desc     string
 		genState *types.GenesisState
@@ -19,54 +30,81 @@ func TestGenesisState_Validate(t *testing.T) {
 			valid:    true,
 		},
 		{
-			desc: "valid genesis state",
+			desc: "valid genesis state with trust deposits",
 			genState: &types.GenesisState{
-				Params: types.Params{
-					TrustDepositReclaimBurnRate: uint32(60), // 60%
-					TrustDepositShareValue:      uint64(1),  // Initial value: 1
-					TrustDepositRate:            uint32(20), // 20%
-					WalletUserAgentRewardRate:   uint32(20), // 20%
-					UserAgentRewardRate:         uint32(20), // 20%
+				Params: types.DefaultParams(),
+				TrustDeposits: []types.TrustDepositRecord{
+					{
+						Account:   validAddr1,
+						Share:     100,
+						Amount:    1000,
+						Claimable: 500,
+					},
+					{
+						Account:   validAddr2,
+						Share:     200,
+						Amount:    2000,
+						Claimable: 1000,
+					},
 				},
-				// Add other genesis state fields as needed
 			},
 			valid: true,
 		},
 		{
-			desc: "invalid trust deposit reclaim burn rate",
+			desc: "invalid parameter",
 			genState: &types.GenesisState{
-				Params: types.Params{
-					TrustDepositReclaimBurnRate: uint32(101), // Invalid: > 100%
-					TrustDepositShareValue:      uint64(1),
-					TrustDepositRate:            uint32(20),
-					WalletUserAgentRewardRate:   uint32(20),
-					UserAgentRewardRate:         uint32(20),
+				Params:        invalidParams,
+				TrustDeposits: []types.TrustDepositRecord{},
+			},
+			valid: false,
+		},
+		{
+			desc: "invalid account address",
+			genState: &types.GenesisState{
+				Params: types.DefaultParams(),
+				TrustDeposits: []types.TrustDepositRecord{
+					{
+						Account:   "invalid_address", // Invalid: not a valid bech32 address
+						Share:     100,
+						Amount:    1000,
+						Claimable: 500,
+					},
 				},
 			},
 			valid: false,
 		},
 		{
-			desc: "invalid trust deposit share value",
+			desc: "duplicate account",
 			genState: &types.GenesisState{
-				Params: types.Params{
-					TrustDepositReclaimBurnRate: uint32(60),
-					TrustDepositShareValue:      uint64(0), // Invalid: cannot be 0
-					TrustDepositRate:            uint32(20),
-					WalletUserAgentRewardRate:   uint32(20),
-					UserAgentRewardRate:         uint32(20),
+				Params: types.DefaultParams(),
+				TrustDeposits: []types.TrustDepositRecord{
+					{
+						Account:   validAddr1,
+						Share:     100,
+						Amount:    1000,
+						Claimable: 500,
+					},
+					{
+						Account:   validAddr1, // Duplicate account
+						Share:     200,
+						Amount:    2000,
+						Claimable: 1000,
+					},
 				},
 			},
 			valid: false,
 		},
 		{
-			desc: "invalid trust deposit rate",
+			desc: "claimable exceeds amount",
 			genState: &types.GenesisState{
-				Params: types.Params{
-					TrustDepositReclaimBurnRate: uint32(60),
-					TrustDepositShareValue:      uint64(1),
-					TrustDepositRate:            uint32(101), // Invalid: > 100%
-					WalletUserAgentRewardRate:   uint32(20),
-					UserAgentRewardRate:         uint32(20),
+				Params: types.DefaultParams(),
+				TrustDeposits: []types.TrustDepositRecord{
+					{
+						Account:   validAddr1,
+						Share:     100,
+						Amount:    1000,
+						Claimable: 1500, // Invalid: claimable > amount
+					},
 				},
 			},
 			valid: false,
