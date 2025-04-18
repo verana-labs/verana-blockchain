@@ -1,26 +1,105 @@
 package permission
 
 import (
+	"errors"
+	"fmt"
+	"sort"
+
+	"cosmossdk.io/collections"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/verana-labs/verana-blockchain/x/permission/keeper"
 	"github.com/verana-labs/verana-blockchain/x/permission/types"
 )
 
+// DefaultGenesis returns the default genesis state
+func DefaultGenesis() *types.GenesisState {
+	return &types.GenesisState{
+		Params:             types.DefaultParams(),
+		Permissions:        []types.Permission{},
+		PermissionSessions: []types.PermissionSession{},
+		NextPermissionId:   1, // Start with 1 as first ID
+	}
+}
+
 // InitGenesis initializes the module's state from a provided genesis state.
 func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) {
-	// this line is used by starport scaffolding # genesis/module/init
+	// Set module parameters
 	if err := k.SetParams(ctx, genState.Params); err != nil {
 		panic(err)
+	}
+
+	// Import all permissions
+	for _, perm := range genState.Permissions {
+		if err := k.Permission.Set(ctx, perm.Id, perm); err != nil {
+			panic(fmt.Errorf("failed to set permission: %w", err))
+		}
+	}
+
+	// Import all permission sessions
+	for _, session := range genState.PermissionSessions {
+		if err := k.PermissionSession.Set(ctx, session.Id, session); err != nil {
+			panic(fmt.Errorf("failed to set permission session: %w", err))
+		}
+	}
+
+	// Set the permissions counter
+	if err := k.PermissionCounter.Set(ctx, genState.NextPermissionId); err != nil {
+		panic(fmt.Errorf("failed to set permission counter: %w", err))
 	}
 }
 
 // ExportGenesis returns the module's exported genesis.
 func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
-	genesis := types.DefaultGenesis()
+	genesis := DefaultGenesis()
+
+	// Export module parameters
 	genesis.Params = k.GetParams(ctx)
 
-	// this line is used by starport scaffolding # genesis/module/export
+	// Export all permissions
+	permissions := []types.Permission{}
+	if err := k.Permission.Walk(ctx, nil, func(id uint64, perm types.Permission) (bool, error) {
+		permissions = append(permissions, perm)
+		return false, nil
+	}); err != nil {
+		panic(fmt.Errorf("failed to export permissions: %w", err))
+	}
+
+	// Sort permissions by ID for deterministic output
+	sort.Slice(permissions, func(i, j int) bool {
+		return permissions[i].Id < permissions[j].Id
+	})
+
+	genesis.Permissions = permissions
+
+	// Export all permission sessions
+	sessions := []types.PermissionSession{}
+	if err := k.PermissionSession.Walk(ctx, nil, func(id string, session types.PermissionSession) (bool, error) {
+		sessions = append(sessions, session)
+		return false, nil
+	}); err != nil {
+		panic(fmt.Errorf("failed to export permission sessions: %w", err))
+	}
+
+	// Sort sessions by ID for deterministic output
+	sort.Slice(sessions, func(i, j int) bool {
+		return sessions[i].Id < sessions[j].Id
+	})
+
+	genesis.PermissionSessions = sessions
+
+	// Export permission counter
+	nextId, err := k.PermissionCounter.Get(ctx)
+	if err != nil && !errors.Is(err, collections.ErrNotFound) {
+		panic(fmt.Errorf("failed to get permission counter: %w", err))
+	}
+
+	// In case of no permissions, set next ID to 1
+	if errors.Is(err, collections.ErrNotFound) {
+		nextId = 1
+	}
+
+	genesis.NextPermissionId = nextId
 
 	return genesis
 }
