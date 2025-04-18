@@ -72,5 +72,21 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 
 	genesis.CredentialSchemas = credentialSchemas
 
+	// Export the counter value - THIS IS THE MISSING PART
+	counter, err := k.Counter.Get(ctx, "cs")
+	if err != nil {
+		// If there's no counter but we have schemas, use the highest ID
+		if len(credentialSchemas) > 0 {
+			highestID := uint64(0)
+			for _, cs := range credentialSchemas {
+				if cs.Id > highestID {
+					highestID = cs.Id
+				}
+			}
+			counter = highestID
+		}
+	}
+	genesis.SchemaCounter = counter
+
 	return genesis
 }
