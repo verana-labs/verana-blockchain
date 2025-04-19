@@ -81,6 +81,10 @@ func (ms msgServer) RenewPermissionVP(goCtx context.Context, msg *types.MsgRenew
 		return nil, fmt.Errorf("validator permission not found: %w", err)
 	}
 
+	if err := IsValidPermission(validatorPerm, applicantPerm.Country, ctx.BlockTime()); err != nil {
+		return nil, fmt.Errorf("validator permission is not valid: %w", err)
+	}
+
 	// [MOD-PERM-MSG-2-2-3] Fee checks
 	validationFees, validationDeposit, err := ms.validateAndCalculateFees(ctx, msg.Creator, validatorPerm)
 	if err != nil {
@@ -181,6 +185,10 @@ func (ms msgServer) SetPermissionVPToValidated(goCtx context.Context, msg *types
 
 	if validatorPerm.Grantee != msg.Creator {
 		return nil, fmt.Errorf("creator is not the validator")
+	}
+
+	if err := IsValidPermission(validatorPerm, msg.Country, ctx.BlockTime()); err != nil {
+		return nil, fmt.Errorf("validator permission is not valid: %w", err)
 	}
 
 	// Get validation period and calculate expiration
@@ -631,6 +639,11 @@ func (ms msgServer) validateExtendPermissionAuthority(ctx sdk.Context, creator s
 		if err != nil {
 			return fmt.Errorf("validator permission not found: %w", err)
 		}
+
+		if err = IsValidPermission(validatorPerm, perm.Country, ctx.BlockTime()); err != nil {
+			return fmt.Errorf("validator permission is not valid: %w", err)
+		}
+
 		if validatorPerm.Grantee != creator {
 			return fmt.Errorf("creator is not the validator")
 		}
@@ -662,6 +675,10 @@ func (ms msgServer) RevokePermission(goCtx context.Context, msg *types.MsgRevoke
 	validatorPerm, err := ms.Keeper.GetPermissionByID(ctx, applicantPerm.ValidatorPermId)
 	if err != nil {
 		return nil, fmt.Errorf("validator permission not found: %w", err)
+	}
+
+	if err := IsValidPermission(validatorPerm, applicantPerm.Country, ctx.BlockTime()); err != nil {
+		return nil, fmt.Errorf("validator permission is not valid: %w", err)
 	}
 
 	if validatorPerm.Grantee != msg.Creator {

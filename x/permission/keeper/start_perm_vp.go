@@ -16,6 +16,11 @@ func (ms msgServer) validatePermissionChecks(ctx sdk.Context, msg *types.MsgStar
 		return types.Permission{}, fmt.Errorf("validator permission not found: %w", err)
 	}
 
+	// Check if validator permission is valid
+	if err := IsValidPermission(validatorPerm, msg.Country, ctx.BlockTime()); err != nil {
+		return types.Permission{}, fmt.Errorf("validator permission is not valid: %w", err)
+	}
+
 	// Check country compatibility
 	if validatorPerm.Country != "" && validatorPerm.Country != msg.Country {
 		return types.Permission{}, fmt.Errorf("validator permission country mismatch")
