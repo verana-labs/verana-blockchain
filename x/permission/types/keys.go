@@ -13,6 +13,10 @@ const (
 	MemStoreKey = "mem_permission"
 )
 
+const (
+	BondDenom = "uvna"
+)
+
 var (
 	ParamsKey            = []byte("p_permission")
 	PermissionKey        = collections.NewPrefix(0)

@@ -240,11 +240,12 @@ func (msg *MsgCreateOrUpdatePermissionSession) ValidateBasic() error {
 		return sdkerrors.ErrInvalidRequest.Wrap("invalid session ID: must be valid UUID")
 	}
 
-	// Validate required fields
-	if msg.ExecutorPermId == 0 {
-		return sdkerrors.ErrInvalidRequest.Wrap("executor permission ID required")
+	// At least one of issuer or verifier must be provided
+	if msg.IssuerPermId == 0 && msg.VerifierPermId == 0 {
+		return sdkerrors.ErrInvalidRequest.Wrap("at least one of issuer_perm_id or verifier_perm_id must be provided")
 	}
 
+	// Agent permission ID is required
 	if msg.AgentPermId == 0 {
 		return sdkerrors.ErrInvalidRequest.Wrap("agent permission ID required")
 	}

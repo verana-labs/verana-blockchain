@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"cosmossdk.io/math"
 	"fmt"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -13,6 +14,11 @@ func (ms msgServer) validatePermissionChecks(ctx sdk.Context, msg *types.MsgStar
 	validatorPerm, err := ms.Keeper.GetPermissionByID(ctx, msg.ValidatorPermId)
 	if err != nil {
 		return types.Permission{}, fmt.Errorf("validator permission not found: %w", err)
+	}
+
+	// Check if validator permission is valid
+	if err := IsValidPermission(validatorPerm, msg.Country, ctx.BlockTime()); err != nil {
+		return types.Permission{}, fmt.Errorf("validator permission is not valid: %w", err)
 	}
 
 	// Check country compatibility
@@ -35,29 +41,20 @@ func (ms msgServer) validatePermissionChecks(ctx sdk.Context, msg *types.MsgStar
 }
 
 func (ms msgServer) validateAndCalculateFees(ctx sdk.Context, creator string, validatorPerm types.Permission) (uint64, uint64, error) {
-	// TODO: After trust deposit module
 	// Get global variables
-	//trustUnitPrice := ms.Keeper.GetTrustUnitPrice(ctx)
-	//trustDepositRate := ms.Keeper.GetTrustDepositRate(ctx)
+	trustUnitPrice := ms.trustRegistryKeeper.GetTrustUnitPrice(ctx)
+	trustDepositRate := ms.trustDeposit.GetTrustDepositRate(ctx)
 
-	// Calculate validation fees
-	//validationFeesInDenom := validatorPerm.ValidationFees * trustUnitPrice
-	//validationTrustDepositInDenom := validationFeesInDenom * trustDepositRate
+	validationFeesInDenom := validatorPerm.ValidationFees * trustUnitPrice
+	validationTrustDepositInDenom := ms.Keeper.validationTrustDepositInDenomAmount(validationFeesInDenom, trustDepositRate)
 
-	// Check if account has sufficient balance
-	//creatorAddr, err := sdk.AccAddressFromBech32(creator)
-	//if err != nil {
-	//	return 0, 0, fmt.Errorf("invalid creator address: %w", err)
-	//}
-	//
-	//balance := ms.bankKeeper.GetBalance(ctx, creatorAddr, ms.Keeper.GetParams(ctx).FeeDenom)
-	//requiredAmount := validationFeesInDenom + validationTrustDepositInDenom
-	//
-	//if balance.Amount.LT(sdk.NewInt(int64(requiredAmount))) {
-	//	return 0, 0, fmt.Errorf("insufficient funds: required %d, got %d", requiredAmount, balance.Amount.Int64())
-	//}
+	return validationFeesInDenom, validationTrustDepositInDenom, nil
+}
 
-	return 0, 0, nil
+func (k Keeper) validationTrustDepositInDenomAmount(validationFeesInDenom uint64, trustDepositRate math.LegacyDec) uint64 {
+	validationFeesInDenomDec := math.LegacyNewDec(int64(validationFeesInDenom))
+	validationTrustDepositInDenom := validationFeesInDenomDec.Mul(trustDepositRate)
+	return validationTrustDepositInDenom.TruncateInt().Uint64()
 }
 
 func (ms msgServer) executeStartPermissionVP(ctx sdk.Context, msg *types.MsgStartPermissionVP, validatorPerm types.Permission, fees, deposit uint64) (uint64, error) {
@@ -68,17 +65,35 @@ func (ms msgServer) executeStartPermissionVP(ctx sdk.Context, msg *types.MsgStar
 		}
 	}
 
+	// Send validation fees to escrow account if greater than 0
+	if fees > 0 {
+		// Get sender address
+		senderAddr, err := sdk.AccAddressFromBech32(msg.Creator)
+		if err != nil {
+			return 0, fmt.Errorf("invalid creator address: %w", err)
+		}
+
+		// Transfer fees to module escrow account
+		err = ms.bankKeeper.SendCoinsFromAccountToModule(
+			ctx,
+			senderAddr,
+			types.ModuleName, // Using module name as the escrow account
+			sdk.NewCoins(sdk.NewInt64Coin(types.BondDenom, int64(fees))),
+		)
+		if err != nil {
+			return 0, fmt.Errorf("failed to transfer validation fees to escrow: %w", err)
+		}
+	}
+
 	// Create new permission entry
 	now := ctx.BlockTime()
 	newPerm := types.Permission{
-		SchemaId:          validatorPerm.SchemaId,
 		Type:              types.PermissionType(msg.Type),
+		SchemaId:          validatorPerm.SchemaId,
 		Did:               msg.Did,
 		Grantee:           msg.Creator,
 		Created:           &now,
 		CreatedBy:         msg.Creator,
-		Extended:          &now,
-		ExtendedBy:        msg.Creator,
 		Modified:          &now,
 		ValidationFees:    0,
 		IssuanceFees:      0,
@@ -104,42 +119,57 @@ func (ms msgServer) executeStartPermissionVP(ctx sdk.Context, msg *types.MsgStar
 func validatePermissionTypeCombination(requestedType, validatorType types.PermissionType, cs credentialschematypes.CredentialSchema) error {
 	switch requestedType {
 	case types.PermissionType_PERMISSION_TYPE_ISSUER:
-		if cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION &&
-			validatorType != types.PermissionType_PERMISSION_TYPE_ISSUER_GRANTOR {
-			return fmt.Errorf("issuer permission requires ISSUER_GRANTOR validator")
-		}
-		if cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_TRUST_REGISTRY_VALIDATION &&
-			validatorType != types.PermissionType_PERMISSION_TYPE_TRUST_REGISTRY {
-			return fmt.Errorf("issuer permission requires TRUST_REGISTRY validator")
+		if cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION {
+			if validatorType != types.PermissionType_PERMISSION_TYPE_ISSUER_GRANTOR {
+				return fmt.Errorf("issuer permission requires ISSUER_GRANTOR validator")
+			}
+		} else if cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_TRUST_REGISTRY_VALIDATION {
+			if validatorType != types.PermissionType_PERMISSION_TYPE_TRUST_REGISTRY {
+				return fmt.Errorf("issuer permission requires TRUST_REGISTRY validator")
+			}
+		} else {
+			return fmt.Errorf("issuer permission not supported with current schema settings")
 		}
 
 	case types.PermissionType_PERMISSION_TYPE_ISSUER_GRANTOR:
-		if cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION &&
-			validatorType != types.PermissionType_PERMISSION_TYPE_TRUST_REGISTRY {
-			return fmt.Errorf("issuer grantor permission requires TRUST_REGISTRY validator")
+		if cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION {
+			if validatorType != types.PermissionType_PERMISSION_TYPE_TRUST_REGISTRY {
+				return fmt.Errorf("issuer grantor permission requires TRUST_REGISTRY validator")
+			}
+		} else {
+			return fmt.Errorf("issuer grantor permission not supported with current schema settings")
 		}
 
 	case types.PermissionType_PERMISSION_TYPE_VERIFIER:
-		if cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION &&
-			validatorType != types.PermissionType_PERMISSION_TYPE_VERIFIER_GRANTOR {
-			return fmt.Errorf("verifier permission requires VERIFIER_GRANTOR validator")
-		}
-		if cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_TRUST_REGISTRY_VALIDATION &&
-			validatorType != types.PermissionType_PERMISSION_TYPE_TRUST_REGISTRY {
-			return fmt.Errorf("verifier permission requires TRUST_REGISTRY validator")
+		if cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION {
+			if validatorType != types.PermissionType_PERMISSION_TYPE_VERIFIER_GRANTOR {
+				return fmt.Errorf("verifier permission requires VERIFIER_GRANTOR validator")
+			}
+		} else if cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_TRUST_REGISTRY_VALIDATION {
+			if validatorType != types.PermissionType_PERMISSION_TYPE_TRUST_REGISTRY {
+				return fmt.Errorf("verifier permission requires TRUST_REGISTRY validator")
+			}
+		} else {
+			return fmt.Errorf("verifier permission not supported with current schema settings")
 		}
 
 	case types.PermissionType_PERMISSION_TYPE_VERIFIER_GRANTOR:
-		if cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION &&
-			validatorType != types.PermissionType_PERMISSION_TYPE_TRUST_REGISTRY {
-			return fmt.Errorf("verifier grantor permission requires TRUST_REGISTRY validator")
+		if cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION {
+			if validatorType != types.PermissionType_PERMISSION_TYPE_TRUST_REGISTRY {
+				return fmt.Errorf("verifier grantor permission requires TRUST_REGISTRY validator")
+			}
+		} else {
+			return fmt.Errorf("verifier grantor permission not supported with current schema settings")
 		}
 
 	case types.PermissionType_PERMISSION_TYPE_HOLDER:
-		if (cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION ||
-			cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_TRUST_REGISTRY_VALIDATION) &&
-			validatorType != types.PermissionType_PERMISSION_TYPE_ISSUER {
-			return fmt.Errorf("holder permission requires ISSUER validator")
+		if cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION ||
+			cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_TRUST_REGISTRY_VALIDATION {
+			if validatorType != types.PermissionType_PERMISSION_TYPE_ISSUER {
+				return fmt.Errorf("holder permission requires ISSUER validator")
+			}
+		} else {
+			return fmt.Errorf("holder permission not supported with current schema settings")
 		}
 	}
 

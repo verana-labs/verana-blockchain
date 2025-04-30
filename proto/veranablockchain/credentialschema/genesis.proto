@@ -16,4 +16,5 @@ message GenesisState {
     (amino.dont_omitempty) = true
   ];
   repeated CredentialSchema credential_schemas = 2 [(gogoproto.nullable) = false];
+  uint64 schema_counter = 3;
 }

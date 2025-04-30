@@ -1,6 +1,7 @@
 package types
 
 import (
+	"cosmossdk.io/math"
 	"fmt"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 )
@@ -8,11 +9,11 @@ import (
 var _ paramtypes.ParamSet = (*Params)(nil)
 
 const (
-	DefaultTrustDepositReclaimBurnRate = uint32(60) // 60%
-	DefaultTrustDepositShareValue      = uint64(1)  // Initial value: 1
-	DefaultTrustDepositRate            = uint32(20) // 20%
-	DefaultWalletUserAgentRewardRate   = uint32(20) // 20%
-	DefaultUserAgentRewardRate         = uint32(20) // 20%
+	DefaultTrustDepositReclaimBurnRate = "0.6" // 60%
+	DefaultTrustDepositShareValue      = "1.0" // Initial value: 1
+	DefaultTrustDepositRate            = "0.2" // 20%
+	DefaultWalletUserAgentRewardRate   = "0.2" // 20%
+	DefaultUserAgentRewardRate         = "0.2" // 20%
 )
 
 // ParamKeyTable the param key table for launch module
@@ -22,11 +23,11 @@ func ParamKeyTable() paramtypes.KeyTable {
 
 // NewParams creates a new Params instance
 func NewParams(
-	trustDepositReclaimBurnRate uint32,
-	trustDepositShareValue uint64,
-	trustDepositRate uint32,
-	walletUserAgentRewardRate uint32,
-	userAgentRewardRate uint32,
+	trustDepositReclaimBurnRate math.LegacyDec,
+	trustDepositShareValue math.LegacyDec,
+	trustDepositRate math.LegacyDec,
+	walletUserAgentRewardRate math.LegacyDec,
+	userAgentRewardRate math.LegacyDec,
 ) Params {
 	return Params{
 		TrustDepositReclaimBurnRate: trustDepositReclaimBurnRate,
@@ -39,12 +40,18 @@ func NewParams(
 
 // DefaultParams returns a default set of parameters
 func DefaultParams() Params {
+	TrustDepositReclaimBurnRate, _ := math.LegacyNewDecFromStr(DefaultTrustDepositReclaimBurnRate)
+	TrustDepositShareValue, _ := math.LegacyNewDecFromStr(DefaultTrustDepositShareValue)
+	TrustDepositRate, _ := math.LegacyNewDecFromStr(DefaultTrustDepositRate)
+	WalletUserAgentRewardRate, _ := math.LegacyNewDecFromStr(DefaultWalletUserAgentRewardRate)
+	UserAgentRewardRate, _ := math.LegacyNewDecFromStr(DefaultUserAgentRewardRate)
+
 	return NewParams(
-		DefaultTrustDepositReclaimBurnRate,
-		DefaultTrustDepositShareValue,
-		DefaultTrustDepositRate,
-		DefaultWalletUserAgentRewardRate,
-		DefaultUserAgentRewardRate,
+		TrustDepositReclaimBurnRate,
+		TrustDepositShareValue,
+		TrustDepositRate,
+		WalletUserAgentRewardRate,
+		UserAgentRewardRate,
 	)
 }
 
@@ -54,72 +61,78 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 		paramtypes.NewParamSetPair(
 			[]byte("TrustDepositReclaimBurnRate"),
 			&p.TrustDepositReclaimBurnRate,
-			validatePercentage,
+			validateLegacyDec,
 		),
 		paramtypes.NewParamSetPair(
 			[]byte("TrustDepositShareValue"),
 			&p.TrustDepositShareValue,
-			validatePositiveUint64,
+			validatePositiveLegacyDec,
 		),
 		paramtypes.NewParamSetPair(
 			[]byte("TrustDepositRate"),
 			&p.TrustDepositRate,
-			validatePercentage,
+			validateLegacyDec,
 		),
 		paramtypes.NewParamSetPair(
 			[]byte("WalletUserAgentRewardRate"),
 			&p.WalletUserAgentRewardRate,
-			validatePercentage,
+			validateLegacyDec,
 		),
 		paramtypes.NewParamSetPair(
 			[]byte("UserAgentRewardRate"),
 			&p.UserAgentRewardRate,
-			validatePercentage,
+			validateLegacyDec,
 		),
 	}
 }
 
 // Validate validates the set of params
 func (p Params) Validate() error {
-	if err := validatePercentage(p.TrustDepositReclaimBurnRate); err != nil {
+	if err := validateLegacyDec(p.TrustDepositReclaimBurnRate); err != nil {
 		return err
 	}
-	if err := validatePositiveUint64(p.TrustDepositShareValue); err != nil {
+	if err := validatePositiveLegacyDec(p.TrustDepositShareValue); err != nil {
 		return err
 	}
-	if err := validatePercentage(p.TrustDepositRate); err != nil {
+	if err := validateLegacyDec(p.TrustDepositRate); err != nil {
 		return err
 	}
-	if err := validatePercentage(p.WalletUserAgentRewardRate); err != nil {
+	if err := validateLegacyDec(p.WalletUserAgentRewardRate); err != nil {
 		return err
 	}
-	if err := validatePercentage(p.UserAgentRewardRate); err != nil {
+	if err := validateLegacyDec(p.UserAgentRewardRate); err != nil {
 		return err
 	}
 	return nil
 }
 
-func validatePercentage(i interface{}) error {
-	v, ok := i.(uint32)
+// validateLegacyDec validates that the parameter is a valid decimal between 0 and 1
+func validateLegacyDec(i interface{}) error {
+	v, ok := i.(math.LegacyDec)
 	if !ok {
 		return fmt.Errorf("invalid parameter type: %T", i)
 	}
 
-	if v > 100 {
-		return fmt.Errorf("percentage value cannot be greater than 100: %d", v)
+	if v.IsNegative() {
+		return fmt.Errorf("value cannot be negative: %s", v)
+	}
+
+	if v.GT(math.LegacyOneDec()) {
+		return fmt.Errorf("value cannot be greater than 1: %s", v)
 	}
 
 	return nil
 }
 
-func validatePositiveUint64(i interface{}) error {
-	v, ok := i.(uint64)
+// validatePositiveLegacyDec validates that the parameter is a positive decimal
+func validatePositiveLegacyDec(i interface{}) error {
+	v, ok := i.(math.LegacyDec)
 	if !ok {
 		return fmt.Errorf("invalid parameter type: %T", i)
 	}
 
-	if v == 0 {
-		return fmt.Errorf("value must be positive: %d", v)
+	if v.IsNegative() || v.IsZero() {
+		return fmt.Errorf("value must be positive: %s", v)
 	}
 
 	return nil

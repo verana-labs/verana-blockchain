@@ -210,6 +210,7 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.CredentialSchemaKeeper,
 		in.TrustRegistryKeeper,
 		in.TrustDepositKeeper,
+		in.BankKeeper,
 	)
 	m := NewAppModule(
 		in.Cdc,

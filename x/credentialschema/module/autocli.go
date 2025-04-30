@@ -45,7 +45,7 @@ $ veranad query credentialschema list-schemas --tr_id 1 --modified_after 2024-01
 				},
 				{
 					RpcMethod: "GetCredentialSchema",
-					Use:       "get [id]",
+					Use:       "get-schema [id]",
 					Short:     "Get a credential schema by ID",
 					Long: `Get a credential schema by its ID.
 
@@ -57,7 +57,7 @@ $ veranad query credentialschema get 1`,
 				},
 				{
 					RpcMethod: "RenderJsonSchema",
-					Use:       "schema [id]",
+					Use:       "render-json-schema [id]",
 					Short:     "Get the JSON schema definition",
 					Long: `Render the JSON schema definition for a credential schema.
 Response will be in application/schema+json format.

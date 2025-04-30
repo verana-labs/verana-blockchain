@@ -4,6 +4,7 @@
 package types
 
 import (
+	cosmossdk_io_math "cosmossdk.io/math"
 	fmt "fmt"
 	_ "github.com/cosmos/cosmos-sdk/types/tx/amino"
 	_ "github.com/cosmos/gogoproto/gogoproto"
@@ -26,11 +27,11 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Params defines the parameters for the module.
 type Params struct {
-	TrustDepositReclaimBurnRate uint32 `protobuf:"varint,1,opt,name=trust_deposit_reclaim_burn_rate,json=trustDepositReclaimBurnRate,proto3" json:"trust_deposit_reclaim_burn_rate,omitempty"`
-	TrustDepositShareValue      uint64 `protobuf:"varint,2,opt,name=trust_deposit_share_value,json=trustDepositShareValue,proto3" json:"trust_deposit_share_value,omitempty"`
-	TrustDepositRate            uint32 `protobuf:"varint,3,opt,name=trust_deposit_rate,json=trustDepositRate,proto3" json:"trust_deposit_rate,omitempty"`
-	WalletUserAgentRewardRate   uint32 `protobuf:"varint,4,opt,name=wallet_user_agent_reward_rate,json=walletUserAgentRewardRate,proto3" json:"wallet_user_agent_reward_rate,omitempty"`
-	UserAgentRewardRate         uint32 `protobuf:"varint,5,opt,name=user_agent_reward_rate,json=userAgentRewardRate,proto3" json:"user_agent_reward_rate,omitempty"`
+	TrustDepositReclaimBurnRate cosmossdk_io_math.LegacyDec `protobuf:"bytes,1,opt,name=trust_deposit_reclaim_burn_rate,json=trustDepositReclaimBurnRate,proto3,customtype=cosmossdk.io/math.LegacyDec" json:"trust_deposit_reclaim_burn_rate" yaml:"trust_deposit_reclaim_burn_rate"`
+	TrustDepositShareValue      cosmossdk_io_math.LegacyDec `protobuf:"bytes,2,opt,name=trust_deposit_share_value,json=trustDepositShareValue,proto3,customtype=cosmossdk.io/math.LegacyDec" json:"trust_deposit_share_value" yaml:"trust_deposit_share_value"`
+	TrustDepositRate            cosmossdk_io_math.LegacyDec `protobuf:"bytes,3,opt,name=trust_deposit_rate,json=trustDepositRate,proto3,customtype=cosmossdk.io/math.LegacyDec" json:"trust_deposit_rate" yaml:"trust_deposit_rate"`
+	WalletUserAgentRewardRate   cosmossdk_io_math.LegacyDec `protobuf:"bytes,4,opt,name=wallet_user_agent_reward_rate,json=walletUserAgentRewardRate,proto3,customtype=cosmossdk.io/math.LegacyDec" json:"wallet_user_agent_reward_rate" yaml:"wallet_user_agent_reward_rate"`
+	UserAgentRewardRate         cosmossdk_io_math.LegacyDec `protobuf:"bytes,5,opt,name=user_agent_reward_rate,json=userAgentRewardRate,proto3,customtype=cosmossdk.io/math.LegacyDec" json:"user_agent_reward_rate" yaml:"user_agent_reward_rate"`
 }
 
 func (m *Params) Reset()         { *m = Params{} }
@@ -66,41 +67,6 @@ func (m *Params) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Params proto.InternalMessageInfo
 
-func (m *Params) GetTrustDepositReclaimBurnRate() uint32 {
-	if m != nil {
-		return m.TrustDepositReclaimBurnRate
-	}
-	return 0
-}
-
-func (m *Params) GetTrustDepositShareValue() uint64 {
-	if m != nil {
-		return m.TrustDepositShareValue
-	}
-	return 0
-}
-
-func (m *Params) GetTrustDepositRate() uint32 {
-	if m != nil {
-		return m.TrustDepositRate
-	}
-	return 0
-}
-
-func (m *Params) GetWalletUserAgentRewardRate() uint32 {
-	if m != nil {
-		return m.WalletUserAgentRewardRate
-	}
-	return 0
-}
-
-func (m *Params) GetUserAgentRewardRate() uint32 {
-	if m != nil {
-		return m.UserAgentRewardRate
-	}
-	return 0
-}
-
 func init() {
 	proto.RegisterType((*Params)(nil), "veranablockchain.trustdeposit.Params")
 }
@@ -110,29 +76,35 @@ func init() {
 }
 
 var fileDescriptor_54da5875c1c486fc = []byte{
-	// 347 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x91, 0xcd, 0x4a, 0xf3, 0x40,
-	0x14, 0x86, 0x3b, 0xfd, 0xfa, 0x75, 0x31, 0x20, 0x68, 0x94, 0xd2, 0x56, 0x9a, 0x16, 0x17, 0x52,
-	0x8a, 0x36, 0x8b, 0xae, 0x14, 0x04, 0x2d, 0xbd, 0x00, 0x89, 0xa8, 0xe0, 0x66, 0x38, 0x49, 0x87,
-	0x34, 0x98, 0x64, 0xc2, 0xfc, 0xb4, 0x7a, 0x0b, 0xae, 0xbc, 0x04, 0x2f, 0xc1, 0xcb, 0x70, 0xd9,
-	0xa5, 0x3b, 0xa5, 0x5d, 0xe8, 0x65, 0xc8, 0xcc, 0x28, 0xf4, 0x87, 0x6e, 0xc2, 0x21, 0xf3, 0xbc,
-	0xcf, 0x3b, 0xcc, 0xc1, 0x9d, 0x31, 0xe5, 0x90, 0x41, 0x90, 0xb0, 0xf0, 0x3e, 0x1c, 0x41, 0x9c,
-	0x79, 0x92, 0x2b, 0x21, 0x87, 0x34, 0x67, 0x22, 0x96, 0x5e, 0x0e, 0x1c, 0x52, 0xd1, 0xcd, 0x39,
-	0x93, 0xcc, 0x69, 0xac, 0xb2, 0xdd, 0x45, 0xb6, 0xbe, 0x03, 0x69, 0x9c, 0x31, 0xcf, 0x7c, 0x6d,
-	0xa2, 0xbe, 0x17, 0xb1, 0x88, 0x99, 0xd1, 0xd3, 0x93, 0xfd, 0x7b, 0xf0, 0x51, 0xc4, 0xe5, 0x4b,
-	0x23, 0x76, 0x06, 0xb8, 0x69, 0x1c, 0xe4, 0x57, 0x42, 0x38, 0x0d, 0x13, 0x88, 0x53, 0x12, 0x28,
-	0x9e, 0x11, 0x0e, 0x92, 0x56, 0x51, 0x0b, 0xb5, 0xb7, 0xfc, 0x7d, 0x83, 0x0d, 0x2c, 0xe5, 0x5b,
-	0xa8, 0xaf, 0x78, 0xe6, 0x83, 0xa4, 0xce, 0x09, 0xae, 0x2d, 0x5b, 0xc4, 0x08, 0x38, 0x25, 0x63,
-	0x48, 0x14, 0xad, 0x16, 0x5b, 0xa8, 0x5d, 0xf2, 0x2b, 0x8b, 0xf9, 0x2b, 0x7d, 0x7c, 0xa3, 0x4f,
-	0x9d, 0x23, 0xec, 0xac, 0x5c, 0x40, 0x77, 0xfe, 0x33, 0x9d, 0xdb, 0x4b, 0x9d, 0xba, 0xe8, 0x1c,
-	0x37, 0x26, 0x90, 0x24, 0x54, 0x12, 0x25, 0x28, 0x27, 0x10, 0xd1, 0x4c, 0x5f, 0x79, 0x02, 0x7c,
-	0x68, 0x83, 0x25, 0x13, 0xac, 0x59, 0xe8, 0x5a, 0x50, 0x7e, 0xa1, 0x11, 0xdf, 0x10, 0xc6, 0xd0,
-	0xc3, 0x95, 0x0d, 0xd1, 0xff, 0x26, 0xba, 0xab, 0xd6, 0x43, 0xa7, 0xde, 0xf7, 0x4b, 0x13, 0x3d,
-	0x7d, 0xbd, 0x76, 0x0e, 0xd7, 0xb6, 0xf5, 0xb0, 0xbc, 0x2f, 0xfb, 0xac, 0xfd, 0xdb, 0xb7, 0x99,
-	0x8b, 0xa6, 0x33, 0x17, 0x7d, 0xce, 0x5c, 0xf4, 0x3c, 0x77, 0x0b, 0xd3, 0xb9, 0x5b, 0x78, 0x9f,
-	0xbb, 0x85, 0xbb, 0xb3, 0x28, 0x96, 0x23, 0x15, 0x74, 0x43, 0x96, 0x7a, 0x56, 0x76, 0x9c, 0x40,
-	0x20, 0xfe, 0xe6, 0xcd, 0x66, 0xf9, 0x98, 0x53, 0x11, 0x94, 0xcd, 0x06, 0x7b, 0x3f, 0x01, 0x00,
-	0x00, 0xff, 0xff, 0x14, 0x61, 0x12, 0xef, 0x37, 0x02, 0x00, 0x00,
+	// 438 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x93, 0xcf, 0xaa, 0xd3, 0x40,
+	0x14, 0xc6, 0x33, 0x6a, 0x0b, 0x66, 0xa5, 0x51, 0x4a, 0xff, 0xd0, 0xa4, 0x04, 0x29, 0x52, 0x30,
+	0x59, 0xb8, 0x2b, 0x08, 0x5a, 0x0a, 0x2e, 0x54, 0x90, 0x88, 0x0a, 0x6e, 0xc2, 0x49, 0x3a, 0x24,
+	0xa1, 0x49, 0x26, 0xcc, 0x4c, 0x5a, 0xb3, 0x75, 0x29, 0x08, 0x82, 0x2f, 0xe0, 0x23, 0xf8, 0x18,
+	0xdd, 0xd9, 0xa5, 0xb8, 0x28, 0xd2, 0x2e, 0xbc, 0xeb, 0xfb, 0x04, 0x97, 0xcc, 0xdc, 0x0b, 0xfd,
+	0x7b, 0x6f, 0x36, 0xe1, 0x90, 0xef, 0xe4, 0xfb, 0x7e, 0xe7, 0x90, 0xa3, 0x0e, 0x66, 0x98, 0x42,
+	0x0a, 0x5e, 0x4c, 0xfc, 0xa9, 0x1f, 0x42, 0x94, 0xda, 0x9c, 0xe6, 0x8c, 0x4f, 0x70, 0x46, 0x58,
+	0xc4, 0xed, 0x0c, 0x28, 0x24, 0xcc, 0xca, 0x28, 0xe1, 0x44, 0xeb, 0xee, 0xf7, 0x5a, 0xdb, 0xbd,
+	0xed, 0xfb, 0x90, 0x44, 0x29, 0xb1, 0xc5, 0x53, 0x7e, 0xd1, 0x7e, 0x18, 0x90, 0x80, 0x88, 0xd2,
+	0x2e, 0x2b, 0xf9, 0xd6, 0xfc, 0x5d, 0x53, 0xeb, 0x6f, 0x85, 0xb1, 0xf6, 0x03, 0xa9, 0x86, 0x30,
+	0x71, 0x2f, 0x5d, 0x5c, 0x8a, 0xfd, 0x18, 0xa2, 0xc4, 0xf5, 0x72, 0x9a, 0xba, 0x14, 0x38, 0x6e,
+	0xa2, 0x1e, 0x7a, 0x7c, 0x77, 0xf4, 0x66, 0xb1, 0x32, 0x94, 0xbf, 0x2b, 0xa3, 0xe3, 0x13, 0x96,
+	0x10, 0xc6, 0x26, 0x53, 0x2b, 0x22, 0x76, 0x02, 0x3c, 0xb4, 0x5e, 0xe3, 0x00, 0xfc, 0x62, 0x8c,
+	0xfd, 0xf3, 0x95, 0xd1, 0x2f, 0x20, 0x89, 0x87, 0xe6, 0x0d, 0x9e, 0xa6, 0xd3, 0x11, 0x1d, 0x63,
+	0xd9, 0xe0, 0x48, 0x7d, 0x94, 0xd3, 0xd4, 0x01, 0x8e, 0xb5, 0x2f, 0x48, 0x6d, 0xed, 0x3a, 0xb0,
+	0x10, 0x28, 0x76, 0x67, 0x10, 0xe7, 0xb8, 0x79, 0x4b, 0xf0, 0xbc, 0xac, 0xc6, 0xd3, 0x3b, 0xc6,
+	0xb3, 0xe5, 0x66, 0x3a, 0x8d, 0x6d, 0x92, 0x77, 0xa5, 0xf2, 0xa1, 0x14, 0xb4, 0x54, 0xd5, 0xf6,
+	0xa6, 0x28, 0x97, 0x71, 0x5b, 0x84, 0x3f, 0xaf, 0x16, 0xde, 0x3a, 0xba, 0x0c, 0x31, 0xff, 0xbd,
+	0x9d, 0xf9, 0xcb, 0xa1, 0xbf, 0x21, 0xb5, 0x3b, 0x87, 0x38, 0xc6, 0xdc, 0xcd, 0x19, 0xa6, 0x2e,
+	0x04, 0x38, 0x2d, 0x57, 0x37, 0x07, 0x3a, 0x91, 0xd9, 0x77, 0x44, 0xf6, 0xab, 0x6a, 0xd9, 0x8f,
+	0x64, 0xf6, 0xb5, 0x8e, 0xa6, 0xd3, 0x92, 0xfa, 0x7b, 0x86, 0xe9, 0x8b, 0x52, 0x75, 0x84, 0x28,
+	0x78, 0x0a, 0xb5, 0x71, 0x82, 0xa3, 0x26, 0x38, 0xc6, 0xd5, 0x38, 0xba, 0x92, 0xe3, 0x14, 0xc0,
+	0x83, 0xfc, 0x30, 0x7a, 0x68, 0x9f, 0xfd, 0x34, 0xd0, 0xd7, 0xff, 0xbf, 0x06, 0xfd, 0x83, 0xeb,
+	0xf8, 0xbc, 0x7b, 0x1f, 0xf2, 0x37, 0x1e, 0x7d, 0x5c, 0xac, 0x75, 0xb4, 0x5c, 0xeb, 0xe8, 0xdf,
+	0x5a, 0x47, 0xdf, 0x37, 0xba, 0xb2, 0xdc, 0xe8, 0xca, 0x9f, 0x8d, 0xae, 0x7c, 0x7a, 0x16, 0x44,
+	0x3c, 0xcc, 0x3d, 0xcb, 0x27, 0x89, 0x2d, 0xcd, 0x9e, 0xc4, 0xe0, 0xb1, 0xab, 0xfa, 0xb4, 0x33,
+	0x2f, 0x32, 0xcc, 0xbc, 0xba, 0xb8, 0x98, 0xa7, 0x17, 0x01, 0x00, 0x00, 0xff, 0xff, 0xf5, 0xf4,
+	0xbd, 0x2d, 0xa7, 0x03, 0x00, 0x00,
 }
 
 func (this *Params) Equal(that interface{}) bool {
@@ -154,19 +126,19 @@ func (this *Params) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if this.TrustDepositReclaimBurnRate != that1.TrustDepositReclaimBurnRate {
+	if !this.TrustDepositReclaimBurnRate.Equal(that1.TrustDepositReclaimBurnRate) {
 		return false
 	}
-	if this.TrustDepositShareValue != that1.TrustDepositShareValue {
+	if !this.TrustDepositShareValue.Equal(that1.TrustDepositShareValue) {
 		return false
 	}
-	if this.TrustDepositRate != that1.TrustDepositRate {
+	if !this.TrustDepositRate.Equal(that1.TrustDepositRate) {
 		return false
 	}
-	if this.WalletUserAgentRewardRate != that1.WalletUserAgentRewardRate {
+	if !this.WalletUserAgentRewardRate.Equal(that1.WalletUserAgentRewardRate) {
 		return false
 	}
-	if this.UserAgentRewardRate != that1.UserAgentRewardRate {
+	if !this.UserAgentRewardRate.Equal(that1.UserAgentRewardRate) {
 		return false
 	}
 	return true
@@ -191,31 +163,56 @@ func (m *Params) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.UserAgentRewardRate != 0 {
-		i = encodeVarintParams(dAtA, i, uint64(m.UserAgentRewardRate))
-		i--
-		dAtA[i] = 0x28
+	{
+		size := m.UserAgentRewardRate.Size()
+		i -= size
+		if _, err := m.UserAgentRewardRate.MarshalTo(dAtA[i:]); err != nil {
+			return 0, err
+		}
+		i = encodeVarintParams(dAtA, i, uint64(size))
 	}
-	if m.WalletUserAgentRewardRate != 0 {
-		i = encodeVarintParams(dAtA, i, uint64(m.WalletUserAgentRewardRate))
-		i--
-		dAtA[i] = 0x20
+	i--
+	dAtA[i] = 0x2a
+	{
+		size := m.WalletUserAgentRewardRate.Size()
+		i -= size
+		if _, err := m.WalletUserAgentRewardRate.MarshalTo(dAtA[i:]); err != nil {
+			return 0, err
+		}
+		i = encodeVarintParams(dAtA, i, uint64(size))
 	}
-	if m.TrustDepositRate != 0 {
-		i = encodeVarintParams(dAtA, i, uint64(m.TrustDepositRate))
-		i--
-		dAtA[i] = 0x18
+	i--
+	dAtA[i] = 0x22
+	{
+		size := m.TrustDepositRate.Size()
+		i -= size
+		if _, err := m.TrustDepositRate.MarshalTo(dAtA[i:]); err != nil {
+			return 0, err
+		}
+		i = encodeVarintParams(dAtA, i, uint64(size))
 	}
-	if m.TrustDepositShareValue != 0 {
-		i = encodeVarintParams(dAtA, i, uint64(m.TrustDepositShareValue))
-		i--
-		dAtA[i] = 0x10
+	i--
+	dAtA[i] = 0x1a
+	{
+		size := m.TrustDepositShareValue.Size()
+		i -= size
+		if _, err := m.TrustDepositShareValue.MarshalTo(dAtA[i:]); err != nil {
+			return 0, err
+		}
+		i = encodeVarintParams(dAtA, i, uint64(size))
 	}
-	if m.TrustDepositReclaimBurnRate != 0 {
-		i = encodeVarintParams(dAtA, i, uint64(m.TrustDepositReclaimBurnRate))
-		i--
-		dAtA[i] = 0x8
+	i--
+	dAtA[i] = 0x12
+	{
+		size := m.TrustDepositReclaimBurnRate.Size()
+		i -= size
+		if _, err := m.TrustDepositReclaimBurnRate.MarshalTo(dAtA[i:]); err != nil {
+			return 0, err
+		}
+		i = encodeVarintParams(dAtA, i, uint64(size))
 	}
+	i--
+	dAtA[i] = 0xa
 	return len(dAtA) - i, nil
 }
 
@@ -236,21 +233,16 @@ func (m *Params) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.TrustDepositReclaimBurnRate != 0 {
-		n += 1 + sovParams(uint64(m.TrustDepositReclaimBurnRate))
-	}
-	if m.TrustDepositShareValue != 0 {
-		n += 1 + sovParams(uint64(m.TrustDepositShareValue))
-	}
-	if m.TrustDepositRate != 0 {
-		n += 1 + sovParams(uint64(m.TrustDepositRate))
-	}
-	if m.WalletUserAgentRewardRate != 0 {
-		n += 1 + sovParams(uint64(m.WalletUserAgentRewardRate))
-	}
-	if m.UserAgentRewardRate != 0 {
-		n += 1 + sovParams(uint64(m.UserAgentRewardRate))
-	}
+	l = m.TrustDepositReclaimBurnRate.Size()
+	n += 1 + l + sovParams(uint64(l))
+	l = m.TrustDepositShareValue.Size()
+	n += 1 + l + sovParams(uint64(l))
+	l = m.TrustDepositRate.Size()
+	n += 1 + l + sovParams(uint64(l))
+	l = m.WalletUserAgentRewardRate.Size()
+	n += 1 + l + sovParams(uint64(l))
+	l = m.UserAgentRewardRate.Size()
+	n += 1 + l + sovParams(uint64(l))
 	return n
 }
 
@@ -290,10 +282,10 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 		}
 		switch fieldNum {
 		case 1:
-			if wireType != 0 {
+			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field TrustDepositReclaimBurnRate", wireType)
 			}
-			m.TrustDepositReclaimBurnRate = 0
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowParams
@@ -303,16 +295,31 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.TrustDepositReclaimBurnRate |= uint32(b&0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthParams
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthParams
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.TrustDepositReclaimBurnRate.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		case 2:
-			if wireType != 0 {
+			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field TrustDepositShareValue", wireType)
 			}
-			m.TrustDepositShareValue = 0
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowParams
@@ -322,16 +329,31 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.TrustDepositShareValue |= uint64(b&0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthParams
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthParams
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.TrustDepositShareValue.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		case 3:
-			if wireType != 0 {
+			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field TrustDepositRate", wireType)
 			}
-			m.TrustDepositRate = 0
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowParams
@@ -341,16 +363,31 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.TrustDepositRate |= uint32(b&0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthParams
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthParams
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.TrustDepositRate.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		case 4:
-			if wireType != 0 {
+			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field WalletUserAgentRewardRate", wireType)
 			}
-			m.WalletUserAgentRewardRate = 0
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowParams
@@ -360,16 +397,31 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.WalletUserAgentRewardRate |= uint32(b&0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthParams
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthParams
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.WalletUserAgentRewardRate.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		case 5:
-			if wireType != 0 {
+			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field UserAgentRewardRate", wireType)
 			}
-			m.UserAgentRewardRate = 0
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowParams
@@ -379,11 +431,26 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.UserAgentRewardRate |= uint32(b&0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthParams
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthParams
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.UserAgentRewardRate.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipParams(dAtA[iNdEx:])

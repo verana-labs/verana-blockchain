@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"fmt"
+	"time"
 
 	"cosmossdk.io/collections"
 
@@ -31,6 +32,7 @@ type (
 		credentialSchemaKeeper types.CredentialSchemaKeeper
 		trustRegistryKeeper    types.TrustRegistryKeeper
 		trustDeposit           types.TrustDepositKeeper
+		bankKeeper             types.BankKeeper
 	}
 )
 
@@ -42,6 +44,7 @@ func NewKeeper(
 	credentialSchemaKeeper types.CredentialSchemaKeeper,
 	trustRegistryKeeper types.TrustRegistryKeeper,
 	trustDeposit types.TrustDepositKeeper,
+	bankKeeper types.BankKeeper,
 ) Keeper {
 	sb := collections.NewSchemaBuilder(storeService)
 
@@ -60,6 +63,7 @@ func NewKeeper(
 		credentialSchemaKeeper: credentialSchemaKeeper,
 		trustRegistryKeeper:    trustRegistryKeeper,
 		trustDeposit:           trustDeposit,
+		bankKeeper:             bankKeeper,
 	}
 }
 
@@ -109,4 +113,38 @@ func (k Keeper) getNextPermissionID(ctx sdk.Context) (uint64, error) {
 
 func (k Keeper) UpdatePermission(ctx sdk.Context, perm types.Permission) error {
 	return k.Permission.Set(ctx, perm.Id, perm)
+}
+
+// IsValidPermission checks if a permission is valid for a given country code and time
+// A valid permission:
+// - Has a matching country (permission country is null or matches the provided country)
+// - Is currently effective (effective_from ≤ now < effective_until)
+// - Is not revoked or terminated
+func IsValidPermission(perm types.Permission, country string, checkTime time.Time) error {
+	// Check country compatibility
+	if perm.Country != "" && perm.Country != country {
+		return fmt.Errorf("permission country mismatch: permission has %s, requested %s",
+			perm.Country, country)
+	}
+
+	// Check if permission is effective at the given time
+	if perm.EffectiveFrom != nil && checkTime.Before(*perm.EffectiveFrom) {
+		return fmt.Errorf("permission not yet effective: begins at %v", perm.EffectiveFrom)
+	}
+
+	if perm.EffectiveUntil != nil && !checkTime.Before(*perm.EffectiveUntil) {
+		return fmt.Errorf("permission expired: ended at %v", perm.EffectiveUntil)
+	}
+
+	// Check if permission is revoked
+	if perm.Revoked != nil {
+		return fmt.Errorf("permission is revoked since %v", perm.Revoked)
+	}
+
+	// Check if permission is terminated
+	if perm.Terminated != nil {
+		return fmt.Errorf("permission is terminated since %v", perm.Terminated)
+	}
+
+	return nil
 }

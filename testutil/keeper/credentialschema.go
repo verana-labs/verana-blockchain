@@ -28,14 +28,24 @@ type MockBankKeeper struct {
 	bankBalances map[string]sdk.Coins
 }
 
+func (k *MockBankKeeper) SendCoins(ctx context.Context, from, to sdk.AccAddress, amt sdk.Coins) error {
+	// For testing purposes, just return nil (success)
+	return nil
+}
+
+func (k *MockBankKeeper) HasBalance(ctx context.Context, addr sdk.AccAddress, amt sdk.Coin) bool {
+	// For testing purposes, just return nil (success)
+	return true
+}
+
 func (k *MockBankKeeper) BurnCoins(ctx context.Context, name string, amt sdk.Coins) error {
-	//TODO implement me
-	panic("implement me")
+	// For testing purposes, just return nil (success)
+	return nil
 }
 
 func (k *MockBankKeeper) SendCoinsFromModuleToAccount(ctx context.Context, senderModule string, recipientAddr sdk.AccAddress, amt sdk.Coins) error {
-	//TODO implement me
-	panic("implement me")
+	// For testing purposes, just return nil (success)
+	return nil
 }
 
 func (k *MockBankKeeper) SendCoinsFromModuleToModule(ctx sdk.Context, senderModule, recipientModule string, amt sdk.Coins) error {

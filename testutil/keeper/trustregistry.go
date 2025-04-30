@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"cosmossdk.io/math"
 	"testing"
 
 	"cosmossdk.io/log"
@@ -56,6 +57,24 @@ func TrustregistryKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
 
 // MockTrustDepositKeeper is a mock implementation of the TrustDepositKeeper interface for testing
 type MockTrustDepositKeeper struct{}
+
+func (m *MockTrustDepositKeeper) GetUserAgentRewardRate(ctx sdk.Context) math.LegacyDec {
+	//unimplemented
+	v, _ := math.LegacyNewDecFromStr("0")
+	return v
+}
+
+func (m *MockTrustDepositKeeper) GetWalletUserAgentRewardRate(ctx sdk.Context) math.LegacyDec {
+	//unimplemented
+	v, _ := math.LegacyNewDecFromStr("0")
+	return v
+}
+
+func (m *MockTrustDepositKeeper) GetTrustDepositRate(ctx sdk.Context) math.LegacyDec {
+	//unimplemented
+	v, _ := math.LegacyNewDecFromStr("0")
+	return v
+}
 
 // AdjustTrustDeposit implements the TrustDepositKeeper interface
 func (m *MockTrustDepositKeeper) AdjustTrustDeposit(ctx sdk.Context, account string, augend int64) error {

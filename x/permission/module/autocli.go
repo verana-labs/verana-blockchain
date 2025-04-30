@@ -320,30 +320,34 @@ For active VPs, only the grantee can request termination unless it's a HOLDER ty
 				},
 				{
 					RpcMethod: "CreateOrUpdatePermissionSession",
-					Use:       "create-or-update-perm-session [id] [executor-perm-id] [agent-perm-id]",
+					Use:       "create-or-update-perm-session [id] [agent-perm-id]",
 					Short:     "Create or update a permission session",
 					Long: `Create or update a permission session with the specified parameters:
 - id: UUID of the session
-- executor-perm-id: ID of the executor permission (ISSUER or VERIFIER)
 - agent-perm-id: ID of the agent permission (HOLDER)
 Optional parameters:
-- beneficiary-perm-id: ID of the beneficiary permission (required for VERIFIER)
-- wallet-agent-perm-id: ID of the wallet agent permission if different from agent`,
+- issuer-perm-id: ID of the issuer permission
+- verifier-perm-id: ID of the verifier permission
+- wallet-agent-perm-id: ID of the wallet agent permission if different from agent
+
+At least one of issuer-perm-id or verifier-perm-id must be provided.`,
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{
 							ProtoField: "id",
-						},
-						{
-							ProtoField: "executor_perm_id",
 						},
 						{
 							ProtoField: "agent_perm_id",
 						},
 					},
 					FlagOptions: map[string]*autocliv1.FlagOptions{
-						"beneficiary_perm_id": {
-							Name:         "beneficiary-perm-id",
-							Usage:        "ID of the beneficiary permission (required for VERIFIER)",
+						"issuer_perm_id": {
+							Name:         "issuer-perm-id",
+							Usage:        "ID of the issuer permission",
+							DefaultValue: "0",
+						},
+						"verifier_perm_id": {
+							Name:         "verifier-perm-id",
+							Usage:        "ID of the verifier permission",
 							DefaultValue: "0",
 						},
 						"wallet_agent_perm_id": {

@@ -281,9 +281,10 @@ test-sim-profile:
 
 .PHONY: test-sim-profile test-sim-benchmark
 
-test-cover:
+test-coverage:
+	@echo "Running tests with coverage..."
 	@export VERSION=$(VERSION); bash -x scripts/test_cover.sh
-.PHONY: test-cover
+.PHONY: test-coverage
 
 benchmark:
 	@go test -mod=readonly -bench=. $(PACKAGES_NOSIMULATION)

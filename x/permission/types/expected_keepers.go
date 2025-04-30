@@ -2,6 +2,7 @@ package types
 
 import (
 	"context"
+	"cosmossdk.io/math"
 
 	credentialschematypes "github.com/verana-labs/verana-blockchain/x/credentialschema/types"
 	trustregistrytypes "github.com/verana-labs/verana-blockchain/x/trustregistry/types"
@@ -18,7 +19,10 @@ type AccountKeeper interface {
 // BankKeeper defines the expected interface for the Bank module.
 type BankKeeper interface {
 	SpendableCoins(context.Context, sdk.AccAddress) sdk.Coins
-	// Methods imported from bank should be defined here
+	SendCoinsFromAccountToModule(ctx context.Context, senderAddr sdk.AccAddress, recipientModule string, amt sdk.Coins) error
+	SendCoinsFromModuleToAccount(ctx context.Context, senderModule string, recipientAddr sdk.AccAddress, amt sdk.Coins) error
+	SendCoins(ctx context.Context, from, to sdk.AccAddress, amt sdk.Coins) error
+	HasBalance(ctx context.Context, addr sdk.AccAddress, amt sdk.Coin) bool
 }
 
 // ParamSubspace defines the expected Subspace interface for parameters.
@@ -34,9 +38,13 @@ type CredentialSchemaKeeper interface {
 // TrustRegistryKeeper defines the expected trust registry keeper
 type TrustRegistryKeeper interface {
 	GetTrustRegistry(ctx sdk.Context, id uint64) (trustregistrytypes.TrustRegistry, error)
+	GetTrustUnitPrice(ctx sdk.Context) uint64
 }
 
 // TrustDepositKeeper defines the expected interface for the Trust Deposit module.
 type TrustDepositKeeper interface {
 	AdjustTrustDeposit(ctx sdk.Context, account string, augend int64) error
+	GetTrustDepositRate(ctx sdk.Context) math.LegacyDec
+	GetUserAgentRewardRate(ctx sdk.Context) math.LegacyDec
+	GetWalletUserAgentRewardRate(ctx sdk.Context) math.LegacyDec
 }

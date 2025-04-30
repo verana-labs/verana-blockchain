@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"cosmossdk.io/math"
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/verana-labs/verana-blockchain/x/trustdeposit/types"
@@ -34,14 +35,18 @@ func (ms msgServer) ReclaimTrustDepositInterests(goCtx context.Context, msg *typ
 	// Get module params for share value calculation
 	params := ms.Keeper.GetParams(ctx)
 
-	// Calculate claimable interest
-	claimableInterest := (td.Share * params.TrustDepositShareValue) - td.Amount
-	if claimableInterest <= 0 {
+	// Calculate claimable interest using decimal math
+	depositAmount := ms.Keeper.ShareToAmount(td.Share, params.TrustDepositShareValue)
+
+	// Guards against underflow
+	if depositAmount <= td.Amount {
 		return nil, fmt.Errorf("no claimable interest available")
 	}
 
-	// Calculate shares to reduce
-	sharesToReduce := claimableInterest / params.TrustDepositShareValue
+	claimableInterest := depositAmount - td.Amount
+
+	// Calculate shares to reduce using decimal math
+	sharesToReduce := ms.Keeper.AmountToShare(claimableInterest, params.TrustDepositShareValue)
 
 	// Update trust deposit shares
 	td.Share -= sharesToReduce
@@ -65,6 +70,23 @@ func (ms msgServer) ReclaimTrustDepositInterests(goCtx context.Context, msg *typ
 	return &types.MsgReclaimTrustDepositInterestsResponse{
 		ClaimedAmount: claimableInterest,
 	}, nil
+}
+
+// ShareToAmount converts share value to amount using decimal math
+func (k Keeper) ShareToAmount(share uint64, shareValue math.LegacyDec) uint64 {
+	shareDec := math.LegacyNewDec(int64(share))
+	amountDec := shareDec.Mul(shareValue)
+	return amountDec.TruncateInt().Uint64()
+}
+
+// AmountToShare converts amount to share value using decimal math
+func (k Keeper) AmountToShare(amount uint64, shareValue math.LegacyDec) uint64 {
+	amountDec := math.LegacyNewDec(int64(amount))
+	if shareValue.IsZero() {
+		return 0 // Prevent division by zero
+	}
+	shareDec := amountDec.Quo(shareValue)
+	return shareDec.TruncateInt().Uint64()
 }
 
 func (ms msgServer) ReclaimTrustDeposit(goCtx context.Context, msg *types.MsgReclaimTrustDeposit) (*types.MsgReclaimTrustDepositResponse, error) {
@@ -92,20 +114,28 @@ func (ms msgServer) ReclaimTrustDeposit(goCtx context.Context, msg *types.MsgRec
 	// Get module params for calculations
 	params := ms.Keeper.GetParams(ctx)
 
-	// Calculate required minimum deposit
-	requiredMinDeposit := td.Share * params.TrustDepositShareValue
-	if requiredMinDeposit < td.Amount-msg.Claimed {
+	// Calculate required minimum deposit using decimal math
+	requiredMinDeposit := ms.Keeper.ShareToAmount(td.Share, params.TrustDepositShareValue)
+
+	if td.Amount < msg.Claimed {
+		return nil, fmt.Errorf("amount less than claimed")
+	}
+
+	if requiredMinDeposit < (td.Amount - msg.Claimed) {
 		return nil, fmt.Errorf("insufficient required minimum deposit")
 	}
 
-	// Calculate burn amount and transfer amount
-	toBurn := (msg.Claimed * uint64(params.TrustDepositReclaimBurnRate)) / 100
+	// Calculate burn amount and transfer amount using decimal math
+	toBurn := ms.Keeper.CalculateBurnAmount(msg.Claimed, params.TrustDepositReclaimBurnRate)
 	toTransfer := msg.Claimed - toBurn
+
+	// Calculate share reduction using decimal math
+	shareReduction := ms.Keeper.AmountToShare(msg.Claimed, params.TrustDepositShareValue)
 
 	// Update trust deposit
 	td.Claimable -= msg.Claimed
 	td.Amount -= msg.Claimed
-	td.Share -= msg.Claimed / params.TrustDepositShareValue
+	td.Share -= shareReduction
 
 	// Transfer claimable amount minus burn to the account
 	if toTransfer > 0 {
@@ -141,4 +171,11 @@ func (ms msgServer) ReclaimTrustDeposit(goCtx context.Context, msg *types.MsgRec
 		BurnedAmount:  toBurn,
 		ClaimedAmount: toTransfer,
 	}, nil
+}
+
+// CalculateBurnAmount applies burn rate to claimed amount using decimal math
+func (k Keeper) CalculateBurnAmount(claimed uint64, burnRate math.LegacyDec) uint64 {
+	claimedDec := math.LegacyNewDec(int64(claimed))
+	burnAmountDec := claimedDec.Mul(burnRate)
+	return burnAmountDec.TruncateInt().Uint64()
 }

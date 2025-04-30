@@ -2,7 +2,9 @@ package keeper
 
 import (
 	"context"
+	"cosmossdk.io/math"
 	"fmt"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"strconv"
 	"time"
 
@@ -79,6 +81,10 @@ func (ms msgServer) RenewPermissionVP(goCtx context.Context, msg *types.MsgRenew
 		return nil, fmt.Errorf("validator permission not found: %w", err)
 	}
 
+	if err := IsValidPermission(validatorPerm, applicantPerm.Country, ctx.BlockTime()); err != nil {
+		return nil, fmt.Errorf("validator permission is not valid: %w", err)
+	}
+
 	// [MOD-PERM-MSG-2-2-3] Fee checks
 	validationFees, validationDeposit, err := ms.validateAndCalculateFees(ctx, msg.Creator, validatorPerm)
 	if err != nil {
@@ -98,6 +104,26 @@ func (ms msgServer) executeRenewPermissionVP(ctx sdk.Context, perm types.Permiss
 	if deposit > 0 {
 		if err := ms.trustDeposit.AdjustTrustDeposit(ctx, perm.Grantee, int64(deposit)); err != nil {
 			return fmt.Errorf("failed to increase trust deposit: %w", err)
+		}
+	}
+
+	// Send validation fees to escrow account if greater than 0
+	if fees > 0 {
+		// Get grantee address
+		granteeAddr, err := sdk.AccAddressFromBech32(perm.Grantee)
+		if err != nil {
+			return fmt.Errorf("invalid grantee address: %w", err)
+		}
+
+		// Transfer fees to module escrow account
+		err = ms.bankKeeper.SendCoinsFromAccountToModule(
+			ctx,
+			granteeAddr,
+			types.ModuleName, // Using module name as the escrow account
+			sdk.NewCoins(sdk.NewInt64Coin(types.BondDenom, int64(fees))),
+		)
+		if err != nil {
+			return fmt.Errorf("failed to transfer validation fees to escrow: %w", err)
 		}
 	}
 
@@ -123,6 +149,11 @@ func (ms msgServer) SetPermissionVPToValidated(goCtx context.Context, msg *types
 	applicantPerm, err := ms.Keeper.GetPermissionByID(ctx, msg.Id)
 	if err != nil {
 		return nil, fmt.Errorf("permission not found: %w", err)
+	}
+
+	// Check permission state - must be PENDING
+	if applicantPerm.VpState != types.ValidationState_VALIDATION_STATE_PENDING {
+		return nil, fmt.Errorf("permission must be in PENDING state to be validated")
 	}
 
 	// Check renewal-specific constraints
@@ -154,6 +185,10 @@ func (ms msgServer) SetPermissionVPToValidated(goCtx context.Context, msg *types
 
 	if validatorPerm.Grantee != msg.Creator {
 		return nil, fmt.Errorf("creator is not the validator")
+	}
+
+	if err := IsValidPermission(validatorPerm, msg.Country, ctx.BlockTime()); err != nil {
+		return nil, fmt.Errorf("validator permission is not valid: %w", err)
 	}
 
 	// Get validation period and calculate expiration
@@ -241,7 +276,7 @@ func (ms msgServer) executeRequestPermissionVPTermination(ctx sdk.Context, perm 
 	perm.VpLastStateChange = &now
 
 	// Set state based on conditions
-	if perm.Type != types.PermissionType_PERMISSION_TYPE_HOLDER && // not HOLDER
+	if perm.Type != types.PermissionType_PERMISSION_TYPE_HOLDER || // not HOLDER
 		(perm.VpExp != nil && now.After(*perm.VpExp)) { // expired
 		// Immediate termination
 		perm.VpState = types.ValidationState_VALIDATION_STATE_TERMINATED
@@ -261,25 +296,38 @@ func (ms msgServer) executeRequestPermissionVPTermination(ctx sdk.Context, perm 
 }
 
 func (ms msgServer) handleTerminationDeposits(ctx sdk.Context, perm *types.Permission) error {
-	// TODO: After trust deposit module is ready
-	// if perm.Deposit > 0 {
-	//     if err := ms.trustDepositKeeper.DecreaseTrustDeposit(ctx, perm.Grantee, perm.Deposit); err != nil {
-	//         return err
-	//     }
-	//     perm.Deposit = 0
-	// }
-	//
-	// if perm.ValidatorDeposit > 0 {
-	//     validatorPerm, err := ms.Keeper.GetPermission(ctx, perm.ValidatorPermId)
-	//     if err != nil {
-	//         return err
-	//     }
-	//     if err := ms.trustDepositKeeper.DecreaseTrustDeposit(ctx, validatorPerm.Grantee, perm.ValidatorDeposit); err != nil {
-	//         return err
-	//     }
-	//     perm.ValidatorDeposit = 0
-	// }
+	// Handle applicant's deposit
+	if perm.Deposit > 0 {
+		// Convert to signed integer for adjustment
+		depositAmount := int64(perm.Deposit)
 
+		// Use negative value to decrease deposit and increase claimable
+		if err := ms.trustDeposit.AdjustTrustDeposit(ctx, perm.Grantee, -depositAmount); err != nil {
+			return fmt.Errorf("failed to adjust applicant trust deposit: %w", err)
+		}
+
+		// Clear the deposit in the permission
+		perm.Deposit = 0
+	}
+
+	// Handle validator's deposit
+	if perm.VpValidatorDeposit > 0 {
+		validatorPerm, err := ms.Keeper.GetPermissionByID(ctx, perm.ValidatorPermId)
+		if err != nil {
+			return fmt.Errorf("validator permission not found: %w", err)
+		}
+
+		// Convert to signed integer for adjustment
+		validatorDepositAmount := int64(perm.VpValidatorDeposit)
+
+		// Use negative value to decrease deposit and increase claimable
+		if err := ms.trustDeposit.AdjustTrustDeposit(ctx, validatorPerm.Grantee, -validatorDepositAmount); err != nil {
+			return fmt.Errorf("failed to adjust validator trust deposit: %w", err)
+		}
+
+		// Clear the validator deposit in the permission
+		perm.VpValidatorDeposit = 0
+	}
 	return nil
 }
 
@@ -329,7 +377,7 @@ func (ms msgServer) ConfirmPermissionVPTermination(goCtx context.Context, msg *t
 	return &types.MsgConfirmPermissionVPTerminationResponse{}, nil
 }
 
-func (ms msgServer) executeConfirmPermissionVPTermination(ctx sdk.Context, applicantPerm types.Permission, validatorPerm types.Permission, confirmer string, now time.Time) error {
+func (ms msgServer) executeConfirmPermissionVPTermination(ctx sdk.Context, applicantPerm, validatorPerm types.Permission, confirmer string, now time.Time) error {
 	// Update basic fields
 	applicantPerm.Modified = &now
 	applicantPerm.VpState = types.ValidationState_VALIDATION_STATE_TERMINATED
@@ -337,21 +385,33 @@ func (ms msgServer) executeConfirmPermissionVPTermination(ctx sdk.Context, appli
 	applicantPerm.Terminated = &now
 	applicantPerm.TerminatedBy = confirmer
 
-	// Handle deposits based on who confirmed
+	// Handle applicant's deposit
 	if applicantPerm.Deposit > 0 {
-		// TODO: After trust deposit module implementation
-		// if err := ms.trustDepositKeeper.DecreaseTrustDeposit(ctx, applicantPerm.Grantee, applicantPerm.Deposit); err != nil {
-		//     return fmt.Errorf("failed to decrease applicant trust deposit: %w", err)
-		// }
+		// Convert to signed integer for adjustment
+		depositAmount := int64(applicantPerm.Deposit)
+
+		// Use negative value to decrease deposit and increase claimable
+		err := ms.trustDeposit.AdjustTrustDeposit(ctx, applicantPerm.Grantee, -depositAmount)
+		if err != nil {
+			return fmt.Errorf("failed to adjust applicant trust deposit: %w", err)
+		}
+
+		// Clear the deposit in the permission
 		applicantPerm.Deposit = 0
 	}
 
 	// Only return validator deposit if validator confirmed
 	if confirmer == validatorPerm.Grantee && applicantPerm.VpValidatorDeposit > 0 {
-		// TODO: After trust deposit module implementation
-		// if err := ms.trustDepositKeeper.DecreaseTrustDeposit(ctx, validatorPerm.Grantee, applicantPerm.ValidatorDeposit); err != nil {
-		//     return fmt.Errorf("failed to decrease validator trust deposit: %w", err)
-		// }
+		// Convert to signed integer for adjustment
+		validatorDepositAmount := int64(applicantPerm.VpValidatorDeposit)
+
+		// Use negative value to decrease deposit and increase claimable
+		err := ms.trustDeposit.AdjustTrustDeposit(ctx, validatorPerm.Grantee, -validatorDepositAmount)
+		if err != nil {
+			return fmt.Errorf("failed to adjust validator trust deposit: %w", err)
+		}
+
+		// Clear the validator deposit in the permission
 		applicantPerm.VpValidatorDeposit = 0
 	}
 
@@ -402,25 +462,38 @@ func (ms msgServer) executeCancelPermissionVPLastRequest(ctx sdk.Context, perm t
 
 	// Handle current fees if any
 	if perm.VpCurrentFees > 0 {
-		// TODO: After bank module integration
-		// Transfer fees back from escrow
-		// if err := ms.bankKeeper.SendCoinsFromModuleToAccount(
-		//     ctx,
-		//     types.ModuleName,
-		//     sdk.AccAddress(perm.Grantee),
-		//     sdk.NewCoins(sdk.NewCoin(ms.Keeper.GetParams(ctx).FeeDenom, sdk.NewInt(int64(perm.VpCurrentFees)))),
-		// ); err != nil {
-		//     return fmt.Errorf("failed to refund fees: %w", err)
-		// }
+		// Transfer escrowed fees back to the applicant
+		granteeAddr, err := sdk.AccAddressFromBech32(perm.Grantee)
+		if err != nil {
+			return fmt.Errorf("invalid grantee address: %w", err)
+		}
+
+		// Transfer fees from module escrow account to applicant account
+		err = ms.bankKeeper.SendCoinsFromModuleToAccount(
+			ctx,
+			types.ModuleName, // Module escrow account
+			granteeAddr,      // Applicant account
+			sdk.NewCoins(sdk.NewInt64Coin(types.BondDenom, int64(perm.VpCurrentFees))),
+		)
+		if err != nil {
+			return fmt.Errorf("failed to refund fees: %w", err)
+		}
+
 		perm.VpCurrentFees = 0
 	}
 
 	// Handle current deposit if any
 	if perm.VpCurrentDeposit > 0 {
-		// TODO: After trust deposit module integration
-		// if err := ms.trustDepositKeeper.DecreaseTrustDeposit(ctx, perm.Grantee, perm.VpCurrentDeposit); err != nil {
-		//     return fmt.Errorf("failed to decrease trust deposit: %w", err)
-		// }
+		// Use AdjustTrustDeposit to reduce trust deposit with negative value
+		// to move funds from deposit to claimable
+		if err := ms.trustDeposit.AdjustTrustDeposit(
+			ctx,
+			perm.Grantee,
+			-int64(perm.VpCurrentDeposit), // Negative value to reduce deposit and increase claimable
+		); err != nil {
+			return fmt.Errorf("failed to adjust trust deposit: %w", err)
+		}
+
 		perm.VpCurrentDeposit = 0
 	}
 
@@ -431,6 +504,11 @@ func (ms msgServer) executeCancelPermissionVPLastRequest(ctx sdk.Context, perm t
 func (ms msgServer) CreateRootPermission(goCtx context.Context, msg *types.MsgCreateRootPermission) (*types.MsgCreateRootPermissionResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	now := ctx.BlockTime()
+
+	// Add this check inside CreateRootPermission after the schema check
+	if msg.EffectiveFrom != nil && !msg.EffectiveFrom.After(now) {
+		return nil, fmt.Errorf("effective_from must be in the future")
+	}
 
 	// Check credential schema exists
 	_, err := ms.credentialSchemaKeeper.GetCredentialSchemaById(ctx, msg.SchemaId)
@@ -501,7 +579,6 @@ func (ms msgServer) executeCreateRootPermission(ctx sdk.Context, msg *types.MsgC
 		IssuanceFees:     msg.IssuanceFees,
 		VerificationFees: msg.VerificationFees,
 		Deposit:          0,
-		VpState:          types.ValidationState_VALIDATION_STATE_VALIDATED,
 	}
 
 	// Store the permission
@@ -562,6 +639,11 @@ func (ms msgServer) validateExtendPermissionAuthority(ctx sdk.Context, creator s
 		if err != nil {
 			return fmt.Errorf("validator permission not found: %w", err)
 		}
+
+		if err = IsValidPermission(validatorPerm, perm.Country, ctx.BlockTime()); err != nil {
+			return fmt.Errorf("validator permission is not valid: %w", err)
+		}
+
 		if validatorPerm.Grantee != creator {
 			return fmt.Errorf("creator is not the validator")
 		}
@@ -593,6 +675,10 @@ func (ms msgServer) RevokePermission(goCtx context.Context, msg *types.MsgRevoke
 	validatorPerm, err := ms.Keeper.GetPermissionByID(ctx, applicantPerm.ValidatorPermId)
 	if err != nil {
 		return nil, fmt.Errorf("validator permission not found: %w", err)
+	}
+
+	if err := IsValidPermission(validatorPerm, applicantPerm.Country, ctx.BlockTime()); err != nil {
+		return nil, fmt.Errorf("validator permission is not valid: %w", err)
 	}
 
 	if validatorPerm.Grantee != msg.Creator {
@@ -635,51 +721,134 @@ func (ms msgServer) CreateOrUpdatePermissionSession(goCtx context.Context, msg *
 		return nil, err
 	}
 
-	// Validate executor permission
-	executorPerm, err := ms.validateExecutorPermission(ctx, msg)
-	if err != nil {
-		return nil, err
+	// Define variables for issuerPerm and verifierPerm
+	var verifierPerm *types.Permission
+
+	// Load and validate issuer permission if specified
+	if msg.IssuerPermId != 0 {
+		perm, err := ms.Permission.Get(ctx, msg.IssuerPermId)
+		if err != nil {
+			return nil, sdkerrors.ErrNotFound.Wrapf("issuer permission not found: %v", err)
+		}
+
+		if perm.Type != types.PermissionType_PERMISSION_TYPE_ISSUER {
+			return nil, sdkerrors.ErrInvalidRequest.Wrap("issuer permission must be ISSUER type")
+		}
+
+		if perm.Revoked != nil || perm.Terminated != nil {
+			return nil, sdkerrors.ErrInvalidRequest.Wrap("issuer permission is revoked or terminated")
+		}
+	}
+
+	// Load and validate verifier permission if specified
+	if msg.VerifierPermId != 0 {
+		perm, err := ms.Permission.Get(ctx, msg.VerifierPermId)
+		if err != nil {
+			return nil, sdkerrors.ErrNotFound.Wrapf("verifier permission not found: %v", err)
+		}
+
+		if perm.Type != types.PermissionType_PERMISSION_TYPE_VERIFIER {
+			return nil, sdkerrors.ErrInvalidRequest.Wrap("verifier permission must be VERIFIER type")
+		}
+
+		if perm.Revoked != nil || perm.Terminated != nil {
+			return nil, sdkerrors.ErrInvalidRequest.Wrap("verifier permission is revoked or terminated")
+		}
+
+		verifierPerm = &perm
 	}
 
 	// Validate agent permission
-	if err := ms.validateAgentPermission(ctx, msg); err != nil {
-		return nil, err
+	agentPerm, err := ms.Permission.Get(ctx, msg.AgentPermId)
+	if err != nil {
+		return nil, sdkerrors.ErrNotFound.Wrap("agent permission not found")
+	}
+
+	if agentPerm.Type != types.PermissionType_PERMISSION_TYPE_HOLDER {
+		return nil, sdkerrors.ErrInvalidRequest.Wrap("agent permission must be HOLDER type")
+	}
+
+	if agentPerm.Revoked != nil || agentPerm.Terminated != nil {
+		return nil, sdkerrors.ErrInvalidRequest.Wrap("agent permission is revoked or terminated")
 	}
 
 	// Validate wallet agent permission if provided
-	if err := ms.validateWalletAgentPermission(ctx, msg); err != nil {
-		return nil, err
+	if msg.WalletAgentPermId != 0 {
+		perm, err := ms.Permission.Get(ctx, msg.WalletAgentPermId)
+		if err != nil {
+			return nil, sdkerrors.ErrNotFound.Wrap("wallet agent permission not found")
+		}
+
+		if perm.Type != types.PermissionType_PERMISSION_TYPE_HOLDER {
+			return nil, sdkerrors.ErrInvalidRequest.Wrap("wallet agent permission must be HOLDER type")
+		}
+
+		if perm.Revoked != nil || perm.Terminated != nil {
+			return nil, sdkerrors.ErrInvalidRequest.Wrap("wallet agent permission is revoked or terminated")
+		}
+
 	}
 
-	// Build permission set and calculate fees
-	_, err = ms.buildPermissionSet(ctx, executorPerm, msg.BeneficiaryPermId)
+	// Get beneficiary permissions set
+	foundPermSet, err := ms.findBeneficiaries(ctx, msg.IssuerPermId, msg.VerifierPermId)
 	if err != nil {
-		return nil, fmt.Errorf("failed to build permission set: %w", err)
+		return nil, fmt.Errorf("failed to find beneficiaries: %w", err)
 	}
 
-	// Calculate and validate fees
-	//fees, err := ms.calculateAndValidateFees(ctx, msg.Creator, permSet, executorPerm.Type)
-	//if err != nil {
-	//	return nil, err
-	//}
+	// Calculate fees
+	trustUnitPrice := ms.trustRegistryKeeper.GetTrustUnitPrice(ctx)
+	trustDepositRate := ms.trustDeposit.GetTrustDepositRate(ctx)
+	userAgentRewardRate := ms.trustDeposit.GetUserAgentRewardRate(ctx)
+	walletUserAgentRewardRate := ms.trustDeposit.GetWalletUserAgentRewardRate(ctx)
 
-	// Process fees and create/update session
-	//if err := ms.processFees(ctx, msg.Creator, permSet, executorPerm.Type, fees); err != nil {
-	//	return nil, err
-	//}
+	// Calculate beneficiary fees
+	beneficiaryFees := uint64(0)
+	for _, perm := range foundPermSet {
+		if verifierPerm != nil {
+			beneficiaryFees += perm.VerificationFees
+		} else {
+			beneficiaryFees += perm.IssuanceFees
+		}
+	}
+
+	// Calculate total required funds
+	totalFees := beneficiaryFees * trustUnitPrice
+	trustFees := uint64(math.LegacyNewDec(int64(totalFees)).Mul(trustDepositRate).TruncateInt64())
+	rewardRate := userAgentRewardRate.Add(walletUserAgentRewardRate)
+	rewards := uint64(math.LegacyNewDec(int64(totalFees)).Mul(rewardRate).TruncateInt64())
+
+	// Calculate required balance
+	requiredAmount := sdk.NewInt64Coin(types.BondDenom, int64(totalFees+trustFees+rewards))
+
+	// Validate sender has sufficient balance
+	creatorAddr, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+		return nil, fmt.Errorf("invalid creator address: %w", err)
+	}
+
+	if !ms.bankKeeper.HasBalance(ctx, creatorAddr, requiredAmount) {
+		return nil, sdkerrors.ErrInsufficientFunds.Wrapf("insufficient funds: required %s", requiredAmount)
+	}
+
+	// Process fees
+	if err := ms.processFees(ctx, msg.Creator, foundPermSet, verifierPerm != nil, trustUnitPrice, trustDepositRate); err != nil {
+		return nil, fmt.Errorf("failed to process fees: %w", err)
+	}
 
 	// Create or update session
 	if err := ms.createOrUpdateSession(ctx, msg, now); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to create/update session: %w", err)
 	}
 
+	// Emit events
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeCreateOrUpdatePermissionSession,
 			sdk.NewAttribute(types.AttributeKeySessionID, msg.Id),
-			sdk.NewAttribute(types.AttributeKeyExecutorPermID, strconv.FormatUint(msg.ExecutorPermId, 10)),
-			sdk.NewAttribute(types.AttributeKeyBeneficiaryPermID, strconv.FormatUint(msg.BeneficiaryPermId, 10)),
+			sdk.NewAttribute(types.AttributeKeyIssuerPermID, strconv.FormatUint(msg.IssuerPermId, 10)),
+			sdk.NewAttribute(types.AttributeKeyVerifierPermID, strconv.FormatUint(msg.VerifierPermId, 10)),
 			sdk.NewAttribute(types.AttributeKeyAgentPermID, strconv.FormatUint(msg.AgentPermId, 10)),
+			sdk.NewAttribute(types.AttributeKeyWalletAgentPermID, strconv.FormatUint(msg.WalletAgentPermId, 10)),
 			sdk.NewAttribute(types.AttributeKeyTimestamp, now.String()),
 		),
 	})

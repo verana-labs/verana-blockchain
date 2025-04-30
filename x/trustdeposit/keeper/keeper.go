@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"cosmossdk.io/collections"
+	"cosmossdk.io/math"
 	"fmt"
 
 	"cosmossdk.io/core/store"
@@ -60,4 +61,24 @@ func (k Keeper) GetAuthority() string {
 // Logger returns a module-specific logger.
 func (k Keeper) Logger() log.Logger {
 	return k.logger.With("module", fmt.Sprintf("x/%s", types.ModuleName))
+}
+
+func (k Keeper) GetTrustDepositRate(ctx sdk.Context) math.LegacyDec {
+	params := k.GetParams(ctx)
+	return params.TrustDepositRate
+}
+
+func (k Keeper) GetUserAgentRewardRate(ctx sdk.Context) math.LegacyDec {
+	params := k.GetParams(ctx)
+	return params.UserAgentRewardRate
+}
+
+func (k Keeper) GetWalletUserAgentRewardRate(ctx sdk.Context) math.LegacyDec {
+	params := k.GetParams(ctx)
+	return params.WalletUserAgentRewardRate
+}
+
+func (k Keeper) GetTrustDepositShareValue(ctx sdk.Context) math.LegacyDec {
+	params := k.GetParams(ctx)
+	return params.TrustDepositShareValue
 }
