@@ -125,7 +125,14 @@ func validatePermissionTypeCombination(requestedType, validatorType types.Permis
 			}
 		} else if cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_ECOSYSTEM {
 			if validatorType != types.PermissionType_PERMISSION_TYPE_ECOSYSTEM {
-				return fmt.Errorf("issuer permission requires TRUST_REGISTRY validator")
+				return fmt.Errorf("issuer permission requires ECOSYSTEM validator")
+			}
+		} else if cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_OPEN {
+			// Mode is OPEN which means anyone can issue credential of this schema
+			// But formal permission creation is still needed when payment is required
+			// Check if validator has the correct type for fee collection
+			if validatorType != types.PermissionType_PERMISSION_TYPE_ECOSYSTEM {
+				return fmt.Errorf("open issuance still requires ECOSYSTEM validator for fee collection")
 			}
 		} else {
 			return fmt.Errorf("issuer permission not supported with current schema settings")
@@ -134,7 +141,7 @@ func validatePermissionTypeCombination(requestedType, validatorType types.Permis
 	case types.PermissionType_PERMISSION_TYPE_ISSUER_GRANTOR:
 		if cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION {
 			if validatorType != types.PermissionType_PERMISSION_TYPE_ECOSYSTEM {
-				return fmt.Errorf("issuer grantor permission requires TRUST_REGISTRY validator")
+				return fmt.Errorf("issuer grantor permission requires ECOSYSTEM validator")
 			}
 		} else {
 			return fmt.Errorf("issuer grantor permission not supported with current schema settings")
@@ -147,7 +154,15 @@ func validatePermissionTypeCombination(requestedType, validatorType types.Permis
 			}
 		} else if cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_ECOSYSTEM {
 			if validatorType != types.PermissionType_PERMISSION_TYPE_ECOSYSTEM {
-				return fmt.Errorf("verifier permission requires TRUST_REGISTRY validator")
+				return fmt.Errorf("verifier permission requires ECOSYSTEM validator")
+			}
+		} else if cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_OPEN {
+			// Mode is OPEN which means anyone can verify credentials of this schema
+			// This doesn't imply no payment is necessary - formal permission might be
+			// required when payment is needed
+			// Check if validator has the correct type for fee collection
+			if validatorType != types.PermissionType_PERMISSION_TYPE_ECOSYSTEM {
+				return fmt.Errorf("open verification still requires ECOSYSTEM validator for fee collection")
 			}
 		} else {
 			return fmt.Errorf("verifier permission not supported with current schema settings")
@@ -156,7 +171,7 @@ func validatePermissionTypeCombination(requestedType, validatorType types.Permis
 	case types.PermissionType_PERMISSION_TYPE_VERIFIER_GRANTOR:
 		if cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION {
 			if validatorType != types.PermissionType_PERMISSION_TYPE_ECOSYSTEM {
-				return fmt.Errorf("verifier grantor permission requires TRUST_REGISTRY validator")
+				return fmt.Errorf("verifier grantor permission requires ECOSYSTEM validator")
 			}
 		} else {
 			return fmt.Errorf("verifier grantor permission not supported with current schema settings")
@@ -167,6 +182,11 @@ func validatePermissionTypeCombination(requestedType, validatorType types.Permis
 			cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_ECOSYSTEM {
 			if validatorType != types.PermissionType_PERMISSION_TYPE_ISSUER {
 				return fmt.Errorf("holder permission requires ISSUER validator")
+			}
+		} else if cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_OPEN {
+			// Even in OPEN mode, holder permissions might require validation from an ISSUER
+			if validatorType != types.PermissionType_PERMISSION_TYPE_ISSUER {
+				return fmt.Errorf("holder permission requires ISSUER validator even in OPEN verification mode")
 			}
 		} else {
 			return fmt.Errorf("holder permission not supported with current schema settings")

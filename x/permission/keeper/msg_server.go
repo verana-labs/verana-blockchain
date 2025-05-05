@@ -5,6 +5,7 @@ import (
 	"cosmossdk.io/math"
 	"fmt"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	credentialschematypes "github.com/verana-labs/verana-blockchain/x/credentialschema/types"
 	"strconv"
 	"time"
 
@@ -199,6 +200,22 @@ func (ms msgServer) SetPermissionVPToValidated(goCtx context.Context, msg *types
 
 	validityPeriod := getValidityPeriod(uint32(applicantPerm.Type), cs)
 	vpExp := calculateVPExp(applicantPerm.VpExp, uint64(validityPeriod), now)
+
+	// Special check for OPEN mode permissions to ensure proper fee handling
+	// Even in OPEN mode, fees can still apply
+	if applicantPerm.Type == types.PermissionType_PERMISSION_TYPE_ISSUER &&
+		cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_OPEN {
+		// Ensure validator is ECOSYSTEM for fee collection in OPEN mode
+		if validatorPerm.Type != types.PermissionType_PERMISSION_TYPE_ECOSYSTEM {
+			return nil, fmt.Errorf("validator must be ECOSYSTEM type for OPEN issuer permission")
+		}
+	} else if applicantPerm.Type == types.PermissionType_PERMISSION_TYPE_VERIFIER &&
+		cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_OPEN {
+		// Ensure validator is ECOSYSTEM for fee collection in OPEN mode
+		if validatorPerm.Type != types.PermissionType_PERMISSION_TYPE_ECOSYSTEM {
+			return nil, fmt.Errorf("validator must be ECOSYSTEM type for OPEN verifier permission")
+		}
+	}
 
 	// Check effective_until if provided
 	if msg.EffectiveUntil != nil {
