@@ -52,13 +52,13 @@ func (gs GenesisState) Validate() error {
 
 		// Check permission management modes are valid
 		if cs.IssuerPermManagementMode <= CredentialSchemaPermManagementMode_MODE_UNSPECIFIED ||
-			cs.IssuerPermManagementMode > CredentialSchemaPermManagementMode_TRUST_REGISTRY_VALIDATION {
+			cs.IssuerPermManagementMode > CredentialSchemaPermManagementMode_ECOSYSTEM {
 			return fmt.Errorf("credential schema at index %d has invalid issuer permission management mode: %d",
 				i, cs.IssuerPermManagementMode)
 		}
 
 		if cs.VerifierPermManagementMode <= CredentialSchemaPermManagementMode_MODE_UNSPECIFIED ||
-			cs.VerifierPermManagementMode > CredentialSchemaPermManagementMode_TRUST_REGISTRY_VALIDATION {
+			cs.VerifierPermManagementMode > CredentialSchemaPermManagementMode_ECOSYSTEM {
 			return fmt.Errorf("credential schema at index %d has invalid verifier permission management mode: %d",
 				i, cs.VerifierPermManagementMode)
 		}

@@ -72,7 +72,7 @@ func TestGenesisState_Validate(t *testing.T) {
 						Modified:                   now.Add(-5 * time.Hour),
 						JsonSchema:                 validJsonSchema,
 						IssuerPermManagementMode:   types.CredentialSchemaPermManagementMode_OPEN,
-						VerifierPermManagementMode: types.CredentialSchemaPermManagementMode_TRUST_REGISTRY_VALIDATION,
+						VerifierPermManagementMode: types.CredentialSchemaPermManagementMode_ECOSYSTEM,
 					},
 				},
 			},
@@ -90,7 +90,7 @@ func TestGenesisState_Validate(t *testing.T) {
 						Modified:                   now.Add(-5 * time.Hour),
 						JsonSchema:                 "", // Empty schema
 						IssuerPermManagementMode:   types.CredentialSchemaPermManagementMode_OPEN,
-						VerifierPermManagementMode: types.CredentialSchemaPermManagementMode_TRUST_REGISTRY_VALIDATION,
+						VerifierPermManagementMode: types.CredentialSchemaPermManagementMode_ECOSYSTEM,
 					},
 				},
 			},

@@ -570,7 +570,7 @@ func TestMsgServerCreateRootPermission(t *testing.T) {
 				require.Equal(t, tc.msg.SchemaId, perm.SchemaId)
 				require.Equal(t, tc.msg.Did, perm.Did)
 				require.Equal(t, tc.msg.Creator, perm.Grantee)
-				require.Equal(t, types.PermissionType_PERMISSION_TYPE_TRUST_REGISTRY, perm.Type)
+				require.Equal(t, types.PermissionType_PERMISSION_TYPE_ECOSYSTEM, perm.Type)
 				require.Equal(t, tc.msg.ValidationFees, perm.ValidationFees)
 				require.Equal(t, tc.msg.IssuanceFees, perm.IssuanceFees)
 				require.Equal(t, tc.msg.VerificationFees, perm.VerificationFees)
@@ -1235,7 +1235,7 @@ func TestExtendPermission(t *testing.T) {
 	// Create a trust registry permission to test direct extension
 	trustRegistryPerm := types.Permission{
 		SchemaId:       1,
-		Type:           types.PermissionType_PERMISSION_TYPE_TRUST_REGISTRY,
+		Type:           types.PermissionType_PERMISSION_TYPE_ECOSYSTEM,
 		Grantee:        trustRegistryAddr,
 		Created:        &now,
 		CreatedBy:      trustRegistryAddr,
@@ -1511,7 +1511,7 @@ func TestCreateOrUpdatePermissionSession(t *testing.T) {
 	// Create trust registry / validator permission
 	trustPerm := types.Permission{
 		SchemaId:         1,
-		Type:             types.PermissionType_PERMISSION_TYPE_TRUST_REGISTRY,
+		Type:             types.PermissionType_PERMISSION_TYPE_ECOSYSTEM,
 		Grantee:          creator,
 		Created:          &now,
 		CreatedBy:        creator,
@@ -1878,7 +1878,7 @@ func TestQueryPermissions(t *testing.T) {
 	// Trust Registry permission
 	trustPerm := types.Permission{
 		SchemaId:   1,
-		Type:       types.PermissionType_PERMISSION_TYPE_TRUST_REGISTRY,
+		Type:       types.PermissionType_PERMISSION_TYPE_ECOSYSTEM,
 		Did:        validDid,
 		Grantee:    creator,
 		Created:    &now,

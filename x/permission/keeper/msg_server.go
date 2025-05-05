@@ -566,7 +566,7 @@ func (ms msgServer) executeCreateRootPermission(ctx sdk.Context, msg *types.MsgC
 	// Create new permission
 	perm := types.Permission{
 		SchemaId:         msg.SchemaId,
-		Type:             types.PermissionType_PERMISSION_TYPE_TRUST_REGISTRY,
+		Type:             types.PermissionType_PERMISSION_TYPE_ECOSYSTEM,
 		Did:              msg.Did,
 		Grantee:          msg.Creator,
 		Created:          &now,
@@ -626,7 +626,7 @@ func (ms msgServer) ExtendPermission(goCtx context.Context, msg *types.MsgExtend
 func (ms msgServer) validateExtendPermissionAuthority(ctx sdk.Context, creator string, perm types.Permission) error {
 	if perm.ValidatorPermId == 0 {
 		// For TRUST_REGISTRY type, creator must be the grantee
-		if perm.Type == types.PermissionType_PERMISSION_TYPE_TRUST_REGISTRY {
+		if perm.Type == types.PermissionType_PERMISSION_TYPE_ECOSYSTEM {
 			if perm.Grantee != creator {
 				return fmt.Errorf("creator is not the permission grantee")
 			}

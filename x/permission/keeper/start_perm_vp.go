@@ -123,8 +123,8 @@ func validatePermissionTypeCombination(requestedType, validatorType types.Permis
 			if validatorType != types.PermissionType_PERMISSION_TYPE_ISSUER_GRANTOR {
 				return fmt.Errorf("issuer permission requires ISSUER_GRANTOR validator")
 			}
-		} else if cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_TRUST_REGISTRY_VALIDATION {
-			if validatorType != types.PermissionType_PERMISSION_TYPE_TRUST_REGISTRY {
+		} else if cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_ECOSYSTEM {
+			if validatorType != types.PermissionType_PERMISSION_TYPE_ECOSYSTEM {
 				return fmt.Errorf("issuer permission requires TRUST_REGISTRY validator")
 			}
 		} else {
@@ -133,7 +133,7 @@ func validatePermissionTypeCombination(requestedType, validatorType types.Permis
 
 	case types.PermissionType_PERMISSION_TYPE_ISSUER_GRANTOR:
 		if cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION {
-			if validatorType != types.PermissionType_PERMISSION_TYPE_TRUST_REGISTRY {
+			if validatorType != types.PermissionType_PERMISSION_TYPE_ECOSYSTEM {
 				return fmt.Errorf("issuer grantor permission requires TRUST_REGISTRY validator")
 			}
 		} else {
@@ -145,8 +145,8 @@ func validatePermissionTypeCombination(requestedType, validatorType types.Permis
 			if validatorType != types.PermissionType_PERMISSION_TYPE_VERIFIER_GRANTOR {
 				return fmt.Errorf("verifier permission requires VERIFIER_GRANTOR validator")
 			}
-		} else if cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_TRUST_REGISTRY_VALIDATION {
-			if validatorType != types.PermissionType_PERMISSION_TYPE_TRUST_REGISTRY {
+		} else if cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_ECOSYSTEM {
+			if validatorType != types.PermissionType_PERMISSION_TYPE_ECOSYSTEM {
 				return fmt.Errorf("verifier permission requires TRUST_REGISTRY validator")
 			}
 		} else {
@@ -155,7 +155,7 @@ func validatePermissionTypeCombination(requestedType, validatorType types.Permis
 
 	case types.PermissionType_PERMISSION_TYPE_VERIFIER_GRANTOR:
 		if cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION {
-			if validatorType != types.PermissionType_PERMISSION_TYPE_TRUST_REGISTRY {
+			if validatorType != types.PermissionType_PERMISSION_TYPE_ECOSYSTEM {
 				return fmt.Errorf("verifier grantor permission requires TRUST_REGISTRY validator")
 			}
 		} else {
@@ -164,7 +164,7 @@ func validatePermissionTypeCombination(requestedType, validatorType types.Permis
 
 	case types.PermissionType_PERMISSION_TYPE_HOLDER:
 		if cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION ||
-			cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_TRUST_REGISTRY_VALIDATION {
+			cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_ECOSYSTEM {
 			if validatorType != types.PermissionType_PERMISSION_TYPE_ISSUER {
 				return fmt.Errorf("holder permission requires ISSUER validator")
 			}
