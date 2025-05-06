@@ -6,6 +6,7 @@ import (
 	errors2 "errors"
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	credentialschematypes "github.com/verana-labs/verana-blockchain/x/credentialschema/types"
 	"github.com/verana-labs/verana-blockchain/x/permission/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -181,8 +182,8 @@ func (k Keeper) FindPermissionsWithDID(goCtx context.Context, req *types.QueryFi
 		return nil, status.Error(codes.InvalidArgument, "schema ID is required")
 	}
 
-	// Check schema exists
-	_, err := k.credentialSchemaKeeper.GetCredentialSchemaById(ctx, req.SchemaId)
+	// Check schema exists and get schema details
+	cs, err := k.credentialSchemaKeeper.GetCredentialSchemaById(ctx, req.SchemaId)
 	if err != nil {
 		return nil, status.Error(codes.NotFound, fmt.Sprintf("credential schema not found: %v", err))
 	}
@@ -195,9 +196,16 @@ func (k Keeper) FindPermissionsWithDID(goCtx context.Context, req *types.QueryFi
 	// [MOD-PERM-QRY-3-3] Execution
 	var foundPerms []types.Permission
 
-	// TODO: If index is implemented, use it here to get permission IDs by schema and hash
-	// For now, we'll scan all permissions
+	// Check if we need to handle the special OPEN mode case
+	isOpenMode := false
+	if (permType == types.PermissionType_PERMISSION_TYPE_ISSUER &&
+		cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_OPEN) ||
+		(permType == types.PermissionType_PERMISSION_TYPE_VERIFIER &&
+			cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_OPEN) {
+		isOpenMode = true
+	}
 
+	// For now, we'll scan all permissions
 	err = k.Permission.Walk(ctx, nil, func(id uint64, perm types.Permission) (bool, error) {
 		// Filter by schema ID
 		if perm.SchemaId != req.SchemaId {
@@ -230,6 +238,42 @@ func (k Keeper) FindPermissionsWithDID(goCtx context.Context, req *types.QueryFi
 
 	if err != nil {
 		return nil, status.Error(codes.Internal, fmt.Sprintf("failed to query permissions: %v", err))
+	}
+
+	// If we're in OPEN mode and didn't find any explicit permissions,
+	// check if there's an ECOSYSTEM permission that handles fees
+	if isOpenMode && len(foundPerms) == 0 {
+		// Find ECOSYSTEM permission for this schema
+		var ecosystemPerm types.Permission
+		ecosystemPermFound := false
+
+		err = k.Permission.Walk(ctx, nil, func(id uint64, perm types.Permission) (bool, error) {
+			if perm.SchemaId == req.SchemaId &&
+				perm.Type == types.PermissionType_PERMISSION_TYPE_ECOSYSTEM {
+				// Check country compatibility
+				if req.Country == "" || perm.Country == "" || perm.Country == req.Country {
+					// Check time validity if "when" is specified
+					if req.When == nil || isPermissionValidAtTime(perm, *req.When) {
+						ecosystemPerm = perm
+						ecosystemPermFound = true
+						return true, nil // Stop iteration once found
+					}
+				}
+			}
+			return false, nil
+		})
+
+		if err != nil {
+			return nil, status.Error(codes.Internal, fmt.Sprintf("failed to query ECOSYSTEM permission: %v", err))
+		}
+
+		// In OPEN mode, if we found an ECOSYSTEM permission, we can consider the DID
+		// authorized even without an explicit permission record
+		if ecosystemPermFound {
+			// Include a note in the response that this is an implicit permission in OPEN mode
+			ecosystemPerm.VpSummaryDigestSri = "OPEN_MODE_IMPLICIT_PERMISSION"
+			foundPerms = append(foundPerms, ecosystemPerm)
+		}
 	}
 
 	return &types.QueryFindPermissionsWithDIDResponse{
@@ -289,6 +333,7 @@ func (k Keeper) FindBeneficiaries(goCtx context.Context, req *types.QueryFindBen
 	}
 
 	var issuerPerm, verifierPerm *types.Permission
+	var schemaID uint64
 
 	// Load issuer permission if specified
 	if req.IssuerPermId != 0 {
@@ -297,6 +342,7 @@ func (k Keeper) FindBeneficiaries(goCtx context.Context, req *types.QueryFindBen
 			return nil, status.Error(codes.NotFound, fmt.Sprintf("issuer permission not found: %v", err))
 		}
 		issuerPerm = &perm
+		schemaID = perm.SchemaId
 	}
 
 	// Load verifier permission if specified
@@ -306,8 +352,61 @@ func (k Keeper) FindBeneficiaries(goCtx context.Context, req *types.QueryFindBen
 			return nil, status.Error(codes.NotFound, fmt.Sprintf("verifier permission not found: %v", err))
 		}
 		verifierPerm = &perm
+		if schemaID == 0 {
+			schemaID = perm.SchemaId
+		}
 	}
 
+	// Get schema to check permission management mode
+	cs, err := k.credentialSchemaKeeper.GetCredentialSchemaById(ctx, schemaID)
+	if err != nil {
+		return nil, status.Error(codes.NotFound, fmt.Sprintf("credential schema not found: %v", err))
+	}
+
+	// Check if schema is configured with OPEN permission management mode
+	isIssuerOpenMode := false
+	isVerifierOpenMode := false
+
+	if cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_OPEN {
+		isIssuerOpenMode = true
+	}
+
+	if cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_OPEN {
+		isVerifierOpenMode = true
+	}
+
+	// Handle OPEN mode case
+	// If in OPEN mode, we need to find the ECOSYSTEM permission for this schema
+	if (req.IssuerPermId != 0 && isIssuerOpenMode) || (req.VerifierPermId != 0 && isVerifierOpenMode) {
+		// Find ECOSYSTEM permission for this schema
+		var ecosystemPerm types.Permission
+		ecosystemPermFound := false
+
+		err = k.Permission.Walk(ctx, nil, func(id uint64, perm types.Permission) (bool, error) {
+			if perm.SchemaId == schemaID &&
+				perm.Type == types.PermissionType_PERMISSION_TYPE_ECOSYSTEM &&
+				perm.Revoked == nil && perm.Terminated == nil {
+				ecosystemPerm = perm
+				ecosystemPermFound = true
+				return true, nil // Stop iteration once found
+			}
+			return false, nil
+		})
+
+		if err != nil {
+			return nil, status.Error(codes.Internal, fmt.Sprintf("failed to query ECOSYSTEM permission: %v", err))
+		}
+
+		if ecosystemPermFound {
+			// For OPEN mode, the only beneficiary is the ECOSYSTEM permission
+			permissions := []types.Permission{ecosystemPerm}
+			return &types.QueryFindBeneficiariesResponse{
+				Permissions: permissions,
+			}, nil
+		}
+	}
+
+	// If not in OPEN mode or ECOSYSTEM permission not found, proceed with normal hierarchy traversal
 	// [MOD-PERM-QRY-4-3] Execution
 	// Use a map to implement the set functionality
 	foundPermMap := make(map[uint64]types.Permission)

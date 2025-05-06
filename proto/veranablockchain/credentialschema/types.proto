@@ -16,8 +16,8 @@ enum CredentialSchemaPermManagementMode {
   OPEN = 1;
   // Requires validation from a grantor
   GRANTOR_VALIDATION = 2;
-  // Requires validation from trust registry
-  TRUST_REGISTRY_VALIDATION = 3;
+  // Requires validation from ecosystem (was TRUST_REGISTRY_VALIDATION)
+  ECOSYSTEM = 3;
 }
 
 // CredentialSchema defines the structure for a credential schema

@@ -4,6 +4,7 @@ import (
 	"cosmossdk.io/math"
 	"errors"
 	"fmt"
+	credentialschematypes "github.com/verana-labs/verana-blockchain/x/credentialschema/types"
 
 	"cosmossdk.io/collections"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -152,6 +153,7 @@ func (ms msgServer) createOrUpdateSession(ctx sdk.Context, msg *types.MsgCreateO
 // findBeneficiaries gets the set of permissions that should receive fees
 func (ms msgServer) findBeneficiaries(ctx sdk.Context, issuerPermId, verifierPermId uint64) ([]types.Permission, error) {
 	var foundPerms []types.Permission
+	var schemaID uint64
 
 	// Helper function to check if a permission is already in the slice
 	containsPerm := func(id uint64) bool {
@@ -163,7 +165,59 @@ func (ms msgServer) findBeneficiaries(ctx sdk.Context, issuerPermId, verifierPer
 		return false
 	}
 
-	// Process issuer permission hierarchy if provided
+	// Get schema ID from either issuer or verifier permission
+	if issuerPermId != 0 {
+		issuerPerm, err := ms.Permission.Get(ctx, issuerPermId)
+		if err != nil {
+			return nil, fmt.Errorf("issuer permission not found: %w", err)
+		}
+		schemaID = issuerPerm.SchemaId
+	} else if verifierPermId != 0 {
+		verifierPerm, err := ms.Permission.Get(ctx, verifierPermId)
+		if err != nil {
+			return nil, fmt.Errorf("verifier permission not found: %w", err)
+		}
+		schemaID = verifierPerm.SchemaId
+	} else {
+		return nil, fmt.Errorf("at least one of issuer_perm_id or verifier_perm_id must be provided")
+	}
+
+	// Get schema to check permission management mode
+	cs, err := ms.credentialSchemaKeeper.GetCredentialSchemaById(ctx, schemaID)
+	if err != nil {
+		return nil, fmt.Errorf("credential schema not found: %w", err)
+	}
+
+	// Check if schema is configured with OPEN permission management mode
+	isOpenMode := false
+
+	if (issuerPermId != 0 && cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_OPEN) ||
+		(verifierPermId != 0 && cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_OPEN) {
+		isOpenMode = true
+	}
+
+	// For OPEN mode, find the ECOSYSTEM permission
+	if isOpenMode {
+		// Find ECOSYSTEM permission for this schema
+		err = ms.Permission.Walk(ctx, nil, func(id uint64, perm types.Permission) (bool, error) {
+			if perm.SchemaId == schemaID &&
+				perm.Type == types.PermissionType_PERMISSION_TYPE_ECOSYSTEM &&
+				perm.Revoked == nil && perm.Terminated == nil {
+				foundPerms = append(foundPerms, perm)
+				return true, nil // Stop iteration once found
+			}
+			return false, nil
+		})
+
+		if err != nil {
+			return nil, fmt.Errorf("failed to query ECOSYSTEM permission: %w", err)
+		}
+
+		// For OPEN mode, we only return the ECOSYSTEM permission as the beneficiary
+		return foundPerms, nil
+	}
+
+	// Process issuer permission hierarchy if provided (non-OPEN mode)
 	if issuerPermId != 0 {
 		issuerPerm, err := ms.Permission.Get(ctx, issuerPermId)
 		if err != nil {

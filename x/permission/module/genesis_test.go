@@ -61,7 +61,7 @@ func TestDeterministicGenesis(t *testing.T) {
 
 	perm1 := types.Permission{
 		Id:             1,
-		Type:           types.PermissionType_PERMISSION_TYPE_TRUST_REGISTRY,
+		Type:           types.PermissionType_PERMISSION_TYPE_ECOSYSTEM,
 		Did:            "did:example:12345",
 		Grantee:        creatorAddr,
 		Created:        &nowTime,
@@ -170,7 +170,7 @@ func TestGenesisImportExport(t *testing.T) {
 	// Create test permissions
 	perm1 := types.Permission{
 		Id:             1,
-		Type:           types.PermissionType_PERMISSION_TYPE_TRUST_REGISTRY,
+		Type:           types.PermissionType_PERMISSION_TYPE_ECOSYSTEM,
 		Did:            "did:example:12345",
 		Grantee:        creatorAddr,
 		Created:        &nowTime,
