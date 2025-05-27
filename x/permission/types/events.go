@@ -16,4 +16,7 @@ const (
 	AttributeKeyIssuerPermID                 = "issuer_perm_id"
 	AttributeKeyVerifierPermID               = "verifier_perm_id"
 	AttributeKeyWalletAgentPermID            = "wallet_agent_perm_id"
+	EventTypeSlashPermissionTrustDeposit     = "slash_permission_trust_deposit"
+	AttributeKeySlashedAmount                = "slashed_amount"
+	AttributeKeySlashedBy                    = "slashed_by"
 )

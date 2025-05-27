@@ -874,3 +874,134 @@ func (ms msgServer) CreateOrUpdatePermissionSession(goCtx context.Context, msg *
 		Id: msg.Id,
 	}, nil
 }
+
+// SlashPermissionTrustDeposit handles the MsgSlashPermissionTrustDeposit message
+func (ms msgServer) SlashPermissionTrustDeposit(goCtx context.Context, msg *types.MsgSlashPermissionTrustDeposit) (*types.MsgSlashPermissionTrustDepositResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Load Permission entry applicant_perm from id
+	applicantPerm, err := ms.Keeper.GetPermissionByID(ctx, msg.Id)
+	if err != nil {
+		return nil, fmt.Errorf("permission not found: %w", err)
+	}
+
+	// applicant_perm MUST be a valid permission
+	if applicantPerm.Revoked != nil || applicantPerm.Terminated != nil {
+		return nil, fmt.Errorf("permission is not valid (revoked or terminated)")
+	}
+
+	// amount MUST be lower or equal to applicant_perm.deposit
+	if msg.Amount > applicantPerm.Deposit {
+		return nil, fmt.Errorf("amount exceeds available deposit: %d > %d", msg.Amount, applicantPerm.Deposit)
+	}
+
+	// [MOD-PERM-MSG-12-2-2] Slash Permission Trust Deposit validator perms
+	hasSlashingAuthority := false
+
+	// Option #1: executed by validator
+	if applicantPerm.ValidatorPermId != 0 {
+		validatorPerm, err := ms.Keeper.GetPermissionByID(ctx, applicantPerm.ValidatorPermId)
+		if err == nil && validatorPerm.Revoked == nil && validatorPerm.Terminated == nil {
+			if validatorPerm.Grantee == msg.Creator {
+				hasSlashingAuthority = true
+			}
+		}
+	}
+
+	// Option #2: executed by ecosystem controller
+	if !hasSlashingAuthority {
+		ecosystemPerm, err := ms.findEcosystemPermissionForSchema(ctx, applicantPerm.SchemaId)
+		if err == nil {
+			if ecosystemPerm.Grantee == msg.Creator {
+				hasSlashingAuthority = true
+			}
+		}
+	}
+
+	// Option #3: network governance authority
+	if !hasSlashingAuthority {
+		// Check if creator is the network governance authority
+		authority := ms.Keeper.GetAuthority()
+		if msg.Creator == authority {
+			hasSlashingAuthority = true
+		}
+	}
+
+	if !hasSlashingAuthority {
+		return nil, fmt.Errorf("creator does not have authority to slash this permission")
+	}
+
+	// [MOD-PERM-MSG-12-2-3] Slash Permission Trust Deposit fee checks
+	// Account executing the method MUST have the required estimated transaction fees
+	// This is handled by the SDK automatically
+
+	// [MOD-PERM-MSG-12-3] Slash Permission Trust Deposit execution
+	if err := ms.executeSlashPermissionTrustDeposit(ctx, applicantPerm, msg.Amount, msg.Creator); err != nil {
+		return nil, fmt.Errorf("failed to slash permission trust deposit: %w", err)
+	}
+
+	// Emit event
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeSlashPermissionTrustDeposit,
+			sdk.NewAttribute(types.AttributeKeyPermissionID, strconv.FormatUint(msg.Id, 10)),
+			sdk.NewAttribute(types.AttributeKeySlashedAmount, strconv.FormatUint(msg.Amount, 10)),
+			sdk.NewAttribute(types.AttributeKeySlashedBy, msg.Creator),
+			sdk.NewAttribute(types.AttributeKeyTimestamp, ctx.BlockTime().String()),
+		),
+	})
+
+	return &types.MsgSlashPermissionTrustDepositResponse{}, nil
+}
+
+// executeSlashPermissionTrustDeposit performs the actual slashing execution
+func (ms msgServer) executeSlashPermissionTrustDeposit(ctx sdk.Context, applicantPerm types.Permission, amount uint64, slashedBy string) error {
+	now := ctx.BlockTime()
+
+	// Update Permission entry applicant_perm
+	applicantPerm.Slashed = &now
+	applicantPerm.Modified = &now
+	applicantPerm.SlashedDeposit = applicantPerm.SlashedDeposit + amount
+	applicantPerm.SlashedBy = slashedBy
+
+	// TODO: use MOD-TD-MSG-7 to burn the slashed amount from the trust deposit of applicant_perm.grantee
+	// This functionality doesn't exist yet, so commenting out for now
+	// if err := ms.trustDeposit.BurnTrustDeposit(ctx, applicantPerm.Grantee, int64(amount)); err != nil {
+	//     return fmt.Errorf("failed to burn trust deposit: %w", err)
+	// }
+
+	// Update permission
+	if err := ms.Keeper.UpdatePermission(ctx, applicantPerm); err != nil {
+		return fmt.Errorf("failed to update permission: %w", err)
+	}
+
+	return nil
+}
+
+// findEcosystemPermissionForSchema finds the ECOSYSTEM permission for a given schema
+func (ms msgServer) findEcosystemPermissionForSchema(ctx sdk.Context, schemaId uint64) (types.Permission, error) {
+	var ecosystemPerm types.Permission
+	var found bool
+
+	err := ms.Permission.Walk(ctx, nil, func(key uint64, perm types.Permission) (bool, error) {
+		if perm.Type == types.PermissionType_PERMISSION_TYPE_ECOSYSTEM &&
+			perm.SchemaId == schemaId &&
+			perm.Revoked == nil &&
+			perm.Terminated == nil {
+			ecosystemPerm = perm
+			found = true
+			return true, nil // Stop iteration
+		}
+		return false, nil
+	})
+
+	if err != nil {
+		return types.Permission{}, err
+	}
+
+	if !found {
+		return types.Permission{}, fmt.Errorf("ecosystem permission not found for schema %d", schemaId)
+	}
+
+	return ecosystemPerm, nil
+}

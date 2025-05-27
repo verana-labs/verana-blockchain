@@ -252,3 +252,15 @@ func (msg *MsgCreateOrUpdatePermissionSession) ValidateBasic() error {
 
 	return nil
 }
+
+func (msg *MsgSlashPermissionTrustDeposit) ValidateBasic() error {
+	// [MOD-PERM-MSG-12-2-1] Slash Permission Trust Deposit basic checks
+	if msg.Id == 0 {
+		return sdkerrors.ErrInvalidRequest.Wrap("id must be a valid uint64")
+	}
+
+	if msg.Amount == 0 {
+		return sdkerrors.ErrInvalidRequest.Wrap("amount must be greater than 0")
+	}
+	return nil
+}
