@@ -886,9 +886,9 @@ func (ms msgServer) SlashPermissionTrustDeposit(goCtx context.Context, msg *type
 	}
 
 	// applicant_perm MUST be a valid permission
-	if applicantPerm.Revoked != nil || applicantPerm.Terminated != nil {
-		return nil, fmt.Errorf("permission is not valid (revoked or terminated)")
-	}
+	//if applicantPerm.Revoked != nil || applicantPerm.Terminated != nil {
+	//	return nil, fmt.Errorf("permission is not valid (revoked or terminated)")
+	//}
 
 	// amount MUST be lower or equal to applicant_perm.deposit
 	if msg.Amount > applicantPerm.Deposit {
@@ -918,14 +918,14 @@ func (ms msgServer) SlashPermissionTrustDeposit(goCtx context.Context, msg *type
 		}
 	}
 
-	// Option #3: network governance authority
-	if !hasSlashingAuthority {
-		// Check if creator is the network governance authority
-		authority := ms.Keeper.GetAuthority()
-		if msg.Creator == authority {
-			hasSlashingAuthority = true
-		}
-	}
+	//// Option #3: network governance authority
+	//if !hasSlashingAuthority {
+	//	// Check if creator is the network governance authority
+	//	authority := ms.Keeper.GetAuthority()
+	//	if msg.Creator == authority {
+	//		hasSlashingAuthority = true
+	//	}
+	//}
 
 	if !hasSlashingAuthority {
 		return nil, fmt.Errorf("creator does not have authority to slash this permission")
@@ -964,11 +964,10 @@ func (ms msgServer) executeSlashPermissionTrustDeposit(ctx sdk.Context, applican
 	applicantPerm.SlashedDeposit = applicantPerm.SlashedDeposit + amount
 	applicantPerm.SlashedBy = slashedBy
 
-	// TODO: use MOD-TD-MSG-7 to burn the slashed amount from the trust deposit of applicant_perm.grantee
 	// This functionality doesn't exist yet, so commenting out for now
-	// if err := ms.trustDeposit.BurnTrustDeposit(ctx, applicantPerm.Grantee, int64(amount)); err != nil {
-	//     return fmt.Errorf("failed to burn trust deposit: %w", err)
-	// }
+	if err := ms.trustDeposit.BurnEcosystemSlashedTrustDeposit(ctx, applicantPerm.Grantee, amount); err != nil {
+		return fmt.Errorf("failed to burn trust deposit: %w", err)
+	}
 
 	// Update permission
 	if err := ms.Keeper.UpdatePermission(ctx, applicantPerm); err != nil {

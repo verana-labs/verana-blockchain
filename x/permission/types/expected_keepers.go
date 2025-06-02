@@ -47,4 +47,5 @@ type TrustDepositKeeper interface {
 	GetTrustDepositRate(ctx sdk.Context) math.LegacyDec
 	GetUserAgentRewardRate(ctx sdk.Context) math.LegacyDec
 	GetWalletUserAgentRewardRate(ctx sdk.Context) math.LegacyDec
+	BurnEcosystemSlashedTrustDeposit(ctx sdk.Context, account string, amount uint64) error
 }

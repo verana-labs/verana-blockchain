@@ -5,6 +5,7 @@ import "amino/amino.proto";
 import "cosmos/msg/v1/msg.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
 import "veranablockchain/trustdeposit/params.proto";
 
 option go_package = "github.com/verana-labs/verana-blockchain/x/trustdeposit/types";
@@ -16,4 +17,11 @@ message TrustDeposit {
   uint64 share = 2;
   uint64 amount = 3;
   uint64 claimable = 4;
+  // NEW v2 fields: Slashing related
+  uint64 slashed_deposit = 5;
+  uint64 repaid_deposit = 6;
+  google.protobuf.Timestamp last_slashed = 7 [(gogoproto.stdtime) = true];
+  google.protobuf.Timestamp last_repaid = 8 [(gogoproto.stdtime) = true];
+  uint64 slash_count = 9;
+  string last_repaid_by = 10 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 }
