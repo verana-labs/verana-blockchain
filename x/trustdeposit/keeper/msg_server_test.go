@@ -536,57 +536,6 @@ func TestUtilityFunctions(t *testing.T) {
 		}
 	})
 
-	// Test GetTotalSharesAndDeposits
-	t.Run("GetTotalSharesAndDeposits", func(t *testing.T) {
-		// Initially should be zero
-		totalShares, totalDeposits := k.GetTotalSharesAndDeposits(sdkCtx)
-		require.Equal(t, int64(0), totalShares)
-		require.Equal(t, int64(0), totalDeposits)
-
-		// Create some trust deposits
-		deposits := []struct {
-			account   string
-			share     uint64
-			amount    uint64
-			claimable uint64
-		}{
-			{
-				account:   "account1",
-				share:     100,
-				amount:    1000,
-				claimable: 200,
-			},
-			{
-				account:   "account2",
-				share:     50,
-				amount:    500,
-				claimable: 100,
-			},
-			{
-				account:   "account3",
-				share:     75,
-				amount:    750,
-				claimable: 150,
-			},
-		}
-
-		for _, d := range deposits {
-			td := types.TrustDeposit{
-				Account:   d.account,
-				Share:     d.share,
-				Amount:    d.amount,
-				Claimable: d.claimable,
-			}
-			err := k.TrustDeposit.Set(ctx, d.account, td)
-			require.NoError(t, err)
-		}
-
-		// Get totals and verify
-		totalShares, totalDeposits = k.GetTotalSharesAndDeposits(sdkCtx)
-		require.Equal(t, int64(225), totalShares)    // 100 + 50 + 75
-		require.Equal(t, int64(2250), totalDeposits) // 1000 + 500 + 750
-	})
-
 	// Test parameter getters
 	t.Run("Parameter getters", func(t *testing.T) {
 		// Set custom params for testing

@@ -58,6 +58,10 @@ func TrustregistryKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
 // MockTrustDepositKeeper is a mock implementation of the TrustDepositKeeper interface for testing
 type MockTrustDepositKeeper struct{}
 
+func (m *MockTrustDepositKeeper) BurnEcosystemSlashedTrustDeposit(ctx sdk.Context, account string, amount uint64) error {
+	return nil
+}
+
 func (m *MockTrustDepositKeeper) GetUserAgentRewardRate(ctx sdk.Context) math.LegacyDec {
 	//unimplemented
 	v, _ := math.LegacyNewDecFromStr("0")
