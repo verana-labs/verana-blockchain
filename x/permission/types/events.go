@@ -22,4 +22,5 @@ const (
 	EventTypeRepayPermissionSlashedTrustDeposit = "repay_permission_slashed_trust_deposit"
 	AttributeKeyRepaidAmount                    = "repaid_amount"
 	AttributeKeyRepaidBy                        = "repaid_by"
+	EventTypeCreatePermission                   = "create_permission"
 )

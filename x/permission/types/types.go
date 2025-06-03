@@ -254,6 +254,10 @@ func (msg *MsgCreateOrUpdatePermissionSession) ValidateBasic() error {
 }
 
 func (msg *MsgSlashPermissionTrustDeposit) ValidateBasic() error {
+	if _, err := sdk.AccAddressFromBech32(msg.Creator); err != nil {
+		return sdkerrors.ErrInvalidAddress.Wrapf("invalid creator address: %s", err)
+	}
+
 	// [MOD-PERM-MSG-12-2-1] Slash Permission Trust Deposit basic checks
 	if msg.Id == 0 {
 		return sdkerrors.ErrInvalidRequest.Wrap("id must be a valid uint64")
@@ -266,9 +270,36 @@ func (msg *MsgSlashPermissionTrustDeposit) ValidateBasic() error {
 }
 
 func (msg *MsgRepayPermissionSlashedTrustDeposit) ValidateBasic() error {
+	if _, err := sdk.AccAddressFromBech32(msg.Creator); err != nil {
+		return sdkerrors.ErrInvalidAddress.Wrapf("invalid creator address: %s", err)
+	}
 	// [MOD-PERM-MSG-13-2-1] Repay Permission Slashed Trust Deposit basic checks
 	if msg.Id == 0 {
 		return sdkerrors.ErrInvalidRequest.Wrap("id must be a valid uint64")
+	}
+	return nil
+}
+
+func (msg *MsgCreatePermission) ValidateBasic() error {
+	if _, err := sdk.AccAddressFromBech32(msg.Creator); err != nil {
+		return sdkerrors.ErrInvalidAddress.Wrapf("invalid creator address: %s", err)
+	}
+	// [MOD-PERM-MSG-13-2-1] Repay Permission Slashed Trust Deposit basic checks
+	if msg.SchemaId == 0 {
+		return sdkerrors.ErrInvalidRequest.Wrap("id must be a valid uint64")
+	}
+	// type MUST be ISSUER or VERIFIER
+	if msg.Type != PermissionType_PERMISSION_TYPE_ISSUER &&
+		msg.Type != PermissionType_PERMISSION_TYPE_VERIFIER {
+		return sdkerrors.ErrInvalidRequest.Wrap("type must be ISSUER or VERIFIER")
+	}
+
+	// did MUST conform to DID Syntax
+	if msg.Did == "" {
+		return sdkerrors.ErrInvalidRequest.Wrap("did is mandatory")
+	}
+	if !isValidDID(msg.Did) {
+		return sdkerrors.ErrInvalidRequest.Wrap("invalid DID syntax")
 	}
 	return nil
 }

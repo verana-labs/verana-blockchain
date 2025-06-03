@@ -394,6 +394,57 @@ Parameters:
 						},
 					},
 				},
+				{
+					RpcMethod: "CreatePermission",
+					Use:       "create-permission [schema-id] [type] [did]",
+					Short:     "Create a new permission for open schemas",
+					Long: `Create a new ISSUER or VERIFIER permission for schemas with OPEN management mode.
+This allows self-creation of permissions without validation process.
+
+Parameters:
+- schema-id: ID of the credential schema
+- type: Permission type (1=ISSUER, 2=VERIFIER)
+- did: DID of the grantee service
+
+Optional flags:
+- country: ISO 3166-1 alpha-2 country code
+- effective-from: Timestamp when permission becomes effective (RFC3339)
+- effective-until: Timestamp when permission expires (RFC3339)
+- verification-fees: Fees for credential verification (default: 0)`,
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "schema_id",
+						},
+						{
+							ProtoField: "type",
+						},
+						{
+							ProtoField: "did",
+						},
+					},
+					FlagOptions: map[string]*autocliv1.FlagOptions{
+						"country": {
+							Name:         "country",
+							DefaultValue: "",
+							Usage:        "Optional country code (ISO 3166-1 alpha-2)",
+						},
+						"effective_from": {
+							Name:         "effective-from",
+							DefaultValue: "",
+							Usage:        "Optional timestamp (RFC3339) from when the permission is effective",
+						},
+						"effective_until": {
+							Name:         "effective-until",
+							DefaultValue: "",
+							Usage:        "Optional timestamp (RFC3339) until when the permission is effective",
+						},
+						"verification_fees": {
+							Name:         "verification-fees",
+							DefaultValue: "0",
+							Usage:        "Verification fees in trust units",
+						},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},

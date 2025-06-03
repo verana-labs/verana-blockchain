@@ -1099,3 +1099,100 @@ func (ms msgServer) executeRepayPermissionSlashedTrustDeposit(ctx sdk.Context, a
 
 	return nil
 }
+
+// CreatePermission handles the MsgCreatePermission message
+func (ms msgServer) CreatePermission(goCtx context.Context, msg *types.MsgCreatePermission) (*types.MsgCreatePermissionResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// type MUST be ISSUER or VERIFIER
+	if msg.Type != types.PermissionType_PERMISSION_TYPE_ISSUER &&
+		msg.Type != types.PermissionType_PERMISSION_TYPE_VERIFIER {
+		return nil, fmt.Errorf("type must be ISSUER or VERIFIER")
+	}
+
+	// effective_from must be in the future
+	now := ctx.BlockTime()
+	if msg.EffectiveFrom != nil && !msg.EffectiveFrom.After(now) {
+		return nil, fmt.Errorf("effective_from must be in the future")
+	}
+
+	// effective_until must be greater than effective_from
+	if msg.EffectiveUntil != nil && msg.EffectiveFrom != nil {
+		if !msg.EffectiveUntil.After(*msg.EffectiveFrom) {
+			return nil, fmt.Errorf("effective_until must be greater than effective_from")
+		}
+	}
+
+	// country validation
+	if msg.Country != "" && !isValidCountryCode(msg.Country) {
+		return nil, fmt.Errorf("invalid country code format")
+	}
+
+	// verification_fees must be >= 0 (uint64 is naturally >= 0)
+
+	// Load credential schema
+	cs, err := ms.credentialSchemaKeeper.GetCredentialSchemaById(ctx, msg.SchemaId)
+	if err != nil {
+		return nil, fmt.Errorf("credential schema not found: %w", err)
+	}
+
+	// [MOD-PERM-MSG-14-2-2] Create Permission permission checks
+	if msg.Type == types.PermissionType_PERMISSION_TYPE_ISSUER {
+		if cs.IssuerPermManagementMode != credentialschematypes.CredentialSchemaPermManagementMode_OPEN {
+			return nil, fmt.Errorf("issuer permission management mode is not OPEN")
+		}
+	} else if msg.Type == types.PermissionType_PERMISSION_TYPE_VERIFIER {
+		if cs.VerifierPermManagementMode != credentialschematypes.CredentialSchemaPermManagementMode_OPEN {
+			return nil, fmt.Errorf("verifier permission management mode is not OPEN")
+		}
+	}
+
+	// [MOD-PERM-MSG-14-3] Create Permission execution
+	permissionId, err := ms.executeCreatePermission(ctx, msg, now)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create permission: %w", err)
+	}
+
+	// Emit event
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeCreatePermission,
+			sdk.NewAttribute(types.AttributeKeyPermissionID, strconv.FormatUint(permissionId, 10)),
+			sdk.NewAttribute(types.AttributeKeySchemaID, strconv.FormatUint(msg.SchemaId, 10)),
+			sdk.NewAttribute(types.AttributeKeyCreator, msg.Creator),
+			sdk.NewAttribute(types.AttributeKeyTimestamp, now.String()),
+		),
+	})
+
+	return &types.MsgCreatePermissionResponse{
+		Id: permissionId,
+	}, nil
+}
+
+// executeCreatePermission performs the actual permission creation
+func (ms msgServer) executeCreatePermission(ctx sdk.Context, msg *types.MsgCreatePermission, now time.Time) (uint64, error) {
+	// Create new Permission entry
+	// Create new Permission entry
+	perm := types.Permission{
+		SchemaId:         msg.SchemaId,
+		Type:             msg.Type,
+		Did:              msg.Did,
+		Grantee:          msg.Creator,
+		Created:          &now,
+		CreatedBy:        msg.Creator,
+		Modified:         &now,
+		EffectiveFrom:    msg.EffectiveFrom,
+		EffectiveUntil:   msg.EffectiveUntil,
+		Country:          msg.Country,
+		VerificationFees: msg.VerificationFees,
+		VpState:          types.ValidationState_VALIDATION_STATE_VALIDATED,
+	}
+
+	// Store the permission
+	id, err := ms.Keeper.CreatePermission(ctx, perm)
+	if err != nil {
+		return 0, fmt.Errorf("failed to create permission: %w", err)
+	}
+
+	return id, nil
+}

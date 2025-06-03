@@ -32,6 +32,7 @@ const (
 	Msg_CreateOrUpdatePermissionSession_FullMethodName    = "/veranablockchain.permission.Msg/CreateOrUpdatePermissionSession"
 	Msg_SlashPermissionTrustDeposit_FullMethodName        = "/veranablockchain.permission.Msg/SlashPermissionTrustDeposit"
 	Msg_RepayPermissionSlashedTrustDeposit_FullMethodName = "/veranablockchain.permission.Msg/RepayPermissionSlashedTrustDeposit"
+	Msg_CreatePermission_FullMethodName                   = "/veranablockchain.permission.Msg/CreatePermission"
 )
 
 // MsgClient is the client API for Msg service.
@@ -53,6 +54,7 @@ type MsgClient interface {
 	CreateOrUpdatePermissionSession(ctx context.Context, in *MsgCreateOrUpdatePermissionSession, opts ...grpc.CallOption) (*MsgCreateOrUpdatePermissionSessionResponse, error)
 	SlashPermissionTrustDeposit(ctx context.Context, in *MsgSlashPermissionTrustDeposit, opts ...grpc.CallOption) (*MsgSlashPermissionTrustDepositResponse, error)
 	RepayPermissionSlashedTrustDeposit(ctx context.Context, in *MsgRepayPermissionSlashedTrustDeposit, opts ...grpc.CallOption) (*MsgRepayPermissionSlashedTrustDepositResponse, error)
+	CreatePermission(ctx context.Context, in *MsgCreatePermission, opts ...grpc.CallOption) (*MsgCreatePermissionResponse, error)
 }
 
 type msgClient struct {
@@ -180,6 +182,15 @@ func (c *msgClient) RepayPermissionSlashedTrustDeposit(ctx context.Context, in *
 	return out, nil
 }
 
+func (c *msgClient) CreatePermission(ctx context.Context, in *MsgCreatePermission, opts ...grpc.CallOption) (*MsgCreatePermissionResponse, error) {
+	out := new(MsgCreatePermissionResponse)
+	err := c.cc.Invoke(ctx, Msg_CreatePermission_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
@@ -199,6 +210,7 @@ type MsgServer interface {
 	CreateOrUpdatePermissionSession(context.Context, *MsgCreateOrUpdatePermissionSession) (*MsgCreateOrUpdatePermissionSessionResponse, error)
 	SlashPermissionTrustDeposit(context.Context, *MsgSlashPermissionTrustDeposit) (*MsgSlashPermissionTrustDepositResponse, error)
 	RepayPermissionSlashedTrustDeposit(context.Context, *MsgRepayPermissionSlashedTrustDeposit) (*MsgRepayPermissionSlashedTrustDepositResponse, error)
+	CreatePermission(context.Context, *MsgCreatePermission) (*MsgCreatePermissionResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -244,6 +256,9 @@ func (UnimplementedMsgServer) SlashPermissionTrustDeposit(context.Context, *MsgS
 }
 func (UnimplementedMsgServer) RepayPermissionSlashedTrustDeposit(context.Context, *MsgRepayPermissionSlashedTrustDeposit) (*MsgRepayPermissionSlashedTrustDepositResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RepayPermissionSlashedTrustDeposit not implemented")
+}
+func (UnimplementedMsgServer) CreatePermission(context.Context, *MsgCreatePermission) (*MsgCreatePermissionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreatePermission not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -492,6 +507,24 @@ func _Msg_RepayPermissionSlashedTrustDeposit_Handler(srv interface{}, ctx contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_CreatePermission_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgCreatePermission)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).CreatePermission(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_CreatePermission_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).CreatePermission(ctx, req.(*MsgCreatePermission))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -550,6 +583,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RepayPermissionSlashedTrustDeposit",
 			Handler:    _Msg_RepayPermissionSlashedTrustDeposit_Handler,
+		},
+		{
+			MethodName: "CreatePermission",
+			Handler:    _Msg_CreatePermission_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
