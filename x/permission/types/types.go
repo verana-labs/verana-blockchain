@@ -264,3 +264,11 @@ func (msg *MsgSlashPermissionTrustDeposit) ValidateBasic() error {
 	}
 	return nil
 }
+
+func (msg *MsgRepayPermissionSlashedTrustDeposit) ValidateBasic() error {
+	// [MOD-PERM-MSG-13-2-1] Repay Permission Slashed Trust Deposit basic checks
+	if msg.Id == 0 {
+		return sdkerrors.ErrInvalidRequest.Wrap("id must be a valid uint64")
+	}
+	return nil
+}

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	credentialschematypes "github.com/verana-labs/verana-blockchain/x/credentialschema/types"
+	trustdeposittypes "github.com/verana-labs/verana-blockchain/x/trustdeposit/types"
 	"strconv"
 	"time"
 
@@ -1003,4 +1004,98 @@ func (ms msgServer) findEcosystemPermissionForSchema(ctx sdk.Context, schemaId u
 	}
 
 	return ecosystemPerm, nil
+}
+
+// RepayPermissionSlashedTrustDeposit handles the MsgRepayPermissionSlashedTrustDeposit message
+func (ms msgServer) RepayPermissionSlashedTrustDeposit(goCtx context.Context, msg *types.MsgRepayPermissionSlashedTrustDeposit) (*types.MsgRepayPermissionSlashedTrustDepositResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Load Permission entry applicant_perm from id
+	applicantPerm, err := ms.Keeper.GetPermissionByID(ctx, msg.Id)
+	if err != nil {
+		return nil, fmt.Errorf("permission not found: %w", err)
+	}
+
+	// Check if permission has been slashed
+	if applicantPerm.SlashedDeposit == 0 {
+		return nil, fmt.Errorf("permission has no slashed deposit to repay")
+	}
+
+	// Check if already repaid
+	if applicantPerm.RepaidDeposit >= applicantPerm.SlashedDeposit {
+		return nil, fmt.Errorf("slashed deposit already fully repaid")
+	}
+
+	// Calculate amount to repay (remaining slashed amount)
+	amountToRepay := applicantPerm.SlashedDeposit - applicantPerm.RepaidDeposit
+
+	// [MOD-PERM-MSG-13-2-3] Repay Permission Slashed Trust Deposit fee checks
+	// Account must have transaction fees + slashed_deposit amount
+	senderAddr, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+		return nil, fmt.Errorf("invalid creator address: %w", err)
+	}
+
+	// Check if sender has sufficient balance for repayment
+	requiredAmount := sdk.NewCoins(sdk.NewInt64Coin(types.BondDenom, int64(amountToRepay)))
+	if !ms.bankKeeper.HasBalance(ctx, senderAddr, requiredAmount[0]) {
+		return nil, fmt.Errorf("insufficient funds to repay slashed deposit: required %d", amountToRepay)
+	}
+
+	// [MOD-PERM-MSG-13-3] Repay Permission Slashed Trust Deposit execution
+	if err := ms.executeRepayPermissionSlashedTrustDeposit(ctx, applicantPerm, amountToRepay, msg.Creator); err != nil {
+		return nil, fmt.Errorf("failed to repay permission slashed trust deposit: %w", err)
+	}
+
+	// Emit event
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeRepayPermissionSlashedTrustDeposit,
+			sdk.NewAttribute(types.AttributeKeyPermissionID, strconv.FormatUint(msg.Id, 10)),
+			sdk.NewAttribute(types.AttributeKeyRepaidAmount, strconv.FormatUint(amountToRepay, 10)),
+			sdk.NewAttribute(types.AttributeKeyRepaidBy, msg.Creator),
+			sdk.NewAttribute(types.AttributeKeyTimestamp, ctx.BlockTime().String()),
+		),
+	})
+
+	return &types.MsgRepayPermissionSlashedTrustDepositResponse{}, nil
+}
+
+// executeRepayPermissionSlashedTrustDeposit performs the actual repayment execution
+func (ms msgServer) executeRepayPermissionSlashedTrustDeposit(ctx sdk.Context, applicantPerm types.Permission, amount uint64, repaidBy string) error {
+	now := ctx.BlockTime()
+
+	// Transfer repayment amount from repayer to trust deposit module
+	senderAddr, err := sdk.AccAddressFromBech32(repaidBy)
+	if err != nil {
+		return fmt.Errorf("invalid repaid_by address: %w", err)
+	}
+
+	// Transfer tokens from repayer to trust deposit module
+	if err := ms.bankKeeper.SendCoinsFromAccountToModule(
+		ctx,
+		senderAddr,
+		trustdeposittypes.ModuleName, //to the trust deposit module
+		sdk.NewCoins(sdk.NewInt64Coin(types.BondDenom, int64(amount))),
+	); err != nil {
+		return fmt.Errorf("failed to transfer repayment: %w", err)
+	}
+
+	// Update Permission entry applicant_perm
+	applicantPerm.Repaid = &now
+	applicantPerm.Modified = &now
+	applicantPerm.RepaidDeposit = amount
+	applicantPerm.RepaidBy = repaidBy
+
+	// Use AdjustTrustDeposit to transfer amount to trust deposit of applicant_perm.grantee
+	if err := ms.trustDeposit.AdjustTrustDeposit(ctx, applicantPerm.Grantee, int64(amount)); err != nil {
+		return fmt.Errorf("failed to adjust trust deposit: %w", err)
+	}
+
+	// Update permission
+	if err := ms.Keeper.UpdatePermission(ctx, applicantPerm); err != nil {
+		return fmt.Errorf("failed to update permission: %w", err)
+	}
+
+	return nil
 }

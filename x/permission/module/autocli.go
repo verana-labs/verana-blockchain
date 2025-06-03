@@ -357,6 +357,43 @@ At least one of issuer-perm-id or verifier-perm-id must be provided.`,
 						},
 					},
 				},
+				{
+					RpcMethod: "SlashPermissionTrustDeposit",
+					Use:       "slash-permission-td [id] [amount]",
+					Short:     "Slash a permission's trust deposit",
+					Long: `Slash a permission's trust deposit. Can only be executed by:
+- The validator that created the permission
+- The grantee of the ECOSYSTEM permission (trust registry controller) for the corresponding credential schema
+- The network governance authority (via proposal)
+
+Parameters:
+- id: ID of the permission to slash
+- amount: Amount to slash from the trust deposit`,
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "id",
+						},
+						{
+							ProtoField: "amount",
+						},
+					},
+				},
+				{
+					RpcMethod: "RepayPermissionSlashedTrustDeposit",
+					Use:       "repay-permission-slashed-td [id]",
+					Short:     "Repay a slashed permission's trust deposit",
+					Long: `Repay the slashed trust deposit of a permission. Can be executed by anyone willing to pay.
+This will repay the full remaining slashed amount and credit it to the permission grantee's trust deposit.
+Note: This does not make the slashed permission reusable - a new permission must be requested.
+
+Parameters:
+- id: ID of the permission with slashed deposit to repay`,
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{
+							ProtoField: "id",
+						},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},

@@ -19,18 +19,19 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Msg_UpdateParams_FullMethodName                    = "/veranablockchain.permission.Msg/UpdateParams"
-	Msg_StartPermissionVP_FullMethodName               = "/veranablockchain.permission.Msg/StartPermissionVP"
-	Msg_RenewPermissionVP_FullMethodName               = "/veranablockchain.permission.Msg/RenewPermissionVP"
-	Msg_SetPermissionVPToValidated_FullMethodName      = "/veranablockchain.permission.Msg/SetPermissionVPToValidated"
-	Msg_RequestPermissionVPTermination_FullMethodName  = "/veranablockchain.permission.Msg/RequestPermissionVPTermination"
-	Msg_ConfirmPermissionVPTermination_FullMethodName  = "/veranablockchain.permission.Msg/ConfirmPermissionVPTermination"
-	Msg_CancelPermissionVPLastRequest_FullMethodName   = "/veranablockchain.permission.Msg/CancelPermissionVPLastRequest"
-	Msg_CreateRootPermission_FullMethodName            = "/veranablockchain.permission.Msg/CreateRootPermission"
-	Msg_ExtendPermission_FullMethodName                = "/veranablockchain.permission.Msg/ExtendPermission"
-	Msg_RevokePermission_FullMethodName                = "/veranablockchain.permission.Msg/RevokePermission"
-	Msg_CreateOrUpdatePermissionSession_FullMethodName = "/veranablockchain.permission.Msg/CreateOrUpdatePermissionSession"
-	Msg_SlashPermissionTrustDeposit_FullMethodName     = "/veranablockchain.permission.Msg/SlashPermissionTrustDeposit"
+	Msg_UpdateParams_FullMethodName                       = "/veranablockchain.permission.Msg/UpdateParams"
+	Msg_StartPermissionVP_FullMethodName                  = "/veranablockchain.permission.Msg/StartPermissionVP"
+	Msg_RenewPermissionVP_FullMethodName                  = "/veranablockchain.permission.Msg/RenewPermissionVP"
+	Msg_SetPermissionVPToValidated_FullMethodName         = "/veranablockchain.permission.Msg/SetPermissionVPToValidated"
+	Msg_RequestPermissionVPTermination_FullMethodName     = "/veranablockchain.permission.Msg/RequestPermissionVPTermination"
+	Msg_ConfirmPermissionVPTermination_FullMethodName     = "/veranablockchain.permission.Msg/ConfirmPermissionVPTermination"
+	Msg_CancelPermissionVPLastRequest_FullMethodName      = "/veranablockchain.permission.Msg/CancelPermissionVPLastRequest"
+	Msg_CreateRootPermission_FullMethodName               = "/veranablockchain.permission.Msg/CreateRootPermission"
+	Msg_ExtendPermission_FullMethodName                   = "/veranablockchain.permission.Msg/ExtendPermission"
+	Msg_RevokePermission_FullMethodName                   = "/veranablockchain.permission.Msg/RevokePermission"
+	Msg_CreateOrUpdatePermissionSession_FullMethodName    = "/veranablockchain.permission.Msg/CreateOrUpdatePermissionSession"
+	Msg_SlashPermissionTrustDeposit_FullMethodName        = "/veranablockchain.permission.Msg/SlashPermissionTrustDeposit"
+	Msg_RepayPermissionSlashedTrustDeposit_FullMethodName = "/veranablockchain.permission.Msg/RepayPermissionSlashedTrustDeposit"
 )
 
 // MsgClient is the client API for Msg service.
@@ -51,6 +52,7 @@ type MsgClient interface {
 	RevokePermission(ctx context.Context, in *MsgRevokePermission, opts ...grpc.CallOption) (*MsgRevokePermissionResponse, error)
 	CreateOrUpdatePermissionSession(ctx context.Context, in *MsgCreateOrUpdatePermissionSession, opts ...grpc.CallOption) (*MsgCreateOrUpdatePermissionSessionResponse, error)
 	SlashPermissionTrustDeposit(ctx context.Context, in *MsgSlashPermissionTrustDeposit, opts ...grpc.CallOption) (*MsgSlashPermissionTrustDepositResponse, error)
+	RepayPermissionSlashedTrustDeposit(ctx context.Context, in *MsgRepayPermissionSlashedTrustDeposit, opts ...grpc.CallOption) (*MsgRepayPermissionSlashedTrustDepositResponse, error)
 }
 
 type msgClient struct {
@@ -169,6 +171,15 @@ func (c *msgClient) SlashPermissionTrustDeposit(ctx context.Context, in *MsgSlas
 	return out, nil
 }
 
+func (c *msgClient) RepayPermissionSlashedTrustDeposit(ctx context.Context, in *MsgRepayPermissionSlashedTrustDeposit, opts ...grpc.CallOption) (*MsgRepayPermissionSlashedTrustDepositResponse, error) {
+	out := new(MsgRepayPermissionSlashedTrustDepositResponse)
+	err := c.cc.Invoke(ctx, Msg_RepayPermissionSlashedTrustDeposit_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
@@ -187,6 +198,7 @@ type MsgServer interface {
 	RevokePermission(context.Context, *MsgRevokePermission) (*MsgRevokePermissionResponse, error)
 	CreateOrUpdatePermissionSession(context.Context, *MsgCreateOrUpdatePermissionSession) (*MsgCreateOrUpdatePermissionSessionResponse, error)
 	SlashPermissionTrustDeposit(context.Context, *MsgSlashPermissionTrustDeposit) (*MsgSlashPermissionTrustDepositResponse, error)
+	RepayPermissionSlashedTrustDeposit(context.Context, *MsgRepayPermissionSlashedTrustDeposit) (*MsgRepayPermissionSlashedTrustDepositResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -229,6 +241,9 @@ func (UnimplementedMsgServer) CreateOrUpdatePermissionSession(context.Context, *
 }
 func (UnimplementedMsgServer) SlashPermissionTrustDeposit(context.Context, *MsgSlashPermissionTrustDeposit) (*MsgSlashPermissionTrustDepositResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SlashPermissionTrustDeposit not implemented")
+}
+func (UnimplementedMsgServer) RepayPermissionSlashedTrustDeposit(context.Context, *MsgRepayPermissionSlashedTrustDeposit) (*MsgRepayPermissionSlashedTrustDepositResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RepayPermissionSlashedTrustDeposit not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -459,6 +474,24 @@ func _Msg_SlashPermissionTrustDeposit_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_RepayPermissionSlashedTrustDeposit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgRepayPermissionSlashedTrustDeposit)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).RepayPermissionSlashedTrustDeposit(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_RepayPermissionSlashedTrustDeposit_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).RepayPermissionSlashedTrustDeposit(ctx, req.(*MsgRepayPermissionSlashedTrustDeposit))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -513,6 +546,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SlashPermissionTrustDeposit",
 			Handler:    _Msg_SlashPermissionTrustDeposit_Handler,
+		},
+		{
+			MethodName: "RepayPermissionSlashedTrustDeposit",
+			Handler:    _Msg_RepayPermissionSlashedTrustDeposit_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
