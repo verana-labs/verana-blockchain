@@ -179,3 +179,69 @@ func (k Keeper) CalculateBurnAmount(claimed uint64, burnRate math.LegacyDec) uin
 	burnAmountDec := claimedDec.Mul(burnRate)
 	return burnAmountDec.TruncateInt().Uint64()
 }
+
+func (ms msgServer) RepaySlashedTrustDeposit(goCtx context.Context, msg *types.MsgRepaySlashedTrustDeposit) (*types.MsgRepaySlashedTrustDepositResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	
+	// Load TrustDeposit entry (must exist)
+	td, err := ms.Keeper.TrustDeposit.Get(ctx, msg.Account)
+	if err != nil {
+		return nil, fmt.Errorf("trust deposit entry not found for account %s: %w", msg.Account, err)
+	}
+
+	// Check that amount exactly equals slashed_deposit - repaid_deposit
+	outstandingSlash := td.SlashedDeposit - td.RepaidDeposit
+	if msg.Amount != outstandingSlash {
+		return nil, fmt.Errorf("amount must exactly equal outstanding slashed amount: expected %d, got %d", outstandingSlash, msg.Amount)
+	}
+
+	// [MOD-TD-MSG-6-2-2] Fee checks validation
+	creatorAddr, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+		return nil, fmt.Errorf("invalid creator address: %w", err)
+	}
+
+	// Transfer amount from creator to trust deposit module
+	transferCoins := sdk.NewCoins(sdk.NewInt64Coin(types.BondDenom, int64(msg.Amount)))
+	if err := ms.Keeper.bankKeeper.SendCoinsFromAccountToModule(
+		ctx,
+		creatorAddr,
+		types.ModuleName,
+		transferCoins,
+	); err != nil {
+		return nil, fmt.Errorf("failed to transfer tokens: %w", err)
+	}
+
+	// [MOD-TD-MSG-6-3] Execution
+	params := ms.Keeper.GetParams(ctx)
+	now := ctx.BlockTime()
+
+	// Update trust deposit fields
+	td.Amount += msg.Amount
+
+	// Calculate share increase using decimal math
+	shareIncrease := ms.Keeper.AmountToShare(msg.Amount, params.TrustDepositShareValue)
+	td.Share += shareIncrease
+
+	// Update repayment tracking
+	td.RepaidDeposit += msg.Amount
+	td.LastRepaid = &now
+	td.LastRepaidBy = msg.Creator
+
+	// Save updated trust deposit
+	if err := ms.Keeper.TrustDeposit.Set(ctx, msg.Account, td); err != nil {
+		return nil, fmt.Errorf("failed to update trust deposit: %w", err)
+	}
+
+	// Emit event
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeRepaySlashedTrustDeposit,
+			sdk.NewAttribute(types.AttributeKeyAccount, msg.Account),
+			sdk.NewAttribute(types.AttributeKeyAmount, fmt.Sprintf("%d", msg.Amount)),
+			sdk.NewAttribute(types.AttributeKeyRepaidBy, msg.Creator),
+		),
+	)
+
+	return &types.MsgRepaySlashedTrustDepositResponse{}, nil
+}

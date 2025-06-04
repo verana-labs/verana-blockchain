@@ -22,6 +22,7 @@ const (
 	Msg_UpdateParams_FullMethodName                 = "/veranablockchain.trustdeposit.Msg/UpdateParams"
 	Msg_ReclaimTrustDepositInterests_FullMethodName = "/veranablockchain.trustdeposit.Msg/ReclaimTrustDepositInterests"
 	Msg_ReclaimTrustDeposit_FullMethodName          = "/veranablockchain.trustdeposit.Msg/ReclaimTrustDeposit"
+	Msg_RepaySlashedTrustDeposit_FullMethodName     = "/veranablockchain.trustdeposit.Msg/RepaySlashedTrustDeposit"
 )
 
 // MsgClient is the client API for Msg service.
@@ -33,6 +34,8 @@ type MsgClient interface {
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
 	ReclaimTrustDepositInterests(ctx context.Context, in *MsgReclaimTrustDepositInterests, opts ...grpc.CallOption) (*MsgReclaimTrustDepositInterestsResponse, error)
 	ReclaimTrustDeposit(ctx context.Context, in *MsgReclaimTrustDeposit, opts ...grpc.CallOption) (*MsgReclaimTrustDepositResponse, error)
+	// rpc SlashTrustDeposit(MsgSlashTrustDeposit) returns (MsgSlashTrustDepositResponse);
+	RepaySlashedTrustDeposit(ctx context.Context, in *MsgRepaySlashedTrustDeposit, opts ...grpc.CallOption) (*MsgRepaySlashedTrustDepositResponse, error)
 }
 
 type msgClient struct {
@@ -70,6 +73,15 @@ func (c *msgClient) ReclaimTrustDeposit(ctx context.Context, in *MsgReclaimTrust
 	return out, nil
 }
 
+func (c *msgClient) RepaySlashedTrustDeposit(ctx context.Context, in *MsgRepaySlashedTrustDeposit, opts ...grpc.CallOption) (*MsgRepaySlashedTrustDepositResponse, error) {
+	out := new(MsgRepaySlashedTrustDepositResponse)
+	err := c.cc.Invoke(ctx, Msg_RepaySlashedTrustDeposit_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
@@ -79,6 +91,8 @@ type MsgServer interface {
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
 	ReclaimTrustDepositInterests(context.Context, *MsgReclaimTrustDepositInterests) (*MsgReclaimTrustDepositInterestsResponse, error)
 	ReclaimTrustDeposit(context.Context, *MsgReclaimTrustDeposit) (*MsgReclaimTrustDepositResponse, error)
+	// rpc SlashTrustDeposit(MsgSlashTrustDeposit) returns (MsgSlashTrustDepositResponse);
+	RepaySlashedTrustDeposit(context.Context, *MsgRepaySlashedTrustDeposit) (*MsgRepaySlashedTrustDepositResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -94,6 +108,9 @@ func (UnimplementedMsgServer) ReclaimTrustDepositInterests(context.Context, *Msg
 }
 func (UnimplementedMsgServer) ReclaimTrustDeposit(context.Context, *MsgReclaimTrustDeposit) (*MsgReclaimTrustDepositResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ReclaimTrustDeposit not implemented")
+}
+func (UnimplementedMsgServer) RepaySlashedTrustDeposit(context.Context, *MsgRepaySlashedTrustDeposit) (*MsgRepaySlashedTrustDepositResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RepaySlashedTrustDeposit not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -162,6 +179,24 @@ func _Msg_ReclaimTrustDeposit_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_RepaySlashedTrustDeposit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgRepaySlashedTrustDeposit)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).RepaySlashedTrustDeposit(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_RepaySlashedTrustDeposit_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).RepaySlashedTrustDeposit(ctx, req.(*MsgRepaySlashedTrustDeposit))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -180,6 +215,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ReclaimTrustDeposit",
 			Handler:    _Msg_ReclaimTrustDeposit_Handler,
+		},
+		{
+			MethodName: "RepaySlashedTrustDeposit",
+			Handler:    _Msg_RepaySlashedTrustDeposit_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

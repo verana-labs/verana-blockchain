@@ -919,15 +919,6 @@ func (ms msgServer) SlashPermissionTrustDeposit(goCtx context.Context, msg *type
 		}
 	}
 
-	//// Option #3: network governance authority
-	//if !hasSlashingAuthority {
-	//	// Check if creator is the network governance authority
-	//	authority := ms.Keeper.GetAuthority()
-	//	if msg.Creator == authority {
-	//		hasSlashingAuthority = true
-	//	}
-	//}
-
 	if !hasSlashingAuthority {
 		return nil, fmt.Errorf("creator does not have authority to slash this permission")
 	}

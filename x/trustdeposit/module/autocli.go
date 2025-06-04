@@ -56,6 +56,16 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 						},
 					},
 				},
+				{
+					RpcMethod: "RepaySlashedTrustDeposit",
+					Use:       "repay-slashed-td [account] [amount]",
+					Short:     "Repay slashed trust deposit for an account",
+					Long:      "Repay the outstanding slashed trust deposit amount for a specific account. The amount must exactly match the outstanding slashed amount.",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "account"},
+						{ProtoField: "amount"},
+					},
+				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},
