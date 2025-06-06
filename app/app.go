@@ -2,6 +2,8 @@ package app
 
 import (
 	"fmt"
+	trustdepositmodulev1 "github.com/verana-labs/verana-blockchain/x/trustdeposit/module"
+	trustdeposittypes "github.com/verana-labs/verana-blockchain/x/trustdeposit/types"
 	"io"
 
 	upgradetypes "cosmossdk.io/x/upgrade/types"
@@ -13,6 +15,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/bank"
 	"github.com/cosmos/cosmos-sdk/x/consensus"
 	"github.com/cosmos/cosmos-sdk/x/crisis"
+	govtypesv1beta1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
 	"github.com/cosmos/cosmos-sdk/x/mint"
 	"github.com/cosmos/cosmos-sdk/x/params"
 	"github.com/cosmos/cosmos-sdk/x/slashing"
@@ -126,7 +129,7 @@ var (
 		capability.AppModuleBasic{},
 		staking.AppModuleBasic{},
 		mint.AppModuleBasic{},
-		//gov.NewAppModuleBasic(GetGovProposalHandlers()),
+		gov.NewAppModuleBasic(getGovProposalHandlers()),
 		params.AppModuleBasic{},
 		crisis.AppModuleBasic{},
 		slashing.AppModuleBasic{},
@@ -221,6 +224,7 @@ func getGovProposalHandlers() []govclient.ProposalHandler {
 
 	govProposalHandlers = append(govProposalHandlers,
 		paramsclient.ProposalHandler,
+		trustdepositmodulev1.SlashTrustDepositHandler,
 		// this line is used by starport scaffolding # stargate/app/govProposalHandler
 	)
 
@@ -358,6 +362,9 @@ func New(
 		}
 		return app.App.InitChainer(ctx, req)
 	})
+
+	govRouter := govtypesv1beta1.NewRouter()
+	govRouter.AddRoute(trustdeposittypes.RouterKey, trustdepositmodulekeeper.NewTrustDepositHandler(app.TrustdepositKeeper))
 
 	app.configurator = module.NewConfigurator(app.appCodec, app.MsgServiceRouter(), app.GRPCQueryRouter())
 

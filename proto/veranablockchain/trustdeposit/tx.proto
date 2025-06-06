@@ -20,6 +20,8 @@ service Msg {
   rpc ReclaimTrustDeposit(MsgReclaimTrustDeposit) returns (MsgReclaimTrustDepositResponse);
 //  rpc SlashTrustDeposit(MsgSlashTrustDeposit) returns (MsgSlashTrustDepositResponse);
   rpc RepaySlashedTrustDeposit(MsgRepaySlashedTrustDeposit) returns (MsgRepaySlashedTrustDepositResponse);
+  //rpc SlashTrustDepositProposal(MsgSlashTrustDepositProposal) returns (MsgSlashTrustDepositProposalResponse);
+
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
@@ -65,15 +67,19 @@ message MsgReclaimTrustDepositResponse {
   uint64 claimed_amount = 2;    // Amount transferred to account
 }
 
-//message MsgSlashTrustDeposit {
-//  option (cosmos.msg.v1.signer) = "authority";
-//
-//  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-//  string account = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-//  uint64 amount = 3;
+//message MsgSlashTrustDepositProposal {
+//  string title = 1 [(gogoproto.moretags) = "yaml:\"title\""];
+//  string description = 2 [(gogoproto.moretags) = "yaml:\"description\""];
+//  string account = 3 [(gogoproto.moretags) = "yaml:\"account\""];
+//  string amount = 4 [
+//    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+//    (gogoproto.nullable) = false,
+//    (gogoproto.moretags) = "yaml:\"amount\""
+//  ];
 //}
 //
-//message MsgSlashTrustDepositResponse {}
+//message MsgSlashTrustDepositProposalResponse {}
+
 
 message MsgRepaySlashedTrustDeposit {
   option (cosmos.msg.v1.signer) = "creator";

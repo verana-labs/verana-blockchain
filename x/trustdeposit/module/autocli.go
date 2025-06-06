@@ -2,6 +2,17 @@ package trustdeposit
 
 import (
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
+	"cosmossdk.io/math"
+	"fmt"
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
+	"github.com/cosmos/cosmos-sdk/client/tx"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	govclient "github.com/cosmos/cosmos-sdk/x/gov/client"
+	"github.com/cosmos/cosmos-sdk/x/gov/client/cli"
+	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
+	"github.com/spf13/cobra"
+	"github.com/verana-labs/verana-blockchain/x/trustdeposit/types"
 
 	modulev1 "github.com/verana-labs/verana-blockchain/api/veranablockchain/trustdeposit"
 )
@@ -71,3 +82,85 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 		},
 	}
 }
+
+func CmdSlashTrustDepositProposal() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "slash-trust-deposit [account] [amount] [flags]",
+		Short: "Submit a governance proposal to slash an account's trust deposit",
+		Args:  cobra.ExactArgs(2),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			// Parse account address
+			account := args[0]
+			if _, err := sdk.AccAddressFromBech32(account); err != nil {
+				return err
+			}
+
+			// Parse amount
+			amount, ok := math.NewIntFromString(args[1])
+			if !ok {
+				return fmt.Errorf("invalid amount: %s", args[1])
+			}
+
+			// Get proposal details from flags
+			title, err := cmd.Flags().GetString(cli.FlagTitle)
+			if err != nil {
+				return err
+			}
+
+			description, err := cmd.Flags().GetString(cli.FlagDescription)
+			if err != nil {
+				return err
+			}
+
+			depositStr, err := cmd.Flags().GetString(cli.FlagDeposit)
+			if err != nil {
+				return err
+			}
+
+			deposit, err := sdk.ParseCoinsNormalized(depositStr)
+			if err != nil {
+				return err
+			}
+
+			from := clientCtx.GetFromAddress()
+
+			// Create the proposal content
+			content := types.NewSlashTrustDepositProposal(title, description, account, amount)
+
+			// Create the governance proposal message
+			msg, err := govtypes.NewMsgSubmitProposal(content, deposit, from)
+			if err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	cmd.Flags().String(cli.FlagTitle, "", "The proposal title")
+	cmd.Flags().String(cli.FlagDescription, "", "The proposal description")
+	cmd.Flags().String(cli.FlagDeposit, "", "The proposal deposit")
+	err := cmd.MarkFlagRequired(cli.FlagTitle)
+	if err != nil {
+		return nil
+	}
+	err = cmd.MarkFlagRequired(cli.FlagDescription)
+	if err != nil {
+		return nil
+	}
+	err = cmd.MarkFlagRequired(cli.FlagDeposit)
+	if err != nil {
+		return nil
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+var SlashTrustDepositHandler = govclient.NewProposalHandler(CmdSlashTrustDepositProposal)
