@@ -240,6 +240,18 @@ func (ms msgServer) SetPermissionVPToValidated(goCtx context.Context, msg *types
 		msg.EffectiveUntil = vpExp
 	}
 
+	// Calculate validator trust deposit
+	validatorTrustDeposit := applicantPerm.VpCurrentFees * ms.GetTrustDepositRate(ctx)
+
+	// Update validator's trust deposit
+	if validatorTrustDeposit > 0 {
+		err = ms.trustDeposit.AdjustTrustDeposit(ctx, validatorPerm.Grantee, int64(validatorTrustDeposit))
+		if err != nil {
+			return nil, fmt.Errorf("failed to adjust validator trust deposit: %w", err)
+		}
+		applicantPerm.VpValidatorDeposit += validatorTrustDeposit
+	}
+
 	// [MOD-PERM-MSG-3-3] Execution
 	if err := ms.executeSetPermissionVPToValidated(ctx, applicantPerm, msg, now, vpExp); err != nil {
 		return nil, fmt.Errorf("failed to execute set to validated: %w", err)
@@ -276,6 +288,29 @@ func (ms msgServer) RequestPermissionVPTermination(goCtx context.Context, msg *t
 		// VP not expired - only grantee can terminate
 		if msg.Creator != applicantPerm.Grantee {
 			return nil, fmt.Errorf("only grantee can terminate active VP")
+		}
+	}
+
+	// Handle trust deposits
+	if applicantPerm.VpState == types.ValidationState_VALIDATION_STATE_TERMINATED {
+		if applicantPerm.Deposit > 0 {
+			err = ms.trustDeposit.AdjustTrustDeposit(ctx, applicantPerm.Grantee, -int64(applicantPerm.Deposit))
+			if err != nil {
+				return nil, fmt.Errorf("failed to reduce applicant trust deposit: %w", err)
+			}
+			applicantPerm.Deposit = 0
+		}
+
+		if applicantPerm.VpValidatorDeposit > 0 {
+			validatorPerm, err := ms.Keeper.GetPermissionByID(ctx, applicantPerm.ValidatorPermId)
+			if err != nil {
+				return nil, fmt.Errorf("failed to get validator permission: %w", err)
+			}
+			err = ms.trustDeposit.AdjustTrustDeposit(ctx, validatorPerm.Grantee, -int64(applicantPerm.VpValidatorDeposit))
+			if err != nil {
+				return nil, fmt.Errorf("failed to reduce validator trust deposit: %w", err)
+			}
+			applicantPerm.VpValidatorDeposit = 0
 		}
 	}
 
@@ -386,6 +421,24 @@ func (ms msgServer) ConfirmPermissionVPTermination(goCtx context.Context, msg *t
 		if msg.Creator != validatorPerm.Grantee && msg.Creator != applicantPerm.Grantee {
 			return nil, fmt.Errorf("only validator or applicant can confirm termination after timeout")
 		}
+	}
+
+	// Handle applicant's trust deposit
+	if applicantPerm.Deposit > 0 {
+		err = ms.trustDeposit.AdjustTrustDeposit(ctx, applicantPerm.Grantee, -int64(applicantPerm.Deposit))
+		if err != nil {
+			return nil, fmt.Errorf("failed to reduce applicant trust deposit: %w", err)
+		}
+		applicantPerm.Deposit = 0
+	}
+
+	// Handle validator's trust deposit if the validator is executing the method
+	if validatorPerm.Grantee == msg.Creator && applicantPerm.VpValidatorDeposit > 0 {
+		err = ms.trustDeposit.AdjustTrustDeposit(ctx, validatorPerm.Grantee, -int64(applicantPerm.VpValidatorDeposit))
+		if err != nil {
+			return nil, fmt.Errorf("failed to reduce validator trust deposit: %w", err)
+		}
+		applicantPerm.VpValidatorDeposit = 0
 	}
 
 	// [MOD-PERM-MSG-5-3] Execution
@@ -702,6 +755,28 @@ func (ms msgServer) RevokePermission(goCtx context.Context, msg *types.MsgRevoke
 
 	if validatorPerm.Grantee != msg.Creator {
 		return nil, fmt.Errorf("creator is not the validator")
+	}
+
+	// Handle applicant's trust deposit
+	if applicantPerm.Deposit > 0 {
+		err = ms.trustDeposit.AdjustTrustDeposit(ctx, applicantPerm.Grantee, -int64(applicantPerm.Deposit))
+		if err != nil {
+			return nil, fmt.Errorf("failed to reduce applicant trust deposit: %w", err)
+		}
+		applicantPerm.Deposit = 0
+	}
+
+	// Handle validator's trust deposit
+	if applicantPerm.VpValidatorDeposit > 0 {
+		validatorPerm, err := ms.Keeper.GetPermissionByID(ctx, applicantPerm.ValidatorPermId)
+		if err != nil {
+			return nil, fmt.Errorf("failed to get validator permission: %w", err)
+		}
+		err = ms.trustDeposit.AdjustTrustDeposit(ctx, validatorPerm.Grantee, -int64(applicantPerm.VpValidatorDeposit))
+		if err != nil {
+			return nil, fmt.Errorf("failed to reduce validator trust deposit: %w", err)
+		}
+		applicantPerm.VpValidatorDeposit = 0
 	}
 
 	// [MOD-PERM-MSG-9-3] Execution
@@ -1225,4 +1300,10 @@ func (ms msgServer) findEcosystemPermission(ctx sdk.Context, cs credentialschema
 	}
 
 	return foundPerm, nil
+}
+
+// GetTrustDepositRate returns the trust deposit rate from the trust deposit module
+func (ms msgServer) GetTrustDepositRate(ctx sdk.Context) uint64 {
+	rate := ms.trustDeposit.GetTrustDepositRate(ctx)
+	return uint64(rate.MulInt64(100).RoundInt64()) // Convert to percentage and then to uint64
 }
