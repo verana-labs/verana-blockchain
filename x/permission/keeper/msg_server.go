@@ -1163,7 +1163,12 @@ func (ms msgServer) CreatePermission(goCtx context.Context, msg *types.MsgCreate
 
 // executeCreatePermission performs the actual permission creation
 func (ms msgServer) executeCreatePermission(ctx sdk.Context, msg *types.MsgCreatePermission, now time.Time) (uint64, error) {
-	// Create new Permission entry
+	// Find the ecosystem permission for this schema
+	ecosystemPerm, err := ms.findEcosystemPermission(ctx, msg.SchemaId)
+	if err != nil {
+		return 0, fmt.Errorf("failed to find ecosystem permission: %w", err)
+	}
+
 	// Create new Permission entry
 	perm := types.Permission{
 		SchemaId:         msg.SchemaId,
@@ -1178,6 +1183,7 @@ func (ms msgServer) executeCreatePermission(ctx sdk.Context, msg *types.MsgCreat
 		Country:          msg.Country,
 		VerificationFees: msg.VerificationFees,
 		VpState:          types.ValidationState_VALIDATION_STATE_VALIDATED,
+		ValidatorPermId:  ecosystemPerm.Id, // Set the ecosystem permission as the validator
 	}
 
 	// Store the permission
@@ -1187,4 +1193,30 @@ func (ms msgServer) executeCreatePermission(ctx sdk.Context, msg *types.MsgCreat
 	}
 
 	return id, nil
+}
+
+// findEcosystemPermission finds the ecosystem permission for a given schema
+func (ms msgServer) findEcosystemPermission(ctx sdk.Context, schemaId uint64) (types.Permission, error) {
+	var foundPerm types.Permission
+	var found bool
+
+	// Iterate through all permissions to find the ecosystem permission for this schema
+	err := ms.Permission.Walk(ctx, nil, func(id uint64, perm types.Permission) (stop bool, err error) {
+		if perm.SchemaId == schemaId && perm.Type == types.PermissionType_PERMISSION_TYPE_ECOSYSTEM {
+			foundPerm = perm
+			found = true
+			return true, nil
+		}
+		return false, nil
+	})
+
+	if err != nil {
+		return types.Permission{}, fmt.Errorf("failed to iterate permissions: %w", err)
+	}
+
+	if !found {
+		return types.Permission{}, fmt.Errorf("ecosystem permission not found for schema %d", schemaId)
+	}
+
+	return foundPerm, nil
 }
