@@ -1163,8 +1163,14 @@ func (ms msgServer) CreatePermission(goCtx context.Context, msg *types.MsgCreate
 
 // executeCreatePermission performs the actual permission creation
 func (ms msgServer) executeCreatePermission(ctx sdk.Context, msg *types.MsgCreatePermission, now time.Time) (uint64, error) {
+	// Load credential schema
+	cs, err := ms.credentialSchemaKeeper.GetCredentialSchemaById(ctx, msg.SchemaId)
+	if err != nil {
+		return 0, fmt.Errorf("credential schema not found: %w", err)
+	}
+
 	// Find the ecosystem permission for this schema
-	ecosystemPerm, err := ms.findEcosystemPermission(ctx, msg.SchemaId)
+	ecosystemPerm, err := ms.findEcosystemPermission(ctx, cs)
 	if err != nil {
 		return 0, fmt.Errorf("failed to find ecosystem permission: %w", err)
 	}
@@ -1195,14 +1201,14 @@ func (ms msgServer) executeCreatePermission(ctx sdk.Context, msg *types.MsgCreat
 	return id, nil
 }
 
-// findEcosystemPermission finds the ecosystem permission for a given schema
-func (ms msgServer) findEcosystemPermission(ctx sdk.Context, schemaId uint64) (types.Permission, error) {
+// findEcosystemPermission finds the ecosystem permission for a given credential schema
+func (ms msgServer) findEcosystemPermission(ctx sdk.Context, cs credentialschematypes.CredentialSchema) (types.Permission, error) {
 	var foundPerm types.Permission
 	var found bool
 
 	// Iterate through all permissions to find the ecosystem permission for this schema
 	err := ms.Permission.Walk(ctx, nil, func(id uint64, perm types.Permission) (stop bool, err error) {
-		if perm.SchemaId == schemaId && perm.Type == types.PermissionType_PERMISSION_TYPE_ECOSYSTEM {
+		if perm.SchemaId == cs.Id && perm.Type == types.PermissionType_PERMISSION_TYPE_ECOSYSTEM {
 			foundPerm = perm
 			found = true
 			return true, nil
@@ -1215,7 +1221,7 @@ func (ms msgServer) findEcosystemPermission(ctx sdk.Context, schemaId uint64) (t
 	}
 
 	if !found {
-		return types.Permission{}, fmt.Errorf("ecosystem permission not found for schema %d", schemaId)
+		return types.Permission{}, fmt.Errorf("ecosystem permission not found for schema %d", cs.Id)
 	}
 
 	return foundPerm, nil
