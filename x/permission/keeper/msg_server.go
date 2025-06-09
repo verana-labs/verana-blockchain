@@ -2,13 +2,14 @@ package keeper
 
 import (
 	"context"
-	"cosmossdk.io/math"
 	"fmt"
+	"strconv"
+	"time"
+
+	"cosmossdk.io/math"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	credentialschematypes "github.com/verana-labs/verana-blockchain/x/credentialschema/types"
 	trustdeposittypes "github.com/verana-labs/verana-blockchain/x/trustdeposit/types"
-	"strconv"
-	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/verana-labs/verana-blockchain/x/permission/types"
@@ -753,8 +754,8 @@ func (ms msgServer) CreateOrUpdatePermissionSession(goCtx context.Context, msg *
 			return nil, sdkerrors.ErrInvalidRequest.Wrap("issuer permission must be ISSUER type")
 		}
 
-		if perm.Revoked != nil || perm.Terminated != nil {
-			return nil, sdkerrors.ErrInvalidRequest.Wrap("issuer permission is revoked or terminated")
+		if perm.Revoked != nil || perm.Terminated != nil || perm.SlashedDeposit > 0 {
+			return nil, sdkerrors.ErrInvalidRequest.Wrap("issuer permission is revoked, terminated, or slashed")
 		}
 	}
 
@@ -769,8 +770,8 @@ func (ms msgServer) CreateOrUpdatePermissionSession(goCtx context.Context, msg *
 			return nil, sdkerrors.ErrInvalidRequest.Wrap("verifier permission must be VERIFIER type")
 		}
 
-		if perm.Revoked != nil || perm.Terminated != nil {
-			return nil, sdkerrors.ErrInvalidRequest.Wrap("verifier permission is revoked or terminated")
+		if perm.Revoked != nil || perm.Terminated != nil || perm.SlashedDeposit > 0 {
+			return nil, sdkerrors.ErrInvalidRequest.Wrap("verifier permission is revoked, terminated, or slashed")
 		}
 
 		verifierPerm = &perm
@@ -786,8 +787,8 @@ func (ms msgServer) CreateOrUpdatePermissionSession(goCtx context.Context, msg *
 		return nil, sdkerrors.ErrInvalidRequest.Wrap("agent permission must be HOLDER type")
 	}
 
-	if agentPerm.Revoked != nil || agentPerm.Terminated != nil {
-		return nil, sdkerrors.ErrInvalidRequest.Wrap("agent permission is revoked or terminated")
+	if agentPerm.Revoked != nil || agentPerm.Terminated != nil || agentPerm.SlashedDeposit > 0 {
+		return nil, sdkerrors.ErrInvalidRequest.Wrap("agent permission is revoked, terminated, or slashed")
 	}
 
 	// Validate wallet agent permission if provided
@@ -801,8 +802,8 @@ func (ms msgServer) CreateOrUpdatePermissionSession(goCtx context.Context, msg *
 			return nil, sdkerrors.ErrInvalidRequest.Wrap("wallet agent permission must be HOLDER type")
 		}
 
-		if perm.Revoked != nil || perm.Terminated != nil {
-			return nil, sdkerrors.ErrInvalidRequest.Wrap("wallet agent permission is revoked or terminated")
+		if perm.Revoked != nil || perm.Terminated != nil || perm.SlashedDeposit > 0 {
+			return nil, sdkerrors.ErrInvalidRequest.Wrap("wallet agent permission is revoked, terminated, or slashed")
 		}
 
 	}

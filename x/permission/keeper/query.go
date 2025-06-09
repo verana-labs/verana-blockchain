@@ -2,17 +2,18 @@ package keeper
 
 import (
 	"context"
-	"cosmossdk.io/collections"
 	errors2 "errors"
 	"fmt"
+	"regexp"
+	"sort"
+	"time"
+
+	"cosmossdk.io/collections"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	credentialschematypes "github.com/verana-labs/verana-blockchain/x/credentialschema/types"
 	"github.com/verana-labs/verana-blockchain/x/permission/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"regexp"
-	"sort"
-	"time"
 )
 
 var _ types.QueryServer = Keeper{}
@@ -303,6 +304,11 @@ func isPermissionValidAtTime(perm types.Permission, when time.Time) bool {
 		return false
 	}
 
+	// Check slashed
+	if perm.SlashedDeposit > 0 {
+		return false
+	}
+
 	return true
 }
 
@@ -425,7 +431,7 @@ func (k Keeper) FindBeneficiaries(goCtx context.Context, req *types.QueryFindBen
 				}
 
 				// Add to set if not revoked or terminated
-				if currentPerm.Revoked == nil && currentPerm.Terminated == nil {
+				if currentPerm.Revoked == nil && currentPerm.Terminated == nil && currentPerm.SlashedDeposit == 0 {
 					foundPermMap[currentPermID] = currentPerm
 				}
 
@@ -438,7 +444,7 @@ func (k Keeper) FindBeneficiaries(goCtx context.Context, req *types.QueryFindBen
 	// Process verifier permission hierarchy
 	if verifierPerm != nil {
 		// First add issuer_perm to the set if it exists
-		if issuerPerm != nil && issuerPerm.Revoked == nil && issuerPerm.Terminated == nil {
+		if issuerPerm != nil && issuerPerm.Revoked == nil && issuerPerm.Terminated == nil && issuerPerm.SlashedDeposit == 0 {
 			foundPermMap[req.IssuerPermId] = *issuerPerm
 		}
 
@@ -454,7 +460,7 @@ func (k Keeper) FindBeneficiaries(goCtx context.Context, req *types.QueryFindBen
 				}
 
 				// Add to set if not revoked or terminated
-				if currentPerm.Revoked == nil && currentPerm.Terminated == nil {
+				if currentPerm.Revoked == nil && currentPerm.Terminated == nil && currentPerm.SlashedDeposit == 0 {
 					foundPermMap[currentPermID] = currentPerm
 				}
 

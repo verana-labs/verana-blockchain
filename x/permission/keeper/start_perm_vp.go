@@ -40,7 +40,7 @@ func (ms msgServer) validatePermissionChecks(ctx sdk.Context, msg *types.MsgStar
 	return validatorPerm, nil
 }
 
-func (ms msgServer) validateAndCalculateFees(ctx sdk.Context, creator string, validatorPerm types.Permission) (uint64, uint64, error) {
+func (ms msgServer) validateAndCalculateFees(ctx sdk.Context, _ string, validatorPerm types.Permission) (uint64, uint64, error) {
 	// Get global variables
 	trustUnitPrice := ms.trustRegistryKeeper.GetTrustUnitPrice(ctx)
 	trustDepositRate := ms.trustDeposit.GetTrustDepositRate(ctx)

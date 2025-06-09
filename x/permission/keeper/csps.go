@@ -1,9 +1,10 @@
 package keeper
 
 import (
-	"cosmossdk.io/math"
 	"errors"
 	"fmt"
+
+	"cosmossdk.io/math"
 	credentialschematypes "github.com/verana-labs/verana-blockchain/x/credentialschema/types"
 
 	"cosmossdk.io/collections"
@@ -202,7 +203,7 @@ func (ms msgServer) findBeneficiaries(ctx sdk.Context, issuerPermId, verifierPer
 		err = ms.Permission.Walk(ctx, nil, func(id uint64, perm types.Permission) (bool, error) {
 			if perm.SchemaId == schemaID &&
 				perm.Type == types.PermissionType_PERMISSION_TYPE_ECOSYSTEM &&
-				perm.Revoked == nil && perm.Terminated == nil {
+				perm.Revoked == nil && perm.Terminated == nil && perm.SlashedDeposit == 0 {
 				foundPerms = append(foundPerms, perm)
 				return true, nil // Stop iteration once found
 			}
@@ -234,7 +235,7 @@ func (ms msgServer) findBeneficiaries(ctx sdk.Context, issuerPermId, verifierPer
 				}
 
 				// Add to set if valid and not already included
-				if currentPerm.Revoked == nil && currentPerm.Terminated == nil && !containsPerm(currentPermID) {
+				if currentPerm.Revoked == nil && currentPerm.Terminated == nil && currentPerm.SlashedDeposit == 0 && !containsPerm(currentPermID) {
 					foundPerms = append(foundPerms, currentPerm)
 				}
 
@@ -269,7 +270,7 @@ func (ms msgServer) findBeneficiaries(ctx sdk.Context, issuerPermId, verifierPer
 				}
 
 				// Add to set if valid and not already included
-				if currentPerm.Revoked == nil && currentPerm.Terminated == nil && !containsPerm(currentPermID) {
+				if currentPerm.Revoked == nil && currentPerm.Terminated == nil && currentPerm.SlashedDeposit == 0 && !containsPerm(currentPermID) {
 					foundPerms = append(foundPerms, currentPerm)
 				}
 

@@ -25,7 +25,7 @@ func TestMsgServer(t *testing.T) {
 	require.NotEmpty(t, k)
 }
 
-func TestMsgReclaimTrustDepositInterests(t *testing.T) {
+func TestMsgReclaimTrustDepositYield(t *testing.T) {
 	k, ms, ctx := setupMsgServer(t)
 
 	// Create test account
@@ -36,23 +36,23 @@ func TestMsgReclaimTrustDepositInterests(t *testing.T) {
 	testCases := []struct {
 		name      string
 		setup     func() // Setup function to prepare the test state
-		msg       *types.MsgReclaimTrustDepositInterests
+		msg       *types.MsgReclaimTrustDepositYield
 		expErr    bool
 		expErrMsg string
-		check     func(*types.MsgReclaimTrustDepositInterestsResponse) // Function to check response
+		check     func(*types.MsgReclaimTrustDepositYieldResponse) // Function to check response
 	}{
 		{
 			name: "Trust deposit not found",
-			msg: &types.MsgReclaimTrustDepositInterests{
+			msg: &types.MsgReclaimTrustDepositYield{
 				Creator: testAccString,
 			},
 			expErr:    true,
 			expErrMsg: "trust deposit not found",
 		},
 		{
-			name: "No claimable interest",
+			name: "No claimable yield",
 			setup: func() {
-				// Set params with no interest (share value = 1.0)
+				// Set params with no yield (share value = 1.0)
 				params := types.Params{
 					TrustDepositShareValue:      math.LegacyMustNewDecFromStr("1.0"),
 					TrustDepositReclaimBurnRate: math.LegacyMustNewDecFromStr("0.6"),
@@ -63,7 +63,7 @@ func TestMsgReclaimTrustDepositInterests(t *testing.T) {
 				err := k.SetParams(ctx, params)
 				require.NoError(t, err)
 
-				// Create a trust deposit with no interest
+				// Create a trust deposit with no yield
 				td := types.TrustDeposit{
 					Account:   testAccString,
 					Share:     1000,
@@ -73,16 +73,16 @@ func TestMsgReclaimTrustDepositInterests(t *testing.T) {
 				err = k.TrustDeposit.Set(ctx, testAccString, td)
 				require.NoError(t, err)
 			},
-			msg: &types.MsgReclaimTrustDepositInterests{
+			msg: &types.MsgReclaimTrustDepositYield{
 				Creator: testAccString,
 			},
 			expErr:    true,
-			expErrMsg: "no claimable interest",
+			expErrMsg: "no claimable yield",
 		},
 		{
-			name: "Successful interest claim",
+			name: "Successful yield claim",
 			setup: func() {
-				// Set params with interest (share value = 1.5)
+				// Set params with yield (share value = 1.5)
 				params := types.Params{
 					TrustDepositShareValue:      math.LegacyMustNewDecFromStr("1.5"),
 					TrustDepositReclaimBurnRate: math.LegacyMustNewDecFromStr("0.6"),
@@ -93,7 +93,7 @@ func TestMsgReclaimTrustDepositInterests(t *testing.T) {
 				err := k.SetParams(ctx, params)
 				require.NoError(t, err)
 
-				// Create a trust deposit with potential interest
+				// Create a trust deposit with potential yield
 				td := types.TrustDeposit{
 					Account:   testAccString,
 					Share:     1000,
@@ -103,12 +103,12 @@ func TestMsgReclaimTrustDepositInterests(t *testing.T) {
 				err = k.TrustDeposit.Set(ctx, testAccString, td)
 				require.NoError(t, err)
 			},
-			msg: &types.MsgReclaimTrustDepositInterests{
+			msg: &types.MsgReclaimTrustDepositYield{
 				Creator: testAccString,
 			},
 			expErr: false,
-			check: func(resp *types.MsgReclaimTrustDepositInterestsResponse) {
-				// Expected interest: 1000 shares * 1.5 value = 1500 total value - 1000 deposited = 500 interest
+			check: func(resp *types.MsgReclaimTrustDepositYieldResponse) {
+				// Expected yield: 1000 shares * 1.5 value = 1500 total value - 1000 deposited = 500 yield
 				require.Equal(t, uint64(500), resp.ClaimedAmount)
 
 				// Verify trust deposit was updated correctly
@@ -127,7 +127,7 @@ func TestMsgReclaimTrustDepositInterests(t *testing.T) {
 				tc.setup()
 			}
 
-			resp, err := ms.ReclaimTrustDepositInterests(ctx, tc.msg)
+			resp, err := ms.ReclaimTrustDepositYield(ctx, tc.msg)
 
 			if tc.expErr {
 				require.Error(t, err)
