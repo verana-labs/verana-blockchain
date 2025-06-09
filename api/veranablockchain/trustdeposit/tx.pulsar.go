@@ -872,25 +872,25 @@ func (x *fastReflection_MsgUpdateParamsResponse) ProtoMethods() *protoiface.Meth
 }
 
 var (
-	md_MsgReclaimTrustDepositInterests         protoreflect.MessageDescriptor
-	fd_MsgReclaimTrustDepositInterests_creator protoreflect.FieldDescriptor
+	md_MsgReclaimTrustDepositYield         protoreflect.MessageDescriptor
+	fd_MsgReclaimTrustDepositYield_creator protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_veranablockchain_trustdeposit_tx_proto_init()
-	md_MsgReclaimTrustDepositInterests = File_veranablockchain_trustdeposit_tx_proto.Messages().ByName("MsgReclaimTrustDepositInterests")
-	fd_MsgReclaimTrustDepositInterests_creator = md_MsgReclaimTrustDepositInterests.Fields().ByName("creator")
+	md_MsgReclaimTrustDepositYield = File_veranablockchain_trustdeposit_tx_proto.Messages().ByName("MsgReclaimTrustDepositYield")
+	fd_MsgReclaimTrustDepositYield_creator = md_MsgReclaimTrustDepositYield.Fields().ByName("creator")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgReclaimTrustDepositInterests)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgReclaimTrustDepositYield)(nil)
 
-type fastReflection_MsgReclaimTrustDepositInterests MsgReclaimTrustDepositInterests
+type fastReflection_MsgReclaimTrustDepositYield MsgReclaimTrustDepositYield
 
-func (x *MsgReclaimTrustDepositInterests) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgReclaimTrustDepositInterests)(x)
+func (x *MsgReclaimTrustDepositYield) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgReclaimTrustDepositYield)(x)
 }
 
-func (x *MsgReclaimTrustDepositInterests) slowProtoReflect() protoreflect.Message {
+func (x *MsgReclaimTrustDepositYield) slowProtoReflect() protoreflect.Message {
 	mi := &file_veranablockchain_trustdeposit_tx_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -902,43 +902,43 @@ func (x *MsgReclaimTrustDepositInterests) slowProtoReflect() protoreflect.Messag
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgReclaimTrustDepositInterests_messageType fastReflection_MsgReclaimTrustDepositInterests_messageType
-var _ protoreflect.MessageType = fastReflection_MsgReclaimTrustDepositInterests_messageType{}
+var _fastReflection_MsgReclaimTrustDepositYield_messageType fastReflection_MsgReclaimTrustDepositYield_messageType
+var _ protoreflect.MessageType = fastReflection_MsgReclaimTrustDepositYield_messageType{}
 
-type fastReflection_MsgReclaimTrustDepositInterests_messageType struct{}
+type fastReflection_MsgReclaimTrustDepositYield_messageType struct{}
 
-func (x fastReflection_MsgReclaimTrustDepositInterests_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgReclaimTrustDepositInterests)(nil)
+func (x fastReflection_MsgReclaimTrustDepositYield_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgReclaimTrustDepositYield)(nil)
 }
-func (x fastReflection_MsgReclaimTrustDepositInterests_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgReclaimTrustDepositInterests)
+func (x fastReflection_MsgReclaimTrustDepositYield_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgReclaimTrustDepositYield)
 }
-func (x fastReflection_MsgReclaimTrustDepositInterests_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgReclaimTrustDepositInterests
+func (x fastReflection_MsgReclaimTrustDepositYield_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgReclaimTrustDepositYield
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgReclaimTrustDepositInterests) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgReclaimTrustDepositInterests
+func (x *fastReflection_MsgReclaimTrustDepositYield) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgReclaimTrustDepositYield
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgReclaimTrustDepositInterests) Type() protoreflect.MessageType {
-	return _fastReflection_MsgReclaimTrustDepositInterests_messageType
+func (x *fastReflection_MsgReclaimTrustDepositYield) Type() protoreflect.MessageType {
+	return _fastReflection_MsgReclaimTrustDepositYield_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgReclaimTrustDepositInterests) New() protoreflect.Message {
-	return new(fastReflection_MsgReclaimTrustDepositInterests)
+func (x *fastReflection_MsgReclaimTrustDepositYield) New() protoreflect.Message {
+	return new(fastReflection_MsgReclaimTrustDepositYield)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgReclaimTrustDepositInterests) Interface() protoreflect.ProtoMessage {
-	return (*MsgReclaimTrustDepositInterests)(x)
+func (x *fastReflection_MsgReclaimTrustDepositYield) Interface() protoreflect.ProtoMessage {
+	return (*MsgReclaimTrustDepositYield)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -946,10 +946,10 @@ func (x *fastReflection_MsgReclaimTrustDepositInterests) Interface() protoreflec
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgReclaimTrustDepositInterests) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgReclaimTrustDepositYield) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Creator != "" {
 		value := protoreflect.ValueOfString(x.Creator)
-		if !f(fd_MsgReclaimTrustDepositInterests_creator, value) {
+		if !f(fd_MsgReclaimTrustDepositYield_creator, value) {
 			return
 		}
 	}
@@ -966,15 +966,15 @@ func (x *fastReflection_MsgReclaimTrustDepositInterests) Range(f func(protorefle
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgReclaimTrustDepositInterests) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgReclaimTrustDepositYield) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "veranablockchain.trustdeposit.MsgReclaimTrustDepositInterests.creator":
+	case "veranablockchain.trustdeposit.MsgReclaimTrustDepositYield.creator":
 		return x.Creator != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustdeposit.MsgReclaimTrustDepositInterests"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustdeposit.MsgReclaimTrustDepositYield"))
 		}
-		panic(fmt.Errorf("message veranablockchain.trustdeposit.MsgReclaimTrustDepositInterests does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message veranablockchain.trustdeposit.MsgReclaimTrustDepositYield does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -984,15 +984,15 @@ func (x *fastReflection_MsgReclaimTrustDepositInterests) Has(fd protoreflect.Fie
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgReclaimTrustDepositInterests) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgReclaimTrustDepositYield) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "veranablockchain.trustdeposit.MsgReclaimTrustDepositInterests.creator":
+	case "veranablockchain.trustdeposit.MsgReclaimTrustDepositYield.creator":
 		x.Creator = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustdeposit.MsgReclaimTrustDepositInterests"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustdeposit.MsgReclaimTrustDepositYield"))
 		}
-		panic(fmt.Errorf("message veranablockchain.trustdeposit.MsgReclaimTrustDepositInterests does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message veranablockchain.trustdeposit.MsgReclaimTrustDepositYield does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1002,16 +1002,16 @@ func (x *fastReflection_MsgReclaimTrustDepositInterests) Clear(fd protoreflect.F
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgReclaimTrustDepositInterests) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgReclaimTrustDepositYield) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "veranablockchain.trustdeposit.MsgReclaimTrustDepositInterests.creator":
+	case "veranablockchain.trustdeposit.MsgReclaimTrustDepositYield.creator":
 		value := x.Creator
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustdeposit.MsgReclaimTrustDepositInterests"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustdeposit.MsgReclaimTrustDepositYield"))
 		}
-		panic(fmt.Errorf("message veranablockchain.trustdeposit.MsgReclaimTrustDepositInterests does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message veranablockchain.trustdeposit.MsgReclaimTrustDepositYield does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -1025,15 +1025,15 @@ func (x *fastReflection_MsgReclaimTrustDepositInterests) Get(descriptor protoref
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgReclaimTrustDepositInterests) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgReclaimTrustDepositYield) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "veranablockchain.trustdeposit.MsgReclaimTrustDepositInterests.creator":
+	case "veranablockchain.trustdeposit.MsgReclaimTrustDepositYield.creator":
 		x.Creator = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustdeposit.MsgReclaimTrustDepositInterests"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustdeposit.MsgReclaimTrustDepositYield"))
 		}
-		panic(fmt.Errorf("message veranablockchain.trustdeposit.MsgReclaimTrustDepositInterests does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message veranablockchain.trustdeposit.MsgReclaimTrustDepositYield does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1047,40 +1047,40 @@ func (x *fastReflection_MsgReclaimTrustDepositInterests) Set(fd protoreflect.Fie
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgReclaimTrustDepositInterests) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgReclaimTrustDepositYield) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "veranablockchain.trustdeposit.MsgReclaimTrustDepositInterests.creator":
-		panic(fmt.Errorf("field creator of message veranablockchain.trustdeposit.MsgReclaimTrustDepositInterests is not mutable"))
+	case "veranablockchain.trustdeposit.MsgReclaimTrustDepositYield.creator":
+		panic(fmt.Errorf("field creator of message veranablockchain.trustdeposit.MsgReclaimTrustDepositYield is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustdeposit.MsgReclaimTrustDepositInterests"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustdeposit.MsgReclaimTrustDepositYield"))
 		}
-		panic(fmt.Errorf("message veranablockchain.trustdeposit.MsgReclaimTrustDepositInterests does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message veranablockchain.trustdeposit.MsgReclaimTrustDepositYield does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgReclaimTrustDepositInterests) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgReclaimTrustDepositYield) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "veranablockchain.trustdeposit.MsgReclaimTrustDepositInterests.creator":
+	case "veranablockchain.trustdeposit.MsgReclaimTrustDepositYield.creator":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustdeposit.MsgReclaimTrustDepositInterests"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustdeposit.MsgReclaimTrustDepositYield"))
 		}
-		panic(fmt.Errorf("message veranablockchain.trustdeposit.MsgReclaimTrustDepositInterests does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message veranablockchain.trustdeposit.MsgReclaimTrustDepositYield does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgReclaimTrustDepositInterests) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgReclaimTrustDepositYield) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in veranablockchain.trustdeposit.MsgReclaimTrustDepositInterests", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in veranablockchain.trustdeposit.MsgReclaimTrustDepositYield", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -1088,7 +1088,7 @@ func (x *fastReflection_MsgReclaimTrustDepositInterests) WhichOneof(d protorefle
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgReclaimTrustDepositInterests) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgReclaimTrustDepositYield) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -1099,7 +1099,7 @@ func (x *fastReflection_MsgReclaimTrustDepositInterests) GetUnknown() protorefle
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgReclaimTrustDepositInterests) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgReclaimTrustDepositYield) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -1111,7 +1111,7 @@ func (x *fastReflection_MsgReclaimTrustDepositInterests) SetUnknown(fields proto
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgReclaimTrustDepositInterests) IsValid() bool {
+func (x *fastReflection_MsgReclaimTrustDepositYield) IsValid() bool {
 	return x != nil
 }
 
@@ -1121,9 +1121,9 @@ func (x *fastReflection_MsgReclaimTrustDepositInterests) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgReclaimTrustDepositInterests) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgReclaimTrustDepositYield) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgReclaimTrustDepositInterests)
+		x := input.Message.Interface().(*MsgReclaimTrustDepositYield)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1149,7 +1149,7 @@ func (x *fastReflection_MsgReclaimTrustDepositInterests) ProtoMethods() *protoif
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgReclaimTrustDepositInterests)
+		x := input.Message.Interface().(*MsgReclaimTrustDepositYield)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1186,7 +1186,7 @@ func (x *fastReflection_MsgReclaimTrustDepositInterests) ProtoMethods() *protoif
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgReclaimTrustDepositInterests)
+		x := input.Message.Interface().(*MsgReclaimTrustDepositYield)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1218,10 +1218,10 @@ func (x *fastReflection_MsgReclaimTrustDepositInterests) ProtoMethods() *protoif
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgReclaimTrustDepositInterests: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgReclaimTrustDepositYield: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgReclaimTrustDepositInterests: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgReclaimTrustDepositYield: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -1292,25 +1292,25 @@ func (x *fastReflection_MsgReclaimTrustDepositInterests) ProtoMethods() *protoif
 }
 
 var (
-	md_MsgReclaimTrustDepositInterestsResponse                protoreflect.MessageDescriptor
-	fd_MsgReclaimTrustDepositInterestsResponse_claimed_amount protoreflect.FieldDescriptor
+	md_MsgReclaimTrustDepositYieldResponse                protoreflect.MessageDescriptor
+	fd_MsgReclaimTrustDepositYieldResponse_claimed_amount protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_veranablockchain_trustdeposit_tx_proto_init()
-	md_MsgReclaimTrustDepositInterestsResponse = File_veranablockchain_trustdeposit_tx_proto.Messages().ByName("MsgReclaimTrustDepositInterestsResponse")
-	fd_MsgReclaimTrustDepositInterestsResponse_claimed_amount = md_MsgReclaimTrustDepositInterestsResponse.Fields().ByName("claimed_amount")
+	md_MsgReclaimTrustDepositYieldResponse = File_veranablockchain_trustdeposit_tx_proto.Messages().ByName("MsgReclaimTrustDepositYieldResponse")
+	fd_MsgReclaimTrustDepositYieldResponse_claimed_amount = md_MsgReclaimTrustDepositYieldResponse.Fields().ByName("claimed_amount")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgReclaimTrustDepositInterestsResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgReclaimTrustDepositYieldResponse)(nil)
 
-type fastReflection_MsgReclaimTrustDepositInterestsResponse MsgReclaimTrustDepositInterestsResponse
+type fastReflection_MsgReclaimTrustDepositYieldResponse MsgReclaimTrustDepositYieldResponse
 
-func (x *MsgReclaimTrustDepositInterestsResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgReclaimTrustDepositInterestsResponse)(x)
+func (x *MsgReclaimTrustDepositYieldResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgReclaimTrustDepositYieldResponse)(x)
 }
 
-func (x *MsgReclaimTrustDepositInterestsResponse) slowProtoReflect() protoreflect.Message {
+func (x *MsgReclaimTrustDepositYieldResponse) slowProtoReflect() protoreflect.Message {
 	mi := &file_veranablockchain_trustdeposit_tx_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -1322,43 +1322,43 @@ func (x *MsgReclaimTrustDepositInterestsResponse) slowProtoReflect() protoreflec
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgReclaimTrustDepositInterestsResponse_messageType fastReflection_MsgReclaimTrustDepositInterestsResponse_messageType
-var _ protoreflect.MessageType = fastReflection_MsgReclaimTrustDepositInterestsResponse_messageType{}
+var _fastReflection_MsgReclaimTrustDepositYieldResponse_messageType fastReflection_MsgReclaimTrustDepositYieldResponse_messageType
+var _ protoreflect.MessageType = fastReflection_MsgReclaimTrustDepositYieldResponse_messageType{}
 
-type fastReflection_MsgReclaimTrustDepositInterestsResponse_messageType struct{}
+type fastReflection_MsgReclaimTrustDepositYieldResponse_messageType struct{}
 
-func (x fastReflection_MsgReclaimTrustDepositInterestsResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgReclaimTrustDepositInterestsResponse)(nil)
+func (x fastReflection_MsgReclaimTrustDepositYieldResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgReclaimTrustDepositYieldResponse)(nil)
 }
-func (x fastReflection_MsgReclaimTrustDepositInterestsResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgReclaimTrustDepositInterestsResponse)
+func (x fastReflection_MsgReclaimTrustDepositYieldResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgReclaimTrustDepositYieldResponse)
 }
-func (x fastReflection_MsgReclaimTrustDepositInterestsResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgReclaimTrustDepositInterestsResponse
+func (x fastReflection_MsgReclaimTrustDepositYieldResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgReclaimTrustDepositYieldResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgReclaimTrustDepositInterestsResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgReclaimTrustDepositInterestsResponse
+func (x *fastReflection_MsgReclaimTrustDepositYieldResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgReclaimTrustDepositYieldResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgReclaimTrustDepositInterestsResponse) Type() protoreflect.MessageType {
-	return _fastReflection_MsgReclaimTrustDepositInterestsResponse_messageType
+func (x *fastReflection_MsgReclaimTrustDepositYieldResponse) Type() protoreflect.MessageType {
+	return _fastReflection_MsgReclaimTrustDepositYieldResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgReclaimTrustDepositInterestsResponse) New() protoreflect.Message {
-	return new(fastReflection_MsgReclaimTrustDepositInterestsResponse)
+func (x *fastReflection_MsgReclaimTrustDepositYieldResponse) New() protoreflect.Message {
+	return new(fastReflection_MsgReclaimTrustDepositYieldResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgReclaimTrustDepositInterestsResponse) Interface() protoreflect.ProtoMessage {
-	return (*MsgReclaimTrustDepositInterestsResponse)(x)
+func (x *fastReflection_MsgReclaimTrustDepositYieldResponse) Interface() protoreflect.ProtoMessage {
+	return (*MsgReclaimTrustDepositYieldResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -1366,10 +1366,10 @@ func (x *fastReflection_MsgReclaimTrustDepositInterestsResponse) Interface() pro
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgReclaimTrustDepositInterestsResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgReclaimTrustDepositYieldResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.ClaimedAmount != uint64(0) {
 		value := protoreflect.ValueOfUint64(x.ClaimedAmount)
-		if !f(fd_MsgReclaimTrustDepositInterestsResponse_claimed_amount, value) {
+		if !f(fd_MsgReclaimTrustDepositYieldResponse_claimed_amount, value) {
 			return
 		}
 	}
@@ -1386,15 +1386,15 @@ func (x *fastReflection_MsgReclaimTrustDepositInterestsResponse) Range(f func(pr
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgReclaimTrustDepositInterestsResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgReclaimTrustDepositYieldResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "veranablockchain.trustdeposit.MsgReclaimTrustDepositInterestsResponse.claimed_amount":
+	case "veranablockchain.trustdeposit.MsgReclaimTrustDepositYieldResponse.claimed_amount":
 		return x.ClaimedAmount != uint64(0)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustdeposit.MsgReclaimTrustDepositInterestsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustdeposit.MsgReclaimTrustDepositYieldResponse"))
 		}
-		panic(fmt.Errorf("message veranablockchain.trustdeposit.MsgReclaimTrustDepositInterestsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message veranablockchain.trustdeposit.MsgReclaimTrustDepositYieldResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1404,15 +1404,15 @@ func (x *fastReflection_MsgReclaimTrustDepositInterestsResponse) Has(fd protoref
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgReclaimTrustDepositInterestsResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgReclaimTrustDepositYieldResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "veranablockchain.trustdeposit.MsgReclaimTrustDepositInterestsResponse.claimed_amount":
+	case "veranablockchain.trustdeposit.MsgReclaimTrustDepositYieldResponse.claimed_amount":
 		x.ClaimedAmount = uint64(0)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustdeposit.MsgReclaimTrustDepositInterestsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustdeposit.MsgReclaimTrustDepositYieldResponse"))
 		}
-		panic(fmt.Errorf("message veranablockchain.trustdeposit.MsgReclaimTrustDepositInterestsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message veranablockchain.trustdeposit.MsgReclaimTrustDepositYieldResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1422,16 +1422,16 @@ func (x *fastReflection_MsgReclaimTrustDepositInterestsResponse) Clear(fd protor
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgReclaimTrustDepositInterestsResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgReclaimTrustDepositYieldResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "veranablockchain.trustdeposit.MsgReclaimTrustDepositInterestsResponse.claimed_amount":
+	case "veranablockchain.trustdeposit.MsgReclaimTrustDepositYieldResponse.claimed_amount":
 		value := x.ClaimedAmount
 		return protoreflect.ValueOfUint64(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustdeposit.MsgReclaimTrustDepositInterestsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustdeposit.MsgReclaimTrustDepositYieldResponse"))
 		}
-		panic(fmt.Errorf("message veranablockchain.trustdeposit.MsgReclaimTrustDepositInterestsResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message veranablockchain.trustdeposit.MsgReclaimTrustDepositYieldResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -1445,15 +1445,15 @@ func (x *fastReflection_MsgReclaimTrustDepositInterestsResponse) Get(descriptor 
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgReclaimTrustDepositInterestsResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgReclaimTrustDepositYieldResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "veranablockchain.trustdeposit.MsgReclaimTrustDepositInterestsResponse.claimed_amount":
+	case "veranablockchain.trustdeposit.MsgReclaimTrustDepositYieldResponse.claimed_amount":
 		x.ClaimedAmount = value.Uint()
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustdeposit.MsgReclaimTrustDepositInterestsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustdeposit.MsgReclaimTrustDepositYieldResponse"))
 		}
-		panic(fmt.Errorf("message veranablockchain.trustdeposit.MsgReclaimTrustDepositInterestsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message veranablockchain.trustdeposit.MsgReclaimTrustDepositYieldResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1467,40 +1467,40 @@ func (x *fastReflection_MsgReclaimTrustDepositInterestsResponse) Set(fd protoref
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgReclaimTrustDepositInterestsResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgReclaimTrustDepositYieldResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "veranablockchain.trustdeposit.MsgReclaimTrustDepositInterestsResponse.claimed_amount":
-		panic(fmt.Errorf("field claimed_amount of message veranablockchain.trustdeposit.MsgReclaimTrustDepositInterestsResponse is not mutable"))
+	case "veranablockchain.trustdeposit.MsgReclaimTrustDepositYieldResponse.claimed_amount":
+		panic(fmt.Errorf("field claimed_amount of message veranablockchain.trustdeposit.MsgReclaimTrustDepositYieldResponse is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustdeposit.MsgReclaimTrustDepositInterestsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustdeposit.MsgReclaimTrustDepositYieldResponse"))
 		}
-		panic(fmt.Errorf("message veranablockchain.trustdeposit.MsgReclaimTrustDepositInterestsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message veranablockchain.trustdeposit.MsgReclaimTrustDepositYieldResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgReclaimTrustDepositInterestsResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgReclaimTrustDepositYieldResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "veranablockchain.trustdeposit.MsgReclaimTrustDepositInterestsResponse.claimed_amount":
+	case "veranablockchain.trustdeposit.MsgReclaimTrustDepositYieldResponse.claimed_amount":
 		return protoreflect.ValueOfUint64(uint64(0))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustdeposit.MsgReclaimTrustDepositInterestsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: veranablockchain.trustdeposit.MsgReclaimTrustDepositYieldResponse"))
 		}
-		panic(fmt.Errorf("message veranablockchain.trustdeposit.MsgReclaimTrustDepositInterestsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message veranablockchain.trustdeposit.MsgReclaimTrustDepositYieldResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgReclaimTrustDepositInterestsResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgReclaimTrustDepositYieldResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in veranablockchain.trustdeposit.MsgReclaimTrustDepositInterestsResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in veranablockchain.trustdeposit.MsgReclaimTrustDepositYieldResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -1508,7 +1508,7 @@ func (x *fastReflection_MsgReclaimTrustDepositInterestsResponse) WhichOneof(d pr
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgReclaimTrustDepositInterestsResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgReclaimTrustDepositYieldResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -1519,7 +1519,7 @@ func (x *fastReflection_MsgReclaimTrustDepositInterestsResponse) GetUnknown() pr
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgReclaimTrustDepositInterestsResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgReclaimTrustDepositYieldResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -1531,7 +1531,7 @@ func (x *fastReflection_MsgReclaimTrustDepositInterestsResponse) SetUnknown(fiel
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgReclaimTrustDepositInterestsResponse) IsValid() bool {
+func (x *fastReflection_MsgReclaimTrustDepositYieldResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -1541,9 +1541,9 @@ func (x *fastReflection_MsgReclaimTrustDepositInterestsResponse) IsValid() bool 
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgReclaimTrustDepositInterestsResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgReclaimTrustDepositYieldResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgReclaimTrustDepositInterestsResponse)
+		x := input.Message.Interface().(*MsgReclaimTrustDepositYieldResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1568,7 +1568,7 @@ func (x *fastReflection_MsgReclaimTrustDepositInterestsResponse) ProtoMethods() 
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgReclaimTrustDepositInterestsResponse)
+		x := input.Message.Interface().(*MsgReclaimTrustDepositYieldResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1603,7 +1603,7 @@ func (x *fastReflection_MsgReclaimTrustDepositInterestsResponse) ProtoMethods() 
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgReclaimTrustDepositInterestsResponse)
+		x := input.Message.Interface().(*MsgReclaimTrustDepositYieldResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1635,10 +1635,10 @@ func (x *fastReflection_MsgReclaimTrustDepositInterestsResponse) ProtoMethods() 
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgReclaimTrustDepositInterestsResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgReclaimTrustDepositYieldResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgReclaimTrustDepositInterestsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgReclaimTrustDepositYieldResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -3593,7 +3593,7 @@ func (*MsgUpdateParamsResponse) Descriptor() ([]byte, []int) {
 }
 
 // MsgReclaimTrustDepositInterests defines the request type
-type MsgReclaimTrustDepositInterests struct {
+type MsgReclaimTrustDepositYield struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -3601,8 +3601,8 @@ type MsgReclaimTrustDepositInterests struct {
 	Creator string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
 }
 
-func (x *MsgReclaimTrustDepositInterests) Reset() {
-	*x = MsgReclaimTrustDepositInterests{}
+func (x *MsgReclaimTrustDepositYield) Reset() {
+	*x = MsgReclaimTrustDepositYield{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_veranablockchain_trustdeposit_tx_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3610,18 +3610,18 @@ func (x *MsgReclaimTrustDepositInterests) Reset() {
 	}
 }
 
-func (x *MsgReclaimTrustDepositInterests) String() string {
+func (x *MsgReclaimTrustDepositYield) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgReclaimTrustDepositInterests) ProtoMessage() {}
+func (*MsgReclaimTrustDepositYield) ProtoMessage() {}
 
-// Deprecated: Use MsgReclaimTrustDepositInterests.ProtoReflect.Descriptor instead.
-func (*MsgReclaimTrustDepositInterests) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgReclaimTrustDepositYield.ProtoReflect.Descriptor instead.
+func (*MsgReclaimTrustDepositYield) Descriptor() ([]byte, []int) {
 	return file_veranablockchain_trustdeposit_tx_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *MsgReclaimTrustDepositInterests) GetCreator() string {
+func (x *MsgReclaimTrustDepositYield) GetCreator() string {
 	if x != nil {
 		return x.Creator
 	}
@@ -3629,7 +3629,7 @@ func (x *MsgReclaimTrustDepositInterests) GetCreator() string {
 }
 
 // MsgReclaimTrustDepositInterestsResponse defines the response type
-type MsgReclaimTrustDepositInterestsResponse struct {
+type MsgReclaimTrustDepositYieldResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -3637,8 +3637,8 @@ type MsgReclaimTrustDepositInterestsResponse struct {
 	ClaimedAmount uint64 `protobuf:"varint,1,opt,name=claimed_amount,json=claimedAmount,proto3" json:"claimed_amount,omitempty"`
 }
 
-func (x *MsgReclaimTrustDepositInterestsResponse) Reset() {
-	*x = MsgReclaimTrustDepositInterestsResponse{}
+func (x *MsgReclaimTrustDepositYieldResponse) Reset() {
+	*x = MsgReclaimTrustDepositYieldResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_veranablockchain_trustdeposit_tx_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3646,18 +3646,18 @@ func (x *MsgReclaimTrustDepositInterestsResponse) Reset() {
 	}
 }
 
-func (x *MsgReclaimTrustDepositInterestsResponse) String() string {
+func (x *MsgReclaimTrustDepositYieldResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgReclaimTrustDepositInterestsResponse) ProtoMessage() {}
+func (*MsgReclaimTrustDepositYieldResponse) ProtoMessage() {}
 
-// Deprecated: Use MsgReclaimTrustDepositInterestsResponse.ProtoReflect.Descriptor instead.
-func (*MsgReclaimTrustDepositInterestsResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgReclaimTrustDepositYieldResponse.ProtoReflect.Descriptor instead.
+func (*MsgReclaimTrustDepositYieldResponse) Descriptor() ([]byte, []int) {
 	return file_veranablockchain_trustdeposit_tx_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *MsgReclaimTrustDepositInterestsResponse) GetClaimedAmount() uint64 {
+func (x *MsgReclaimTrustDepositYieldResponse) GetClaimedAmount() uint64 {
 	if x != nil {
 		return x.ClaimedAmount
 	}
@@ -3858,101 +3858,100 @@ var file_veranablockchain_trustdeposit_tx_proto_rawDesc = []byte{
 	0x75, 0x73, 0x74, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x2f, 0x4d, 0x73, 0x67, 0x55, 0x70,
 	0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x22, 0x19, 0x0a, 0x17, 0x4d, 0x73,
 	0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x63, 0x0a, 0x1f, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x63, 0x6c,
-	0x61, 0x69, 0x6d, 0x54, 0x72, 0x75, 0x73, 0x74, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x49,
-	0x6e, 0x74, 0x65, 0x72, 0x65, 0x73, 0x74, 0x73, 0x12, 0x32, 0x0a, 0x07, 0x63, 0x72, 0x65, 0x61,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x5f, 0x0a, 0x1b, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x63, 0x6c,
+	0x61, 0x69, 0x6d, 0x54, 0x72, 0x75, 0x73, 0x74, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x59,
+	0x69, 0x65, 0x6c, 0x64, 0x12, 0x32, 0x0a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
+	0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52,
+	0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x3a, 0x0c, 0x82, 0xe7, 0xb0, 0x2a, 0x07, 0x63,
+	0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x22, 0x4c, 0x0a, 0x23, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x63,
+	0x6c, 0x61, 0x69, 0x6d, 0x54, 0x72, 0x75, 0x73, 0x74, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74,
+	0x59, 0x69, 0x65, 0x6c, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x25, 0x0a,
+	0x0e, 0x63, 0x6c, 0x61, 0x69, 0x6d, 0x65, 0x64, 0x5f, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0d, 0x63, 0x6c, 0x61, 0x69, 0x6d, 0x65, 0x64, 0x41, 0x6d,
+	0x6f, 0x75, 0x6e, 0x74, 0x22, 0x74, 0x0a, 0x16, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x63, 0x6c, 0x61,
+	0x69, 0x6d, 0x54, 0x72, 0x75, 0x73, 0x74, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x12, 0x32,
+	0x0a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42,
+	0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72,
+	0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74,
+	0x6f, 0x72, 0x12, 0x18, 0x0a, 0x07, 0x63, 0x6c, 0x61, 0x69, 0x6d, 0x65, 0x64, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x04, 0x52, 0x07, 0x63, 0x6c, 0x61, 0x69, 0x6d, 0x65, 0x64, 0x3a, 0x0c, 0x82, 0xe7,
+	0xb0, 0x2a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x22, 0x6c, 0x0a, 0x1e, 0x4d, 0x73,
+	0x67, 0x52, 0x65, 0x63, 0x6c, 0x61, 0x69, 0x6d, 0x54, 0x72, 0x75, 0x73, 0x74, 0x44, 0x65, 0x70,
+	0x6f, 0x73, 0x69, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x23, 0x0a, 0x0d,
+	0x62, 0x75, 0x72, 0x6e, 0x65, 0x64, 0x5f, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x04, 0x52, 0x0c, 0x62, 0x75, 0x72, 0x6e, 0x65, 0x64, 0x41, 0x6d, 0x6f, 0x75, 0x6e,
+	0x74, 0x12, 0x25, 0x0a, 0x0e, 0x63, 0x6c, 0x61, 0x69, 0x6d, 0x65, 0x64, 0x5f, 0x61, 0x6d, 0x6f,
+	0x75, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0d, 0x63, 0x6c, 0x61, 0x69, 0x6d,
+	0x65, 0x64, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0xab, 0x01, 0x0a, 0x1b, 0x4d, 0x73, 0x67,
+	0x52, 0x65, 0x70, 0x61, 0x79, 0x53, 0x6c, 0x61, 0x73, 0x68, 0x65, 0x64, 0x54, 0x72, 0x75, 0x73,
+	0x74, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x12, 0x32, 0x0a, 0x07, 0x63, 0x72, 0x65, 0x61,
 	0x74, 0x6f, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63,
 	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72,
-	0x69, 0x6e, 0x67, 0x52, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x3a, 0x0c, 0x82, 0xe7,
-	0xb0, 0x2a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x22, 0x50, 0x0a, 0x27, 0x4d, 0x73,
-	0x67, 0x52, 0x65, 0x63, 0x6c, 0x61, 0x69, 0x6d, 0x54, 0x72, 0x75, 0x73, 0x74, 0x44, 0x65, 0x70,
-	0x6f, 0x73, 0x69, 0x74, 0x49, 0x6e, 0x74, 0x65, 0x72, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x25, 0x0a, 0x0e, 0x63, 0x6c, 0x61, 0x69, 0x6d, 0x65, 0x64,
-	0x5f, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0d, 0x63,
-	0x6c, 0x61, 0x69, 0x6d, 0x65, 0x64, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0x74, 0x0a, 0x16,
-	0x4d, 0x73, 0x67, 0x52, 0x65, 0x63, 0x6c, 0x61, 0x69, 0x6d, 0x54, 0x72, 0x75, 0x73, 0x74, 0x44,
-	0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x12, 0x32, 0x0a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f,
-	0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73,
-	0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e,
-	0x67, 0x52, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x12, 0x18, 0x0a, 0x07, 0x63, 0x6c,
-	0x61, 0x69, 0x6d, 0x65, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x07, 0x63, 0x6c, 0x61,
-	0x69, 0x6d, 0x65, 0x64, 0x3a, 0x0c, 0x82, 0xe7, 0xb0, 0x2a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74,
-	0x6f, 0x72, 0x22, 0x6c, 0x0a, 0x1e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x63, 0x6c, 0x61, 0x69, 0x6d,
-	0x54, 0x72, 0x75, 0x73, 0x74, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x23, 0x0a, 0x0d, 0x62, 0x75, 0x72, 0x6e, 0x65, 0x64, 0x5f, 0x61,
-	0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0c, 0x62, 0x75, 0x72,
-	0x6e, 0x65, 0x64, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x25, 0x0a, 0x0e, 0x63, 0x6c, 0x61,
-	0x69, 0x6d, 0x65, 0x64, 0x5f, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28,
-	0x04, 0x52, 0x0d, 0x63, 0x6c, 0x61, 0x69, 0x6d, 0x65, 0x64, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74,
-	0x22, 0xab, 0x01, 0x0a, 0x1b, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x70, 0x61, 0x79, 0x53, 0x6c, 0x61,
-	0x73, 0x68, 0x65, 0x64, 0x54, 0x72, 0x75, 0x73, 0x74, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74,
-	0x12, 0x32, 0x0a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64,
-	0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x07, 0x63, 0x72, 0x65,
-	0x61, 0x74, 0x6f, 0x72, 0x12, 0x32, 0x0a, 0x07, 0x61, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18,
-	0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
-	0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52,
-	0x07, 0x61, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75,
-	0x6e, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74,
-	0x3a, 0x0c, 0x82, 0xe7, 0xb0, 0x2a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x22, 0x25,
-	0x0a, 0x23, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x70, 0x61, 0x79, 0x53, 0x6c, 0x61, 0x73, 0x68, 0x65,
-	0x64, 0x54, 0x72, 0x75, 0x73, 0x74, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0xd8, 0x04, 0x0a, 0x03, 0x4d, 0x73, 0x67, 0x12, 0x76, 0x0a,
-	0x0c, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x2e, 0x2e,
-	0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e,
-	0x2e, 0x74, 0x72, 0x75, 0x73, 0x74, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x2e, 0x4d, 0x73,
-	0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x1a, 0x36, 0x2e,
-	0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e,
-	0x2e, 0x74, 0x72, 0x75, 0x73, 0x74, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x2e, 0x4d, 0x73,
-	0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0xa6, 0x01, 0x0a, 0x1c, 0x52, 0x65, 0x63, 0x6c, 0x61, 0x69,
-	0x6d, 0x54, 0x72, 0x75, 0x73, 0x74, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x49, 0x6e, 0x74,
-	0x65, 0x72, 0x65, 0x73, 0x74, 0x73, 0x12, 0x3e, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62,
-	0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x74, 0x72, 0x75, 0x73, 0x74, 0x64,
-	0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x63, 0x6c, 0x61, 0x69,
-	0x6d, 0x54, 0x72, 0x75, 0x73, 0x74, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x49, 0x6e, 0x74,
-	0x65, 0x72, 0x65, 0x73, 0x74, 0x73, 0x1a, 0x46, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62,
-	0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x74, 0x72, 0x75, 0x73, 0x74, 0x64,
-	0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x63, 0x6c, 0x61, 0x69,
-	0x6d, 0x54, 0x72, 0x75, 0x73, 0x74, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x49, 0x6e, 0x74,
-	0x65, 0x72, 0x65, 0x73, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x8b,
-	0x01, 0x0a, 0x13, 0x52, 0x65, 0x63, 0x6c, 0x61, 0x69, 0x6d, 0x54, 0x72, 0x75, 0x73, 0x74, 0x44,
-	0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x12, 0x35, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62,
-	0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x74, 0x72, 0x75, 0x73, 0x74, 0x64,
-	0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x63, 0x6c, 0x61, 0x69,
-	0x6d, 0x54, 0x72, 0x75, 0x73, 0x74, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x1a, 0x3d, 0x2e,
-	0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e,
-	0x2e, 0x74, 0x72, 0x75, 0x73, 0x74, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x2e, 0x4d, 0x73,
-	0x67, 0x52, 0x65, 0x63, 0x6c, 0x61, 0x69, 0x6d, 0x54, 0x72, 0x75, 0x73, 0x74, 0x44, 0x65, 0x70,
-	0x6f, 0x73, 0x69, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x9a, 0x01, 0x0a,
-	0x18, 0x52, 0x65, 0x70, 0x61, 0x79, 0x53, 0x6c, 0x61, 0x73, 0x68, 0x65, 0x64, 0x54, 0x72, 0x75,
-	0x73, 0x74, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x12, 0x3a, 0x2e, 0x76, 0x65, 0x72, 0x61,
-	0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x74, 0x72, 0x75,
-	0x73, 0x74, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x70,
+	0x69, 0x6e, 0x67, 0x52, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x12, 0x32, 0x0a, 0x07,
+	0x61, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2,
+	0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73,
+	0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x07, 0x61, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74,
+	0x12, 0x16, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04,
+	0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x3a, 0x0c, 0x82, 0xe7, 0xb0, 0x2a, 0x07, 0x63,
+	0x72, 0x65, 0x61, 0x74, 0x6f, 0x72, 0x22, 0x25, 0x0a, 0x23, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x70,
 	0x61, 0x79, 0x53, 0x6c, 0x61, 0x73, 0x68, 0x65, 0x64, 0x54, 0x72, 0x75, 0x73, 0x74, 0x44, 0x65,
-	0x70, 0x6f, 0x73, 0x69, 0x74, 0x1a, 0x42, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c,
+	0x70, 0x6f, 0x73, 0x69, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0xcc, 0x04,
+	0x0a, 0x03, 0x4d, 0x73, 0x67, 0x12, 0x76, 0x0a, 0x0c, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50,
+	0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x2e, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c,
+	0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x74, 0x72, 0x75, 0x73, 0x74, 0x64, 0x65,
+	0x70, 0x6f, 0x73, 0x69, 0x74, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50,
+	0x61, 0x72, 0x61, 0x6d, 0x73, 0x1a, 0x36, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c,
+	0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x74, 0x72, 0x75, 0x73, 0x74, 0x64, 0x65,
+	0x70, 0x6f, 0x73, 0x69, 0x74, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50,
+	0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x9a, 0x01,
+	0x0a, 0x18, 0x52, 0x65, 0x63, 0x6c, 0x61, 0x69, 0x6d, 0x54, 0x72, 0x75, 0x73, 0x74, 0x44, 0x65,
+	0x70, 0x6f, 0x73, 0x69, 0x74, 0x59, 0x69, 0x65, 0x6c, 0x64, 0x12, 0x3a, 0x2e, 0x76, 0x65, 0x72,
+	0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x74, 0x72,
+	0x75, 0x73, 0x74, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65,
+	0x63, 0x6c, 0x61, 0x69, 0x6d, 0x54, 0x72, 0x75, 0x73, 0x74, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69,
+	0x74, 0x59, 0x69, 0x65, 0x6c, 0x64, 0x1a, 0x42, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62,
+	0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x74, 0x72, 0x75, 0x73, 0x74, 0x64,
+	0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x63, 0x6c, 0x61, 0x69,
+	0x6d, 0x54, 0x72, 0x75, 0x73, 0x74, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x59, 0x69, 0x65,
+	0x6c, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x8b, 0x01, 0x0a, 0x13, 0x52,
+	0x65, 0x63, 0x6c, 0x61, 0x69, 0x6d, 0x54, 0x72, 0x75, 0x73, 0x74, 0x44, 0x65, 0x70, 0x6f, 0x73,
+	0x69, 0x74, 0x12, 0x35, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b,
+	0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x74, 0x72, 0x75, 0x73, 0x74, 0x64, 0x65, 0x70, 0x6f, 0x73,
+	0x69, 0x74, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x63, 0x6c, 0x61, 0x69, 0x6d, 0x54, 0x72, 0x75,
+	0x73, 0x74, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x1a, 0x3d, 0x2e, 0x76, 0x65, 0x72, 0x61,
+	0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x74, 0x72, 0x75,
+	0x73, 0x74, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x63,
+	0x6c, 0x61, 0x69, 0x6d, 0x54, 0x72, 0x75, 0x73, 0x74, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x9a, 0x01, 0x0a, 0x18, 0x52, 0x65, 0x70,
+	0x61, 0x79, 0x53, 0x6c, 0x61, 0x73, 0x68, 0x65, 0x64, 0x54, 0x72, 0x75, 0x73, 0x74, 0x44, 0x65,
+	0x70, 0x6f, 0x73, 0x69, 0x74, 0x12, 0x3a, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c,
 	0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x74, 0x72, 0x75, 0x73, 0x74, 0x64, 0x65,
 	0x70, 0x6f, 0x73, 0x69, 0x74, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x70, 0x61, 0x79, 0x53, 0x6c,
 	0x61, 0x73, 0x68, 0x65, 0x64, 0x54, 0x72, 0x75, 0x73, 0x74, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69,
-	0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05, 0x80, 0xe7, 0xb0, 0x2a, 0x01,
-	0x42, 0x8d, 0x02, 0x0a, 0x21, 0x63, 0x6f, 0x6d, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62,
-	0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x74, 0x72, 0x75, 0x73, 0x74, 0x64,
-	0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x42, 0x07, 0x54, 0x78, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50,
-	0x01, 0x5a, 0x4a, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x76, 0x65,
-	0x72, 0x61, 0x6e, 0x61, 0x2d, 0x6c, 0x61, 0x62, 0x73, 0x2f, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61,
-	0x2d, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2f, 0x61, 0x70, 0x69, 0x2f,
-	0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e,
-	0x2f, 0x74, 0x72, 0x75, 0x73, 0x74, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0xa2, 0x02, 0x03,
-	0x56, 0x54, 0x58, 0xaa, 0x02, 0x1d, 0x56, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63,
-	0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x54, 0x72, 0x75, 0x73, 0x74, 0x64, 0x65, 0x70, 0x6f,
-	0x73, 0x69, 0x74, 0xca, 0x02, 0x1d, 0x56, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63,
-	0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x5c, 0x54, 0x72, 0x75, 0x73, 0x74, 0x64, 0x65, 0x70, 0x6f,
-	0x73, 0x69, 0x74, 0xe2, 0x02, 0x29, 0x56, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63,
-	0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x5c, 0x54, 0x72, 0x75, 0x73, 0x74, 0x64, 0x65, 0x70, 0x6f,
-	0x73, 0x69, 0x74, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea,
-	0x02, 0x1e, 0x56, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61,
-	0x69, 0x6e, 0x3a, 0x3a, 0x54, 0x72, 0x75, 0x73, 0x74, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74,
-	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x74, 0x1a, 0x42, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63,
+	0x68, 0x61, 0x69, 0x6e, 0x2e, 0x74, 0x72, 0x75, 0x73, 0x74, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69,
+	0x74, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x70, 0x61, 0x79, 0x53, 0x6c, 0x61, 0x73, 0x68, 0x65,
+	0x64, 0x54, 0x72, 0x75, 0x73, 0x74, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05, 0x80, 0xe7, 0xb0, 0x2a, 0x01, 0x42, 0x8d, 0x02, 0x0a,
+	0x21, 0x63, 0x6f, 0x6d, 0x2e, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b,
+	0x63, 0x68, 0x61, 0x69, 0x6e, 0x2e, 0x74, 0x72, 0x75, 0x73, 0x74, 0x64, 0x65, 0x70, 0x6f, 0x73,
+	0x69, 0x74, 0x42, 0x07, 0x54, 0x78, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x4a, 0x67,
+	0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61,
+	0x2d, 0x6c, 0x61, 0x62, 0x73, 0x2f, 0x76, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x2d, 0x62, 0x6c, 0x6f,
+	0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x76, 0x65, 0x72, 0x61,
+	0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x2f, 0x74, 0x72, 0x75,
+	0x73, 0x74, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0xa2, 0x02, 0x03, 0x56, 0x54, 0x58, 0xaa,
+	0x02, 0x1d, 0x56, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61,
+	0x69, 0x6e, 0x2e, 0x54, 0x72, 0x75, 0x73, 0x74, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0xca,
+	0x02, 0x1d, 0x56, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61,
+	0x69, 0x6e, 0x5c, 0x54, 0x72, 0x75, 0x73, 0x74, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0xe2,
+	0x02, 0x29, 0x56, 0x65, 0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61,
+	0x69, 0x6e, 0x5c, 0x54, 0x72, 0x75, 0x73, 0x74, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x5c,
+	0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x1e, 0x56, 0x65,
+	0x72, 0x61, 0x6e, 0x61, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x3a, 0x3a,
+	0x54, 0x72, 0x75, 0x73, 0x74, 0x64, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x62, 0x06, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -3969,24 +3968,24 @@ func file_veranablockchain_trustdeposit_tx_proto_rawDescGZIP() []byte {
 
 var file_veranablockchain_trustdeposit_tx_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_veranablockchain_trustdeposit_tx_proto_goTypes = []interface{}{
-	(*MsgUpdateParams)(nil),                         // 0: veranablockchain.trustdeposit.MsgUpdateParams
-	(*MsgUpdateParamsResponse)(nil),                 // 1: veranablockchain.trustdeposit.MsgUpdateParamsResponse
-	(*MsgReclaimTrustDepositInterests)(nil),         // 2: veranablockchain.trustdeposit.MsgReclaimTrustDepositInterests
-	(*MsgReclaimTrustDepositInterestsResponse)(nil), // 3: veranablockchain.trustdeposit.MsgReclaimTrustDepositInterestsResponse
-	(*MsgReclaimTrustDeposit)(nil),                  // 4: veranablockchain.trustdeposit.MsgReclaimTrustDeposit
-	(*MsgReclaimTrustDepositResponse)(nil),          // 5: veranablockchain.trustdeposit.MsgReclaimTrustDepositResponse
-	(*MsgRepaySlashedTrustDeposit)(nil),             // 6: veranablockchain.trustdeposit.MsgRepaySlashedTrustDeposit
-	(*MsgRepaySlashedTrustDepositResponse)(nil),     // 7: veranablockchain.trustdeposit.MsgRepaySlashedTrustDepositResponse
-	(*Params)(nil),                                  // 8: veranablockchain.trustdeposit.Params
+	(*MsgUpdateParams)(nil),                     // 0: veranablockchain.trustdeposit.MsgUpdateParams
+	(*MsgUpdateParamsResponse)(nil),             // 1: veranablockchain.trustdeposit.MsgUpdateParamsResponse
+	(*MsgReclaimTrustDepositYield)(nil),         // 2: veranablockchain.trustdeposit.MsgReclaimTrustDepositYield
+	(*MsgReclaimTrustDepositYieldResponse)(nil), // 3: veranablockchain.trustdeposit.MsgReclaimTrustDepositYieldResponse
+	(*MsgReclaimTrustDeposit)(nil),              // 4: veranablockchain.trustdeposit.MsgReclaimTrustDeposit
+	(*MsgReclaimTrustDepositResponse)(nil),      // 5: veranablockchain.trustdeposit.MsgReclaimTrustDepositResponse
+	(*MsgRepaySlashedTrustDeposit)(nil),         // 6: veranablockchain.trustdeposit.MsgRepaySlashedTrustDeposit
+	(*MsgRepaySlashedTrustDepositResponse)(nil), // 7: veranablockchain.trustdeposit.MsgRepaySlashedTrustDepositResponse
+	(*Params)(nil),                              // 8: veranablockchain.trustdeposit.Params
 }
 var file_veranablockchain_trustdeposit_tx_proto_depIdxs = []int32{
 	8, // 0: veranablockchain.trustdeposit.MsgUpdateParams.params:type_name -> veranablockchain.trustdeposit.Params
 	0, // 1: veranablockchain.trustdeposit.Msg.UpdateParams:input_type -> veranablockchain.trustdeposit.MsgUpdateParams
-	2, // 2: veranablockchain.trustdeposit.Msg.ReclaimTrustDepositInterests:input_type -> veranablockchain.trustdeposit.MsgReclaimTrustDepositInterests
+	2, // 2: veranablockchain.trustdeposit.Msg.ReclaimTrustDepositYield:input_type -> veranablockchain.trustdeposit.MsgReclaimTrustDepositYield
 	4, // 3: veranablockchain.trustdeposit.Msg.ReclaimTrustDeposit:input_type -> veranablockchain.trustdeposit.MsgReclaimTrustDeposit
 	6, // 4: veranablockchain.trustdeposit.Msg.RepaySlashedTrustDeposit:input_type -> veranablockchain.trustdeposit.MsgRepaySlashedTrustDeposit
 	1, // 5: veranablockchain.trustdeposit.Msg.UpdateParams:output_type -> veranablockchain.trustdeposit.MsgUpdateParamsResponse
-	3, // 6: veranablockchain.trustdeposit.Msg.ReclaimTrustDepositInterests:output_type -> veranablockchain.trustdeposit.MsgReclaimTrustDepositInterestsResponse
+	3, // 6: veranablockchain.trustdeposit.Msg.ReclaimTrustDepositYield:output_type -> veranablockchain.trustdeposit.MsgReclaimTrustDepositYieldResponse
 	5, // 7: veranablockchain.trustdeposit.Msg.ReclaimTrustDeposit:output_type -> veranablockchain.trustdeposit.MsgReclaimTrustDepositResponse
 	7, // 8: veranablockchain.trustdeposit.Msg.RepaySlashedTrustDeposit:output_type -> veranablockchain.trustdeposit.MsgRepaySlashedTrustDepositResponse
 	5, // [5:9] is the sub-list for method output_type
@@ -4028,7 +4027,7 @@ func file_veranablockchain_trustdeposit_tx_proto_init() {
 			}
 		}
 		file_veranablockchain_trustdeposit_tx_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgReclaimTrustDepositInterests); i {
+			switch v := v.(*MsgReclaimTrustDepositYield); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -4040,7 +4039,7 @@ func file_veranablockchain_trustdeposit_tx_proto_init() {
 			}
 		}
 		file_veranablockchain_trustdeposit_tx_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgReclaimTrustDepositInterestsResponse); i {
+			switch v := v.(*MsgReclaimTrustDepositYieldResponse); i {
 			case 0:
 				return &v.state
 			case 1:

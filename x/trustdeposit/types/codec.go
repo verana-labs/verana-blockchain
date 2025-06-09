@@ -11,7 +11,7 @@ import (
 )
 
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	legacy.RegisterAminoMsg(cdc, &MsgReclaimTrustDepositInterests{}, "/td/v1/reclaim-interests")
+	legacy.RegisterAminoMsg(cdc, &MsgReclaimTrustDepositYield{}, "/td/v1/reclaim-interests")
 	legacy.RegisterAminoMsg(cdc, &MsgReclaimTrustDeposit{}, "/td/v1/reclaim-deposit")
 	legacy.RegisterAminoMsg(cdc, &MsgRepaySlashedTrustDeposit{}, "/td/v1/repay-slashed-td")
 	legacy.RegisterAminoMsg(cdc, &SlashTrustDepositProposal{}, "td/v1/SlashTrustDepositProposal")
@@ -25,7 +25,7 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 	)
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgUpdateParams{},
-		&MsgReclaimTrustDepositInterests{},
+		&MsgReclaimTrustDepositYield{},
 		&MsgReclaimTrustDeposit{},
 		&MsgRepaySlashedTrustDeposit{},
 	)

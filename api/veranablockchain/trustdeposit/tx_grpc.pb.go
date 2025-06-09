@@ -19,10 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Msg_UpdateParams_FullMethodName                 = "/veranablockchain.trustdeposit.Msg/UpdateParams"
-	Msg_ReclaimTrustDepositInterests_FullMethodName = "/veranablockchain.trustdeposit.Msg/ReclaimTrustDepositInterests"
-	Msg_ReclaimTrustDeposit_FullMethodName          = "/veranablockchain.trustdeposit.Msg/ReclaimTrustDeposit"
-	Msg_RepaySlashedTrustDeposit_FullMethodName     = "/veranablockchain.trustdeposit.Msg/RepaySlashedTrustDeposit"
+	Msg_UpdateParams_FullMethodName             = "/veranablockchain.trustdeposit.Msg/UpdateParams"
+	Msg_ReclaimTrustDepositYield_FullMethodName = "/veranablockchain.trustdeposit.Msg/ReclaimTrustDepositYield"
+	Msg_ReclaimTrustDeposit_FullMethodName      = "/veranablockchain.trustdeposit.Msg/ReclaimTrustDeposit"
+	Msg_RepaySlashedTrustDeposit_FullMethodName = "/veranablockchain.trustdeposit.Msg/RepaySlashedTrustDeposit"
 )
 
 // MsgClient is the client API for Msg service.
@@ -32,7 +32,7 @@ type MsgClient interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
-	ReclaimTrustDepositInterests(ctx context.Context, in *MsgReclaimTrustDepositInterests, opts ...grpc.CallOption) (*MsgReclaimTrustDepositInterestsResponse, error)
+	ReclaimTrustDepositYield(ctx context.Context, in *MsgReclaimTrustDepositYield, opts ...grpc.CallOption) (*MsgReclaimTrustDepositYieldResponse, error)
 	ReclaimTrustDeposit(ctx context.Context, in *MsgReclaimTrustDeposit, opts ...grpc.CallOption) (*MsgReclaimTrustDepositResponse, error)
 	// rpc SlashTrustDeposit(MsgSlashTrustDeposit) returns (MsgSlashTrustDepositResponse);
 	RepaySlashedTrustDeposit(ctx context.Context, in *MsgRepaySlashedTrustDeposit, opts ...grpc.CallOption) (*MsgRepaySlashedTrustDepositResponse, error)
@@ -55,9 +55,9 @@ func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts 
 	return out, nil
 }
 
-func (c *msgClient) ReclaimTrustDepositInterests(ctx context.Context, in *MsgReclaimTrustDepositInterests, opts ...grpc.CallOption) (*MsgReclaimTrustDepositInterestsResponse, error) {
-	out := new(MsgReclaimTrustDepositInterestsResponse)
-	err := c.cc.Invoke(ctx, Msg_ReclaimTrustDepositInterests_FullMethodName, in, out, opts...)
+func (c *msgClient) ReclaimTrustDepositYield(ctx context.Context, in *MsgReclaimTrustDepositYield, opts ...grpc.CallOption) (*MsgReclaimTrustDepositYieldResponse, error) {
+	out := new(MsgReclaimTrustDepositYieldResponse)
+	err := c.cc.Invoke(ctx, Msg_ReclaimTrustDepositYield_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -89,7 +89,7 @@ type MsgServer interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
-	ReclaimTrustDepositInterests(context.Context, *MsgReclaimTrustDepositInterests) (*MsgReclaimTrustDepositInterestsResponse, error)
+	ReclaimTrustDepositYield(context.Context, *MsgReclaimTrustDepositYield) (*MsgReclaimTrustDepositYieldResponse, error)
 	ReclaimTrustDeposit(context.Context, *MsgReclaimTrustDeposit) (*MsgReclaimTrustDepositResponse, error)
 	// rpc SlashTrustDeposit(MsgSlashTrustDeposit) returns (MsgSlashTrustDepositResponse);
 	RepaySlashedTrustDeposit(context.Context, *MsgRepaySlashedTrustDeposit) (*MsgRepaySlashedTrustDepositResponse, error)
@@ -103,8 +103,8 @@ type UnimplementedMsgServer struct {
 func (UnimplementedMsgServer) UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
 }
-func (UnimplementedMsgServer) ReclaimTrustDepositInterests(context.Context, *MsgReclaimTrustDepositInterests) (*MsgReclaimTrustDepositInterestsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ReclaimTrustDepositInterests not implemented")
+func (UnimplementedMsgServer) ReclaimTrustDepositYield(context.Context, *MsgReclaimTrustDepositYield) (*MsgReclaimTrustDepositYieldResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ReclaimTrustDepositYield not implemented")
 }
 func (UnimplementedMsgServer) ReclaimTrustDeposit(context.Context, *MsgReclaimTrustDeposit) (*MsgReclaimTrustDepositResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ReclaimTrustDeposit not implemented")
@@ -143,20 +143,20 @@ func _Msg_UpdateParams_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_ReclaimTrustDepositInterests_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgReclaimTrustDepositInterests)
+func _Msg_ReclaimTrustDepositYield_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgReclaimTrustDepositYield)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).ReclaimTrustDepositInterests(ctx, in)
+		return srv.(MsgServer).ReclaimTrustDepositYield(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Msg_ReclaimTrustDepositInterests_FullMethodName,
+		FullMethod: Msg_ReclaimTrustDepositYield_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).ReclaimTrustDepositInterests(ctx, req.(*MsgReclaimTrustDepositInterests))
+		return srv.(MsgServer).ReclaimTrustDepositYield(ctx, req.(*MsgReclaimTrustDepositYield))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -209,8 +209,8 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_UpdateParams_Handler,
 		},
 		{
-			MethodName: "ReclaimTrustDepositInterests",
-			Handler:    _Msg_ReclaimTrustDepositInterests_Handler,
+			MethodName: "ReclaimTrustDepositYield",
+			Handler:    _Msg_ReclaimTrustDepositYield_Handler,
 		},
 		{
 			MethodName: "ReclaimTrustDeposit",

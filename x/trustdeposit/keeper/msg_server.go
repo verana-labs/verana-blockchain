@@ -20,46 +20,47 @@ func NewMsgServerImpl(keeper Keeper) types.MsgServer {
 
 var _ types.MsgServer = msgServer{}
 
-func (ms msgServer) ReclaimTrustDepositInterests(goCtx context.Context, msg *types.MsgReclaimTrustDepositInterests) (*types.MsgReclaimTrustDepositInterestsResponse, error) {
+func (ms msgServer) ReclaimTrustDepositYield(goCtx context.Context, msg *types.MsgReclaimTrustDepositYield) (*types.MsgReclaimTrustDepositYieldResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	// Get account running the method
 	account := msg.Creator
 
-	// Load TrustDeposit entry
+	// [MOD-TD-MSG-2-2-1] Load TrustDeposit entry
 	td, err := ms.Keeper.TrustDeposit.Get(ctx, account)
 	if err != nil {
 		return nil, fmt.Errorf("trust deposit not found for account: %s", account)
 	}
 
-	// Get module params for share value calculation
-	params := ms.Keeper.GetParams(ctx)
-
-	// Calculate claimable interest using decimal math
-	depositAmount := ms.Keeper.ShareToAmount(td.Share, params.TrustDepositShareValue)
-
-	// Guards against underflow
-	if depositAmount <= td.Amount {
-		return nil, fmt.Errorf("no claimable interest available")
+	// [MOD-TD-MSG-2-2-1] Check slashing condition - CRITICAL MISSING CHECK
+	if td.SlashedDeposit > 0 && td.SlashedDeposit < td.RepaidDeposit {
+		return nil, fmt.Errorf("deposit has been slashed and not repaid")
 	}
 
-	claimableInterest := depositAmount - td.Amount
+	// Get share value
+	params := ms.Keeper.GetParams(ctx)
 
-	// Calculate shares to reduce using decimal math
-	sharesToReduce := ms.Keeper.AmountToShare(claimableInterest, params.TrustDepositShareValue)
+	// [MOD-TD-MSG-2-2-1] Calculate claimable yield
+	// claimable_yield = td.share * GlobalVariables.trust_deposit_share_value - td.deposit
+	depositValue := ms.Keeper.ShareToAmount(td.Share, params.TrustDepositShareValue)
+	if depositValue <= td.Amount { // td.Amount maps to spec's td.deposit
+		return nil, fmt.Errorf("no claimable yield available") // Updated error message
+	}
 
-	// Update trust deposit shares
+	claimableYield := depositValue - td.Amount
+
+	// [MOD-TD-MSG-2-3] Calculate shares to reduce
+	// td.share = td.share - claimable_yield / GlobalVariables.trust_deposit_share_value
+	sharesToReduce := ms.Keeper.AmountToShare(claimableYield, params.TrustDepositShareValue)
 	td.Share -= sharesToReduce
 
-	// Transfer claimable interest from module to account
-	coins := sdk.NewCoins(sdk.NewInt64Coin(types.BondDenom, int64(claimableInterest)))
+	// [MOD-TD-MSG-2-3] Transfer yield from TrustDeposit account to account
+	coins := sdk.NewCoins(sdk.NewInt64Coin(types.BondDenom, int64(claimableYield)))
 	if err := ms.Keeper.bankKeeper.SendCoinsFromModuleToAccount(
 		ctx,
 		types.ModuleName,
 		sdk.AccAddress(account),
 		coins,
 	); err != nil {
-		return nil, fmt.Errorf("failed to transfer interest: %w", err)
+		return nil, fmt.Errorf("failed to transfer yield: %w", err)
 	}
 
 	// Save updated trust deposit
@@ -67,8 +68,8 @@ func (ms msgServer) ReclaimTrustDepositInterests(goCtx context.Context, msg *typ
 		return nil, fmt.Errorf("failed to update trust deposit: %w", err)
 	}
 
-	return &types.MsgReclaimTrustDepositInterestsResponse{
-		ClaimedAmount: claimableInterest,
+	return &types.MsgReclaimTrustDepositYieldResponse{
+		ClaimedAmount: claimableYield, // Or rename to ClaimedYield
 	}, nil
 }
 
@@ -182,7 +183,7 @@ func (k Keeper) CalculateBurnAmount(claimed uint64, burnRate math.LegacyDec) uin
 
 func (ms msgServer) RepaySlashedTrustDeposit(goCtx context.Context, msg *types.MsgRepaySlashedTrustDeposit) (*types.MsgRepaySlashedTrustDepositResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	
+
 	// Load TrustDeposit entry (must exist)
 	td, err := ms.Keeper.TrustDeposit.Get(ctx, msg.Account)
 	if err != nil {

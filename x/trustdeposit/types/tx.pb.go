@@ -127,22 +127,22 @@ func (m *MsgUpdateParamsResponse) XXX_DiscardUnknown() {
 var xxx_messageInfo_MsgUpdateParamsResponse proto.InternalMessageInfo
 
 // MsgReclaimTrustDepositInterests defines the request type
-type MsgReclaimTrustDepositInterests struct {
+type MsgReclaimTrustDepositYield struct {
 	Creator string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
 }
 
-func (m *MsgReclaimTrustDepositInterests) Reset()         { *m = MsgReclaimTrustDepositInterests{} }
-func (m *MsgReclaimTrustDepositInterests) String() string { return proto.CompactTextString(m) }
-func (*MsgReclaimTrustDepositInterests) ProtoMessage()    {}
-func (*MsgReclaimTrustDepositInterests) Descriptor() ([]byte, []int) {
+func (m *MsgReclaimTrustDepositYield) Reset()         { *m = MsgReclaimTrustDepositYield{} }
+func (m *MsgReclaimTrustDepositYield) String() string { return proto.CompactTextString(m) }
+func (*MsgReclaimTrustDepositYield) ProtoMessage()    {}
+func (*MsgReclaimTrustDepositYield) Descriptor() ([]byte, []int) {
 	return fileDescriptor_ecf9f31152d5bd50, []int{2}
 }
-func (m *MsgReclaimTrustDepositInterests) XXX_Unmarshal(b []byte) error {
+func (m *MsgReclaimTrustDepositYield) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgReclaimTrustDepositInterests) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgReclaimTrustDepositYield) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgReclaimTrustDepositInterests.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgReclaimTrustDepositYield.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -152,19 +152,19 @@ func (m *MsgReclaimTrustDepositInterests) XXX_Marshal(b []byte, deterministic bo
 		return b[:n], nil
 	}
 }
-func (m *MsgReclaimTrustDepositInterests) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgReclaimTrustDepositInterests.Merge(m, src)
+func (m *MsgReclaimTrustDepositYield) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgReclaimTrustDepositYield.Merge(m, src)
 }
-func (m *MsgReclaimTrustDepositInterests) XXX_Size() int {
+func (m *MsgReclaimTrustDepositYield) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgReclaimTrustDepositInterests) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgReclaimTrustDepositInterests.DiscardUnknown(m)
+func (m *MsgReclaimTrustDepositYield) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgReclaimTrustDepositYield.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgReclaimTrustDepositInterests proto.InternalMessageInfo
+var xxx_messageInfo_MsgReclaimTrustDepositYield proto.InternalMessageInfo
 
-func (m *MsgReclaimTrustDepositInterests) GetCreator() string {
+func (m *MsgReclaimTrustDepositYield) GetCreator() string {
 	if m != nil {
 		return m.Creator
 	}
@@ -172,24 +172,22 @@ func (m *MsgReclaimTrustDepositInterests) GetCreator() string {
 }
 
 // MsgReclaimTrustDepositInterestsResponse defines the response type
-type MsgReclaimTrustDepositInterestsResponse struct {
+type MsgReclaimTrustDepositYieldResponse struct {
 	ClaimedAmount uint64 `protobuf:"varint,1,opt,name=claimed_amount,json=claimedAmount,proto3" json:"claimed_amount,omitempty"`
 }
 
-func (m *MsgReclaimTrustDepositInterestsResponse) Reset() {
-	*m = MsgReclaimTrustDepositInterestsResponse{}
-}
-func (m *MsgReclaimTrustDepositInterestsResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgReclaimTrustDepositInterestsResponse) ProtoMessage()    {}
-func (*MsgReclaimTrustDepositInterestsResponse) Descriptor() ([]byte, []int) {
+func (m *MsgReclaimTrustDepositYieldResponse) Reset()         { *m = MsgReclaimTrustDepositYieldResponse{} }
+func (m *MsgReclaimTrustDepositYieldResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgReclaimTrustDepositYieldResponse) ProtoMessage()    {}
+func (*MsgReclaimTrustDepositYieldResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_ecf9f31152d5bd50, []int{3}
 }
-func (m *MsgReclaimTrustDepositInterestsResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgReclaimTrustDepositYieldResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgReclaimTrustDepositInterestsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgReclaimTrustDepositYieldResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgReclaimTrustDepositInterestsResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgReclaimTrustDepositYieldResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -199,19 +197,19 @@ func (m *MsgReclaimTrustDepositInterestsResponse) XXX_Marshal(b []byte, determin
 		return b[:n], nil
 	}
 }
-func (m *MsgReclaimTrustDepositInterestsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgReclaimTrustDepositInterestsResponse.Merge(m, src)
+func (m *MsgReclaimTrustDepositYieldResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgReclaimTrustDepositYieldResponse.Merge(m, src)
 }
-func (m *MsgReclaimTrustDepositInterestsResponse) XXX_Size() int {
+func (m *MsgReclaimTrustDepositYieldResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgReclaimTrustDepositInterestsResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgReclaimTrustDepositInterestsResponse.DiscardUnknown(m)
+func (m *MsgReclaimTrustDepositYieldResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgReclaimTrustDepositYieldResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgReclaimTrustDepositInterestsResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgReclaimTrustDepositYieldResponse proto.InternalMessageInfo
 
-func (m *MsgReclaimTrustDepositInterestsResponse) GetClaimedAmount() uint64 {
+func (m *MsgReclaimTrustDepositYieldResponse) GetClaimedAmount() uint64 {
 	if m != nil {
 		return m.ClaimedAmount
 	}
@@ -421,8 +419,8 @@ var xxx_messageInfo_MsgRepaySlashedTrustDepositResponse proto.InternalMessageInf
 func init() {
 	proto.RegisterType((*MsgUpdateParams)(nil), "veranablockchain.trustdeposit.MsgUpdateParams")
 	proto.RegisterType((*MsgUpdateParamsResponse)(nil), "veranablockchain.trustdeposit.MsgUpdateParamsResponse")
-	proto.RegisterType((*MsgReclaimTrustDepositInterests)(nil), "veranablockchain.trustdeposit.MsgReclaimTrustDepositInterests")
-	proto.RegisterType((*MsgReclaimTrustDepositInterestsResponse)(nil), "veranablockchain.trustdeposit.MsgReclaimTrustDepositInterestsResponse")
+	proto.RegisterType((*MsgReclaimTrustDepositYield)(nil), "veranablockchain.trustdeposit.MsgReclaimTrustDepositYield")
+	proto.RegisterType((*MsgReclaimTrustDepositYieldResponse)(nil), "veranablockchain.trustdeposit.MsgReclaimTrustDepositYieldResponse")
 	proto.RegisterType((*MsgReclaimTrustDeposit)(nil), "veranablockchain.trustdeposit.MsgReclaimTrustDeposit")
 	proto.RegisterType((*MsgReclaimTrustDepositResponse)(nil), "veranablockchain.trustdeposit.MsgReclaimTrustDepositResponse")
 	proto.RegisterType((*MsgRepaySlashedTrustDeposit)(nil), "veranablockchain.trustdeposit.MsgRepaySlashedTrustDeposit")
@@ -434,45 +432,44 @@ func init() {
 }
 
 var fileDescriptor_ecf9f31152d5bd50 = []byte{
-	// 595 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x55, 0x3f, 0x6f, 0xd3, 0x40,
-	0x14, 0xcf, 0xb5, 0x21, 0x51, 0x1e, 0x29, 0x08, 0x53, 0xb5, 0xa9, 0x01, 0xb7, 0x4a, 0x15, 0xa8,
-	0x22, 0xd5, 0x16, 0x41, 0x74, 0x88, 0x54, 0xa4, 0x46, 0x08, 0xc1, 0x10, 0xa9, 0x72, 0x41, 0x48,
-	0x2c, 0xd5, 0xc5, 0x3e, 0x39, 0x16, 0xb1, 0xcf, 0xf2, 0x5d, 0xa2, 0x66, 0x43, 0x8c, 0xb0, 0x30,
-	0xf3, 0x01, 0x10, 0x12, 0x4b, 0x06, 0x3e, 0x44, 0xc7, 0x8a, 0x85, 0x4e, 0x08, 0x25, 0x43, 0xbe,
-	0x06, 0x8a, 0x7d, 0x4e, 0xa9, 0x71, 0x1d, 0x9a, 0x2e, 0x89, 0xdf, 0x9f, 0xdf, 0xef, 0xfd, 0xde,
-	0xf3, 0xbb, 0x33, 0xdc, 0xef, 0x11, 0x1f, 0xbb, 0xb8, 0xd5, 0xa1, 0xc6, 0x5b, 0xa3, 0x8d, 0x6d,
-	0x57, 0xe3, 0x7e, 0x97, 0x71, 0x93, 0x78, 0x94, 0xd9, 0x5c, 0xe3, 0x47, 0xaa, 0xe7, 0x53, 0x4e,
-	0xa5, 0x7b, 0xf1, 0x3c, 0xf5, 0xef, 0x3c, 0xf9, 0x16, 0x76, 0x6c, 0x97, 0x6a, 0xc1, 0x6f, 0x88,
-	0x90, 0x57, 0x0d, 0xca, 0x1c, 0xca, 0x34, 0x87, 0x59, 0x5a, 0xef, 0xe1, 0xe4, 0x4f, 0x04, 0xd6,
-	0xc2, 0xc0, 0x61, 0x60, 0x69, 0xa1, 0x21, 0x42, 0xcb, 0x16, 0xb5, 0x68, 0xe8, 0x9f, 0x3c, 0x09,
-	0x6f, 0x35, 0x5d, 0xa3, 0x87, 0x7d, 0xec, 0x08, 0x86, 0xf2, 0x4f, 0x04, 0x37, 0x9b, 0xcc, 0x7a,
-	0xe5, 0x99, 0x98, 0x93, 0xfd, 0x20, 0x22, 0xed, 0x40, 0x01, 0x77, 0x79, 0x9b, 0xfa, 0x36, 0xef,
-	0x97, 0xd0, 0x06, 0xda, 0x2a, 0x34, 0x4a, 0x3f, 0xbe, 0x6f, 0x2f, 0x8b, 0xd2, 0x7b, 0xa6, 0xe9,
-	0x13, 0xc6, 0x0e, 0xb8, 0x6f, 0xbb, 0x96, 0x7e, 0x96, 0x2a, 0x3d, 0x87, 0x5c, 0xc8, 0x5d, 0x5a,
-	0xd8, 0x40, 0x5b, 0xd7, 0x6b, 0x15, 0x35, 0x75, 0x08, 0x6a, 0x58, 0xae, 0x51, 0x38, 0xfe, 0xb5,
-	0x9e, 0xf9, 0x3a, 0x1e, 0x54, 0x91, 0x2e, 0xf0, 0xf5, 0xc6, 0xfb, 0xf1, 0xa0, 0x7a, 0xc6, 0xfc,
-	0x61, 0x3c, 0xa8, 0x6a, 0xff, 0x34, 0x75, 0x74, 0xbe, 0xad, 0x58, 0x17, 0xe5, 0x35, 0x58, 0x8d,
-	0xb9, 0x74, 0xc2, 0x3c, 0xea, 0x32, 0x52, 0x36, 0x60, 0xbd, 0xc9, 0x2c, 0x9d, 0x18, 0x1d, 0x6c,
-	0x3b, 0x2f, 0x27, 0x24, 0x4f, 0x43, 0x92, 0x17, 0x2e, 0x27, 0x3e, 0x61, 0x9c, 0x49, 0x35, 0xc8,
-	0x1b, 0x3e, 0xc1, 0x9c, 0xfa, 0x33, 0x27, 0x10, 0x25, 0xd6, 0x8b, 0x13, 0xd5, 0x91, 0x55, 0xde,
-	0x87, 0x07, 0x33, 0x8a, 0x44, 0x7a, 0xa4, 0x0a, 0xdc, 0x08, 0xb2, 0x88, 0x79, 0x88, 0x1d, 0xda,
-	0x75, 0x79, 0x50, 0x33, 0xab, 0x2f, 0x09, 0xef, 0x5e, 0xe0, 0x2c, 0x73, 0x58, 0x49, 0x66, 0x9c,
-	0x47, 0xad, 0x54, 0x82, 0xbc, 0xa0, 0x0f, 0x5e, 0x57, 0x56, 0x8f, 0xcc, 0x58, 0x1f, 0x1d, 0x50,
-	0x92, 0xab, 0x4e, 0xe5, 0x6f, 0xc2, 0x52, 0xab, 0xeb, 0xbb, 0x71, 0xf5, 0xc5, 0xd0, 0x19, 0x8a,
-	0x4f, 0xe8, 0x71, 0x21, 0xa9, 0xc7, 0x6f, 0x08, 0xee, 0x04, 0xe5, 0x3c, 0xdc, 0x3f, 0xe8, 0x60,
-	0xd6, 0x26, 0xe6, 0x95, 0x3b, 0xad, 0x41, 0x1e, 0x1b, 0xc6, 0xb4, 0x66, 0x2a, 0x46, 0x24, 0x4a,
-	0x2b, 0x90, 0x13, 0x32, 0x17, 0x03, 0x99, 0xc2, 0x8a, 0xcd, 0xa6, 0x02, 0x9b, 0x29, 0x62, 0xa3,
-	0x01, 0xd5, 0x4e, 0xb3, 0xb0, 0xd8, 0x64, 0x96, 0xd4, 0x83, 0xe2, 0xb9, 0x83, 0xa6, 0xce, 0x38,
-	0x20, 0xb1, 0xfd, 0x95, 0x77, 0x2e, 0x97, 0x3f, 0x7d, 0x41, 0x5f, 0x10, 0xdc, 0x4d, 0xdd, 0xf6,
-	0x27, 0xb3, 0x89, 0xd3, 0xf0, 0xf2, 0xb3, 0xab, 0xe1, 0xa7, 0x42, 0x3f, 0x22, 0xb8, 0x9d, 0xb4,
-	0xdf, 0x8f, 0xe7, 0xe2, 0x97, 0x77, 0xe7, 0x82, 0x4d, 0xd5, 0x7c, 0x46, 0x50, 0xba, 0x70, 0x11,
-	0xeb, 0xff, 0xc3, 0x9d, 0x8c, 0x95, 0x1b, 0xf3, 0x63, 0x23, 0x71, 0xf2, 0xb5, 0x77, 0x93, 0x1b,
-	0xb3, 0xf1, 0xfa, 0x78, 0xa8, 0xa0, 0x93, 0xa1, 0x82, 0x7e, 0x0f, 0x15, 0xf4, 0x69, 0xa4, 0x64,
-	0x4e, 0x46, 0x4a, 0xe6, 0x74, 0xa4, 0x64, 0xde, 0xec, 0x5a, 0x36, 0x6f, 0x77, 0x5b, 0xaa, 0x41,
-	0x1d, 0x71, 0x77, 0x6e, 0x77, 0x70, 0x8b, 0x45, 0xcf, 0x17, 0x5f, 0xa4, 0xbc, 0xef, 0x11, 0xd6,
-	0xca, 0x05, 0xdf, 0x87, 0x47, 0x7f, 0x02, 0x00, 0x00, 0xff, 0xff, 0xda, 0x3d, 0xe0, 0x4f, 0xf1,
-	0x06, 0x00, 0x00,
+	// 588 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x55, 0x31, 0x6f, 0xd3, 0x4e,
+	0x14, 0xcf, 0xb5, 0xf9, 0x27, 0xca, 0xfd, 0x53, 0x10, 0xa6, 0x6a, 0x53, 0x23, 0x4c, 0x95, 0x2a,
+	0xa8, 0x8a, 0x54, 0x5b, 0x04, 0xd1, 0x21, 0x52, 0x87, 0x46, 0x0c, 0x0c, 0x44, 0x42, 0x2e, 0x08,
+	0xc1, 0x12, 0x5d, 0xec, 0x93, 0x63, 0x61, 0xfb, 0xac, 0xbb, 0x73, 0xd4, 0x6c, 0x88, 0x11, 0x16,
+	0x66, 0x3e, 0x01, 0x12, 0x4b, 0x06, 0x3e, 0x44, 0x07, 0x86, 0x8a, 0x05, 0x26, 0x84, 0x92, 0x21,
+	0x5f, 0x03, 0xd9, 0x3e, 0xa7, 0xd4, 0x38, 0x4e, 0x09, 0x4b, 0xe2, 0xf7, 0xee, 0xbd, 0xdf, 0xfb,
+	0xfd, 0xde, 0x7b, 0x3e, 0xc3, 0xbb, 0x43, 0x4c, 0x91, 0x87, 0xfa, 0x0e, 0x31, 0x5e, 0x19, 0x03,
+	0x64, 0x7b, 0x1a, 0xa7, 0x01, 0xe3, 0x26, 0xf6, 0x09, 0xb3, 0xb9, 0xc6, 0x4f, 0x55, 0x9f, 0x12,
+	0x4e, 0xa4, 0xdb, 0xe9, 0x38, 0xf5, 0xf7, 0x38, 0xf9, 0x06, 0x72, 0x6d, 0x8f, 0x68, 0xd1, 0x6f,
+	0x9c, 0x21, 0x6f, 0x1b, 0x84, 0xb9, 0x84, 0x69, 0x2e, 0xb3, 0xb4, 0xe1, 0xbd, 0xf0, 0x4f, 0x1c,
+	0xec, 0xc4, 0x07, 0xbd, 0xc8, 0xd2, 0x62, 0x43, 0x1c, 0x6d, 0x5a, 0xc4, 0x22, 0xb1, 0x3f, 0x7c,
+	0x12, 0xde, 0x66, 0x3e, 0x47, 0x1f, 0x51, 0xe4, 0x0a, 0x84, 0xfa, 0x37, 0x00, 0xaf, 0x77, 0x99,
+	0xf5, 0xcc, 0x37, 0x11, 0xc7, 0x4f, 0xa2, 0x13, 0xe9, 0x10, 0x56, 0x50, 0xc0, 0x07, 0x84, 0xda,
+	0x7c, 0x54, 0x03, 0xbb, 0x60, 0xbf, 0xd2, 0xa9, 0x7d, 0xfd, 0x7c, 0xb0, 0x29, 0x4a, 0x1f, 0x9b,
+	0x26, 0xc5, 0x8c, 0x9d, 0x70, 0x6a, 0x7b, 0x96, 0x7e, 0x11, 0x2a, 0x3d, 0x82, 0xa5, 0x18, 0xbb,
+	0xb6, 0xb6, 0x0b, 0xf6, 0xff, 0x6f, 0x35, 0xd4, 0xdc, 0x26, 0xa8, 0x71, 0xb9, 0x4e, 0xe5, 0xec,
+	0xc7, 0x9d, 0xc2, 0xc7, 0xd9, 0xb8, 0x09, 0x74, 0x91, 0xdf, 0xee, 0xbc, 0x99, 0x8d, 0x9b, 0x17,
+	0xc8, 0x6f, 0x67, 0xe3, 0xa6, 0xf6, 0x87, 0xa8, 0xd3, 0xcb, 0xb2, 0x52, 0x2a, 0xea, 0x3b, 0x70,
+	0x3b, 0xe5, 0xd2, 0x31, 0xf3, 0x89, 0xc7, 0x70, 0xbd, 0x07, 0x6f, 0x75, 0x99, 0xa5, 0x63, 0xc3,
+	0x41, 0xb6, 0xfb, 0x34, 0x04, 0x79, 0x18, 0x83, 0xbc, 0xb0, 0xb1, 0x63, 0x4a, 0x2d, 0x58, 0x36,
+	0x28, 0x46, 0x9c, 0xd0, 0xa5, 0xea, 0x93, 0xc0, 0x76, 0x35, 0x64, 0x9c, 0x58, 0xf5, 0xc7, 0x70,
+	0x2f, 0xa7, 0x40, 0xc2, 0x43, 0x6a, 0xc0, 0x6b, 0x51, 0x04, 0x36, 0x7b, 0xc8, 0x25, 0x81, 0xc7,
+	0xa3, 0x7a, 0x45, 0x7d, 0x43, 0x78, 0x8f, 0x23, 0x67, 0x9d, 0xc3, 0xad, 0x6c, 0xb4, 0x55, 0x98,
+	0x4a, 0x35, 0x58, 0x16, 0xf0, 0xd1, 0x98, 0x8a, 0x7a, 0x62, 0xa6, 0x34, 0x38, 0x50, 0xc9, 0xae,
+	0x3a, 0xa7, 0xbf, 0x07, 0x37, 0xfa, 0x01, 0xf5, 0xd2, 0xec, 0xab, 0xb1, 0x33, 0x26, 0x9f, 0xa1,
+	0x71, 0x2d, 0x4b, 0xe3, 0x27, 0x20, 0x66, 0xe2, 0xa3, 0xd1, 0x89, 0x83, 0xd8, 0x00, 0x9b, 0xff,
+	0xac, 0xb4, 0x05, 0xcb, 0xc8, 0x30, 0xe6, 0x35, 0x73, 0x73, 0x44, 0xa0, 0xb4, 0x05, 0x4b, 0x82,
+	0xe6, 0x7a, 0x44, 0x53, 0x58, 0xa9, 0xde, 0x34, 0xc4, 0x7c, 0xb3, 0xc9, 0x26, 0x0d, 0x6a, 0x7d,
+	0x29, 0xc2, 0xf5, 0x2e, 0xb3, 0xa4, 0x21, 0xac, 0x5e, 0x7a, 0xc1, 0xd4, 0x25, 0x2f, 0x46, 0x6a,
+	0x6f, 0xe5, 0xc3, 0xbf, 0x8b, 0x9f, 0x0f, 0xe8, 0x03, 0x80, 0xb5, 0x85, 0x5b, 0xde, 0x5e, 0x0e,
+	0xba, 0x28, 0x57, 0xee, 0xac, 0x9e, 0x3b, 0x27, 0xf7, 0x0e, 0xc0, 0x9b, 0x59, 0x3b, 0xfd, 0x60,
+	0x25, 0x6c, 0xf9, 0x68, 0xa5, 0xb4, 0x54, 0xab, 0x16, 0x2c, 0xdf, 0x95, 0x5a, 0x95, 0x9d, 0x7b,
+	0xb5, 0x56, 0xe5, 0xef, 0x91, 0xfc, 0xdf, 0xeb, 0xf0, 0x76, 0xec, 0x3c, 0x3f, 0x9b, 0x28, 0xe0,
+	0x7c, 0xa2, 0x80, 0x9f, 0x13, 0x05, 0xbc, 0x9f, 0x2a, 0x85, 0xf3, 0xa9, 0x52, 0xf8, 0x3e, 0x55,
+	0x0a, 0x2f, 0x8f, 0x2c, 0x9b, 0x0f, 0x82, 0xbe, 0x6a, 0x10, 0x57, 0xdc, 0x93, 0x07, 0x0e, 0xea,
+	0xb3, 0xe4, 0x79, 0xf1, 0xa5, 0xc9, 0x47, 0x3e, 0x66, 0xfd, 0x52, 0xf4, 0x2d, 0xb8, 0xff, 0x2b,
+	0x00, 0x00, 0xff, 0xff, 0xa8, 0xc6, 0x20, 0x77, 0xdd, 0x06, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -490,7 +487,7 @@ type MsgClient interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
-	ReclaimTrustDepositInterests(ctx context.Context, in *MsgReclaimTrustDepositInterests, opts ...grpc.CallOption) (*MsgReclaimTrustDepositInterestsResponse, error)
+	ReclaimTrustDepositYield(ctx context.Context, in *MsgReclaimTrustDepositYield, opts ...grpc.CallOption) (*MsgReclaimTrustDepositYieldResponse, error)
 	ReclaimTrustDeposit(ctx context.Context, in *MsgReclaimTrustDeposit, opts ...grpc.CallOption) (*MsgReclaimTrustDepositResponse, error)
 	// rpc SlashTrustDeposit(MsgSlashTrustDeposit) returns (MsgSlashTrustDepositResponse);
 	RepaySlashedTrustDeposit(ctx context.Context, in *MsgRepaySlashedTrustDeposit, opts ...grpc.CallOption) (*MsgRepaySlashedTrustDepositResponse, error)
@@ -513,9 +510,9 @@ func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts 
 	return out, nil
 }
 
-func (c *msgClient) ReclaimTrustDepositInterests(ctx context.Context, in *MsgReclaimTrustDepositInterests, opts ...grpc.CallOption) (*MsgReclaimTrustDepositInterestsResponse, error) {
-	out := new(MsgReclaimTrustDepositInterestsResponse)
-	err := c.cc.Invoke(ctx, "/veranablockchain.trustdeposit.Msg/ReclaimTrustDepositInterests", in, out, opts...)
+func (c *msgClient) ReclaimTrustDepositYield(ctx context.Context, in *MsgReclaimTrustDepositYield, opts ...grpc.CallOption) (*MsgReclaimTrustDepositYieldResponse, error) {
+	out := new(MsgReclaimTrustDepositYieldResponse)
+	err := c.cc.Invoke(ctx, "/veranablockchain.trustdeposit.Msg/ReclaimTrustDepositYield", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -545,7 +542,7 @@ type MsgServer interface {
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
-	ReclaimTrustDepositInterests(context.Context, *MsgReclaimTrustDepositInterests) (*MsgReclaimTrustDepositInterestsResponse, error)
+	ReclaimTrustDepositYield(context.Context, *MsgReclaimTrustDepositYield) (*MsgReclaimTrustDepositYieldResponse, error)
 	ReclaimTrustDeposit(context.Context, *MsgReclaimTrustDeposit) (*MsgReclaimTrustDepositResponse, error)
 	// rpc SlashTrustDeposit(MsgSlashTrustDeposit) returns (MsgSlashTrustDepositResponse);
 	RepaySlashedTrustDeposit(context.Context, *MsgRepaySlashedTrustDeposit) (*MsgRepaySlashedTrustDepositResponse, error)
@@ -558,8 +555,8 @@ type UnimplementedMsgServer struct {
 func (*UnimplementedMsgServer) UpdateParams(ctx context.Context, req *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
 }
-func (*UnimplementedMsgServer) ReclaimTrustDepositInterests(ctx context.Context, req *MsgReclaimTrustDepositInterests) (*MsgReclaimTrustDepositInterestsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ReclaimTrustDepositInterests not implemented")
+func (*UnimplementedMsgServer) ReclaimTrustDepositYield(ctx context.Context, req *MsgReclaimTrustDepositYield) (*MsgReclaimTrustDepositYieldResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ReclaimTrustDepositYield not implemented")
 }
 func (*UnimplementedMsgServer) ReclaimTrustDeposit(ctx context.Context, req *MsgReclaimTrustDeposit) (*MsgReclaimTrustDepositResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ReclaimTrustDeposit not implemented")
@@ -590,20 +587,20 @@ func _Msg_UpdateParams_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_ReclaimTrustDepositInterests_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgReclaimTrustDepositInterests)
+func _Msg_ReclaimTrustDepositYield_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgReclaimTrustDepositYield)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).ReclaimTrustDepositInterests(ctx, in)
+		return srv.(MsgServer).ReclaimTrustDepositYield(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/veranablockchain.trustdeposit.Msg/ReclaimTrustDepositInterests",
+		FullMethod: "/veranablockchain.trustdeposit.Msg/ReclaimTrustDepositYield",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).ReclaimTrustDepositInterests(ctx, req.(*MsgReclaimTrustDepositInterests))
+		return srv.(MsgServer).ReclaimTrustDepositYield(ctx, req.(*MsgReclaimTrustDepositYield))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -654,8 +651,8 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_UpdateParams_Handler,
 		},
 		{
-			MethodName: "ReclaimTrustDepositInterests",
-			Handler:    _Msg_ReclaimTrustDepositInterests_Handler,
+			MethodName: "ReclaimTrustDepositYield",
+			Handler:    _Msg_ReclaimTrustDepositYield_Handler,
 		},
 		{
 			MethodName: "ReclaimTrustDeposit",
@@ -733,7 +730,7 @@ func (m *MsgUpdateParamsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgReclaimTrustDepositInterests) Marshal() (dAtA []byte, err error) {
+func (m *MsgReclaimTrustDepositYield) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -743,12 +740,12 @@ func (m *MsgReclaimTrustDepositInterests) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgReclaimTrustDepositInterests) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgReclaimTrustDepositYield) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgReclaimTrustDepositInterests) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgReclaimTrustDepositYield) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -763,7 +760,7 @@ func (m *MsgReclaimTrustDepositInterests) MarshalToSizedBuffer(dAtA []byte) (int
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgReclaimTrustDepositInterestsResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgReclaimTrustDepositYieldResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -773,12 +770,12 @@ func (m *MsgReclaimTrustDepositInterestsResponse) Marshal() (dAtA []byte, err er
 	return dAtA[:n], nil
 }
 
-func (m *MsgReclaimTrustDepositInterestsResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgReclaimTrustDepositYieldResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgReclaimTrustDepositInterestsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgReclaimTrustDepositYieldResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -959,7 +956,7 @@ func (m *MsgUpdateParamsResponse) Size() (n int) {
 	return n
 }
 
-func (m *MsgReclaimTrustDepositInterests) Size() (n int) {
+func (m *MsgReclaimTrustDepositYield) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -972,7 +969,7 @@ func (m *MsgReclaimTrustDepositInterests) Size() (n int) {
 	return n
 }
 
-func (m *MsgReclaimTrustDepositInterestsResponse) Size() (n int) {
+func (m *MsgReclaimTrustDepositYieldResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1215,7 +1212,7 @@ func (m *MsgUpdateParamsResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgReclaimTrustDepositInterests) Unmarshal(dAtA []byte) error {
+func (m *MsgReclaimTrustDepositYield) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1238,10 +1235,10 @@ func (m *MsgReclaimTrustDepositInterests) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgReclaimTrustDepositInterests: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgReclaimTrustDepositYield: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgReclaimTrustDepositInterests: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgReclaimTrustDepositYield: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1297,7 +1294,7 @@ func (m *MsgReclaimTrustDepositInterests) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgReclaimTrustDepositInterestsResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgReclaimTrustDepositYieldResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1320,10 +1317,10 @@ func (m *MsgReclaimTrustDepositInterestsResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgReclaimTrustDepositInterestsResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgReclaimTrustDepositYieldResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgReclaimTrustDepositInterestsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgReclaimTrustDepositYieldResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
