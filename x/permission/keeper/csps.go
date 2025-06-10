@@ -55,6 +55,19 @@ func (ms msgServer) processFees(
 		return fmt.Errorf("invalid creator address: %w", err)
 	}
 
+	// Get the executor permission (issuer or verifier)
+	var executorPerm types.Permission
+	if isVerifier {
+		// For verification, use the verifier permission
+		executorPerm, err = ms.Permission.Get(ctx, permSet[0].ValidatorPermId)
+	} else {
+		// For issuance, use the issuer permission
+		executorPerm, err = ms.Permission.Get(ctx, permSet[0].Id)
+	}
+	if err != nil {
+		return fmt.Errorf("failed to get executor permission: %w", err)
+	}
+
 	// Process each permission's fees
 	for _, perm := range permSet {
 		var fees uint64
@@ -113,6 +126,28 @@ func (ms msgServer) processFees(
 				)
 				if err != nil {
 					return fmt.Errorf("failed to adjust grantee trust deposit: %w", err)
+				}
+
+				// Update grantee's permission deposit
+				perm.Deposit += trustDepositAmount
+				if err := ms.Keeper.UpdatePermission(ctx, perm); err != nil {
+					return fmt.Errorf("failed to update grantee permission deposit: %w", err)
+				}
+
+				// 3. Increase trust deposit for the creator (executor)
+				err = ms.trustDeposit.AdjustTrustDeposit(
+					ctx,
+					creator,
+					int64(trustDepositAmount),
+				)
+				if err != nil {
+					return fmt.Errorf("failed to adjust creator trust deposit: %w", err)
+				}
+
+				// Update executor's permission deposit
+				executorPerm.Deposit += trustDepositAmount
+				if err := ms.Keeper.UpdatePermission(ctx, executorPerm); err != nil {
+					return fmt.Errorf("failed to update executor permission deposit: %w", err)
 				}
 			}
 		}
