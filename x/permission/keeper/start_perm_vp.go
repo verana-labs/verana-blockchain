@@ -3,7 +3,6 @@ package keeper
 import (
 	"cosmossdk.io/math"
 	"fmt"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	credentialschematypes "github.com/verana-labs/verana-blockchain/x/credentialschema/types"
 	"github.com/verana-labs/verana-blockchain/x/permission/types"
@@ -58,57 +57,63 @@ func (k Keeper) validationTrustDepositInDenomAmount(validationFeesInDenom uint64
 }
 
 func (ms msgServer) executeStartPermissionVP(ctx sdk.Context, msg *types.MsgStartPermissionVP, validatorPerm types.Permission, fees, deposit uint64) (uint64, error) {
+	// Calculate fees and deposits as per spec
+	validationFeesInDenom := fees
+	validationTrustDepositInDenom := deposit
+
 	// Increment trust deposit if deposit is greater than 0
-	if deposit > 0 {
-		if err := ms.trustDeposit.AdjustTrustDeposit(ctx, msg.Creator, int64(deposit)); err != nil {
+	if validationTrustDepositInDenom > 0 {
+		if err := ms.trustDeposit.AdjustTrustDeposit(ctx, msg.Creator, int64(validationTrustDepositInDenom)); err != nil {
 			return 0, fmt.Errorf("failed to increase trust deposit: %w", err)
 		}
 	}
 
 	// Send validation fees to escrow account if greater than 0
-	if fees > 0 {
-		// Get sender address
+	if validationFeesInDenom > 0 {
 		senderAddr, err := sdk.AccAddressFromBech32(msg.Creator)
 		if err != nil {
 			return 0, fmt.Errorf("invalid creator address: %w", err)
 		}
 
-		// Transfer fees to module escrow account
+		// Transfer fees to validation escrow account
 		err = ms.bankKeeper.SendCoinsFromAccountToModule(
 			ctx,
 			senderAddr,
-			types.ModuleName, // Using module name as the escrow account
-			sdk.NewCoins(sdk.NewInt64Coin(types.BondDenom, int64(fees))),
+			types.ModuleName, // Validation escrow account
+			sdk.NewCoins(sdk.NewInt64Coin(types.BondDenom, int64(validationFeesInDenom))),
 		)
 		if err != nil {
 			return 0, fmt.Errorf("failed to transfer validation fees to escrow: %w", err)
 		}
 	}
 
-	// Create new permission entry
+	// Create new permission entry as specified in spec
 	now := ctx.BlockTime()
-	newPerm := types.Permission{
-		Type:              types.PermissionType(msg.Type),
-		SchemaId:          validatorPerm.SchemaId,
-		Did:               msg.Did,
-		Grantee:           msg.Creator,
-		Created:           &now,
-		CreatedBy:         msg.Creator,
-		Modified:          &now,
-		ValidationFees:    0,
-		IssuanceFees:      0,
-		VerificationFees:  0,
-		Deposit:           deposit,
-		Country:           msg.Country,
-		ValidatorPermId:   msg.ValidatorPermId,
-		VpState:           types.ValidationState_VALIDATION_STATE_PENDING,
-		VpLastStateChange: &now,
-		VpCurrentFees:     fees,
-		VpCurrentDeposit:  deposit,
+	applicantPerm := types.Permission{
+		Grantee:            msg.Creator,                    // applicant_perm.grantee: applicant's account
+		Type:               types.PermissionType(msg.Type), // applicant_perm.type: type
+		SchemaId:           validatorPerm.SchemaId,
+		Did:                msg.Did,
+		Created:            &now, // applicant_perm.created: now
+		CreatedBy:          msg.Creator,
+		Modified:           &now,                          // applicant_perm.modified: now
+		Deposit:            validationTrustDepositInDenom, // applicant_perm.deposit: validation_trust_deposit_in_denom
+		ValidationFees:     0,                             // applicant_perm.validation_fees: 0
+		IssuanceFees:       0,                             // applicant_perm.issuance_fees: 0
+		VerificationFees:   0,                             // applicant_perm.verification_fees: 0
+		Country:            msg.Country,
+		ValidatorPermId:    msg.ValidatorPermId,                            // applicant_perm.validator_perm_id: validator_perm_id
+		VpLastStateChange:  &now,                                           // applicant_perm.vp_last_state_change: now
+		VpState:            types.ValidationState_VALIDATION_STATE_PENDING, // applicant_perm.vp_state: PENDING
+		VpCurrentFees:      validationFeesInDenom,                          // applicant_perm.vp_current_fees: validation_fees_in_denom
+		VpCurrentDeposit:   validationTrustDepositInDenom,                  // applicant_perm.vp_current_deposit: validation_trust_deposit_in_denom
+		VpSummaryDigestSri: "",                                             // applicant_perm.vp_summary_digest_sri: null
+		VpTermRequested:    nil,                                            // applicant_perm.vp_term_requested: null
+		VpValidatorDeposit: 0,                                              // applicant_perm.vp_validator_deposit: 0
 	}
 
 	// Store the permission
-	id, err := ms.Keeper.CreatePermission(ctx, newPerm)
+	id, err := ms.Keeper.CreatePermission(ctx, applicantPerm)
 	if err != nil {
 		return 0, fmt.Errorf("failed to create permission: %w", err)
 	}

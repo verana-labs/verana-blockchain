@@ -126,7 +126,7 @@ func (m *MsgUpdateParamsResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgUpdateParamsResponse proto.InternalMessageInfo
 
-// MsgReclaimTrustDepositInterests defines the request type
+// MsgReclaimTrustDepositYield defines the request type
 type MsgReclaimTrustDepositYield struct {
 	Creator string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
 }
@@ -171,7 +171,7 @@ func (m *MsgReclaimTrustDepositYield) GetCreator() string {
 	return ""
 }
 
-// MsgReclaimTrustDepositInterestsResponse defines the response type
+// MsgReclaimTrustDepositYieldResponse defines the response type
 type MsgReclaimTrustDepositYieldResponse struct {
 	ClaimedAmount uint64 `protobuf:"varint,1,opt,name=claimed_amount,json=claimedAmount,proto3" json:"claimed_amount,omitempty"`
 }

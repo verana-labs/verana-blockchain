@@ -51,8 +51,8 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Skip:      true, // skipped because authority gated
 				},
 				{
-					RpcMethod: "ReclaimTrustDepositInterests",
-					Use:       "reclaim-interests",
+					RpcMethod: "ReclaimTrustDepositYield",
+					Use:       "reclaim-yield",
 					Short:     "Reclaim earned interest from trust deposits",
 					Long:      "Reclaim any available interest earned from trust deposits. The interest is calculated based on share value and current deposit amount.",
 				},

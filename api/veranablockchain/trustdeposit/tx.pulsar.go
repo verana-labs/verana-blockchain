@@ -3592,7 +3592,7 @@ func (*MsgUpdateParamsResponse) Descriptor() ([]byte, []int) {
 	return file_veranablockchain_trustdeposit_tx_proto_rawDescGZIP(), []int{1}
 }
 
-// MsgReclaimTrustDepositInterests defines the request type
+// MsgReclaimTrustDepositYield defines the request type
 type MsgReclaimTrustDepositYield struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -3628,7 +3628,7 @@ func (x *MsgReclaimTrustDepositYield) GetCreator() string {
 	return ""
 }
 
-// MsgReclaimTrustDepositInterestsResponse defines the response type
+// MsgReclaimTrustDepositYieldResponse defines the response type
 type MsgReclaimTrustDepositYieldResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

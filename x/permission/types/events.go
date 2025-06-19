@@ -23,4 +23,7 @@ const (
 	AttributeKeyRepaidAmount                    = "repaid_amount"
 	AttributeKeyRepaidBy                        = "repaid_by"
 	EventTypeCreatePermission                   = "create_permission"
+	AttributeKeyValidatorPermID                 = "validator_perm_id"
+	AttributeKeyType                            = "type"
+	AttributeKeyCountry                         = "country"
 )
