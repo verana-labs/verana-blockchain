@@ -15,19 +15,19 @@ option go_package = "github.com/verana-labs/verana-blockchain/x/credentialschema
 service Query {
   // Parameters queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/vpr/v1/cs/params";
+    option (google.api.http).get = "/cs/v1/params";
   }
   // ListCredentialSchemas queries a list of CredentialSchema items.
   rpc ListCredentialSchemas(QueryListCredentialSchemasRequest) returns (QueryListCredentialSchemasResponse) {
-    option (google.api.http).get = "/vpr/v1/cs/list";
+    option (google.api.http).get = "/cs/v1/list";
   }
   // GetCredentialSchema returns a credential schema by ID
   rpc GetCredentialSchema(QueryGetCredentialSchemaRequest) returns (QueryGetCredentialSchemaResponse) {
-    option (google.api.http).get = "/vpr/v1/cs/get/{id}";
+    option (google.api.http).get = "/cs/v1/get/{id}";
   }
   // RenderJsonSchema returns the JSON schema definition
   rpc RenderJsonSchema(QueryRenderJsonSchemaRequest) returns (QueryRenderJsonSchemaResponse) {
-    option (google.api.http).get = "/vpr/v1/cs/js/{id}";
+    option (google.api.http).get = "/cs/v1/js/{id}";
   }
 }
 

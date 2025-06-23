@@ -659,7 +659,7 @@ var (
 
 	pattern_Query_ListPermissions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"perm", "v1", "list"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_GetPermission_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"prem", "v1", "get", "id"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_GetPermission_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"perm", "v1", "get", "id"}, "", runtime.AssumeColonVerbOpt(false)))
 
 	pattern_Query_GetPermissionSession_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"perm", "v1", "get_session", "id"}, "", runtime.AssumeColonVerbOpt(false)))
 
