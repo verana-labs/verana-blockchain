@@ -19,10 +19,11 @@ VALIDATOR_TIMEZONES=(
     "Australia/Sydney"     # validator4
     "America/Los_Angeles"  # validator5
 )
+CHAIN_ID="vna-local-1"
 
 # Define mnemonics for each validator
 VALIDATOR_MNEMONICS=(
-    "feed seven deny satisfy outside human muscle trophy casual goddess chicken pond sibling forward oblige share fault prosper anchor wet turn account matter annual"
+    "pink glory help gown abstract eight nice crazy forward ketchup skill cheese"
     "real spring program old collect circle scout survey earth wall north town become lottery response submit shallow garage bird wedding dial loop original melody"
     "forum world antique join retire twelve input flame hole hold sample draft skull speed blossom fork peace opinion soon symbol two left flat prepare"
     "normal cousin seminar poem raccoon genius hope escape track course soup drift build orchard egg mango race loop squeeze someone lunar tail seven much"
@@ -43,13 +44,13 @@ for i in {1..5}; do
 done
 
 # Define addresses for genesis accounts (these will be generated from the mnemonics)
-GENESIS_ACCOUNTS=(
-    "verana1n4pw3yrvsw4tfhp7jcwxv3k090a8fgk0jsphdn"
-    "verana1elf8m94agzfmpg2lkvqd776ellz7fxtgqnhcaa"
-    "verana10nmtkxr4mm7xu0ryq2h5t9f77jelwqsye0heee"
-    "verana17qupxnsfc4l82m40hx6ys08ds9lcj0lqll5kaf"
-    "verana16jh6jcpxnz5l49p3fdmru8rf6ex3farztc2mqa"
-)
+#GENESIS_ACCOUNTS=(
+#    "verana16mzeyu9l6kua2cdg9x0jk5g6e7h0kk8q6uadu4"
+#    "verana1elf8m94agzfmpg2lkvqd776ellz7fxtgqnhcaa"
+#    "verana10nmtkxr4mm7xu0ryq2h5t9f77jelwqsye0heee"
+#    "verana17qupxnsfc4l82m40hx6ys08ds9lcj0lqll5kaf"
+#    "verana16jh6jcpxnz5l49p3fdmru8rf6ex3farztc2mqa"
+#)
 
 PASSPHRASE="testpass123"
 
@@ -305,7 +306,7 @@ print_status "Setting up Validator 1 in ${VALIDATOR_TIMEZONES[0]}..."
 mkdir -p validator1
 
 # Initialize the node
-docker run --rm -v $(pwd)/validator1:/root/.verana $DOCKER_IMAGE init validator1 --chain-id vna-local-1
+docker run --rm -v $(pwd)/validator1:/root/.verana $DOCKER_IMAGE init validator1 --chain-id $CHAIN_ID
 
 # Replace stake with uvna in genesis file
 sed -i.bak 's/stake/uvna/g' validator1/config/genesis.json
@@ -356,7 +357,7 @@ done
 
 # Generate validator transaction
 printf "$PASSPHRASE" \
-| docker run --rm -i -v $(pwd)/validator1:/root/.verana $DOCKER_IMAGE gentx wallet1 1000000000uvna --chain-id=vna-local-1 --keyring-backend test
+| docker run --rm -i -v $(pwd)/validator1:/root/.verana $DOCKER_IMAGE gentx wallet1 1000000000uvna --chain-id $CHAIN_ID --keyring-backend test
 
 # Collect genesis transactions
 docker run --rm -v $(pwd)/validator1:/root/.verana $DOCKER_IMAGE collect-gentxs
@@ -392,7 +393,7 @@ for i in {2..5}; do
     mkdir -p "$validator"
 
     # Initialize validator node
-    docker run --rm -v "$(pwd)/$validator:/root/.verana" $DOCKER_IMAGE init "$validator" --chain-id vna-local-1
+    docker run --rm -v "$(pwd)/$validator:/root/.verana" $DOCKER_IMAGE init "$validator" --chain-id $CHAIN_ID
 
     # Copy configuration files from validator 1
     cp validator1/config/genesis.json "$validator/config/genesis.json"
@@ -441,13 +442,13 @@ EOF
 
     # Start the validator container before running create-validator
     start_validator_with_timezone "$validator" "${VALIDATOR_PORTS[$i]}"
-    sleep 10
+    sleep 20
     # Run the create-validator transaction inside the running container
     print_status "Creating $validator..."
     printf "$PASSPHRASE" \
     | docker exec -i $validator veranad tx staking create-validator /root/.verana/validator.json \
         --from="$wallet" \
-        --chain-id=vna-local-1 \
+        --chain-id $CHAIN_ID \
         --broadcast-mode=sync \
         --fees=65000uvna \
         --keyring-backend test \
@@ -464,7 +465,7 @@ EOF
     print_status "$validator is ready!"
 
     # Wait before setting up next validator
-    sleep 10
+    sleep 20
 done
 
 # =============================================================================
