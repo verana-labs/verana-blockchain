@@ -78,7 +78,7 @@ func (k Keeper) AdjustTrustDeposit(ctx sdk.Context, account string, augend int64
 	}
 
 	// Trust deposit exists - check slashing status
-	if td.SlashedDeposit > 0 && td.SlashedDeposit > td.RepaidDeposit {
+	if td.SlashedDeposit > 0 && td.SlashedDeposit < td.RepaidDeposit {
 		return fmt.Errorf("trust deposit has been slashed and not fully repaid")
 	}
 
