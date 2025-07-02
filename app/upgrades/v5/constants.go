@@ -5,7 +5,7 @@ import (
 	"github.com/verana-labs/verana-blockchain/app/upgrades/types"
 )
 
-const UpgradeName = "v0.4"
+const UpgradeName = "v0.5"
 
 var Upgrade = types.Upgrade{
 	UpgradeName:          UpgradeName,
