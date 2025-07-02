@@ -13,7 +13,7 @@ else
 fi
 
 # Variables
-CHAIN_ID="vna-local-1"
+CHAIN_ID="vna-testnet-1"
 MONIKER="validator1"
 BINARY="veranad"
 HOME_DIR="$HOME/.verana"
