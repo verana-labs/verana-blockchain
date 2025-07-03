@@ -53,11 +53,11 @@ import (
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
 	"google.golang.org/protobuf/types/known/durationpb"
 
-	credentialschemamodulev1 "github.com/verana-labs/verana-blockchain/api/veranablockchain/credentialschema/module"
-	diddirectorymodulev1 "github.com/verana-labs/verana-blockchain/api/veranablockchain/diddirectory/module"
-	permissionmodulev1 "github.com/verana-labs/verana-blockchain/api/veranablockchain/permission/module"
-	trustdepositmodulev1 "github.com/verana-labs/verana-blockchain/api/veranablockchain/trustdeposit/module"
-	trustregistrymodulev1 "github.com/verana-labs/verana-blockchain/api/veranablockchain/trustregistry/module"
+	credentialschemamodulev1 "github.com/verana-labs/verana-blockchain/api/verana/credentialschema/module"
+	diddirectorymodulev1 "github.com/verana-labs/verana-blockchain/api/verana/diddirectory/module"
+	permissionmodulev1 "github.com/verana-labs/verana-blockchain/api/verana/permission/module"
+	trustdepositmodulev1 "github.com/verana-labs/verana-blockchain/api/verana/trustdeposit/module"
+	trustregistrymodulev1 "github.com/verana-labs/verana-blockchain/api/verana/trustregistry/module"
 	_ "github.com/verana-labs/verana-blockchain/x/credentialschema/module" // import for side-effects
 	credentialschemamoduletypes "github.com/verana-labs/verana-blockchain/x/credentialschema/types"
 	_ "github.com/verana-labs/verana-blockchain/x/diddirectory/module" // import for side-effects
