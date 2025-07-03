@@ -50,16 +50,16 @@ func (gs GenesisState) Validate() error {
 			return fmt.Errorf("credential schema at index %d has empty JSON schema", i)
 		}
 
-		// Check permission management modes are valid
+		// Check perm management modes are valid
 		if cs.IssuerPermManagementMode <= CredentialSchemaPermManagementMode_MODE_UNSPECIFIED ||
 			cs.IssuerPermManagementMode > CredentialSchemaPermManagementMode_ECOSYSTEM {
-			return fmt.Errorf("credential schema at index %d has invalid issuer permission management mode: %d",
+			return fmt.Errorf("credential schema at index %d has invalid issuer perm management mode: %d",
 				i, cs.IssuerPermManagementMode)
 		}
 
 		if cs.VerifierPermManagementMode <= CredentialSchemaPermManagementMode_MODE_UNSPECIFIED ||
 			cs.VerifierPermManagementMode > CredentialSchemaPermManagementMode_ECOSYSTEM {
-			return fmt.Errorf("credential schema at index %d has invalid verifier permission management mode: %d",
+			return fmt.Errorf("credential schema at index %d has invalid verifier perm management mode: %d",
 				i, cs.VerifierPermManagementMode)
 		}
 

@@ -239,7 +239,7 @@ func TestGenesisValidation(t *testing.T) {
 			errorMsg: "empty JSON schema",
 		},
 		{
-			name: "invalid permission management mode",
+			name: "invalid perm management mode",
 			genesisState: types.GenesisState{
 				Params: types.DefaultParams(),
 				CredentialSchemas: []types.CredentialSchema{
@@ -255,7 +255,7 @@ func TestGenesisValidation(t *testing.T) {
 				},
 			},
 			valid:    false,
-			errorMsg: "invalid issuer permission management mode",
+			errorMsg: "invalid issuer perm management mode",
 		},
 		{
 			name: "zero creation time",

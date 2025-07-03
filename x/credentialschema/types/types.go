@@ -166,7 +166,7 @@ func (msg *MsgCreateCredentialSchema) ValidateBasic() error {
 		return errors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	// Validate permission management modes
+	// Validate perm management modes
 	if err := validatePermManagementModes(msg); err != nil {
 		return errors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
@@ -277,20 +277,20 @@ func validateValidityPeriods(msg *MsgCreateCredentialSchema) error {
 }
 
 func validatePermManagementModes(msg *MsgCreateCredentialSchema) error {
-	// Check issuer permission management mode
+	// Check issuer perm management mode
 	if msg.IssuerPermManagementMode == 0 {
-		return fmt.Errorf("issuer permission management mode must be specified")
+		return fmt.Errorf("issuer perm management mode must be specified")
 	}
 	if msg.IssuerPermManagementMode > 3 {
-		return fmt.Errorf("invalid issuer permission management mode: must be between 1 and 3")
+		return fmt.Errorf("invalid issuer perm management mode: must be between 1 and 3")
 	}
 
-	// Check verifier permission management mode
+	// Check verifier perm management mode
 	if msg.VerifierPermManagementMode == 0 {
-		return fmt.Errorf("verifier permission management mode must be specified")
+		return fmt.Errorf("verifier perm management mode must be specified")
 	}
 	if msg.VerifierPermManagementMode > 3 {
-		return fmt.Errorf("invalid verifier permission management mode: must be between 1 and 3")
+		return fmt.Errorf("invalid verifier perm management mode: must be between 1 and 3")
 	}
 
 	return nil

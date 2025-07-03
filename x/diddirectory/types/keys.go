@@ -4,7 +4,7 @@ import "cosmossdk.io/collections"
 
 const (
 	// ModuleName defines the module name
-	ModuleName = "diddirectory"
+	ModuleName = "dd"
 
 	// StoreKey defines the primary module store key
 	StoreKey = ModuleName

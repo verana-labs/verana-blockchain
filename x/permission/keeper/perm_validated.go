@@ -42,7 +42,7 @@ func calculateVPExp(currentVPExp *time.Time, validityPeriod uint64, now time.Tim
 }
 
 func (ms msgServer) executeSetPermissionVPToValidated(ctx sdk.Context, perm types.Permission, msg *types.MsgSetPermissionVPToValidated, now time.Time, vpExp *time.Time) error {
-	// Update permission
+	// Update perm
 	perm.Modified = &now
 	perm.VpState = types.ValidationState_VALIDATION_STATE_VALIDATED
 	perm.VpLastStateChange = &now
@@ -61,10 +61,10 @@ func (ms msgServer) executeSetPermissionVPToValidated(ctx sdk.Context, perm type
 
 	// Handle fees and trust deposits
 	if perm.VpCurrentFees > 0 {
-		// Load validator permission
+		// Load validator perm
 		validatorPerm, err := ms.Keeper.GetPermissionByID(ctx, perm.ValidatorPermId)
 		if err != nil {
-			return fmt.Errorf("failed to get validator permission: %w", err)
+			return fmt.Errorf("failed to get validator perm: %w", err)
 		}
 
 		// Get validator address
@@ -99,7 +99,7 @@ func (ms msgServer) executeSetPermissionVPToValidated(ctx sdk.Context, perm type
 				return fmt.Errorf("failed to adjust validator trust deposit: %w", err)
 			}
 
-			// Update validator deposit in applicant permission
+			// Update validator deposit in applicant perm
 			perm.VpValidatorDeposit += validatorTrustDeposit
 		}
 	}

@@ -10,19 +10,19 @@ import (
 )
 
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	legacy.RegisterAminoMsg(cdc, &MsgStartPermissionVP{}, "/perm/v1/start-permission-vp")
-	legacy.RegisterAminoMsg(cdc, &MsgRenewPermissionVP{}, "/perm/v1/renew-permission-vp")
-	legacy.RegisterAminoMsg(cdc, &MsgSetPermissionVPToValidated{}, "/perm/v1/set-permission-vp-validated")
+	legacy.RegisterAminoMsg(cdc, &MsgStartPermissionVP{}, "/perm/v1/start-perm-vp")
+	legacy.RegisterAminoMsg(cdc, &MsgRenewPermissionVP{}, "/perm/v1/renew-perm-vp")
+	legacy.RegisterAminoMsg(cdc, &MsgSetPermissionVPToValidated{}, "/perm/v1/set-perm-vp-validated")
 	legacy.RegisterAminoMsg(cdc, &MsgRequestPermissionVPTermination{}, "/perm/v1/request-vp-termination")
 	legacy.RegisterAminoMsg(cdc, &MsgConfirmPermissionVPTermination{}, "/perm/v1/confirm-vp-termination")
-	legacy.RegisterAminoMsg(cdc, &MsgCancelPermissionVPLastRequest{}, "/perm/v1/cancel-permission-vp-request")
-	legacy.RegisterAminoMsg(cdc, &MsgCreateRootPermission{}, "/perm/v1/create-root-permission")
-	legacy.RegisterAminoMsg(cdc, &MsgExtendPermission{}, "/perm/v1/extend-permission")
-	legacy.RegisterAminoMsg(cdc, &MsgRevokePermission{}, "/perm/v1/revoke-permission")
+	legacy.RegisterAminoMsg(cdc, &MsgCancelPermissionVPLastRequest{}, "/perm/v1/cancel-perm-vp-request")
+	legacy.RegisterAminoMsg(cdc, &MsgCreateRootPermission{}, "/perm/v1/create-root-perm")
+	legacy.RegisterAminoMsg(cdc, &MsgExtendPermission{}, "/perm/v1/extend-perm")
+	legacy.RegisterAminoMsg(cdc, &MsgRevokePermission{}, "/perm/v1/revoke-perm")
 	legacy.RegisterAminoMsg(cdc, &MsgCreateOrUpdatePermissionSession{}, "/perm/v1/create-or-update-perm-session")
-	legacy.RegisterAminoMsg(cdc, &MsgSlashPermissionTrustDeposit{}, "/perm/v1/slash-permission-td")
-	legacy.RegisterAminoMsg(cdc, &MsgRepayPermissionSlashedTrustDeposit{}, "/perm/v1/repay-permission-slashed-td")
-	legacy.RegisterAminoMsg(cdc, &MsgCreatePermission{}, "/perm/v1/create-permission")
+	legacy.RegisterAminoMsg(cdc, &MsgSlashPermissionTrustDeposit{}, "/perm/v1/slash-perm-td")
+	legacy.RegisterAminoMsg(cdc, &MsgRepayPermissionSlashedTrustDeposit{}, "/perm/v1/repay-perm-slashed-td")
+	legacy.RegisterAminoMsg(cdc, &MsgCreatePermission{}, "/perm/v1/create-perm")
 }
 
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {

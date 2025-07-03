@@ -20,7 +20,7 @@ import (
 
 	// this line is used by starport scaffolding # 1
 
-	modulev1 "github.com/verana-labs/verana-blockchain/api/verana/credentialschema/module"
+	modulev1 "github.com/verana-labs/verana-blockchain/api/verana/cs/module"
 	"github.com/verana-labs/verana-blockchain/x/credentialschema/keeper"
 	"github.com/verana-labs/verana-blockchain/x/credentialschema/types"
 )

@@ -22,28 +22,28 @@ func (gs GenesisState) Validate() error {
 		return err
 	}
 
-	// Check for duplicate permission IDs
+	// Check for duplicate perm IDs
 	permissionIds := make(map[uint64]bool)
 	maxPermId := uint64(0)
 
 	for _, perm := range gs.Permissions {
 		// Check if ID exists
 		if perm.Id == 0 {
-			return fmt.Errorf("permission ID cannot be 0")
+			return fmt.Errorf("perm ID cannot be 0")
 		}
 
 		// Check for duplicate IDs
 		if _, exists := permissionIds[perm.Id]; exists {
-			return fmt.Errorf("duplicate permission ID found: %d", perm.Id)
+			return fmt.Errorf("duplicate perm ID found: %d", perm.Id)
 		}
 		permissionIds[perm.Id] = true
 
-		// Track highest permission ID
+		// Track highest perm ID
 		if perm.Id > maxPermId {
 			maxPermId = perm.Id
 		}
 
-		// Validate each permission
+		// Validate each perm
 		if err := validatePermission(perm, gs.Permissions); err != nil {
 			return err
 		}
@@ -59,46 +59,46 @@ func (gs GenesisState) Validate() error {
 	for _, session := range gs.PermissionSessions {
 		// Check if ID exists
 		if session.Id == "" {
-			return fmt.Errorf("permission session ID cannot be empty")
+			return fmt.Errorf("perm session ID cannot be empty")
 		}
 
 		// Check for duplicate IDs
 		if _, exists := sessionIds[session.Id]; exists {
-			return fmt.Errorf("duplicate permission session ID found: %s", session.Id)
+			return fmt.Errorf("duplicate perm session ID found: %s", session.Id)
 		}
 		sessionIds[session.Id] = true
 
-		// Validate permission references
+		// Validate perm references
 		if err := validatePermissionSession(session, permissionIds); err != nil {
 			return err
 		}
 	}
 
-	// Validate next permission ID is greater than max permission ID
+	// Validate next perm ID is greater than max perm ID
 	if gs.NextPermissionId <= maxPermId {
-		return fmt.Errorf("next_permission_id (%d) must be greater than the maximum permission ID (%d)",
+		return fmt.Errorf("next_permission_id (%d) must be greater than the maximum perm ID (%d)",
 			gs.NextPermissionId, maxPermId)
 	}
 
 	return nil
 }
 
-// validatePermission validates a single permission
+// validatePermission validates a single perm
 func validatePermission(perm Permission, allPerms []Permission) error {
 	// Check required fields
 	if perm.Type == 0 {
-		return fmt.Errorf("permission type cannot be 0 for permission ID %d", perm.Id)
+		return fmt.Errorf("perm type cannot be 0 for perm ID %d", perm.Id)
 	}
 
 	if perm.Grantee == "" {
-		return fmt.Errorf("grantee cannot be empty for permission ID %d", perm.Id)
+		return fmt.Errorf("grantee cannot be empty for perm ID %d", perm.Id)
 	}
 
-	// Validate validator permission reference
+	// Validate validator perm reference
 	if perm.ValidatorPermId != 0 {
 		validatorFound := false
 
-		// Check if validator permission exists
+		// Check if validator perm exists
 		for _, p := range allPerms {
 			if p.Id == perm.ValidatorPermId {
 				validatorFound = true
@@ -107,7 +107,7 @@ func validatePermission(perm Permission, allPerms []Permission) error {
 		}
 
 		if !validatorFound {
-			return fmt.Errorf("validator permission ID %d not found for permission ID %d",
+			return fmt.Errorf("validator perm ID %d not found for perm ID %d",
 				perm.ValidatorPermId, perm.Id)
 		}
 	}
@@ -119,40 +119,40 @@ func validatePermission(perm Permission, allPerms []Permission) error {
 func validatePermissionTimestamps(perm Permission) error {
 	// Check that modified time exists
 	if perm.Modified == nil {
-		return fmt.Errorf("modified timestamp is required for permission ID %d", perm.Id)
+		return fmt.Errorf("modified timestamp is required for perm ID %d", perm.Id)
 	}
 
 	// Check that created time exists
 	if perm.Created == nil {
-		return fmt.Errorf("created timestamp is required for permission ID %d", perm.Id)
+		return fmt.Errorf("created timestamp is required for perm ID %d", perm.Id)
 	}
 
 	// If effective_from and effective_until both exist, ensure effective_from is before effective_until
 	if perm.EffectiveFrom != nil && perm.EffectiveUntil != nil {
 		if !perm.EffectiveFrom.Before(*perm.EffectiveUntil) {
-			return fmt.Errorf("effective_from must be before effective_until for permission ID %d", perm.Id)
+			return fmt.Errorf("effective_from must be before effective_until for perm ID %d", perm.Id)
 		}
 	}
 
 	// If extended time exists, it should be after created time
 	if perm.Extended != nil && perm.Created != nil {
 		if !perm.Created.Before(*perm.Extended) {
-			return fmt.Errorf("extended timestamp must be after created timestamp for permission ID %d", perm.Id)
+			return fmt.Errorf("extended timestamp must be after created timestamp for perm ID %d", perm.Id)
 		}
 	}
 
 	return nil
 }
 
-// validatePermissionSession validates a single permission session
+// validatePermissionSession validates a single perm session
 func validatePermissionSession(session PermissionSession, permissionIds map[uint64]bool) error {
-	// Check that agent permission exists
+	// Check that agent perm exists
 	if session.AgentPermId == 0 {
-		return fmt.Errorf("agent permission ID cannot be 0 for session ID %s", session.Id)
+		return fmt.Errorf("agent perm ID cannot be 0 for session ID %s", session.Id)
 	}
 
 	if !permissionIds[session.AgentPermId] {
-		return fmt.Errorf("agent permission ID %d not found for session ID %s", session.AgentPermId, session.Id)
+		return fmt.Errorf("agent perm ID %d not found for session ID %s", session.AgentPermId, session.Id)
 	}
 
 	// Validate timestamps
@@ -172,21 +172,21 @@ func validatePermissionSession(session PermissionSession, permissionIds map[uint
 				session.Id, i)
 		}
 
-		// Check that executor permission exists if set
+		// Check that executor perm exists if set
 		if authz.ExecutorPermId != 0 && !permissionIds[authz.ExecutorPermId] {
-			return fmt.Errorf("executor permission ID %d not found for session ID %s, authz index %d",
+			return fmt.Errorf("executor perm ID %d not found for session ID %s, authz index %d",
 				authz.ExecutorPermId, session.Id, i)
 		}
 
-		// Check that beneficiary permission exists if set
+		// Check that beneficiary perm exists if set
 		if authz.BeneficiaryPermId != 0 && !permissionIds[authz.BeneficiaryPermId] {
-			return fmt.Errorf("beneficiary permission ID %d not found for session ID %s, authz index %d",
+			return fmt.Errorf("beneficiary perm ID %d not found for session ID %s, authz index %d",
 				authz.BeneficiaryPermId, session.Id, i)
 		}
 
-		// Check that wallet agent permission exists if set
+		// Check that wallet agent perm exists if set
 		if authz.WalletAgentPermId != 0 && !permissionIds[authz.WalletAgentPermId] {
-			return fmt.Errorf("wallet agent permission ID %d not found for session ID %s, authz index %d",
+			return fmt.Errorf("wallet agent perm ID %d not found for session ID %s, authz index %d",
 				authz.WalletAgentPermId, session.Id, i)
 		}
 	}

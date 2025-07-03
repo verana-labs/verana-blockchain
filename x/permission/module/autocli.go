@@ -3,7 +3,7 @@ package permission
 import (
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
 
-	modulev1 "github.com/verana-labs/verana-blockchain/api/verana/permission"
+	modulev1 "github.com/verana-labs/verana-blockchain/api/verana/perm/v1"
 )
 
 // AutoCLIOptions implements the autocli.HasAutoCLIConfig interface.
@@ -37,9 +37,9 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod: "GetPermission",
-					Use:       "get-permission [id]",
-					Short:     "Get permission by ID",
-					Long:      "Get detailed information about a permission by its ID",
+					Use:       "get-perm [id]",
+					Short:     "Get perm by ID",
+					Long:      "Get detailed information about a perm by its ID",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{
 							ProtoField: "id",
@@ -48,9 +48,9 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod: "GetPermissionSession",
-					Use:       "get-permission-session [id]",
-					Short:     "Get permission session by ID",
-					Long:      "Get details about a specific permission session by its ID",
+					Use:       "get-perm-session [id]",
+					Short:     "Get perm session by ID",
+					Long:      "Get details about a specific perm session by its ID",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{
 							ProtoField: "id",
@@ -59,9 +59,9 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod: "ListPermissionSessions",
-					Use:       "list-permission-sessions",
-					Short:     "List permission sessions",
-					Long:      "List all permission sessions with optional filtering and pagination",
+					Use:       "list-perm-sessions",
+					Short:     "List perm sessions",
+					Long:      "List all perm sessions with optional filtering and pagination",
 					FlagOptions: map[string]*autocliv1.FlagOptions{
 						"modified_after": {
 							Name:         "modified-after",
@@ -101,18 +101,18 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				{
 					RpcMethod: "FindBeneficiaries",
 					Use:       "find-beneficiaries",
-					Short:     "Find beneficiary permissions in the permission tree",
-					Long:      "Find beneficiary permissions by traversing the permission tree for issuer and/or verifier permissions",
+					Short:     "Find beneficiary permissions in the perm tree",
+					Long:      "Find beneficiary permissions by traversing the perm tree for issuer and/or verifier permissions",
 					FlagOptions: map[string]*autocliv1.FlagOptions{
 						"issuer_perm_id": {
 							Name:         "issuer-perm-id",
 							DefaultValue: "0",
-							Usage:        "ID of the issuer permission",
+							Usage:        "ID of the issuer perm",
 						},
 						"verifier_perm_id": {
 							Name:         "verifier-perm-id",
 							DefaultValue: "0",
-							Usage:        "ID of the verifier permission",
+							Usage:        "ID of the verifier perm",
 						},
 					},
 				},
@@ -129,11 +129,11 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod: "StartPermissionVP",
-					Use:       "start-permission-vp [type] [validator-perm-id] [country]",
-					Short:     "Start a new permission validation process",
-					Long: `Start a new permission validation process with the specified parameters:
+					Use:       "start-perm-vp [type] [validator-perm-id] [country]",
+					Short:     "Start a new perm validation process",
+					Long: `Start a new perm validation process with the specified parameters:
 - type: Permission type (0=Unspecified, 1=Issuer, 2=Verifier, 3=IssuerGrantor, 4=VerifierGrantor, 5=TrustRegistry, 6=Holder)
-- validator-perm-id: ID of the validator permission
+- validator-perm-id: ID of the validator perm
 - country: ISO 3166-1 alpha-2 country code`,
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{
@@ -149,17 +149,17 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					FlagOptions: map[string]*autocliv1.FlagOptions{
 						"did": {
 							Name:         "did",
-							Usage:        "Optional DID for this permission",
+							Usage:        "Optional DID for this perm",
 							DefaultValue: "",
 						},
 					},
 				},
 				{
 					RpcMethod: "RenewPermissionVP",
-					Use:       "renew-permission-vp [id]",
-					Short:     "Renew a permission validation process",
-					Long: `Renew a permission validation process for an existing permission:
-- id: ID of the permission to renew`,
+					Use:       "renew-perm-vp [id]",
+					Short:     "Renew a perm validation process",
+					Long: `Renew a perm validation process for an existing perm:
+- id: ID of the perm to renew`,
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{
 							ProtoField: "id",
@@ -168,11 +168,11 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod: "SetPermissionVPToValidated",
-					Use:       "set-permission-vp-validated [id]",
-					Short:     "Set permission validation process to validated state",
-					Long: `Set a permission validation process to validated state with optional parameters:
-- id: ID of the permission to validate
-- effective-until: Optional timestamp until when this permission is effective (RFC3339 format)
+					Use:       "set-perm-vp-validated [id]",
+					Short:     "Set perm validation process to validated state",
+					Long: `Set a perm validation process to validated state with optional parameters:
+- id: ID of the perm to validate
+- effective-until: Optional timestamp until when this perm is effective (RFC3339 format)
 - validation-fees: Optional validation fees
 - issuance-fees: Optional issuance fees
 - verification-fees: Optional verification fees
@@ -186,7 +186,7 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					FlagOptions: map[string]*autocliv1.FlagOptions{
 						"effective_until": {
 							Name:         "effective-until",
-							Usage:        "Timestamp until when this permission is effective (RFC3339)",
+							Usage:        "Timestamp until when this perm is effective (RFC3339)",
 							DefaultValue: "",
 						},
 						"validation_fees": {
@@ -219,9 +219,9 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				{
 					RpcMethod: "RequestPermissionVPTermination",
 					Use:       "request-vp-termination [id]",
-					Short:     "Request termination of a permission validation process",
-					Long: `Request termination of a permission validation process:
-- id: ID of the permission validation process to terminate
+					Short:     "Request termination of a perm validation process",
+					Long: `Request termination of a perm validation process:
+- id: ID of the perm validation process to terminate
 Note: For expired VPs, either the grantee or validator can request termination.
 For active VPs, only the grantee can request termination unless it's a HOLDER type.`,
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
@@ -234,8 +234,8 @@ For active VPs, only the grantee can request termination unless it's a HOLDER ty
 				{
 					RpcMethod: "ConfirmPermissionVPTermination",
 					Use:       "confirm-vp-termination [id]",
-					Short:     "Confirm the termination of a permission VP",
-					Long:      "Confirm the termination of a permission VP. Can be called by the validator, or by the grantee after the timeout period has elapsed.",
+					Short:     "Confirm the termination of a perm VP",
+					Long:      "Confirm the termination of a perm VP. Can be called by the validator, or by the grantee after the timeout period has elapsed.",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{
 							ProtoField: "id",
@@ -244,9 +244,9 @@ For active VPs, only the grantee can request termination unless it's a HOLDER ty
 				},
 				{
 					RpcMethod: "CancelPermissionVPLastRequest",
-					Use:       "cancel-permission-vp-request [id]",
-					Short:     "Cancel a pending permission VP request",
-					Long:      "Cancel a pending permission VP request. Can only be executed by the permission grantee and only when the permission is in PENDING state.",
+					Use:       "cancel-perm-vp-request [id]",
+					Short:     "Cancel a pending perm VP request",
+					Long:      "Cancel a pending perm VP request. Can only be executed by the perm grantee and only when the perm is in PENDING state.",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{
 							ProtoField: "id",
@@ -255,9 +255,9 @@ For active VPs, only the grantee can request termination unless it's a HOLDER ty
 				},
 				{
 					RpcMethod: "CreateRootPermission",
-					Use:       "create-root-permission [schema-id] [did] [validation-fees] [issuance-fees] [verification-fees]",
-					Short:     "Create a new root permission for a credential schema",
-					Long:      "Create a new root permission for a credential schema. Can only be executed by the trust registry controller.",
+					Use:       "create-root-perm [schema-id] [did] [validation-fees] [issuance-fees] [verification-fees]",
+					Short:     "Create a new root perm for a credential schema",
+					Long:      "Create a new root perm for a credential schema. Can only be executed by the trust registry controller.",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{
 							ProtoField: "schema_id",
@@ -284,20 +284,20 @@ For active VPs, only the grantee can request termination unless it's a HOLDER ty
 						"effective_from": {
 							Name:         "effective-from",
 							DefaultValue: "",
-							Usage:        "Optional timestamp (RFC3339) from when the permission is effective",
+							Usage:        "Optional timestamp (RFC3339) from when the perm is effective",
 						},
 						"effective_until": {
 							Name:         "effective-until",
 							DefaultValue: "",
-							Usage:        "Optional timestamp (RFC3339) until when the permission is effective",
+							Usage:        "Optional timestamp (RFC3339) until when the perm is effective",
 						},
 					},
 				},
 				{
 					RpcMethod: "ExtendPermission",
-					Use:       "extend-permission [id] [effective-until]",
-					Short:     "Extend a permission's effective duration",
-					Long:      "Extend a permission's effective duration. Can only be executed by the validator of the permission.",
+					Use:       "extend-perm [id] [effective-until]",
+					Short:     "Extend a perm's effective duration",
+					Long:      "Extend a perm's effective duration. Can only be executed by the validator of the perm.",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{
 							ProtoField: "id",
@@ -309,9 +309,9 @@ For active VPs, only the grantee can request termination unless it's a HOLDER ty
 				},
 				{
 					RpcMethod: "RevokePermission",
-					Use:       "revoke-permission [id]",
-					Short:     "Revoke a permission",
-					Long:      "Revoke a permission. Can only be executed by the validator of the permission.",
+					Use:       "revoke-perm [id]",
+					Short:     "Revoke a perm",
+					Long:      "Revoke a perm. Can only be executed by the validator of the perm.",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{
 							ProtoField: "id",
@@ -321,14 +321,14 @@ For active VPs, only the grantee can request termination unless it's a HOLDER ty
 				{
 					RpcMethod: "CreateOrUpdatePermissionSession",
 					Use:       "create-or-update-perm-session [id] [agent-perm-id]",
-					Short:     "Create or update a permission session",
-					Long: `Create or update a permission session with the specified parameters:
+					Short:     "Create or update a perm session",
+					Long: `Create or update a perm session with the specified parameters:
 - id: UUID of the session
-- agent-perm-id: ID of the agent permission (HOLDER)
+- agent-perm-id: ID of the agent perm (HOLDER)
 Optional parameters:
-- issuer-perm-id: ID of the issuer permission
-- verifier-perm-id: ID of the verifier permission
-- wallet-agent-perm-id: ID of the wallet agent permission if different from agent
+- issuer-perm-id: ID of the issuer perm
+- verifier-perm-id: ID of the verifier perm
+- wallet-agent-perm-id: ID of the wallet agent perm if different from agent
 
 At least one of issuer-perm-id or verifier-perm-id must be provided.`,
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
@@ -342,32 +342,32 @@ At least one of issuer-perm-id or verifier-perm-id must be provided.`,
 					FlagOptions: map[string]*autocliv1.FlagOptions{
 						"issuer_perm_id": {
 							Name:         "issuer-perm-id",
-							Usage:        "ID of the issuer permission",
+							Usage:        "ID of the issuer perm",
 							DefaultValue: "0",
 						},
 						"verifier_perm_id": {
 							Name:         "verifier-perm-id",
-							Usage:        "ID of the verifier permission",
+							Usage:        "ID of the verifier perm",
 							DefaultValue: "0",
 						},
 						"wallet_agent_perm_id": {
 							Name:         "wallet-agent-perm-id",
-							Usage:        "ID of the wallet agent permission if different from agent",
+							Usage:        "ID of the wallet agent perm if different from agent",
 							DefaultValue: "0",
 						},
 					},
 				},
 				{
 					RpcMethod: "SlashPermissionTrustDeposit",
-					Use:       "slash-permission-td [id] [amount]",
-					Short:     "Slash a permission's trust deposit",
-					Long: `Slash a permission's trust deposit. Can only be executed by:
-- The validator that created the permission
-- The grantee of the ECOSYSTEM permission (trust registry controller) for the corresponding credential schema
+					Use:       "slash-perm-td [id] [amount]",
+					Short:     "Slash a perm's trust deposit",
+					Long: `Slash a perm's trust deposit. Can only be executed by:
+- The validator that created the perm
+- The grantee of the ECOSYSTEM perm (trust registry controller) for the corresponding credential schema
 - The network governance authority (via proposal)
 
 Parameters:
-- id: ID of the permission to slash
+- id: ID of the perm to slash
 - amount: Amount to slash from the trust deposit`,
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{
@@ -380,14 +380,14 @@ Parameters:
 				},
 				{
 					RpcMethod: "RepayPermissionSlashedTrustDeposit",
-					Use:       "repay-permission-slashed-td [id]",
-					Short:     "Repay a slashed permission's trust deposit",
-					Long: `Repay the slashed trust deposit of a permission. Can be executed by anyone willing to pay.
-This will repay the full remaining slashed amount and credit it to the permission grantee's trust deposit.
-Note: This does not make the slashed permission reusable - a new permission must be requested.
+					Use:       "repay-perm-slashed-td [id]",
+					Short:     "Repay a slashed perm's trust deposit",
+					Long: `Repay the slashed trust deposit of a perm. Can be executed by anyone willing to pay.
+This will repay the full remaining slashed amount and credit it to the perm grantee's trust deposit.
+Note: This does not make the slashed perm reusable - a new perm must be requested.
 
 Parameters:
-- id: ID of the permission with slashed deposit to repay`,
+- id: ID of the perm with slashed deposit to repay`,
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{
 							ProtoField: "id",
@@ -396,9 +396,9 @@ Parameters:
 				},
 				{
 					RpcMethod: "CreatePermission",
-					Use:       "create-permission [schema-id] [type] [did]",
-					Short:     "Create a new permission for open schemas",
-					Long: `Create a new ISSUER or VERIFIER permission for schemas with OPEN management mode.
+					Use:       "create-perm [schema-id] [type] [did]",
+					Short:     "Create a new perm for open schemas",
+					Long: `Create a new ISSUER or VERIFIER perm for schemas with OPEN management mode.
 This allows self-creation of permissions without validation process.
 
 Parameters:
@@ -408,8 +408,8 @@ Parameters:
 
 Optional flags:
 - country: ISO 3166-1 alpha-2 country code
-- effective-from: Timestamp when permission becomes effective (RFC3339)
-- effective-until: Timestamp when permission expires (RFC3339)
+- effective-from: Timestamp when perm becomes effective (RFC3339)
+- effective-until: Timestamp when perm expires (RFC3339)
 - verification-fees: Fees for credential verification (default: 0)`,
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{
@@ -431,12 +431,12 @@ Optional flags:
 						"effective_from": {
 							Name:         "effective-from",
 							DefaultValue: "",
-							Usage:        "Optional timestamp (RFC3339) from when the permission is effective",
+							Usage:        "Optional timestamp (RFC3339) from when the perm is effective",
 						},
 						"effective_until": {
 							Name:         "effective-until",
 							DefaultValue: "",
-							Usage:        "Optional timestamp (RFC3339) until when the permission is effective",
+							Usage:        "Optional timestamp (RFC3339) until when the perm is effective",
 						},
 						"verification_fees": {
 							Name:         "verification-fees",

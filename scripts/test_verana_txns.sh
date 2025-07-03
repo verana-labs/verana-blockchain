@@ -1104,7 +1104,7 @@ log "   - Schema details consistency"
 # ================================================================
 log_section "CREDENTIAL SCHEMA PERMISSION MODULE TESTS"
 
-# Test different permission types
+# Test different perm types
 PERMISSION_TYPES=("1" "2" "3" "4" "5" "6")
 PERMISSION_NAMES=("ISSUER" "VERIFIER" "ISSUER_GRANTOR" "VERIFIER_GRANTOR" "TRUST_REGISTRY" "HOLDER")
 

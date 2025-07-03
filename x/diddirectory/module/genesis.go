@@ -14,7 +14,7 @@ import (
 func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) {
 	// Validate genesis state first
 	if err := genState.Validate(); err != nil {
-		panic(fmt.Sprintf("invalid diddirectory genesis state: %s", err))
+		panic(fmt.Sprintf("invalid dd genesis state: %s", err))
 	}
 
 	// Set module parameters

@@ -55,20 +55,20 @@ func (ms msgServer) processFees(
 		return fmt.Errorf("invalid creator address: %w", err)
 	}
 
-	// Get the executor permission (issuer or verifier)
+	// Get the executor perm (issuer or verifier)
 	var executorPerm types.Permission
 	if isVerifier {
-		// For verification, use the verifier permission
+		// For verification, use the verifier perm
 		executorPerm, err = ms.Permission.Get(ctx, permSet[0].ValidatorPermId)
 	} else {
-		// For issuance, use the issuer permission
+		// For issuance, use the issuer perm
 		executorPerm, err = ms.Permission.Get(ctx, permSet[0].Id)
 	}
 	if err != nil {
-		return fmt.Errorf("failed to get executor permission: %w", err)
+		return fmt.Errorf("failed to get executor perm: %w", err)
 	}
 
-	// Process each permission's fees
+	// Process each perm's fees
 	for _, perm := range permSet {
 		var fees uint64
 		if isVerifier {
@@ -87,7 +87,7 @@ func (ms msgServer) processFees(
 			// Calculate direct fees (the portion that goes directly to the grantee)
 			directFeesAmount := feesInDenom - trustDepositAmount
 
-			// 1. Transfer direct fees from creator to permission grantee
+			// 1. Transfer direct fees from creator to perm grantee
 			if directFeesAmount > 0 {
 				granteeAddr, err := sdk.AccAddressFromBech32(perm.Grantee)
 				if err != nil {
@@ -128,10 +128,10 @@ func (ms msgServer) processFees(
 					return fmt.Errorf("failed to adjust grantee trust deposit: %w", err)
 				}
 
-				// Update grantee's permission deposit
+				// Update grantee's perm deposit
 				perm.Deposit += trustDepositAmount
 				if err := ms.Keeper.UpdatePermission(ctx, perm); err != nil {
-					return fmt.Errorf("failed to update grantee permission deposit: %w", err)
+					return fmt.Errorf("failed to update grantee perm deposit: %w", err)
 				}
 
 				// 3. Increase trust deposit for the creator (executor)
@@ -144,10 +144,10 @@ func (ms msgServer) processFees(
 					return fmt.Errorf("failed to adjust creator trust deposit: %w", err)
 				}
 
-				// Update executor's permission deposit
+				// Update executor's perm deposit
 				executorPerm.Deposit += trustDepositAmount
 				if err := ms.Keeper.UpdatePermission(ctx, executorPerm); err != nil {
-					return fmt.Errorf("failed to update executor permission deposit: %w", err)
+					return fmt.Errorf("failed to update executor perm deposit: %w", err)
 				}
 			}
 		}
@@ -191,7 +191,7 @@ func (ms msgServer) findBeneficiaries(ctx sdk.Context, issuerPermId, verifierPer
 	var foundPerms []types.Permission
 	var schemaID uint64
 
-	// Helper function to check if a permission is already in the slice
+	// Helper function to check if a perm is already in the slice
 	containsPerm := func(id uint64) bool {
 		for _, p := range foundPerms {
 			if p.Id == id {
@@ -201,30 +201,30 @@ func (ms msgServer) findBeneficiaries(ctx sdk.Context, issuerPermId, verifierPer
 		return false
 	}
 
-	// Get schema ID from either issuer or verifier permission
+	// Get schema ID from either issuer or verifier perm
 	if issuerPermId != 0 {
 		issuerPerm, err := ms.Permission.Get(ctx, issuerPermId)
 		if err != nil {
-			return nil, fmt.Errorf("issuer permission not found: %w", err)
+			return nil, fmt.Errorf("issuer perm not found: %w", err)
 		}
 		schemaID = issuerPerm.SchemaId
 	} else if verifierPermId != 0 {
 		verifierPerm, err := ms.Permission.Get(ctx, verifierPermId)
 		if err != nil {
-			return nil, fmt.Errorf("verifier permission not found: %w", err)
+			return nil, fmt.Errorf("verifier perm not found: %w", err)
 		}
 		schemaID = verifierPerm.SchemaId
 	} else {
 		return nil, fmt.Errorf("at least one of issuer_perm_id or verifier_perm_id must be provided")
 	}
 
-	// Get schema to check permission management mode
+	// Get schema to check perm management mode
 	cs, err := ms.credentialSchemaKeeper.GetCredentialSchemaById(ctx, schemaID)
 	if err != nil {
 		return nil, fmt.Errorf("credential schema not found: %w", err)
 	}
 
-	// Check if schema is configured with OPEN permission management mode
+	// Check if schema is configured with OPEN perm management mode
 	isOpenMode := false
 
 	if (issuerPermId != 0 && cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_OPEN) ||
@@ -232,9 +232,9 @@ func (ms msgServer) findBeneficiaries(ctx sdk.Context, issuerPermId, verifierPer
 		isOpenMode = true
 	}
 
-	// For OPEN mode, find the ECOSYSTEM permission
+	// For OPEN mode, find the ECOSYSTEM perm
 	if isOpenMode {
-		// Find ECOSYSTEM permission for this schema
+		// Find ECOSYSTEM perm for this schema
 		err = ms.Permission.Walk(ctx, nil, func(id uint64, perm types.Permission) (bool, error) {
 			if perm.SchemaId == schemaID &&
 				perm.Type == types.PermissionType_PERMISSION_TYPE_ECOSYSTEM &&
@@ -246,18 +246,18 @@ func (ms msgServer) findBeneficiaries(ctx sdk.Context, issuerPermId, verifierPer
 		})
 
 		if err != nil {
-			return nil, fmt.Errorf("failed to query ECOSYSTEM permission: %w", err)
+			return nil, fmt.Errorf("failed to query ECOSYSTEM perm: %w", err)
 		}
 
-		// For OPEN mode, we only return the ECOSYSTEM permission as the beneficiary
+		// For OPEN mode, we only return the ECOSYSTEM perm as the beneficiary
 		return foundPerms, nil
 	}
 
-	// Process issuer permission hierarchy if provided (non-OPEN mode)
+	// Process issuer perm hierarchy if provided (non-OPEN mode)
 	if issuerPermId != 0 {
 		issuerPerm, err := ms.Permission.Get(ctx, issuerPermId)
 		if err != nil {
-			return nil, fmt.Errorf("issuer permission not found: %w", err)
+			return nil, fmt.Errorf("issuer perm not found: %w", err)
 		}
 
 		// Follow the validator chain up
@@ -266,7 +266,7 @@ func (ms msgServer) findBeneficiaries(ctx sdk.Context, issuerPermId, verifierPer
 			for currentPermID != 0 {
 				currentPerm, err := ms.Permission.Get(ctx, currentPermID)
 				if err != nil {
-					return nil, fmt.Errorf("failed to get permission: %w", err)
+					return nil, fmt.Errorf("failed to get perm: %w", err)
 				}
 
 				// Add to set if valid and not already included
@@ -280,9 +280,9 @@ func (ms msgServer) findBeneficiaries(ctx sdk.Context, issuerPermId, verifierPer
 		}
 	}
 
-	// Process verifier permission hierarchy if provided
+	// Process verifier perm hierarchy if provided
 	if verifierPermId != 0 {
-		// First add issuer permission to the set if provided
+		// First add issuer perm to the set if provided
 		if issuerPermId != 0 {
 			issuerPerm, err := ms.Permission.Get(ctx, issuerPermId)
 			if err == nil && issuerPerm.Revoked == nil && issuerPerm.Terminated == nil && !containsPerm(issuerPermId) {
@@ -293,7 +293,7 @@ func (ms msgServer) findBeneficiaries(ctx sdk.Context, issuerPermId, verifierPer
 		// Then process verifier's validator chain
 		verifierPerm, err := ms.Permission.Get(ctx, verifierPermId)
 		if err != nil {
-			return nil, fmt.Errorf("verifier permission not found: %w", err)
+			return nil, fmt.Errorf("verifier perm not found: %w", err)
 		}
 
 		if verifierPerm.ValidatorPermId != 0 {
@@ -301,7 +301,7 @@ func (ms msgServer) findBeneficiaries(ctx sdk.Context, issuerPermId, verifierPer
 			for currentPermID != 0 {
 				currentPerm, err := ms.Permission.Get(ctx, currentPermID)
 				if err != nil {
-					return nil, fmt.Errorf("failed to get permission: %w", err)
+					return nil, fmt.Errorf("failed to get perm: %w", err)
 				}
 
 				// Add to set if valid and not already included

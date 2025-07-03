@@ -14,7 +14,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/verana-labs/verana-blockchain/x/trustdeposit/types"
 
-	modulev1 "github.com/verana-labs/verana-blockchain/api/verana/trustdeposit"
+	modulev1 "github.com/verana-labs/verana-blockchain/api/verana/td/v1"
 )
 
 // AutoCLIOptions implements the autocli.HasAutoCLIConfig interface.

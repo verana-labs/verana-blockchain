@@ -16,11 +16,11 @@ func (msg *MsgStartPermissionVP) ValidateBasic() error {
 	}
 
 	if msg.ValidatorPermId == 0 {
-		return fmt.Errorf("validator permission ID cannot be 0")
+		return fmt.Errorf("validator perm ID cannot be 0")
 	}
 
 	if msg.Type == 0 || msg.Type > 6 {
-		return fmt.Errorf("permission type must be between 1 and 6")
+		return fmt.Errorf("perm type must be between 1 and 6")
 	}
 
 	if msg.Country == "" {
@@ -56,9 +56,9 @@ func (msg *MsgRenewPermissionVP) ValidateBasic() error {
 		return fmt.Errorf("invalid creator address: %w", err)
 	}
 
-	// Validate permission ID
+	// Validate perm ID
 	if msg.Id == 0 {
-		return fmt.Errorf("permission ID cannot be 0")
+		return fmt.Errorf("perm ID cannot be 0")
 	}
 
 	return nil
@@ -71,9 +71,9 @@ func (msg *MsgSetPermissionVPToValidated) ValidateBasic() error {
 		return fmt.Errorf("invalid creator address: %w", err)
 	}
 
-	// Validate permission ID
+	// Validate perm ID
 	if msg.Id == 0 {
-		return fmt.Errorf("permission ID cannot be 0")
+		return fmt.Errorf("perm ID cannot be 0")
 	}
 
 	// Validate fees are non-negative
@@ -107,9 +107,9 @@ func (msg *MsgRequestPermissionVPTermination) ValidateBasic() error {
 		return fmt.Errorf("invalid creator address: %w", err)
 	}
 
-	// Validate permission ID
+	// Validate perm ID
 	if msg.Id == 0 {
-		return fmt.Errorf("permission ID cannot be 0")
+		return fmt.Errorf("perm ID cannot be 0")
 	}
 
 	return nil
@@ -122,9 +122,9 @@ func (msg *MsgConfirmPermissionVPTermination) ValidateBasic() error {
 		return fmt.Errorf("invalid creator address: %w", err)
 	}
 
-	// Validate permission ID
+	// Validate perm ID
 	if msg.Id == 0 {
-		return fmt.Errorf("permission ID cannot be 0")
+		return fmt.Errorf("perm ID cannot be 0")
 	}
 
 	return nil
@@ -137,9 +137,9 @@ func (msg *MsgCancelPermissionVPLastRequest) ValidateBasic() error {
 		return fmt.Errorf("invalid creator address: %w", err)
 	}
 
-	// Validate permission ID
+	// Validate perm ID
 	if msg.Id == 0 {
-		return fmt.Errorf("permission ID cannot be 0")
+		return fmt.Errorf("perm ID cannot be 0")
 	}
 
 	return nil
@@ -203,9 +203,9 @@ func (msg *MsgExtendPermission) ValidateBasic() error {
 		return fmt.Errorf("invalid creator address: %w", err)
 	}
 
-	// Validate permission ID
+	// Validate perm ID
 	if msg.Id == 0 {
-		return fmt.Errorf("permission ID cannot be 0")
+		return fmt.Errorf("perm ID cannot be 0")
 	}
 
 	// Validate effective_until is in the future
@@ -222,9 +222,9 @@ func (msg *MsgRevokePermission) ValidateBasic() error {
 		return fmt.Errorf("invalid creator address: %w", err)
 	}
 
-	// Validate permission ID
+	// Validate perm ID
 	if msg.Id == 0 {
-		return fmt.Errorf("permission ID cannot be 0")
+		return fmt.Errorf("perm ID cannot be 0")
 	}
 
 	return nil
@@ -245,9 +245,9 @@ func (msg *MsgCreateOrUpdatePermissionSession) ValidateBasic() error {
 		return sdkerrors.ErrInvalidRequest.Wrap("at least one of issuer_perm_id or verifier_perm_id must be provided")
 	}
 
-	// Agent permission ID is required
+	// Agent perm ID is required
 	if msg.AgentPermId == 0 {
-		return sdkerrors.ErrInvalidRequest.Wrap("agent permission ID required")
+		return sdkerrors.ErrInvalidRequest.Wrap("agent perm ID required")
 	}
 
 	return nil
