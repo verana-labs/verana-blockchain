@@ -1,0 +1,10 @@
+{
+ "title": "software upgrade v0.5",
+ "authors": [
+  "pratikasr"
+ ],
+ "summary": "upgrading to v0.5",
+ "details": "updating params",
+ "proposal_forum_url": "http://google.com",
+ "vote_option_context": "yes, no"
+}

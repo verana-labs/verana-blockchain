@@ -2,6 +2,8 @@ package types
 
 import (
 	"context"
+	"github.com/cosmos/cosmos-sdk/x/authz"
+	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
@@ -27,4 +29,8 @@ type ParamSubspace interface {
 // TrustDepositKeeper defines the expected interface for the Trust Deposit module.
 type TrustDepositKeeper interface {
 	AdjustTrustDeposit(ctx sdk.Context, account string, augend int64) error
+}
+
+type AuthzKeeper interface {
+	GetAuthorization(ctx context.Context, grantee, granter sdk.AccAddress, msgType string) (authz.Authorization, *time.Time) // Methods imported from bank should be defined here
 }

@@ -1,0 +1,20 @@
+{
+ "messages": [
+  {
+   "@type": "/cosmos.upgrade.v1beta1.MsgSoftwareUpgrade",
+   "authority": "verana10d07y265gmmuvt4z0w9aw880jnsr700j22m4w8",
+   "plan": {
+    "name": "v0.5",
+    "time": "0001-01-01T00:00:00Z",
+    "height": "135",
+    "info": "",
+    "upgraded_client_state": null
+   }
+  }
+ ],
+ "metadata": "ipfs://CID",
+ "deposit": "10000000uvna",
+ "title": "software upgrade v0.5",
+ "summary": "upgrading to v0.5",
+ "expedited": false
+}

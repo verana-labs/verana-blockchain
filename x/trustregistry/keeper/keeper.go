@@ -1,11 +1,10 @@
 package keeper
 
 import (
-	"fmt"
-
 	"cosmossdk.io/collections"
 	"cosmossdk.io/core/store"
 	"cosmossdk.io/log"
+	"fmt"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/verana-labs/verana-blockchain/x/trustregistry/types"
@@ -31,6 +30,7 @@ type (
 		// module references
 		//bankKeeper    types.BankKeeper
 		trustDeposit types.TrustDepositKeeper
+		authzKeeper  types.AuthzKeeper
 	}
 )
 
@@ -40,6 +40,7 @@ func NewKeeper(
 	logger log.Logger,
 	authority string,
 	trustDeposit types.TrustDepositKeeper,
+	authzKeeper types.AuthzKeeper,
 ) Keeper {
 	if _, err := sdk.AccAddressFromBech32(authority); err != nil {
 		panic(fmt.Sprintf("invalid authority address: %s", authority))
@@ -59,6 +60,7 @@ func NewKeeper(
 		GFDocument:            collections.NewMap(sb, types.GovernanceFrameworkDocumentKey, "gf_document", collections.Uint64Key, codec.CollValue[types.GovernanceFrameworkDocument](cdc)),
 		Counter:               collections.NewMap(sb, types.CounterKey, "counter", collections.StringKey, collections.Uint64Value),
 		trustDeposit:          trustDeposit,
+		authzKeeper:           authzKeeper,
 	}
 
 	schema, err := sb.Build()

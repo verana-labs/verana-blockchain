@@ -143,9 +143,13 @@ func (ms msgServer) ArchiveTrustRegistry(goCtx context.Context, msg *types.MsgAr
 		return nil, fmt.Errorf("trust registry not found: %w", err)
 	}
 
-	// Check controller
-	if tr.Controller != msg.Creator {
-		return nil, fmt.Errorf("only trust registry controller can archive trust registry")
+	// Check authorization: either direct controller or authorized via authz grant
+	authorized, err := ms.checkArchiveAuthorization(ctx, tr.Controller, msg.Creator, msg)
+	if err != nil {
+		return nil, fmt.Errorf("authorization check failed: %w", err)
+	}
+	if !authorized {
+		return nil, fmt.Errorf("unauthorized: only trust registry controller or authorized grantee can archive trust registry")
 	}
 
 	// Check archive state
@@ -174,4 +178,41 @@ func (ms msgServer) ArchiveTrustRegistry(goCtx context.Context, msg *types.MsgAr
 	}
 
 	return &types.MsgArchiveTrustRegistryResponse{}, nil
+}
+
+// Helper function to check authorization via controller or authz grant
+func (ms *msgServer) checkArchiveAuthorization(ctx sdk.Context, controller string, creator string, msg *types.MsgArchiveTrustRegistry) (bool, error) {
+	// First check: is the creator the controller?
+	if controller == creator {
+		return true, nil
+	}
+
+	// Second check: does the creator have an authz grant from the controller?
+	controllerAddr, err := sdk.AccAddressFromBech32(controller)
+	if err != nil {
+		return false, fmt.Errorf("invalid controller address: %w", err)
+	}
+
+	creatorAddr, err := sdk.AccAddressFromBech32(creator)
+	if err != nil {
+		return false, fmt.Errorf("invalid creator address: %w", err)
+	}
+
+	// Check for authz grant - the specific message type should match what you showed in your example
+	msgTypeURL := sdk.MsgTypeURL(msg)
+
+	// Use the authz keeper to check if there's a valid grant
+	authorization, expiration := ms.authzKeeper.GetAuthorization(ctx, creatorAddr, controllerAddr, msgTypeURL)
+	if authorization == nil {
+		// No grant found or grant is invalid/expired
+		return false, nil
+	}
+
+	// Optional: Check if the grant has expired (GetAuthorization should handle this, but just to be explicit)
+	if expiration != nil && ctx.BlockTime().After(*expiration) {
+		return false, nil
+	}
+
+	// Grant exists and is valid
+	return true, nil
 }
