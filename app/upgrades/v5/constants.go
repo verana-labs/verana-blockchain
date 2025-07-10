@@ -10,5 +10,14 @@ const UpgradeName = "v0.5"
 var Upgrade = types.Upgrade{
 	UpgradeName:          UpgradeName,
 	CreateUpgradeHandler: CreateUpgradeHandler,
-	StoreUpgrades:        store.StoreUpgrades{},
+	StoreUpgrades: store.StoreUpgrades{
+		Added: []string{
+			"cs",
+			"dd",
+			"perm",
+			"td",
+			"tr",
+		},
+		Deleted: []string{},
+	},
 }
