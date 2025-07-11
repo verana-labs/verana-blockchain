@@ -175,8 +175,6 @@ func restoreCredentialSchemaData(ctx sdk.Context, keepers types.AppKeepers, data
 		id, _ := strconv.ParseUint(cs.ID, 10, 64)
 		trID, _ := strconv.ParseUint(cs.TRID, 10, 64)
 		deposit, _ := math.NewIntFromString(cs.Deposit)
-		IssuerPermManagementMode, _ := math.NewIntFromString(cs.IssuerPermManagementMode)
-		VerifierPermManagementMode, _ := math.NewIntFromString(cs.VerifierPermManagementMode)
 		csUpdated := credentialschematypes.CredentialSchema{
 			Id:                                      id,
 			TrId:                                    trID,
@@ -190,8 +188,8 @@ func restoreCredentialSchemaData(ctx sdk.Context, keepers types.AppKeepers, data
 			IssuerValidationValidityPeriod:          cs.IssuerValidationValidityPeriod,
 			VerifierValidationValidityPeriod:        cs.VerifierValidationValidityPeriod,
 			HolderValidationValidityPeriod:          cs.HolderValidationValidityPeriod,
-			IssuerPermManagementMode:                credentialschematypes.CredentialSchemaPermManagementMode(IssuerPermManagementMode.Int64()),
-			VerifierPermManagementMode:              credentialschematypes.CredentialSchemaPermManagementMode(VerifierPermManagementMode.Int64()),
+			IssuerPermManagementMode:                credentialschematypes.CredentialSchemaPermManagementMode_GRANTOR_VALIDATION,
+			VerifierPermManagementMode:              credentialschematypes.CredentialSchemaPermManagementMode_OPEN,
 		}
 
 		// Call your keeper method to set credential schema
