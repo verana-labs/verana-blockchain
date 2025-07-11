@@ -256,6 +256,18 @@ func (app *App) GetCredentialSchemaKeeper() credentialschemamodulekeeper.Keeper 
 	return app.CredentialschemaKeeper
 }
 
+func (app *App) GetTrustRegistryKeeper() trustregistrymodulekeeper.Keeper {
+	return app.TrustregistryKeeper
+}
+
+func (app *App) GetPermissionKeeper() permissionmodulekeeper.Keeper {
+	return app.PermissionKeeper
+}
+
+func (app *App) GetTrustDepositKeeper() trustdepositmodulekeeper.Keeper {
+	return app.TrustdepositKeeper
+}
+
 // New returns a reference to an initialized App.
 func New(
 	logger log.Logger,
