@@ -217,7 +217,7 @@ func TestGenesisImportExport(t *testing.T) {
 	require.NoError(t, k.Permission.Set(ctx, perm3.Id, perm3))
 	require.NoError(t, k.PermissionCounter.Set(ctx, 4))
 
-	// Create test permission sessions
+	// Create test perm sessions
 	session1 := types.PermissionSession{
 		Id:          "test-session-id-1",
 		Controller:  creatorAddr,
@@ -314,7 +314,7 @@ func TestGenesisValidation(t *testing.T) {
 		expectedErr  string
 	}{
 		{
-			name: "duplicate permission IDs",
+			name: "duplicate perm IDs",
 			genesisState: types.GenesisState{
 				Params: types.DefaultParams(),
 				Permissions: []types.Permission{
@@ -335,10 +335,10 @@ func TestGenesisValidation(t *testing.T) {
 				},
 				NextPermissionId: 2,
 			},
-			expectedErr: "duplicate permission ID found: 1",
+			expectedErr: "duplicate perm ID found: 1",
 		},
 		{
-			name: "next permission ID too low",
+			name: "next perm ID too low",
 			genesisState: types.GenesisState{
 				Params: types.DefaultParams(),
 				Permissions: []types.Permission{
@@ -352,10 +352,10 @@ func TestGenesisValidation(t *testing.T) {
 				},
 				NextPermissionId: 3, // Should be > 5
 			},
-			expectedErr: "next_permission_id (3) must be greater than the maximum permission ID (5)",
+			expectedErr: "next_permission_id (3) must be greater than the maximum perm ID (5)",
 		},
 		{
-			name: "missing required permission field",
+			name: "missing required perm field",
 			genesisState: types.GenesisState{
 				Params: types.DefaultParams(),
 				Permissions: []types.Permission{
@@ -369,7 +369,7 @@ func TestGenesisValidation(t *testing.T) {
 				},
 				NextPermissionId: 2,
 			},
-			expectedErr: "grantee cannot be empty for permission ID 1",
+			expectedErr: "grantee cannot be empty for perm ID 1",
 		},
 		{
 			name: "invalid validator reference",
@@ -387,7 +387,7 @@ func TestGenesisValidation(t *testing.T) {
 				},
 				NextPermissionId: 3,
 			},
-			expectedErr: "validator permission ID 999 not found for permission ID 2",
+			expectedErr: "validator perm ID 999 not found for perm ID 2",
 		},
 	}
 

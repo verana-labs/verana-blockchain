@@ -32,20 +32,20 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	// Import all permissions
 	for _, perm := range genState.Permissions {
 		if err := k.Permission.Set(ctx, perm.Id, perm); err != nil {
-			panic(fmt.Errorf("failed to set permission: %w", err))
+			panic(fmt.Errorf("failed to set perm: %w", err))
 		}
 	}
 
-	// Import all permission sessions
+	// Import all perm sessions
 	for _, session := range genState.PermissionSessions {
 		if err := k.PermissionSession.Set(ctx, session.Id, session); err != nil {
-			panic(fmt.Errorf("failed to set permission session: %w", err))
+			panic(fmt.Errorf("failed to set perm session: %w", err))
 		}
 	}
 
 	// Set the permissions counter
 	if err := k.PermissionCounter.Set(ctx, genState.NextPermissionId); err != nil {
-		panic(fmt.Errorf("failed to set permission counter: %w", err))
+		panic(fmt.Errorf("failed to set perm counter: %w", err))
 	}
 }
 
@@ -72,13 +72,13 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 
 	genesis.Permissions = permissions
 
-	// Export all permission sessions
+	// Export all perm sessions
 	sessions := []types.PermissionSession{}
 	if err := k.PermissionSession.Walk(ctx, nil, func(id string, session types.PermissionSession) (bool, error) {
 		sessions = append(sessions, session)
 		return false, nil
 	}); err != nil {
-		panic(fmt.Errorf("failed to export permission sessions: %w", err))
+		panic(fmt.Errorf("failed to export perm sessions: %w", err))
 	}
 
 	// Sort sessions by ID for deterministic output
@@ -88,10 +88,10 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 
 	genesis.PermissionSessions = sessions
 
-	// Export permission counter
+	// Export perm counter
 	nextId, err := k.PermissionCounter.Get(ctx)
 	if err != nil && !errors.Is(err, collections.ErrNotFound) {
-		panic(fmt.Errorf("failed to get permission counter: %w", err))
+		panic(fmt.Errorf("failed to get perm counter: %w", err))
 	}
 
 	// In case of no permissions, set next ID to 1

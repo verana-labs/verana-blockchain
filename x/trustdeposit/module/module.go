@@ -15,11 +15,13 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
+	govtypes1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
+
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 
 	// this line is used by starport scaffolding # 1
 
-	modulev1 "github.com/verana-labs/verana-blockchain/api/veranablockchain/trustdeposit/module"
+	modulev1 "github.com/verana-labs/verana-blockchain/api/verana/td/module"
 	"github.com/verana-labs/verana-blockchain/x/trustdeposit/keeper"
 	"github.com/verana-labs/verana-blockchain/x/trustdeposit/types"
 )
@@ -64,6 +66,11 @@ func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 // RegisterInterfaces registers a module's interface types and their concrete implementations as proto.Message.
 func (a AppModuleBasic) RegisterInterfaces(reg cdctypes.InterfaceRegistry) {
 	types.RegisterInterfaces(reg)
+}
+
+// RegisterProposalHandler registers the proposal handler for the governance module
+func (am AppModule) RegisterProposalHandler() govtypes1.Handler {
+	return keeper.NewTrustDepositHandler(am.keeper)
 }
 
 // DefaultGenesis returns a default GenesisState for the module, marshalled to json.RawMessage.

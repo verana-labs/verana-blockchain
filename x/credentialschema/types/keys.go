@@ -6,7 +6,7 @@ import (
 
 const (
 	// ModuleName defines the module name
-	ModuleName = "credentialschema"
+	ModuleName = "cs"
 
 	// StoreKey defines the primary module store key
 	StoreKey = ModuleName

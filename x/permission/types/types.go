@@ -16,11 +16,11 @@ func (msg *MsgStartPermissionVP) ValidateBasic() error {
 	}
 
 	if msg.ValidatorPermId == 0 {
-		return fmt.Errorf("validator permission ID cannot be 0")
+		return fmt.Errorf("validator perm ID cannot be 0")
 	}
 
 	if msg.Type == 0 || msg.Type > 6 {
-		return fmt.Errorf("permission type must be between 1 and 6")
+		return fmt.Errorf("perm type must be between 1 and 6")
 	}
 
 	if msg.Country == "" {
@@ -56,9 +56,9 @@ func (msg *MsgRenewPermissionVP) ValidateBasic() error {
 		return fmt.Errorf("invalid creator address: %w", err)
 	}
 
-	// Validate permission ID
+	// Validate perm ID
 	if msg.Id == 0 {
-		return fmt.Errorf("permission ID cannot be 0")
+		return fmt.Errorf("perm ID cannot be 0")
 	}
 
 	return nil
@@ -71,9 +71,9 @@ func (msg *MsgSetPermissionVPToValidated) ValidateBasic() error {
 		return fmt.Errorf("invalid creator address: %w", err)
 	}
 
-	// Validate permission ID
+	// Validate perm ID
 	if msg.Id == 0 {
-		return fmt.Errorf("permission ID cannot be 0")
+		return fmt.Errorf("perm ID cannot be 0")
 	}
 
 	// Validate fees are non-negative
@@ -107,9 +107,9 @@ func (msg *MsgRequestPermissionVPTermination) ValidateBasic() error {
 		return fmt.Errorf("invalid creator address: %w", err)
 	}
 
-	// Validate permission ID
+	// Validate perm ID
 	if msg.Id == 0 {
-		return fmt.Errorf("permission ID cannot be 0")
+		return fmt.Errorf("perm ID cannot be 0")
 	}
 
 	return nil
@@ -122,9 +122,9 @@ func (msg *MsgConfirmPermissionVPTermination) ValidateBasic() error {
 		return fmt.Errorf("invalid creator address: %w", err)
 	}
 
-	// Validate permission ID
+	// Validate perm ID
 	if msg.Id == 0 {
-		return fmt.Errorf("permission ID cannot be 0")
+		return fmt.Errorf("perm ID cannot be 0")
 	}
 
 	return nil
@@ -137,9 +137,9 @@ func (msg *MsgCancelPermissionVPLastRequest) ValidateBasic() error {
 		return fmt.Errorf("invalid creator address: %w", err)
 	}
 
-	// Validate permission ID
+	// Validate perm ID
 	if msg.Id == 0 {
-		return fmt.Errorf("permission ID cannot be 0")
+		return fmt.Errorf("perm ID cannot be 0")
 	}
 
 	return nil
@@ -203,9 +203,9 @@ func (msg *MsgExtendPermission) ValidateBasic() error {
 		return fmt.Errorf("invalid creator address: %w", err)
 	}
 
-	// Validate permission ID
+	// Validate perm ID
 	if msg.Id == 0 {
-		return fmt.Errorf("permission ID cannot be 0")
+		return fmt.Errorf("perm ID cannot be 0")
 	}
 
 	// Validate effective_until is in the future
@@ -222,9 +222,9 @@ func (msg *MsgRevokePermission) ValidateBasic() error {
 		return fmt.Errorf("invalid creator address: %w", err)
 	}
 
-	// Validate permission ID
+	// Validate perm ID
 	if msg.Id == 0 {
-		return fmt.Errorf("permission ID cannot be 0")
+		return fmt.Errorf("perm ID cannot be 0")
 	}
 
 	return nil
@@ -245,10 +245,61 @@ func (msg *MsgCreateOrUpdatePermissionSession) ValidateBasic() error {
 		return sdkerrors.ErrInvalidRequest.Wrap("at least one of issuer_perm_id or verifier_perm_id must be provided")
 	}
 
-	// Agent permission ID is required
+	// Agent perm ID is required
 	if msg.AgentPermId == 0 {
-		return sdkerrors.ErrInvalidRequest.Wrap("agent permission ID required")
+		return sdkerrors.ErrInvalidRequest.Wrap("agent perm ID required")
 	}
 
+	return nil
+}
+
+func (msg *MsgSlashPermissionTrustDeposit) ValidateBasic() error {
+	if _, err := sdk.AccAddressFromBech32(msg.Creator); err != nil {
+		return sdkerrors.ErrInvalidAddress.Wrapf("invalid creator address: %s", err)
+	}
+
+	// [MOD-PERM-MSG-12-2-1] Slash Permission Trust Deposit basic checks
+	if msg.Id == 0 {
+		return sdkerrors.ErrInvalidRequest.Wrap("id must be a valid uint64")
+	}
+
+	if msg.Amount == 0 {
+		return sdkerrors.ErrInvalidRequest.Wrap("amount must be greater than 0")
+	}
+	return nil
+}
+
+func (msg *MsgRepayPermissionSlashedTrustDeposit) ValidateBasic() error {
+	if _, err := sdk.AccAddressFromBech32(msg.Creator); err != nil {
+		return sdkerrors.ErrInvalidAddress.Wrapf("invalid creator address: %s", err)
+	}
+	// [MOD-PERM-MSG-13-2-1] Repay Permission Slashed Trust Deposit basic checks
+	if msg.Id == 0 {
+		return sdkerrors.ErrInvalidRequest.Wrap("id must be a valid uint64")
+	}
+	return nil
+}
+
+func (msg *MsgCreatePermission) ValidateBasic() error {
+	if _, err := sdk.AccAddressFromBech32(msg.Creator); err != nil {
+		return sdkerrors.ErrInvalidAddress.Wrapf("invalid creator address: %s", err)
+	}
+	// [MOD-PERM-MSG-13-2-1] Repay Permission Slashed Trust Deposit basic checks
+	if msg.SchemaId == 0 {
+		return sdkerrors.ErrInvalidRequest.Wrap("id must be a valid uint64")
+	}
+	// type MUST be ISSUER or VERIFIER
+	if msg.Type != PermissionType_PERMISSION_TYPE_ISSUER &&
+		msg.Type != PermissionType_PERMISSION_TYPE_VERIFIER {
+		return sdkerrors.ErrInvalidRequest.Wrap("type must be ISSUER or VERIFIER")
+	}
+
+	// did MUST conform to DID Syntax
+	if msg.Did == "" {
+		return sdkerrors.ErrInvalidRequest.Wrap("did is mandatory")
+	}
+	if !isValidDID(msg.Did) {
+		return sdkerrors.ErrInvalidRequest.Wrap("invalid DID syntax")
+	}
 	return nil
 }

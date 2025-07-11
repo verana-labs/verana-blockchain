@@ -92,7 +92,7 @@ func TestGenesisState_Validate(t *testing.T) {
 			errorString: "validation term requested timeout days must be positive",
 		},
 		{
-			desc: "duplicate permission IDs",
+			desc: "duplicate perm IDs",
 			genState: &types.GenesisState{
 				Params:             types.DefaultParams(),
 				Permissions:        []types.Permission{validPerm1, validPerm1}, // Duplicate ID
@@ -100,10 +100,10 @@ func TestGenesisState_Validate(t *testing.T) {
 				NextPermissionId:   3,
 			},
 			valid:       false,
-			errorString: "duplicate permission ID",
+			errorString: "duplicate perm ID",
 		},
 		{
-			desc: "missing permission ID",
+			desc: "missing perm ID",
 			genState: &types.GenesisState{
 				Params: types.DefaultParams(),
 				Permissions: []types.Permission{
@@ -119,7 +119,7 @@ func TestGenesisState_Validate(t *testing.T) {
 				NextPermissionId:   1,
 			},
 			valid:       false,
-			errorString: "permission ID cannot be 0",
+			errorString: "perm ID cannot be 0",
 		},
 		{
 			desc: "invalid validator reference",
@@ -139,10 +139,10 @@ func TestGenesisState_Validate(t *testing.T) {
 				NextPermissionId:   2,
 			},
 			valid:       false,
-			errorString: "validator permission ID 999 not found",
+			errorString: "validator perm ID 999 not found",
 		},
 		{
-			desc: "next permission ID too low",
+			desc: "next perm ID too low",
 			genState: &types.GenesisState{
 				Params:             types.DefaultParams(),
 				Permissions:        []types.Permission{validPerm1, validPerm2},
@@ -161,7 +161,7 @@ func TestGenesisState_Validate(t *testing.T) {
 					{
 						Id:          "test-session-id",
 						Controller:  creatorAddr,
-						AgentPermId: 999, // Non-existent permission
+						AgentPermId: 999, // Non-existent perm
 						Created:     &nowTime,
 						Modified:    &nowTime,
 					},
@@ -169,7 +169,7 @@ func TestGenesisState_Validate(t *testing.T) {
 				NextPermissionId: 2,
 			},
 			valid:       false,
-			errorString: "agent permission ID 999 not found",
+			errorString: "agent perm ID 999 not found",
 		},
 	}
 

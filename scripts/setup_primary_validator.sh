@@ -13,7 +13,7 @@ else
 fi
 
 # Variables
-CHAIN_ID="vna-local-1"
+CHAIN_ID="vna-testnet-1"
 MONIKER="validator1"
 BINARY="veranad"
 HOME_DIR="$HOME/.verana"
@@ -90,6 +90,7 @@ $SED_CMD 's/stake/uvna/g' "$GENESIS_JSON_PATH"
 log "Updating governance parameters in genesis.json..."
 $SED_CMD 's/"max_deposit_period": ".*"/"max_deposit_period": "100s"/' "$GENESIS_JSON_PATH"
 $SED_CMD 's/"voting_period": ".*"/"voting_period": "100s"/' "$GENESIS_JSON_PATH"
+$SED_CMD 's/"expedited_voting_period": ".*"/"expedited_voting_period": "90s"/' "$GENESIS_JSON_PATH"
 if [ $? -ne 0 ]; then
     log "Error: Failed to update governance parameters in genesis.json."
     exit 1

@@ -57,7 +57,7 @@ func NewKeeper(
 		storeService:           storeService,
 		authority:              authority,
 		logger:                 logger,
-		Permission:             collections.NewMap(sb, types.PermissionKey, "permission", collections.Uint64Key, codec.CollValue[types.Permission](cdc)),
+		Permission:             collections.NewMap(sb, types.PermissionKey, "perm", collections.Uint64Key, codec.CollValue[types.Permission](cdc)),
 		PermissionCounter:      collections.NewItem(sb, types.PermissionCounterKey, "permission_counter", collections.Uint64Value),
 		PermissionSession:      collections.NewMap(sb, types.PermissionSessionKey, "permission_session", collections.StringKey, codec.CollValue[types.PermissionSession](cdc)),
 		credentialSchemaKeeper: credentialSchemaKeeper,
@@ -81,7 +81,7 @@ func (k Keeper) GetPermissionByID(ctx sdk.Context, id uint64) (types.Permission,
 	return k.Permission.Get(ctx, id)
 }
 
-// CreatePermission creates a new permission and returns its ID
+// CreatePermission creates a new perm and returns its ID
 func (k Keeper) CreatePermission(ctx sdk.Context, perm types.Permission) (uint64, error) {
 	id, err := k.getNextPermissionID(ctx)
 	if err != nil {
@@ -95,7 +95,7 @@ func (k Keeper) CreatePermission(ctx sdk.Context, perm types.Permission) (uint64
 	return id, nil
 }
 
-// getNextPermissionID gets the next available permission ID
+// getNextPermissionID gets the next available perm ID
 func (k Keeper) getNextPermissionID(ctx sdk.Context) (uint64, error) {
 	id, err := k.PermissionCounter.Get(ctx)
 	if err != nil {
@@ -105,7 +105,7 @@ func (k Keeper) getNextPermissionID(ctx sdk.Context) (uint64, error) {
 	nextID := id + 1
 	err = k.PermissionCounter.Set(ctx, nextID)
 	if err != nil {
-		return 0, fmt.Errorf("failed to set permission counter: %w", err)
+		return 0, fmt.Errorf("failed to set perm counter: %w", err)
 	}
 
 	return nextID, nil
@@ -115,35 +115,41 @@ func (k Keeper) UpdatePermission(ctx sdk.Context, perm types.Permission) error {
 	return k.Permission.Set(ctx, perm.Id, perm)
 }
 
-// IsValidPermission checks if a permission is valid for a given country code and time
-// A valid permission:
-// - Has a matching country (permission country is null or matches the provided country)
+// IsValidPermission checks if a perm is valid for a given country code and time
+// A valid perm:
+// - Has a matching country (perm country is null or matches the provided country)
 // - Is currently effective (effective_from ≤ now < effective_until)
 // - Is not revoked or terminated
+// - Is not slashed
 func IsValidPermission(perm types.Permission, country string, checkTime time.Time) error {
 	// Check country compatibility
 	if perm.Country != "" && perm.Country != country {
-		return fmt.Errorf("permission country mismatch: permission has %s, requested %s",
+		return fmt.Errorf("perm country mismatch: perm has %s, requested %s",
 			perm.Country, country)
 	}
 
-	// Check if permission is effective at the given time
+	// Check if perm is effective at the given time
 	if perm.EffectiveFrom != nil && checkTime.Before(*perm.EffectiveFrom) {
-		return fmt.Errorf("permission not yet effective: begins at %v", perm.EffectiveFrom)
+		return fmt.Errorf("perm not yet effective: begins at %v", perm.EffectiveFrom)
 	}
 
 	if perm.EffectiveUntil != nil && !checkTime.Before(*perm.EffectiveUntil) {
-		return fmt.Errorf("permission expired: ended at %v", perm.EffectiveUntil)
+		return fmt.Errorf("perm expired: ended at %v", perm.EffectiveUntil)
 	}
 
-	// Check if permission is revoked
+	// Check if perm is revoked
 	if perm.Revoked != nil {
-		return fmt.Errorf("permission is revoked since %v", perm.Revoked)
+		return fmt.Errorf("perm is revoked since %v", perm.Revoked)
 	}
 
-	// Check if permission is terminated
+	// Check if perm is terminated
 	if perm.Terminated != nil {
-		return fmt.Errorf("permission is terminated since %v", perm.Terminated)
+		return fmt.Errorf("perm is terminated since %v", perm.Terminated)
+	}
+
+	// Check if perm is slashed
+	if perm.SlashedDeposit > 0 {
+		return fmt.Errorf("perm is slashed with amount %d", perm.SlashedDeposit)
 	}
 
 	return nil

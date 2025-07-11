@@ -2,12 +2,14 @@ package keeper
 
 import (
 	"context"
-	"cosmossdk.io/math"
 	"fmt"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	credentialschematypes "github.com/verana-labs/verana-blockchain/x/credentialschema/types"
 	"strconv"
 	"time"
+
+	"cosmossdk.io/math"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	credentialschematypes "github.com/verana-labs/verana-blockchain/x/credentialschema/types"
+	trustdeposittypes "github.com/verana-labs/verana-blockchain/x/trustdeposit/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/verana-labs/verana-blockchain/x/permission/types"
@@ -32,7 +34,7 @@ func (ms msgServer) StartPermissionVP(goCtx context.Context, msg *types.MsgStart
 	// [MOD-PERM-MSG-1-2-2] Permission checks
 	validatorPerm, err := ms.validatePermissionChecks(ctx, msg)
 	if err != nil {
-		return nil, fmt.Errorf("permission validation failed: %w", err)
+		return nil, fmt.Errorf("perm validation failed: %w", err)
 	}
 
 	// [MOD-PERM-MSG-1-2-3] Fee checks
@@ -41,10 +43,10 @@ func (ms msgServer) StartPermissionVP(goCtx context.Context, msg *types.MsgStart
 		return nil, fmt.Errorf("fee validation failed: %w", err)
 	}
 
-	// [MOD-PERM-MSG-1-3] Execute the permission VP creation
+	// [MOD-PERM-MSG-1-3] Execute the perm VP creation
 	permID, err := ms.executeStartPermissionVP(ctx, msg, validatorPerm, fees, deposit)
 	if err != nil {
-		return nil, fmt.Errorf("failed to execute permission VP: %w", err)
+		return nil, fmt.Errorf("failed to execute perm VP: %w", err)
 	}
 
 	ctx.EventManager().EmitEvents(sdk.Events{
@@ -52,6 +54,9 @@ func (ms msgServer) StartPermissionVP(goCtx context.Context, msg *types.MsgStart
 			types.EventTypeStartPermissionVP,
 			sdk.NewAttribute(types.AttributeKeyPermissionID, strconv.FormatUint(permID, 10)),
 			sdk.NewAttribute(types.AttributeKeyCreator, msg.Creator),
+			sdk.NewAttribute(types.AttributeKeyValidatorPermID, strconv.FormatUint(msg.ValidatorPermId, 10)),
+			sdk.NewAttribute(types.AttributeKeyType, types.PermissionType(msg.Type).String()),
+			sdk.NewAttribute(types.AttributeKeyCountry, msg.Country),
 			sdk.NewAttribute(types.AttributeKeyFees, strconv.FormatUint(fees, 10)),
 			sdk.NewAttribute(types.AttributeKeyDeposit, strconv.FormatUint(deposit, 10)),
 		),
@@ -68,22 +73,22 @@ func (ms msgServer) RenewPermissionVP(goCtx context.Context, msg *types.MsgRenew
 	// [MOD-PERM-MSG-2-2-2] Permission checks
 	applicantPerm, err := ms.Keeper.GetPermissionByID(ctx, msg.Id)
 	if err != nil {
-		return nil, fmt.Errorf("permission not found: %w", err)
+		return nil, fmt.Errorf("perm not found: %w", err)
 	}
 
 	// Verify creator is the grantee
 	if applicantPerm.Grantee != msg.Creator {
-		return nil, fmt.Errorf("creator is not the permission grantee")
+		return nil, fmt.Errorf("creator is not the perm grantee")
 	}
 
-	// Get validator permission
+	// Get validator perm
 	validatorPerm, err := ms.Keeper.GetPermissionByID(ctx, applicantPerm.ValidatorPermId)
 	if err != nil {
-		return nil, fmt.Errorf("validator permission not found: %w", err)
+		return nil, fmt.Errorf("validator perm not found: %w", err)
 	}
 
 	if err := IsValidPermission(validatorPerm, applicantPerm.Country, ctx.BlockTime()); err != nil {
-		return nil, fmt.Errorf("validator permission is not valid: %w", err)
+		return nil, fmt.Errorf("validator perm is not valid: %w", err)
 	}
 
 	// [MOD-PERM-MSG-2-2-3] Fee checks
@@ -94,7 +99,7 @@ func (ms msgServer) RenewPermissionVP(goCtx context.Context, msg *types.MsgRenew
 
 	// [MOD-PERM-MSG-2-3] Execution
 	if err := ms.executeRenewPermissionVP(ctx, applicantPerm, validationFees, validationDeposit); err != nil {
-		return nil, fmt.Errorf("failed to execute permission VP renewal: %w", err)
+		return nil, fmt.Errorf("failed to execute perm VP renewal: %w", err)
 	}
 
 	return &types.MsgRenewPermissionVPResponse{}, nil
@@ -130,7 +135,7 @@ func (ms msgServer) executeRenewPermissionVP(ctx sdk.Context, perm types.Permiss
 
 	now := ctx.BlockTime()
 
-	// Update permission
+	// Update perm
 	perm.VpState = types.ValidationState_VALIDATION_STATE_PENDING
 	perm.VpLastStateChange = &now
 	perm.Deposit += deposit
@@ -138,7 +143,7 @@ func (ms msgServer) executeRenewPermissionVP(ctx sdk.Context, perm types.Permiss
 	perm.VpCurrentDeposit = deposit
 	perm.Modified = &now
 
-	// Store updated permission
+	// Store updated perm
 	return ms.Keeper.UpdatePermission(ctx, perm)
 }
 
@@ -149,12 +154,12 @@ func (ms msgServer) SetPermissionVPToValidated(goCtx context.Context, msg *types
 	// [MOD-PERM-MSG-3-2-1] Basic checks
 	applicantPerm, err := ms.Keeper.GetPermissionByID(ctx, msg.Id)
 	if err != nil {
-		return nil, fmt.Errorf("permission not found: %w", err)
+		return nil, fmt.Errorf("perm not found: %w", err)
 	}
 
-	// Check permission state - must be PENDING
+	// Check perm state - must be PENDING
 	if applicantPerm.VpState != types.ValidationState_VALIDATION_STATE_PENDING {
-		return nil, fmt.Errorf("permission must be in PENDING state to be validated")
+		return nil, fmt.Errorf("perm must be in PENDING state to be validated")
 	}
 
 	// Check renewal-specific constraints
@@ -178,10 +183,10 @@ func (ms msgServer) SetPermissionVPToValidated(goCtx context.Context, msg *types
 		return nil, fmt.Errorf("vp_summary_digest_sri must be null for HOLDER type")
 	}
 
-	// [MOD-PERM-MSG-3-2-2] Validator permission checks
+	// [MOD-PERM-MSG-3-2-2] Validator perm checks
 	validatorPerm, err := ms.Keeper.GetPermissionByID(ctx, applicantPerm.ValidatorPermId)
 	if err != nil {
-		return nil, fmt.Errorf("validator permission not found: %w", err)
+		return nil, fmt.Errorf("validator perm not found: %w", err)
 	}
 
 	if validatorPerm.Grantee != msg.Creator {
@@ -189,7 +194,7 @@ func (ms msgServer) SetPermissionVPToValidated(goCtx context.Context, msg *types
 	}
 
 	if err := IsValidPermission(validatorPerm, msg.Country, ctx.BlockTime()); err != nil {
-		return nil, fmt.Errorf("validator permission is not valid: %w", err)
+		return nil, fmt.Errorf("validator perm is not valid: %w", err)
 	}
 
 	// Get validation period and calculate expiration
@@ -207,13 +212,13 @@ func (ms msgServer) SetPermissionVPToValidated(goCtx context.Context, msg *types
 		cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_OPEN {
 		// Ensure validator is ECOSYSTEM for fee collection in OPEN mode
 		if validatorPerm.Type != types.PermissionType_PERMISSION_TYPE_ECOSYSTEM {
-			return nil, fmt.Errorf("validator must be ECOSYSTEM type for OPEN issuer permission")
+			return nil, fmt.Errorf("validator must be ECOSYSTEM type for OPEN issuer perm")
 		}
 	} else if applicantPerm.Type == types.PermissionType_PERMISSION_TYPE_VERIFIER &&
 		cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_OPEN {
 		// Ensure validator is ECOSYSTEM for fee collection in OPEN mode
 		if validatorPerm.Type != types.PermissionType_PERMISSION_TYPE_ECOSYSTEM {
-			return nil, fmt.Errorf("validator must be ECOSYSTEM type for OPEN verifier permission")
+			return nil, fmt.Errorf("validator must be ECOSYSTEM type for OPEN verifier perm")
 		}
 	}
 
@@ -238,6 +243,18 @@ func (ms msgServer) SetPermissionVPToValidated(goCtx context.Context, msg *types
 		msg.EffectiveUntil = vpExp
 	}
 
+	// Calculate validator trust deposit
+	validatorTrustDeposit := applicantPerm.VpCurrentFees * ms.GetTrustDepositRate(ctx)
+
+	// Update validator's trust deposit
+	if validatorTrustDeposit > 0 {
+		err = ms.trustDeposit.AdjustTrustDeposit(ctx, validatorPerm.Grantee, int64(validatorTrustDeposit))
+		if err != nil {
+			return nil, fmt.Errorf("failed to adjust validator trust deposit: %w", err)
+		}
+		applicantPerm.VpValidatorDeposit += validatorTrustDeposit
+	}
+
 	// [MOD-PERM-MSG-3-3] Execution
 	if err := ms.executeSetPermissionVPToValidated(ctx, applicantPerm, msg, now, vpExp); err != nil {
 		return nil, fmt.Errorf("failed to execute set to validated: %w", err)
@@ -253,11 +270,11 @@ func (ms msgServer) RequestPermissionVPTermination(goCtx context.Context, msg *t
 	// [MOD-PERM-MSG-4-2-1] Basic checks
 	applicantPerm, err := ms.Keeper.GetPermissionByID(ctx, msg.Id)
 	if err != nil {
-		return nil, fmt.Errorf("permission not found: %w", err)
+		return nil, fmt.Errorf("perm not found: %w", err)
 	}
 
 	if applicantPerm.VpState != types.ValidationState_VALIDATION_STATE_VALIDATED {
-		return nil, fmt.Errorf("permission must be in VALIDATED state")
+		return nil, fmt.Errorf("perm must be in VALIDATED state")
 	}
 
 	// Check termination authorization
@@ -265,7 +282,7 @@ func (ms msgServer) RequestPermissionVPTermination(goCtx context.Context, msg *t
 		// VP has expired - either party can terminate
 		validatorPerm, err := ms.Keeper.GetPermissionByID(ctx, applicantPerm.ValidatorPermId)
 		if err != nil {
-			return nil, fmt.Errorf("validator permission not found: %w", err)
+			return nil, fmt.Errorf("validator perm not found: %w", err)
 		}
 		if msg.Creator != applicantPerm.Grantee && msg.Creator != validatorPerm.Grantee {
 			return nil, fmt.Errorf("only grantee or validator can terminate expired VP")
@@ -274,6 +291,29 @@ func (ms msgServer) RequestPermissionVPTermination(goCtx context.Context, msg *t
 		// VP not expired - only grantee can terminate
 		if msg.Creator != applicantPerm.Grantee {
 			return nil, fmt.Errorf("only grantee can terminate active VP")
+		}
+	}
+
+	// Handle trust deposits
+	if applicantPerm.VpState == types.ValidationState_VALIDATION_STATE_TERMINATED {
+		if applicantPerm.Deposit > 0 {
+			err = ms.trustDeposit.AdjustTrustDeposit(ctx, applicantPerm.Grantee, -int64(applicantPerm.Deposit))
+			if err != nil {
+				return nil, fmt.Errorf("failed to reduce applicant trust deposit: %w", err)
+			}
+			applicantPerm.Deposit = 0
+		}
+
+		if applicantPerm.VpValidatorDeposit > 0 {
+			validatorPerm, err := ms.Keeper.GetPermissionByID(ctx, applicantPerm.ValidatorPermId)
+			if err != nil {
+				return nil, fmt.Errorf("failed to get validator perm: %w", err)
+			}
+			err = ms.trustDeposit.AdjustTrustDeposit(ctx, validatorPerm.Grantee, -int64(applicantPerm.VpValidatorDeposit))
+			if err != nil {
+				return nil, fmt.Errorf("failed to reduce validator trust deposit: %w", err)
+			}
+			applicantPerm.VpValidatorDeposit = 0
 		}
 	}
 
@@ -323,7 +363,7 @@ func (ms msgServer) handleTerminationDeposits(ctx sdk.Context, perm *types.Permi
 			return fmt.Errorf("failed to adjust applicant trust deposit: %w", err)
 		}
 
-		// Clear the deposit in the permission
+		// Clear the deposit in the perm
 		perm.Deposit = 0
 	}
 
@@ -331,7 +371,7 @@ func (ms msgServer) handleTerminationDeposits(ctx sdk.Context, perm *types.Permi
 	if perm.VpValidatorDeposit > 0 {
 		validatorPerm, err := ms.Keeper.GetPermissionByID(ctx, perm.ValidatorPermId)
 		if err != nil {
-			return fmt.Errorf("validator permission not found: %w", err)
+			return fmt.Errorf("validator perm not found: %w", err)
 		}
 
 		// Convert to signed integer for adjustment
@@ -342,7 +382,7 @@ func (ms msgServer) handleTerminationDeposits(ctx sdk.Context, perm *types.Permi
 			return fmt.Errorf("failed to adjust validator trust deposit: %w", err)
 		}
 
-		// Clear the validator deposit in the permission
+		// Clear the validator deposit in the perm
 		perm.VpValidatorDeposit = 0
 	}
 	return nil
@@ -352,21 +392,21 @@ func (ms msgServer) ConfirmPermissionVPTermination(goCtx context.Context, msg *t
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	now := ctx.BlockTime()
 
-	// Load applicant permission
+	// Load applicant perm
 	applicantPerm, err := ms.Keeper.GetPermissionByID(ctx, msg.Id)
 	if err != nil {
-		return nil, fmt.Errorf("permission not found: %w", err)
+		return nil, fmt.Errorf("perm not found: %w", err)
 	}
 
-	// Check permission state
+	// Check perm state
 	if applicantPerm.VpState != types.ValidationState_VALIDATION_STATE_TERMINATION_REQUESTED {
-		return nil, fmt.Errorf("permission must be in TERMINATION_REQUESTED state")
+		return nil, fmt.Errorf("perm must be in TERMINATION_REQUESTED state")
 	}
 
 	// [MOD-PERM-MSG-5-2-2] Permission checks
 	validatorPerm, err := ms.Keeper.GetPermissionByID(ctx, applicantPerm.ValidatorPermId)
 	if err != nil {
-		return nil, fmt.Errorf("validator permission not found: %w", err)
+		return nil, fmt.Errorf("validator perm not found: %w", err)
 	}
 
 	// Calculate timeout
@@ -384,6 +424,24 @@ func (ms msgServer) ConfirmPermissionVPTermination(goCtx context.Context, msg *t
 		if msg.Creator != validatorPerm.Grantee && msg.Creator != applicantPerm.Grantee {
 			return nil, fmt.Errorf("only validator or applicant can confirm termination after timeout")
 		}
+	}
+
+	// Handle applicant's trust deposit
+	if applicantPerm.Deposit > 0 {
+		err = ms.trustDeposit.AdjustTrustDeposit(ctx, applicantPerm.Grantee, -int64(applicantPerm.Deposit))
+		if err != nil {
+			return nil, fmt.Errorf("failed to reduce applicant trust deposit: %w", err)
+		}
+		applicantPerm.Deposit = 0
+	}
+
+	// Handle validator's trust deposit if the validator is executing the method
+	if validatorPerm.Grantee == msg.Creator && applicantPerm.VpValidatorDeposit > 0 {
+		err = ms.trustDeposit.AdjustTrustDeposit(ctx, validatorPerm.Grantee, -int64(applicantPerm.VpValidatorDeposit))
+		if err != nil {
+			return nil, fmt.Errorf("failed to reduce validator trust deposit: %w", err)
+		}
+		applicantPerm.VpValidatorDeposit = 0
 	}
 
 	// [MOD-PERM-MSG-5-3] Execution
@@ -413,7 +471,7 @@ func (ms msgServer) executeConfirmPermissionVPTermination(ctx sdk.Context, appli
 			return fmt.Errorf("failed to adjust applicant trust deposit: %w", err)
 		}
 
-		// Clear the deposit in the permission
+		// Clear the deposit in the perm
 		applicantPerm.Deposit = 0
 	}
 
@@ -428,7 +486,7 @@ func (ms msgServer) executeConfirmPermissionVPTermination(ctx sdk.Context, appli
 			return fmt.Errorf("failed to adjust validator trust deposit: %w", err)
 		}
 
-		// Clear the validator deposit in the permission
+		// Clear the validator deposit in the perm
 		applicantPerm.VpValidatorDeposit = 0
 	}
 
@@ -439,20 +497,20 @@ func (ms msgServer) executeConfirmPermissionVPTermination(ctx sdk.Context, appli
 func (ms msgServer) CancelPermissionVPLastRequest(goCtx context.Context, msg *types.MsgCancelPermissionVPLastRequest) (*types.MsgCancelPermissionVPLastRequestResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	// Load applicant permission
+	// Load applicant perm
 	applicantPerm, err := ms.Keeper.GetPermissionByID(ctx, msg.Id)
 	if err != nil {
-		return nil, fmt.Errorf("permission not found: %w", err)
+		return nil, fmt.Errorf("perm not found: %w", err)
 	}
 
 	// Check if creator is the grantee
 	if applicantPerm.Grantee != msg.Creator {
-		return nil, fmt.Errorf("creator is not the permission grantee")
+		return nil, fmt.Errorf("creator is not the perm grantee")
 	}
 
-	// Check permission state
+	// Check perm state
 	if applicantPerm.VpState != types.ValidationState_VALIDATION_STATE_PENDING {
-		return nil, fmt.Errorf("permission must be in PENDING state")
+		return nil, fmt.Errorf("perm must be in PENDING state")
 	}
 
 	// [MOD-PERM-MSG-6-3] Execution
@@ -541,7 +599,7 @@ func (ms msgServer) CreateRootPermission(goCtx context.Context, msg *types.MsgCr
 	// [MOD-PERM-MSG-7-3] Execution
 	id, err := ms.executeCreateRootPermission(ctx, msg, now)
 	if err != nil {
-		return nil, fmt.Errorf("failed to create root permission: %w", err)
+		return nil, fmt.Errorf("failed to create root perm: %w", err)
 	}
 
 	ctx.EventManager().EmitEvents(sdk.Events{
@@ -580,7 +638,7 @@ func (ms msgServer) validateCreateRootPermissionAuthority(ctx sdk.Context, msg *
 }
 
 func (ms msgServer) executeCreateRootPermission(ctx sdk.Context, msg *types.MsgCreateRootPermission, now time.Time) (uint64, error) {
-	// Create new permission
+	// Create new perm
 	perm := types.Permission{
 		SchemaId:         msg.SchemaId,
 		Type:             types.PermissionType_PERMISSION_TYPE_ECOSYSTEM,
@@ -598,10 +656,10 @@ func (ms msgServer) executeCreateRootPermission(ctx sdk.Context, msg *types.MsgC
 		Deposit:          0,
 	}
 
-	// Store the permission
+	// Store the perm
 	id, err := ms.Keeper.CreatePermission(ctx, perm)
 	if err != nil {
-		return 0, fmt.Errorf("failed to create permission: %w", err)
+		return 0, fmt.Errorf("failed to create perm: %w", err)
 	}
 
 	return id, nil
@@ -614,7 +672,7 @@ func (ms msgServer) ExtendPermission(goCtx context.Context, msg *types.MsgExtend
 	// [MOD-PERM-MSG-8-2-1] Basic checks
 	applicantPerm, err := ms.Keeper.GetPermissionByID(ctx, msg.Id)
 	if err != nil {
-		return nil, fmt.Errorf("permission not found: %w", err)
+		return nil, fmt.Errorf("perm not found: %w", err)
 	}
 
 	// Check effective_until is after current effective_until
@@ -627,14 +685,14 @@ func (ms msgServer) ExtendPermission(goCtx context.Context, msg *types.MsgExtend
 		return nil, fmt.Errorf("effective_until cannot be after validation expiration")
 	}
 
-	// [MOD-PERM-MSG-8-2-2] Validator permission checks
+	// [MOD-PERM-MSG-8-2-2] Validator perm checks
 	if err := ms.validateExtendPermissionAuthority(ctx, msg.Creator, applicantPerm); err != nil {
 		return nil, err
 	}
 
 	// [MOD-PERM-MSG-8-3] Execution
 	if err := ms.executeExtendPermission(ctx, applicantPerm, msg.Creator, msg.EffectiveUntil, now); err != nil {
-		return nil, fmt.Errorf("failed to extend permission: %w", err)
+		return nil, fmt.Errorf("failed to extend perm: %w", err)
 	}
 
 	return &types.MsgExtendPermissionResponse{}, nil
@@ -645,20 +703,20 @@ func (ms msgServer) validateExtendPermissionAuthority(ctx sdk.Context, creator s
 		// For TRUST_REGISTRY type, creator must be the grantee
 		if perm.Type == types.PermissionType_PERMISSION_TYPE_ECOSYSTEM {
 			if perm.Grantee != creator {
-				return fmt.Errorf("creator is not the permission grantee")
+				return fmt.Errorf("creator is not the perm grantee")
 			}
 		} else {
-			return fmt.Errorf("invalid permission type for extension")
+			return fmt.Errorf("invalid perm type for extension")
 		}
 	} else {
 		// For other types, creator must be the validator
 		validatorPerm, err := ms.Keeper.GetPermissionByID(ctx, perm.ValidatorPermId)
 		if err != nil {
-			return fmt.Errorf("validator permission not found: %w", err)
+			return fmt.Errorf("validator perm not found: %w", err)
 		}
 
 		if err = IsValidPermission(validatorPerm, perm.Country, ctx.BlockTime()); err != nil {
-			return fmt.Errorf("validator permission is not valid: %w", err)
+			return fmt.Errorf("validator perm is not valid: %w", err)
 		}
 
 		if validatorPerm.Grantee != creator {
@@ -685,26 +743,48 @@ func (ms msgServer) RevokePermission(goCtx context.Context, msg *types.MsgRevoke
 	// [MOD-PERM-MSG-9-2-1] Basic checks
 	applicantPerm, err := ms.Keeper.GetPermissionByID(ctx, msg.Id)
 	if err != nil {
-		return nil, fmt.Errorf("permission not found: %w", err)
+		return nil, fmt.Errorf("perm not found: %w", err)
 	}
 
-	// [MOD-PERM-MSG-9-2-2] Validator permission checks
+	// [MOD-PERM-MSG-9-2-2] Validator perm checks
 	validatorPerm, err := ms.Keeper.GetPermissionByID(ctx, applicantPerm.ValidatorPermId)
 	if err != nil {
-		return nil, fmt.Errorf("validator permission not found: %w", err)
+		return nil, fmt.Errorf("validator perm not found: %w", err)
 	}
 
 	if err := IsValidPermission(validatorPerm, applicantPerm.Country, ctx.BlockTime()); err != nil {
-		return nil, fmt.Errorf("validator permission is not valid: %w", err)
+		return nil, fmt.Errorf("validator perm is not valid: %w", err)
 	}
 
 	if validatorPerm.Grantee != msg.Creator {
 		return nil, fmt.Errorf("creator is not the validator")
 	}
 
+	// Handle applicant's trust deposit
+	if applicantPerm.Deposit > 0 {
+		err = ms.trustDeposit.AdjustTrustDeposit(ctx, applicantPerm.Grantee, -int64(applicantPerm.Deposit))
+		if err != nil {
+			return nil, fmt.Errorf("failed to reduce applicant trust deposit: %w", err)
+		}
+		applicantPerm.Deposit = 0
+	}
+
+	// Handle validator's trust deposit
+	if applicantPerm.VpValidatorDeposit > 0 {
+		validatorPerm, err := ms.Keeper.GetPermissionByID(ctx, applicantPerm.ValidatorPermId)
+		if err != nil {
+			return nil, fmt.Errorf("failed to get validator perm: %w", err)
+		}
+		err = ms.trustDeposit.AdjustTrustDeposit(ctx, validatorPerm.Grantee, -int64(applicantPerm.VpValidatorDeposit))
+		if err != nil {
+			return nil, fmt.Errorf("failed to reduce validator trust deposit: %w", err)
+		}
+		applicantPerm.VpValidatorDeposit = 0
+	}
+
 	// [MOD-PERM-MSG-9-3] Execution
 	if err := ms.executeRevokePermission(ctx, applicantPerm, msg.Creator, now); err != nil {
-		return nil, fmt.Errorf("failed to revoke permission: %w", err)
+		return nil, fmt.Errorf("failed to revoke perm: %w", err)
 	}
 
 	return &types.MsgRevokePermissionResponse{}, nil
@@ -741,67 +821,67 @@ func (ms msgServer) CreateOrUpdatePermissionSession(goCtx context.Context, msg *
 	// Define variables for issuerPerm and verifierPerm
 	var verifierPerm *types.Permission
 
-	// Load and validate issuer permission if specified
+	// Load and validate issuer perm if specified
 	if msg.IssuerPermId != 0 {
 		perm, err := ms.Permission.Get(ctx, msg.IssuerPermId)
 		if err != nil {
-			return nil, sdkerrors.ErrNotFound.Wrapf("issuer permission not found: %v", err)
+			return nil, sdkerrors.ErrNotFound.Wrapf("issuer perm not found: %v", err)
 		}
 
 		if perm.Type != types.PermissionType_PERMISSION_TYPE_ISSUER {
-			return nil, sdkerrors.ErrInvalidRequest.Wrap("issuer permission must be ISSUER type")
+			return nil, sdkerrors.ErrInvalidRequest.Wrap("issuer perm must be ISSUER type")
 		}
 
-		if perm.Revoked != nil || perm.Terminated != nil {
-			return nil, sdkerrors.ErrInvalidRequest.Wrap("issuer permission is revoked or terminated")
+		if perm.Revoked != nil || perm.Terminated != nil || perm.SlashedDeposit > 0 {
+			return nil, sdkerrors.ErrInvalidRequest.Wrap("issuer perm is revoked, terminated, or slashed")
 		}
 	}
 
-	// Load and validate verifier permission if specified
+	// Load and validate verifier perm if specified
 	if msg.VerifierPermId != 0 {
 		perm, err := ms.Permission.Get(ctx, msg.VerifierPermId)
 		if err != nil {
-			return nil, sdkerrors.ErrNotFound.Wrapf("verifier permission not found: %v", err)
+			return nil, sdkerrors.ErrNotFound.Wrapf("verifier perm not found: %v", err)
 		}
 
 		if perm.Type != types.PermissionType_PERMISSION_TYPE_VERIFIER {
-			return nil, sdkerrors.ErrInvalidRequest.Wrap("verifier permission must be VERIFIER type")
+			return nil, sdkerrors.ErrInvalidRequest.Wrap("verifier perm must be VERIFIER type")
 		}
 
-		if perm.Revoked != nil || perm.Terminated != nil {
-			return nil, sdkerrors.ErrInvalidRequest.Wrap("verifier permission is revoked or terminated")
+		if perm.Revoked != nil || perm.Terminated != nil || perm.SlashedDeposit > 0 {
+			return nil, sdkerrors.ErrInvalidRequest.Wrap("verifier perm is revoked, terminated, or slashed")
 		}
 
 		verifierPerm = &perm
 	}
 
-	// Validate agent permission
+	// Validate agent perm
 	agentPerm, err := ms.Permission.Get(ctx, msg.AgentPermId)
 	if err != nil {
-		return nil, sdkerrors.ErrNotFound.Wrap("agent permission not found")
+		return nil, sdkerrors.ErrNotFound.Wrap("agent perm not found")
 	}
 
 	if agentPerm.Type != types.PermissionType_PERMISSION_TYPE_HOLDER {
-		return nil, sdkerrors.ErrInvalidRequest.Wrap("agent permission must be HOLDER type")
+		return nil, sdkerrors.ErrInvalidRequest.Wrap("agent perm must be HOLDER type")
 	}
 
-	if agentPerm.Revoked != nil || agentPerm.Terminated != nil {
-		return nil, sdkerrors.ErrInvalidRequest.Wrap("agent permission is revoked or terminated")
+	if agentPerm.Revoked != nil || agentPerm.Terminated != nil || agentPerm.SlashedDeposit > 0 {
+		return nil, sdkerrors.ErrInvalidRequest.Wrap("agent perm is revoked, terminated, or slashed")
 	}
 
-	// Validate wallet agent permission if provided
+	// Validate wallet agent perm if provided
 	if msg.WalletAgentPermId != 0 {
 		perm, err := ms.Permission.Get(ctx, msg.WalletAgentPermId)
 		if err != nil {
-			return nil, sdkerrors.ErrNotFound.Wrap("wallet agent permission not found")
+			return nil, sdkerrors.ErrNotFound.Wrap("wallet agent perm not found")
 		}
 
 		if perm.Type != types.PermissionType_PERMISSION_TYPE_HOLDER {
-			return nil, sdkerrors.ErrInvalidRequest.Wrap("wallet agent permission must be HOLDER type")
+			return nil, sdkerrors.ErrInvalidRequest.Wrap("wallet agent perm must be HOLDER type")
 		}
 
-		if perm.Revoked != nil || perm.Terminated != nil {
-			return nil, sdkerrors.ErrInvalidRequest.Wrap("wallet agent permission is revoked or terminated")
+		if perm.Revoked != nil || perm.Terminated != nil || perm.SlashedDeposit > 0 {
+			return nil, sdkerrors.ErrInvalidRequest.Wrap("wallet agent perm is revoked, terminated, or slashed")
 		}
 
 	}
@@ -873,4 +953,360 @@ func (ms msgServer) CreateOrUpdatePermissionSession(goCtx context.Context, msg *
 	return &types.MsgCreateOrUpdatePermissionSessionResponse{
 		Id: msg.Id,
 	}, nil
+}
+
+// SlashPermissionTrustDeposit handles the MsgSlashPermissionTrustDeposit message
+func (ms msgServer) SlashPermissionTrustDeposit(goCtx context.Context, msg *types.MsgSlashPermissionTrustDeposit) (*types.MsgSlashPermissionTrustDepositResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Load Permission entry applicant_perm from id
+	applicantPerm, err := ms.Keeper.GetPermissionByID(ctx, msg.Id)
+	if err != nil {
+		return nil, fmt.Errorf("perm not found: %w", err)
+	}
+
+	// applicant_perm MUST be a valid perm
+	//if applicantPerm.Revoked != nil || applicantPerm.Terminated != nil {
+	//	return nil, fmt.Errorf("perm is not valid (revoked or terminated)")
+	//}
+
+	// amount MUST be lower or equal to applicant_perm.deposit
+	if msg.Amount > applicantPerm.Deposit {
+		return nil, fmt.Errorf("amount exceeds available deposit: %d > %d", msg.Amount, applicantPerm.Deposit)
+	}
+
+	// [MOD-PERM-MSG-12-2-2] Slash Permission Trust Deposit validator perms
+	hasSlashingAuthority := false
+
+	// Option #1: executed by validator
+	if applicantPerm.ValidatorPermId != 0 {
+		validatorPerm, err := ms.Keeper.GetPermissionByID(ctx, applicantPerm.ValidatorPermId)
+		if err == nil && validatorPerm.Revoked == nil && validatorPerm.Terminated == nil {
+			if validatorPerm.Grantee == msg.Creator {
+				hasSlashingAuthority = true
+			}
+		}
+	}
+
+	// Option #2: executed by ecosystem controller
+	if !hasSlashingAuthority {
+		ecosystemPerm, err := ms.findEcosystemPermissionForSchema(ctx, applicantPerm.SchemaId)
+		if err == nil {
+			if ecosystemPerm.Grantee == msg.Creator {
+				hasSlashingAuthority = true
+			}
+		}
+	}
+
+	if !hasSlashingAuthority {
+		return nil, fmt.Errorf("creator does not have authority to slash this perm")
+	}
+
+	// [MOD-PERM-MSG-12-2-3] Slash Permission Trust Deposit fee checks
+	// Account executing the method MUST have the required estimated transaction fees
+	// This is handled by the SDK automatically
+
+	// [MOD-PERM-MSG-12-3] Slash Permission Trust Deposit execution
+	if err := ms.executeSlashPermissionTrustDeposit(ctx, applicantPerm, msg.Amount, msg.Creator); err != nil {
+		return nil, fmt.Errorf("failed to slash perm trust deposit: %w", err)
+	}
+
+	// Emit event
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeSlashPermissionTrustDeposit,
+			sdk.NewAttribute(types.AttributeKeyPermissionID, strconv.FormatUint(msg.Id, 10)),
+			sdk.NewAttribute(types.AttributeKeySlashedAmount, strconv.FormatUint(msg.Amount, 10)),
+			sdk.NewAttribute(types.AttributeKeySlashedBy, msg.Creator),
+			sdk.NewAttribute(types.AttributeKeyTimestamp, ctx.BlockTime().String()),
+		),
+	})
+
+	return &types.MsgSlashPermissionTrustDepositResponse{}, nil
+}
+
+// executeSlashPermissionTrustDeposit performs the actual slashing execution
+func (ms msgServer) executeSlashPermissionTrustDeposit(ctx sdk.Context, applicantPerm types.Permission, amount uint64, slashedBy string) error {
+	now := ctx.BlockTime()
+
+	// Update Permission entry applicant_perm
+	applicantPerm.Slashed = &now
+	applicantPerm.Modified = &now
+	applicantPerm.SlashedDeposit = applicantPerm.SlashedDeposit + amount
+	applicantPerm.SlashedBy = slashedBy
+
+	// This functionality doesn't exist yet, so commenting out for now
+	if err := ms.trustDeposit.BurnEcosystemSlashedTrustDeposit(ctx, applicantPerm.Grantee, amount); err != nil {
+		return fmt.Errorf("failed to burn trust deposit: %w", err)
+	}
+
+	// Update perm
+	if err := ms.Keeper.UpdatePermission(ctx, applicantPerm); err != nil {
+		return fmt.Errorf("failed to update perm: %w", err)
+	}
+
+	return nil
+}
+
+// findEcosystemPermissionForSchema finds the ECOSYSTEM perm for a given schema
+func (ms msgServer) findEcosystemPermissionForSchema(ctx sdk.Context, schemaId uint64) (types.Permission, error) {
+	var ecosystemPerm types.Permission
+	var found bool
+
+	err := ms.Permission.Walk(ctx, nil, func(key uint64, perm types.Permission) (bool, error) {
+		if perm.Type == types.PermissionType_PERMISSION_TYPE_ECOSYSTEM &&
+			perm.SchemaId == schemaId &&
+			perm.Revoked == nil &&
+			perm.Terminated == nil {
+			ecosystemPerm = perm
+			found = true
+			return true, nil // Stop iteration
+		}
+		return false, nil
+	})
+
+	if err != nil {
+		return types.Permission{}, err
+	}
+
+	if !found {
+		return types.Permission{}, fmt.Errorf("ecosystem perm not found for schema %d", schemaId)
+	}
+
+	return ecosystemPerm, nil
+}
+
+// RepayPermissionSlashedTrustDeposit handles the MsgRepayPermissionSlashedTrustDeposit message
+func (ms msgServer) RepayPermissionSlashedTrustDeposit(goCtx context.Context, msg *types.MsgRepayPermissionSlashedTrustDeposit) (*types.MsgRepayPermissionSlashedTrustDepositResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Load Permission entry applicant_perm from id
+	applicantPerm, err := ms.Keeper.GetPermissionByID(ctx, msg.Id)
+	if err != nil {
+		return nil, fmt.Errorf("perm not found: %w", err)
+	}
+
+	// Check if perm has been slashed
+	if applicantPerm.SlashedDeposit == 0 {
+		return nil, fmt.Errorf("perm has no slashed deposit to repay")
+	}
+
+	// Check if already repaid
+	if applicantPerm.RepaidDeposit >= applicantPerm.SlashedDeposit {
+		return nil, fmt.Errorf("slashed deposit already fully repaid")
+	}
+
+	// Calculate amount to repay (remaining slashed amount)
+	amountToRepay := applicantPerm.SlashedDeposit - applicantPerm.RepaidDeposit
+
+	// [MOD-PERM-MSG-13-2-3] Repay Permission Slashed Trust Deposit fee checks
+	// Account must have transaction fees + slashed_deposit amount
+	senderAddr, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+		return nil, fmt.Errorf("invalid creator address: %w", err)
+	}
+
+	// Check if sender has sufficient balance for repayment
+	requiredAmount := sdk.NewCoins(sdk.NewInt64Coin(types.BondDenom, int64(amountToRepay)))
+	if !ms.bankKeeper.HasBalance(ctx, senderAddr, requiredAmount[0]) {
+		return nil, fmt.Errorf("insufficient funds to repay slashed deposit: required %d", amountToRepay)
+	}
+
+	// [MOD-PERM-MSG-13-3] Repay Permission Slashed Trust Deposit execution
+	if err := ms.executeRepayPermissionSlashedTrustDeposit(ctx, applicantPerm, amountToRepay, msg.Creator); err != nil {
+		return nil, fmt.Errorf("failed to repay perm slashed trust deposit: %w", err)
+	}
+
+	// Emit event
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeRepayPermissionSlashedTrustDeposit,
+			sdk.NewAttribute(types.AttributeKeyPermissionID, strconv.FormatUint(msg.Id, 10)),
+			sdk.NewAttribute(types.AttributeKeyRepaidAmount, strconv.FormatUint(amountToRepay, 10)),
+			sdk.NewAttribute(types.AttributeKeyRepaidBy, msg.Creator),
+			sdk.NewAttribute(types.AttributeKeyTimestamp, ctx.BlockTime().String()),
+		),
+	})
+
+	return &types.MsgRepayPermissionSlashedTrustDepositResponse{}, nil
+}
+
+// executeRepayPermissionSlashedTrustDeposit performs the actual repayment execution
+func (ms msgServer) executeRepayPermissionSlashedTrustDeposit(ctx sdk.Context, applicantPerm types.Permission, amount uint64, repaidBy string) error {
+	now := ctx.BlockTime()
+
+	// Transfer repayment amount from repayer to trust deposit module
+	senderAddr, err := sdk.AccAddressFromBech32(repaidBy)
+	if err != nil {
+		return fmt.Errorf("invalid repaid_by address: %w", err)
+	}
+
+	// Transfer tokens from repayer to trust deposit module
+	if err := ms.bankKeeper.SendCoinsFromAccountToModule(
+		ctx,
+		senderAddr,
+		trustdeposittypes.ModuleName, //to the trust deposit module
+		sdk.NewCoins(sdk.NewInt64Coin(types.BondDenom, int64(amount))),
+	); err != nil {
+		return fmt.Errorf("failed to transfer repayment: %w", err)
+	}
+
+	// Update Permission entry applicant_perm
+	applicantPerm.Repaid = &now
+	applicantPerm.Modified = &now
+	applicantPerm.RepaidDeposit = amount
+	applicantPerm.RepaidBy = repaidBy
+
+	// Use AdjustTrustDeposit to transfer amount to trust deposit of applicant_perm.grantee
+	if err := ms.trustDeposit.AdjustTrustDeposit(ctx, applicantPerm.Grantee, int64(amount)); err != nil {
+		return fmt.Errorf("failed to adjust trust deposit: %w", err)
+	}
+
+	// Update perm
+	if err := ms.Keeper.UpdatePermission(ctx, applicantPerm); err != nil {
+		return fmt.Errorf("failed to update perm: %w", err)
+	}
+
+	return nil
+}
+
+// CreatePermission handles the MsgCreatePermission message
+func (ms msgServer) CreatePermission(goCtx context.Context, msg *types.MsgCreatePermission) (*types.MsgCreatePermissionResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// type MUST be ISSUER or VERIFIER
+	if msg.Type != types.PermissionType_PERMISSION_TYPE_ISSUER &&
+		msg.Type != types.PermissionType_PERMISSION_TYPE_VERIFIER {
+		return nil, fmt.Errorf("type must be ISSUER or VERIFIER")
+	}
+
+	// effective_from must be in the future
+	now := ctx.BlockTime()
+	if msg.EffectiveFrom != nil && !msg.EffectiveFrom.After(now) {
+		return nil, fmt.Errorf("effective_from must be in the future")
+	}
+
+	// effective_until must be greater than effective_from
+	if msg.EffectiveUntil != nil && msg.EffectiveFrom != nil {
+		if !msg.EffectiveUntil.After(*msg.EffectiveFrom) {
+			return nil, fmt.Errorf("effective_until must be greater than effective_from")
+		}
+	}
+
+	// country validation
+	if msg.Country != "" && !isValidCountryCode(msg.Country) {
+		return nil, fmt.Errorf("invalid country code format")
+	}
+
+	// verification_fees must be >= 0 (uint64 is naturally >= 0)
+
+	// Load credential schema
+	cs, err := ms.credentialSchemaKeeper.GetCredentialSchemaById(ctx, msg.SchemaId)
+	if err != nil {
+		return nil, fmt.Errorf("credential schema not found: %w", err)
+	}
+
+	// [MOD-PERM-MSG-14-2-2] Create Permission perm checks
+	if msg.Type == types.PermissionType_PERMISSION_TYPE_ISSUER {
+		if cs.IssuerPermManagementMode != credentialschematypes.CredentialSchemaPermManagementMode_OPEN {
+			return nil, fmt.Errorf("issuer perm management mode is not OPEN")
+		}
+	} else if msg.Type == types.PermissionType_PERMISSION_TYPE_VERIFIER {
+		if cs.VerifierPermManagementMode != credentialschematypes.CredentialSchemaPermManagementMode_OPEN {
+			return nil, fmt.Errorf("verifier perm management mode is not OPEN")
+		}
+	}
+
+	// [MOD-PERM-MSG-14-3] Create Permission execution
+	permissionId, err := ms.executeCreatePermission(ctx, msg, now)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create perm: %w", err)
+	}
+
+	// Emit event
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeCreatePermission,
+			sdk.NewAttribute(types.AttributeKeyPermissionID, strconv.FormatUint(permissionId, 10)),
+			sdk.NewAttribute(types.AttributeKeySchemaID, strconv.FormatUint(msg.SchemaId, 10)),
+			sdk.NewAttribute(types.AttributeKeyCreator, msg.Creator),
+			sdk.NewAttribute(types.AttributeKeyTimestamp, now.String()),
+		),
+	})
+
+	return &types.MsgCreatePermissionResponse{
+		Id: permissionId,
+	}, nil
+}
+
+// executeCreatePermission performs the actual perm creation
+func (ms msgServer) executeCreatePermission(ctx sdk.Context, msg *types.MsgCreatePermission, now time.Time) (uint64, error) {
+	// Load credential schema
+	cs, err := ms.credentialSchemaKeeper.GetCredentialSchemaById(ctx, msg.SchemaId)
+	if err != nil {
+		return 0, fmt.Errorf("credential schema not found: %w", err)
+	}
+
+	// Find the ecosystem perm for this schema
+	ecosystemPerm, err := ms.findEcosystemPermission(ctx, cs)
+	if err != nil {
+		return 0, fmt.Errorf("failed to find ecosystem perm: %w", err)
+	}
+
+	// Create new Permission entry
+	perm := types.Permission{
+		SchemaId:         msg.SchemaId,
+		Type:             msg.Type,
+		Did:              msg.Did,
+		Grantee:          msg.Creator,
+		Created:          &now,
+		CreatedBy:        msg.Creator,
+		Modified:         &now,
+		EffectiveFrom:    msg.EffectiveFrom,
+		EffectiveUntil:   msg.EffectiveUntil,
+		Country:          msg.Country,
+		VerificationFees: msg.VerificationFees,
+		VpState:          types.ValidationState_VALIDATION_STATE_VALIDATED,
+		ValidatorPermId:  ecosystemPerm.Id, // Set the ecosystem perm as the validator
+	}
+
+	// Store the perm
+	id, err := ms.Keeper.CreatePermission(ctx, perm)
+	if err != nil {
+		return 0, fmt.Errorf("failed to create perm: %w", err)
+	}
+
+	return id, nil
+}
+
+// findEcosystemPermission finds the ecosystem perm for a given credential schema
+func (ms msgServer) findEcosystemPermission(ctx sdk.Context, cs credentialschematypes.CredentialSchema) (types.Permission, error) {
+	var foundPerm types.Permission
+	var found bool
+
+	// Iterate through all permissions to find the ecosystem perm for this schema
+	err := ms.Permission.Walk(ctx, nil, func(id uint64, perm types.Permission) (stop bool, err error) {
+		if perm.SchemaId == cs.Id && perm.Type == types.PermissionType_PERMISSION_TYPE_ECOSYSTEM {
+			foundPerm = perm
+			found = true
+			return true, nil
+		}
+		return false, nil
+	})
+
+	if err != nil {
+		return types.Permission{}, fmt.Errorf("failed to iterate permissions: %w", err)
+	}
+
+	if !found {
+		return types.Permission{}, fmt.Errorf("ecosystem perm not found for schema %d", cs.Id)
+	}
+
+	return foundPerm, nil
+}
+
+// GetTrustDepositRate returns the trust deposit rate from the trust deposit module
+func (ms msgServer) GetTrustDepositRate(ctx sdk.Context) uint64 {
+	rate := ms.trustDeposit.GetTrustDepositRate(ctx)
+	return uint64(rate.MulInt64(100).RoundInt64()) // Convert to percentage and then to uint64
 }

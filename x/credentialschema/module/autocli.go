@@ -3,7 +3,7 @@ package credentialschema
 import (
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
 
-	modulev1 "github.com/verana-labs/verana-blockchain/api/veranablockchain/credentialschema"
+	modulev1 "github.com/verana-labs/verana-blockchain/api/verana/cs/v1"
 )
 
 // AutoCLIOptions implements the autocli.HasAutoCLIConfig interface.
@@ -23,8 +23,8 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:     "List credential schemas with optional filters",
 					Long: `List credential schemas with optional filters.
 Example:
-$ veranad query credentialschema list-schemas
-$ veranad query credentialschema list-schemas --tr_id 1 --modified_after 2024-01-01T00:00:00Z --response_max_size 100`,
+$ veranad query cs list-schemas
+$ veranad query cs list-schemas --tr_id 1 --modified_after 2024-01-01T00:00:00Z --response_max_size 100`,
 					FlagOptions: map[string]*autocliv1.FlagOptions{
 						"tr_id": {
 							Name:         "tr_id",
@@ -50,7 +50,7 @@ $ veranad query credentialschema list-schemas --tr_id 1 --modified_after 2024-01
 					Long: `Get a credential schema by its ID.
 
 Example:
-$ veranad query credentialschema get 1`,
+$ veranad query cs get 1`,
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "id"},
 					},
@@ -63,7 +63,7 @@ $ veranad query credentialschema get 1`,
 Response will be in application/schema+json format.
 
 Example:
-$ veranad query credentialschema schema 1`,
+$ veranad query cs schema 1`,
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{
 							ProtoField: "id",
@@ -93,11 +93,11 @@ $ veranad query credentialschema schema 1`,
 - issuer-period: validation period for issuers (days)
 - verifier-period: validation period for verifiers (days)
 - holder-period: validation period for holders (days)
-- issuer-mode: permission management mode for issuers (1=OPEN, 2=GRANTOR_VALIDATION, 3=TRUST_REGISTRY_VALIDATION)
-- verifier-mode: permission management mode for verifiers (1=OPEN, 2=GRANTOR_VALIDATION, 3=TRUST_REGISTRY_VALIDATION)
+- issuer-mode: perm management mode for issuers (1=OPEN, 2=GRANTOR_VALIDATION, 3=TRUST_REGISTRY_VALIDATION)
+- verifier-mode: perm management mode for verifiers (1=OPEN, 2=GRANTOR_VALIDATION, 3=TRUST_REGISTRY_VALIDATION)
 
 Example:
-$ veranad tx credentialschema create-credential-schema 1 schema.json 365 365 180 180 180 2 2`,
+$ veranad tx cs create-credential-schema 1 schema.json 365 365 180 180 180 2 2`,
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{
 							ProtoField: "tr_id",

@@ -4,13 +4,15 @@ import "cosmossdk.io/collections"
 
 const (
 	// ModuleName defines the module name
-	ModuleName = "trustdeposit"
+	ModuleName = "td"
 
 	// StoreKey defines the primary module store key
 	StoreKey = ModuleName
 
 	// MemStoreKey defines the in-memory store key
 	MemStoreKey = "mem_trustdeposit"
+
+	RouterKey = ModuleName
 )
 
 var (

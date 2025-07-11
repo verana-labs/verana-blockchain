@@ -20,7 +20,7 @@ import (
 
 	// this line is used by starport scaffolding # 1
 
-	modulev1 "github.com/verana-labs/verana-blockchain/api/veranablockchain/diddirectory/module"
+	modulev1 "github.com/verana-labs/verana-blockchain/api/verana/dd/module"
 	"github.com/verana-labs/verana-blockchain/x/diddirectory/keeper"
 	"github.com/verana-labs/verana-blockchain/x/diddirectory/types"
 )

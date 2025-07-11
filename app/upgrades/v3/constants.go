@@ -12,7 +12,7 @@ var Upgrade = types.Upgrade{
 	CreateUpgradeHandler: CreateUpgradeHandler,
 	StoreUpgrades: store.StoreUpgrades{
 		Added: []string{
-			"credentialschema",
+			"cs",
 			"cspermission",
 		},
 		Deleted: []string{},

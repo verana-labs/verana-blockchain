@@ -2,17 +2,18 @@ package keeper
 
 import (
 	"context"
-	"cosmossdk.io/collections"
 	errors2 "errors"
 	"fmt"
+	"regexp"
+	"sort"
+	"time"
+
+	"cosmossdk.io/collections"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	credentialschematypes "github.com/verana-labs/verana-blockchain/x/credentialschema/types"
 	"github.com/verana-labs/verana-blockchain/x/permission/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"regexp"
-	"sort"
-	"time"
 )
 
 var _ types.QueryServer = Keeper{}
@@ -69,16 +70,16 @@ func (k Keeper) GetPermission(goCtx context.Context, req *types.QueryGetPermissi
 
 	// [MOD-PERM-QRY-2-2] Checks
 	if req.Id == 0 {
-		return nil, status.Error(codes.InvalidArgument, "permission ID cannot be 0")
+		return nil, status.Error(codes.InvalidArgument, "perm ID cannot be 0")
 	}
 
 	// [MOD-PERM-QRY-2-3] Execution
 	permission, err := k.Permission.Get(ctx, req.Id)
 	if err != nil {
 		if errors2.Is(collections.ErrNotFound, err) {
-			return nil, status.Error(codes.NotFound, "permission not found")
+			return nil, status.Error(codes.NotFound, "perm not found")
 		}
-		return nil, status.Error(codes.Internal, fmt.Sprintf("failed to get permission: %v", err))
+		return nil, status.Error(codes.Internal, fmt.Sprintf("failed to get perm: %v", err))
 	}
 
 	return &types.QueryGetPermissionResponse{
@@ -166,15 +167,15 @@ func (k Keeper) FindPermissionsWithDID(goCtx context.Context, req *types.QueryFi
 
 	// Check type - convert uint32 to PermissionType
 	if req.Type == 0 {
-		return nil, status.Error(codes.InvalidArgument, "permission type is required")
+		return nil, status.Error(codes.InvalidArgument, "perm type is required")
 	}
 
-	// Validate permission type value is in range
+	// Validate perm type value is in range
 	permType := types.PermissionType(req.Type)
 	if permType < types.PermissionType_PERMISSION_TYPE_ISSUER ||
 		permType > types.PermissionType_PERMISSION_TYPE_HOLDER {
 		return nil, status.Error(codes.InvalidArgument,
-			fmt.Sprintf("invalid permission type value: %d, must be between 1 and 6", req.Type))
+			fmt.Sprintf("invalid perm type value: %d, must be between 1 and 6", req.Type))
 	}
 
 	// Check schema ID
@@ -241,9 +242,9 @@ func (k Keeper) FindPermissionsWithDID(goCtx context.Context, req *types.QueryFi
 	}
 
 	// If we're in OPEN mode and didn't find any explicit permissions,
-	// check if there's an ECOSYSTEM permission that handles fees
+	// check if there's an ECOSYSTEM perm that handles fees
 	if isOpenMode && len(foundPerms) == 0 {
-		// Find ECOSYSTEM permission for this schema
+		// Find ECOSYSTEM perm for this schema
 		var ecosystemPerm types.Permission
 		ecosystemPermFound := false
 
@@ -264,13 +265,13 @@ func (k Keeper) FindPermissionsWithDID(goCtx context.Context, req *types.QueryFi
 		})
 
 		if err != nil {
-			return nil, status.Error(codes.Internal, fmt.Sprintf("failed to query ECOSYSTEM permission: %v", err))
+			return nil, status.Error(codes.Internal, fmt.Sprintf("failed to query ECOSYSTEM perm: %v", err))
 		}
 
-		// In OPEN mode, if we found an ECOSYSTEM permission, we can consider the DID
-		// authorized even without an explicit permission record
+		// In OPEN mode, if we found an ECOSYSTEM perm, we can consider the DID
+		// authorized even without an explicit perm record
 		if ecosystemPermFound {
-			// Include a note in the response that this is an implicit permission in OPEN mode
+			// Include a note in the response that this is an implicit perm in OPEN mode
 			ecosystemPerm.VpSummaryDigestSri = "OPEN_MODE_IMPLICIT_PERMISSION"
 			foundPerms = append(foundPerms, ecosystemPerm)
 		}
@@ -281,7 +282,7 @@ func (k Keeper) FindPermissionsWithDID(goCtx context.Context, req *types.QueryFi
 	}, nil
 }
 
-// Helper function to check if a permission is valid at a specific time
+// Helper function to check if a perm is valid at a specific time
 func isPermissionValidAtTime(perm types.Permission, when time.Time) bool {
 	// Check effective_from
 	if perm.EffectiveFrom != nil && when.Before(*perm.EffectiveFrom) {
@@ -300,6 +301,11 @@ func isPermissionValidAtTime(perm types.Permission, when time.Time) bool {
 
 	// Check terminated
 	if perm.Terminated != nil && !when.Before(*perm.Terminated) {
+		return false
+	}
+
+	// Check slashed
+	if perm.SlashedDeposit > 0 {
 		return false
 	}
 
@@ -335,21 +341,21 @@ func (k Keeper) FindBeneficiaries(goCtx context.Context, req *types.QueryFindBen
 	var issuerPerm, verifierPerm *types.Permission
 	var schemaID uint64
 
-	// Load issuer permission if specified
+	// Load issuer perm if specified
 	if req.IssuerPermId != 0 {
 		perm, err := k.Permission.Get(ctx, req.IssuerPermId)
 		if err != nil {
-			return nil, status.Error(codes.NotFound, fmt.Sprintf("issuer permission not found: %v", err))
+			return nil, status.Error(codes.NotFound, fmt.Sprintf("issuer perm not found: %v", err))
 		}
 		issuerPerm = &perm
 		schemaID = perm.SchemaId
 	}
 
-	// Load verifier permission if specified
+	// Load verifier perm if specified
 	if req.VerifierPermId != 0 {
 		perm, err := k.Permission.Get(ctx, req.VerifierPermId)
 		if err != nil {
-			return nil, status.Error(codes.NotFound, fmt.Sprintf("verifier permission not found: %v", err))
+			return nil, status.Error(codes.NotFound, fmt.Sprintf("verifier perm not found: %v", err))
 		}
 		verifierPerm = &perm
 		if schemaID == 0 {
@@ -357,13 +363,13 @@ func (k Keeper) FindBeneficiaries(goCtx context.Context, req *types.QueryFindBen
 		}
 	}
 
-	// Get schema to check permission management mode
+	// Get schema to check perm management mode
 	cs, err := k.credentialSchemaKeeper.GetCredentialSchemaById(ctx, schemaID)
 	if err != nil {
 		return nil, status.Error(codes.NotFound, fmt.Sprintf("credential schema not found: %v", err))
 	}
 
-	// Check if schema is configured with OPEN permission management mode
+	// Check if schema is configured with OPEN perm management mode
 	isIssuerOpenMode := false
 	isVerifierOpenMode := false
 
@@ -376,9 +382,9 @@ func (k Keeper) FindBeneficiaries(goCtx context.Context, req *types.QueryFindBen
 	}
 
 	// Handle OPEN mode case
-	// If in OPEN mode, we need to find the ECOSYSTEM permission for this schema
+	// If in OPEN mode, we need to find the ECOSYSTEM perm for this schema
 	if (req.IssuerPermId != 0 && isIssuerOpenMode) || (req.VerifierPermId != 0 && isVerifierOpenMode) {
-		// Find ECOSYSTEM permission for this schema
+		// Find ECOSYSTEM perm for this schema
 		var ecosystemPerm types.Permission
 		ecosystemPermFound := false
 
@@ -394,11 +400,11 @@ func (k Keeper) FindBeneficiaries(goCtx context.Context, req *types.QueryFindBen
 		})
 
 		if err != nil {
-			return nil, status.Error(codes.Internal, fmt.Sprintf("failed to query ECOSYSTEM permission: %v", err))
+			return nil, status.Error(codes.Internal, fmt.Sprintf("failed to query ECOSYSTEM perm: %v", err))
 		}
 
 		if ecosystemPermFound {
-			// For OPEN mode, the only beneficiary is the ECOSYSTEM permission
+			// For OPEN mode, the only beneficiary is the ECOSYSTEM perm
 			permissions := []types.Permission{ecosystemPerm}
 			return &types.QueryFindBeneficiariesResponse{
 				Permissions: permissions,
@@ -406,12 +412,12 @@ func (k Keeper) FindBeneficiaries(goCtx context.Context, req *types.QueryFindBen
 		}
 	}
 
-	// If not in OPEN mode or ECOSYSTEM permission not found, proceed with normal hierarchy traversal
+	// If not in OPEN mode or ECOSYSTEM perm not found, proceed with normal hierarchy traversal
 	// [MOD-PERM-QRY-4-3] Execution
 	// Use a map to implement the set functionality
 	foundPermMap := make(map[uint64]types.Permission)
 
-	// Process issuer permission hierarchy
+	// Process issuer perm hierarchy
 	if issuerPerm != nil {
 		// Start with the validator of issuer_perm
 		if issuerPerm.ValidatorPermId != 0 {
@@ -421,11 +427,11 @@ func (k Keeper) FindBeneficiaries(goCtx context.Context, req *types.QueryFindBen
 			for currentPermID != 0 {
 				currentPerm, err := k.Permission.Get(ctx, currentPermID)
 				if err != nil {
-					return nil, status.Error(codes.Internal, fmt.Sprintf("failed to get permission: %v", err))
+					return nil, status.Error(codes.Internal, fmt.Sprintf("failed to get perm: %v", err))
 				}
 
 				// Add to set if not revoked or terminated
-				if currentPerm.Revoked == nil && currentPerm.Terminated == nil {
+				if currentPerm.Revoked == nil && currentPerm.Terminated == nil && currentPerm.SlashedDeposit == 0 {
 					foundPermMap[currentPermID] = currentPerm
 				}
 
@@ -435,10 +441,10 @@ func (k Keeper) FindBeneficiaries(goCtx context.Context, req *types.QueryFindBen
 		}
 	}
 
-	// Process verifier permission hierarchy
+	// Process verifier perm hierarchy
 	if verifierPerm != nil {
 		// First add issuer_perm to the set if it exists
-		if issuerPerm != nil && issuerPerm.Revoked == nil && issuerPerm.Terminated == nil {
+		if issuerPerm != nil && issuerPerm.Revoked == nil && issuerPerm.Terminated == nil && issuerPerm.SlashedDeposit == 0 {
 			foundPermMap[req.IssuerPermId] = *issuerPerm
 		}
 
@@ -450,11 +456,11 @@ func (k Keeper) FindBeneficiaries(goCtx context.Context, req *types.QueryFindBen
 			for currentPermID != 0 {
 				currentPerm, err := k.Permission.Get(ctx, currentPermID)
 				if err != nil {
-					return nil, status.Error(codes.Internal, fmt.Sprintf("failed to get permission: %v", err))
+					return nil, status.Error(codes.Internal, fmt.Sprintf("failed to get perm: %v", err))
 				}
 
 				// Add to set if not revoked or terminated
-				if currentPerm.Revoked == nil && currentPerm.Terminated == nil {
+				if currentPerm.Revoked == nil && currentPerm.Terminated == nil && currentPerm.SlashedDeposit == 0 {
 					foundPermMap[currentPermID] = currentPerm
 				}
 
