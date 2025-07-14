@@ -6,6 +6,8 @@ import (
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
+	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
+	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	credentialschemakeeper "github.com/verana-labs/verana-blockchain/x/credentialschema/keeper"
 	diddirectorykeeper "github.com/verana-labs/verana-blockchain/x/diddirectory/keeper"
 	permission "github.com/verana-labs/verana-blockchain/x/permission/keeper"
@@ -24,6 +26,8 @@ type AppKeepers interface {
 	GetTrustDepositKeeper() trustdeposit.Keeper
 	GetDidDirectoryKeeper() diddirectorykeeper.Keeper
 	GetCredentialSchemaKeeper() credentialschemakeeper.Keeper
+	GetBankKeeper() bankkeeper.Keeper
+	GetAccountKeeper() authkeeper.AccountKeeper
 }
 
 type Upgrade struct {

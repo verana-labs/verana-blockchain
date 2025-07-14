@@ -25,6 +25,11 @@ func CreateUpgradeHandler(
 	return func(context context.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
 		ctx := sdk.UnwrapSDKContext(context)
 
+		// Transfer module balances first
+		if err := transferModuleBalances(ctx, keepers); err != nil {
+			return nil, fmt.Errorf("failed to transfer module balances: %w", err)
+		}
+
 		// Get extracted data
 		trustRegistryData, trustDepositData, credentialSchemaData, permissionData, didDirectoryData := GetExtractedData()
 
@@ -56,6 +61,64 @@ func CreateUpgradeHandler(
 		// Run standard migrations
 		return mm.RunMigrations(ctx, configurator, fromVM)
 	}
+}
+
+func transferModuleBalances(ctx sdk.Context, keepers types.AppKeepers) error {
+	// Transfer DID Directory module balance
+	if err := transferSingleModuleBalance(ctx, keepers, "diddirectory", diddirectorytypes.ModuleName); err != nil {
+		return fmt.Errorf("failed to transfer diddirectory balance: %w", err)
+	}
+
+	// Transfer Trust Registry module balance
+	if err := transferSingleModuleBalance(ctx, keepers, "trustregistry", trustregistrytypes.ModuleName); err != nil {
+		return fmt.Errorf("failed to transfer trustregistry balance: %w", err)
+	}
+
+	// Transfer Trust Deposit module balance
+	if err := transferSingleModuleBalance(ctx, keepers, "trustdeposit", trustdeposittypes.ModuleName); err != nil {
+		return fmt.Errorf("failed to transfer trustdeposit balance: %w", err)
+	}
+
+	// Transfer Credential Schema module balance
+	if err := transferSingleModuleBalance(ctx, keepers, "credentialschema", credentialschematypes.ModuleName); err != nil {
+		return fmt.Errorf("failed to transfer credentialschema balance: %w", err)
+	}
+
+	// Transfer Permission module balance
+	if err := transferSingleModuleBalance(ctx, keepers, "permission", permissiontypes.ModuleName); err != nil {
+		return fmt.Errorf("failed to transfer permission balance: %w", err)
+	}
+
+	return nil
+}
+
+func transferSingleModuleBalance(ctx sdk.Context, keepers types.AppKeepers, oldModule, newModule string) error {
+	// Get the old module account
+	oldModuleAccount := keepers.GetAccountKeeper().GetModuleAccount(ctx, oldModule)
+	if oldModuleAccount == nil {
+		fmt.Printf("Old module account %s not found, skipping transfer\n", oldModule)
+		return nil
+	}
+
+	// Check the balance of the old module
+	balance := keepers.GetBankKeeper().GetBalance(ctx, oldModuleAccount.GetAddress(), "uvna")
+
+	// Only transfer if balance is positive
+	if balance.Amount.IsPositive() {
+		fmt.Printf("Transferring %s from %s to %s\n", balance.String(), oldModule, newModule)
+
+		// Transfer from old to new module
+		err := keepers.GetBankKeeper().SendCoinsFromModuleToModule(ctx, oldModule, newModule, sdk.NewCoins(balance))
+		if err != nil {
+			return fmt.Errorf("failed to transfer balance from %s to %s: %w", oldModule, newModule, err)
+		}
+
+		fmt.Printf("Successfully transferred %s from %s to %s\n", balance.String(), oldModule, newModule)
+	} else {
+		fmt.Printf("No positive balance to transfer from %s (balance: %s)\n", oldModule, balance.String())
+	}
+
+	return nil
 }
 
 func restoreTrustRegistryData(ctx sdk.Context, keepers types.AppKeepers, data TrustRegistryData) error {
