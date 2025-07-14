@@ -1,0 +1,20 @@
+{
+  "messages": [
+    {
+      "@type": "/cosmos.upgrade.v1beta1.MsgSoftwareUpgrade",
+      "authority": "verana10d07y265gmmuvt4z0w9aw880jnsr700j22m4w8",
+      "plan": {
+        "name": "v0.6",
+        "time": "0001-01-01T00:00:00Z",
+        "height": "1475350",
+        "info": "",
+        "upgraded_client_state": null
+      }
+    }
+  ],
+  "metadata": "ipfs://CID",
+  "deposit": "10000000uvna",
+  "title": "Software Upgrade v0.6: Specs Update to v2 and Package Rename",
+  "summary": "This proposal initiates a comprehensive upgrade to version 0.6, which includes a major specification update to v2 and a full package rename across the codebase. The upgrade aims to improve maintainability, align with new standards, and enhance future development capabilities. All modules and dependencies will be updated accordingly, and the network will transition to the new package structure at the specified upgrade height.",
+  "expedited": false
+}

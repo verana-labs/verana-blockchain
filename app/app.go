@@ -268,6 +268,14 @@ func (app *App) GetTrustDepositKeeper() trustdepositmodulekeeper.Keeper {
 	return app.TrustdepositKeeper
 }
 
+func (app *App) GetBankKeeper() bankkeeper.Keeper {
+	return app.BankKeeper
+}
+
+func (app *App) GetAccountKeeper() authkeeper.AccountKeeper {
+	return app.AccountKeeper
+}
+
 // New returns a reference to an initialized App.
 func New(
 	logger log.Logger,

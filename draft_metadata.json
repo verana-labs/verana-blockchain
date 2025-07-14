@@ -1,0 +1,10 @@
+{
+  "title": "Software Upgrade v0.6: Specs Update to v2 and Package Rename",
+  "authors": [
+    "pratikasr"
+  ],
+  "summary": "Comprehensive upgrade to v0.6, including a major specification update to v2 and a package rename for improved maintainability and alignment with new standards.",
+  "details": "This proposal details the transition to version 0.6, featuring a full specification update to v2 and a package rename across all modules. The changes are designed to enhance code maintainability, ensure compatibility with evolving standards, and streamline future development. All relevant documentation and dependencies will be updated as part of this process.",
+  "proposal_forum_url": "https://verana.io",
+  "vote_option_context": "Yes: Approve the v0.6 upgrade and package rename; No: Reject the proposal"
+}
