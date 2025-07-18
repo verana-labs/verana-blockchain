@@ -16,16 +16,16 @@ option go_package = "github.com/verana-labs/verana-blockchain/x/trustregistry/ty
 service Query {
   // Parameters queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/tr/v1/params";
+    option (google.api.http).get = "/verana/tr/v1/params";
   }
   // GetTrustRegistry returns the trust registry information.
   rpc GetTrustRegistry(QueryGetTrustRegistryRequest) returns (QueryGetTrustRegistryResponse) {
-    option (google.api.http).get = "/tr/v1/get/{tr_id}";
+    option (google.api.http).get = "/verana/tr/v1/get/{tr_id}";
   }
 
   // ListTrustRegistries returns a list of Trust Registries
   rpc ListTrustRegistries(QueryListTrustRegistriesRequest) returns (QueryListTrustRegistriesResponse) {
-    option (google.api.http).get = "/tr/v1/list";
+    option (google.api.http).get = "/verana/tr/v1/list";
   }
 }
 

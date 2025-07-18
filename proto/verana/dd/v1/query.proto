@@ -16,13 +16,13 @@ option go_package = "github.com/verana-labs/verana-blockchain/x/diddirectory/typ
 service Query {
   // Parameters queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/dd/v1/params";
+    option (google.api.http).get = "/verana/dd/v1/params";
   }
   rpc ListDIDs(QueryListDIDsRequest) returns (QueryListDIDsResponse) {
-    option (google.api.http).get = "/dd/v1/list";
+    option (google.api.http).get = "/verana/dd/v1/list";
   }
   rpc GetDID(QueryGetDIDRequest) returns (QueryGetDIDResponse) {
-    option (google.api.http).get = "/dd/v1/get/{did}";
+    option (google.api.http).get = "/verana/dd/v1/get/{did}";
   }
 }
 
