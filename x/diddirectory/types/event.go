@@ -2,8 +2,9 @@ package types
 
 // Event types and attribute keys for the DID Directory module
 const (
-	EventTypeAddDID   = "add_did"
-	EventTypeRenewDID = "renew_did"
+	EventTypeAddDID    = "add_did"
+	EventTypeRenewDID  = "renew_did"
+	EventTypeRemoveDID = "remove_did"
 
 	// Attribute keys
 	AttributeKeyDID        = "did"
