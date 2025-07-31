@@ -41,17 +41,37 @@ func (ms msgServer) validateRemoveDIDParams(ctx sdk.Context, msg *types.MsgRemov
 }
 
 func (ms msgServer) executeRemoveDID(ctx sdk.Context, msg *types.MsgRemoveDID) error {
-	_, err := ms.DIDDirectory.Get(ctx, msg.Did)
+	// Load DidDirectory entry dd
+	didEntry, err := ms.DIDDirectory.Get(ctx, msg.Did)
 	if err != nil {
 		return fmt.Errorf("error retrieving DID: %w", err)
 	}
 
-	// Release trust deposit to controller
+	// Use [MOD-TD-MSG-1] to decrease by dd.deposit the trust deposit of dd.controller account
+	if didEntry.Deposit > 0 {
+		// Convert to signed integer for adjustment
+		depositAmount := didEntry.Deposit
 
-	// Remove DID entry
+		// Use negative value to decrease deposit and increase claimable amount
+		if err := ms.trustDeposit.AdjustTrustDeposit(ctx, didEntry.Controller, -depositAmount); err != nil {
+			return fmt.Errorf("failed to adjust trust deposit for controller %s: %w", didEntry.Controller, err)
+		}
+	}
+
+	// Remove entry from DidDirectory
 	if err = ms.DIDDirectory.Remove(ctx, msg.Did); err != nil {
 		return fmt.Errorf("failed to remove DID: %w", err)
 	}
+
+	// Emit event
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeRemoveDID,
+			sdk.NewAttribute(types.AttributeKeyDID, msg.Did),
+			sdk.NewAttribute(types.AttributeKeyController, didEntry.Controller),
+			sdk.NewAttribute(types.AttributeKeyDeposit, fmt.Sprintf("%d", didEntry.Deposit)),
+		),
+	)
 
 	return nil
 }
