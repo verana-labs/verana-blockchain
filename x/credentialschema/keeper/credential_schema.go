@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"fmt"
+	"strings"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/verana-labs/verana-blockchain/x/credentialschema/types"
@@ -73,6 +74,9 @@ func (ms msgServer) executeCreateCredentialSchema(ctx sdk.Context, schemaID uint
 		return fmt.Errorf("failed to adjust trust deposit: %w", err)
 	}
 
+	// Replace VPR_CREDENTIAL_SCHEMA_ID placeholder with actual generated ID
+	processedJsonSchema := strings.ReplaceAll(msg.JsonSchema, "VPR_CREDENTIAL_SCHEMA_ID", fmt.Sprintf("%d", schemaID))
+
 	// Create the credential schema
 	credentialSchema := types.CredentialSchema{
 		Id:                                      schemaID, // Use the generated ID
@@ -80,7 +84,7 @@ func (ms msgServer) executeCreateCredentialSchema(ctx sdk.Context, schemaID uint
 		Created:                                 ctx.BlockTime(),
 		Modified:                                ctx.BlockTime(),
 		Deposit:                                 trustDepositAmount,
-		JsonSchema:                              msg.JsonSchema,
+		JsonSchema:                              processedJsonSchema, // Use processed schema with replaced ID
 		IssuerGrantorValidationValidityPeriod:   msg.IssuerGrantorValidationValidityPeriod,
 		VerifierGrantorValidationValidityPeriod: msg.VerifierGrantorValidationValidityPeriod,
 		IssuerValidationValidityPeriod:          msg.IssuerValidationValidityPeriod,

@@ -11,17 +11,49 @@ import (
 func TestGenesisState_Validate(t *testing.T) {
 	// Create a valid JSON schema for testing
 	validJsonSchema := `{
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "/vpr/v1/cs/js/1",
-        "type": "object",
-        "properties": {
-            "name": {
-                "type": "string"
-            }
+  "$id": "vpr:verana:mainnet/cs/v1/js/1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ExampleCredential",
+  "description": "ExampleCredential using JsonSchema",
+  "type": "object",
+  "properties": {
+    "credentialSubject": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uri"
         },
-        "required": ["name"],
-        "additionalProperties": false
-    }`
+        "firstName": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 256
+        },
+        "lastName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "expirationDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "countryOfResidence": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 2
+        }
+      },
+      "required": [
+        "id",
+        "lastName",
+        "birthDate",
+        "expirationDate",
+        "countryOfResidence"
+      ]
+    }
+  }
+}`
 
 	// Setup valid schema for testing
 	now := time.Now().UTC()
