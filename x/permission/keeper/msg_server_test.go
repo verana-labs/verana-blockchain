@@ -446,7 +446,7 @@ func TestSetPermissionVPToValidated(t *testing.T) {
 
 		resp, err := ms.SetPermissionVPToValidated(ctx, msg)
 		require.Error(t, err)
-		require.Contains(t, err.Error(), "creator is not the validator")
+		require.Contains(t, err.Error(), "account running method must be validator grantee")
 		require.Nil(t, resp)
 	})
 
