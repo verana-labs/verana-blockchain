@@ -22,7 +22,7 @@ const jsonSchemaMetaSchema = `{
     "$id": {
       "type": "string",
       "format": "uri-reference",
-      "pattern": "^vpr:verana:mainnet/cs/v1/js/\\d+$",
+      "pattern": "^vpr:verana:mainnet/cs/v1/js/(VPR_CREDENTIAL_SCHEMA_ID|\\d+)$",
       "description": "$id must be a URI matching the rendering URL format"
     },
     "$schema": {
@@ -102,7 +102,6 @@ const jsonSchemaMetaSchema = `{
   ]
 }
 `
-
 const TypeMsgCreateCredentialSchema = "create_credential_schema"
 
 var _ sdk.Msg = &MsgCreateCredentialSchema{}
@@ -207,7 +206,7 @@ func validateJSONSchema(schemaJSON string) error {
 
 	// Only validate that $id follows the basic pattern, actual ID will be set later
 	if !isValidSchemaIdPattern(schemaId) {
-		return fmt.Errorf("$id must match the pattern 'vpr:verana:mainnet/cs/v1/js/{number}'")
+		return fmt.Errorf("$id must match the pattern 'vpr:verana:mainnet/cs/v1/js/VPR_CREDENTIAL_SCHEMA_ID' or 'vpr:verana:mainnet/cs/v1/js/{number}'")
 	}
 
 	// Load the meta-schema and validate
@@ -258,8 +257,11 @@ func validateJSONSchema(schemaJSON string) error {
 }
 
 func isValidSchemaIdPattern(schemaId string) bool {
-	pattern := regexp.MustCompile(`^vpr:verana:mainnet/cs/v1/js/\d+$`)
-	return pattern.MatchString(schemaId)
+	// Accept either the placeholder or an actual number
+	placeholderPattern := regexp.MustCompile(`^vpr:verana:mainnet/cs/v1/js/VPR_CREDENTIAL_SCHEMA_ID$`)
+	numberPattern := regexp.MustCompile(`^vpr:verana:mainnet/cs/v1/js/\d+$`)
+
+	return placeholderPattern.MatchString(schemaId) || numberPattern.MatchString(schemaId)
 }
 
 func validateValidityPeriods(msg *MsgCreateCredentialSchema) error {

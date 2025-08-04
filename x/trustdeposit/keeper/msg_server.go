@@ -52,12 +52,14 @@ func (ms msgServer) ReclaimTrustDepositYield(goCtx context.Context, msg *types.M
 	sharesToReduce := ms.Keeper.AmountToShare(claimableYield, params.TrustDepositShareValue)
 	td.Share -= sharesToReduce
 
+	addr, _ := sdk.AccAddressFromBech32(account)
+
 	// [MOD-TD-MSG-2-3] Transfer yield from TrustDeposit account to account
 	coins := sdk.NewCoins(sdk.NewInt64Coin(types.BondDenom, int64(claimableYield)))
 	if err := ms.Keeper.bankKeeper.SendCoinsFromModuleToAccount(
 		ctx,
 		types.ModuleName,
-		sdk.AccAddress(account),
+		addr,
 		coins,
 	); err != nil {
 		return nil, fmt.Errorf("failed to transfer yield: %w", err)
@@ -138,13 +140,14 @@ func (ms msgServer) ReclaimTrustDeposit(goCtx context.Context, msg *types.MsgRec
 	td.Amount -= msg.Claimed
 	td.Share -= shareReduction
 
+	addr, _ := sdk.AccAddressFromBech32(msg.Creator)
 	// Transfer claimable amount minus burn to the account
 	if toTransfer > 0 {
 		transferCoins := sdk.NewCoins(sdk.NewInt64Coin(types.BondDenom, int64(toTransfer)))
 		if err := ms.Keeper.bankKeeper.SendCoinsFromModuleToAccount(
 			ctx,
 			types.ModuleName,
-			sdk.AccAddress(account),
+			addr,
 			transferCoins,
 		); err != nil {
 			return nil, fmt.Errorf("failed to transfer coins: %w", err)
