@@ -6,7 +6,7 @@ on:
       TEST_HARNESS_BRANCH:
         description: 'Branch to use for verana-test-harness checkout (default is main)'
         required: false
-        default: 'main'
+        default: 'fix/v2-bugs'
   pull_request:
     branches:
       - '*' # Trigger on pull requests to any branch
