@@ -163,28 +163,16 @@ func (ms msgServer) SetPermissionVPToValidated(goCtx context.Context, msg *types
 		return nil, fmt.Errorf("perm must be in PENDING state to be validated")
 	}
 
-	// validation_fees: If specified, MUST be zero or a positive number.
-	if msg.ValidationFees < 0 {
-		return nil, fmt.Errorf("validation_fees must be zero or positive")
-	}
 	// If applicant_perm.effective_from is not null (renewal) validation_fees MUST be equal to applicant_perm.validation_fees
 	if applicantPerm.EffectiveFrom != nil && msg.ValidationFees != applicantPerm.ValidationFees {
 		return nil, fmt.Errorf("validation_fees cannot be changed during renewal")
 	}
 
-	// issuance_fees: If specified, MUST be zero or a positive number.
-	if msg.IssuanceFees < 0 {
-		return nil, fmt.Errorf("issuance fees must be zero or positive")
-	}
 	// If applicant_perm.effective_from is not null (renewal) issuance_fees MUST be equal to applicant_perm.issuance_fees
 	if applicantPerm.EffectiveFrom != nil && msg.IssuanceFees != applicantPerm.IssuanceFees {
 		return nil, fmt.Errorf("issuance_fees cannot be changed during renewal")
 	}
 
-	// verification_fees: If specified, MUST be zero or a positive number.
-	if msg.VerificationFees < 0 {
-		return nil, fmt.Errorf("verification_fees must be zero or positive")
-	}
 	// If applicant_perm.effective_from is not null (renewal) verification_fees MUST be equal to applicant_perm.verification_fees
 	if applicantPerm.EffectiveFrom != nil && msg.VerificationFees != applicantPerm.VerificationFees {
 		return nil, fmt.Errorf("verification_fees cannot be changed during renewal")
@@ -248,6 +236,7 @@ func (ms msgServer) SetPermissionVPToValidated(goCtx context.Context, msg *types
 	if err != nil {
 		return nil, fmt.Errorf("validator permission not found: %w", err)
 	}
+	// TODO: check for valid perm
 
 	// account running the method MUST be validator_perm.grantee
 	if validatorPerm.Grantee != msg.Creator {
