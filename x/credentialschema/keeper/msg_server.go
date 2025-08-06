@@ -35,11 +35,6 @@ func (ms msgServer) CreateCredentialSchema(goCtx context.Context, msg *types.Msg
 		return nil, err
 	}
 
-	// [MOD-CS-MSG-1-2-2] Fee checks
-	//if err := ms.checkSufficientFees(ctx, msg.Creator); err != nil {
-	// return nil, err
-	//}
-
 	// [MOD-CS-MSG-1-3] Execution
 	if err := ms.executeCreateCredentialSchema(ctx, nextID, msg); err != nil {
 		return nil, err

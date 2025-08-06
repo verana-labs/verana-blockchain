@@ -152,115 +152,99 @@ func (ms msgServer) SetPermissionVPToValidated(goCtx context.Context, msg *types
 	now := ctx.BlockTime()
 
 	// [MOD-PERM-MSG-3-2-1] Basic checks
+	// Load Permission entry applicant_perm from id. If no entry found, abort.
 	applicantPerm, err := ms.Keeper.GetPermissionByID(ctx, msg.Id)
 	if err != nil {
 		return nil, fmt.Errorf("perm not found: %w", err)
 	}
 
-	// Check perm state - must be PENDING
+	// applicant_perm.vp_state MUST be equal to PENDING, else abort.
 	if applicantPerm.VpState != types.ValidationState_VALIDATION_STATE_PENDING {
 		return nil, fmt.Errorf("perm must be in PENDING state to be validated")
 	}
 
-	// Check renewal-specific constraints
-	if applicantPerm.EffectiveFrom != nil {
-		if msg.ValidationFees != applicantPerm.ValidationFees {
-			return nil, fmt.Errorf("validation fees cannot be changed during renewal")
-		}
-		if msg.IssuanceFees != applicantPerm.IssuanceFees {
-			return nil, fmt.Errorf("issuance fees cannot be changed during renewal")
-		}
-		if msg.VerificationFees != applicantPerm.VerificationFees {
-			return nil, fmt.Errorf("verification fees cannot be changed during renewal")
-		}
-		if msg.Country != applicantPerm.Country {
-			return nil, fmt.Errorf("country cannot be changed during renewal")
-		}
+	// If applicant_perm.effective_from is not null (renewal) validation_fees MUST be equal to applicant_perm.validation_fees
+	if applicantPerm.EffectiveFrom != nil && msg.ValidationFees != applicantPerm.ValidationFees {
+		return nil, fmt.Errorf("validation_fees cannot be changed during renewal")
 	}
 
-	// Check summary digest SRI
+	// If applicant_perm.effective_from is not null (renewal) issuance_fees MUST be equal to applicant_perm.issuance_fees
+	if applicantPerm.EffectiveFrom != nil && msg.IssuanceFees != applicantPerm.IssuanceFees {
+		return nil, fmt.Errorf("issuance_fees cannot be changed during renewal")
+	}
+
+	// If applicant_perm.effective_from is not null (renewal) verification_fees MUST be equal to applicant_perm.verification_fees
+	if applicantPerm.EffectiveFrom != nil && msg.VerificationFees != applicantPerm.VerificationFees {
+		return nil, fmt.Errorf("verification_fees cannot be changed during renewal")
+	}
+
+	// country: If applicant_perm.effective_from is not null (renewal) country MUST be equal to applicant_perm.country
+	if applicantPerm.EffectiveFrom != nil && msg.Country != applicantPerm.Country {
+		return nil, fmt.Errorf("country cannot be changed during renewal")
+	}
+
+	// vp_summary_digest_sri: MUST be null if validation.type is set to HOLDER
 	if applicantPerm.Type == types.PermissionType_PERMISSION_TYPE_HOLDER && msg.VpSummaryDigestSri != "" {
 		return nil, fmt.Errorf("vp_summary_digest_sri must be null for HOLDER type")
 	}
 
-	// [MOD-PERM-MSG-3-2-2] Validator perm checks
-	validatorPerm, err := ms.Keeper.GetPermissionByID(ctx, applicantPerm.ValidatorPermId)
-	if err != nil {
-		return nil, fmt.Errorf("validator perm not found: %w", err)
-	}
-
-	if validatorPerm.Grantee != msg.Creator {
-		return nil, fmt.Errorf("creator is not the validator")
-	}
-
-	if err := IsValidPermission(validatorPerm, msg.Country, ctx.BlockTime()); err != nil {
-		return nil, fmt.Errorf("validator perm is not valid: %w", err)
-	}
-
-	// Get validation period and calculate expiration
+	// Load CredentialSchema cs from applicant_perm.schema_id.
 	cs, err := ms.credentialSchemaKeeper.GetCredentialSchemaById(ctx, applicantPerm.SchemaId)
 	if err != nil {
 		return nil, fmt.Errorf("credential schema not found: %w", err)
 	}
 
+	// Calculate vp_exp
 	validityPeriod := getValidityPeriod(uint32(applicantPerm.Type), cs)
-	vpExp := calculateVPExp(applicantPerm.VpExp, uint64(validityPeriod), now)
-
-	// Special check for OPEN mode permissions to ensure proper fee handling
-	// Even in OPEN mode, fees can still apply
-	if applicantPerm.Type == types.PermissionType_PERMISSION_TYPE_ISSUER &&
-		cs.IssuerPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_OPEN {
-		// Ensure validator is ECOSYSTEM for fee collection in OPEN mode
-		if validatorPerm.Type != types.PermissionType_PERMISSION_TYPE_ECOSYSTEM {
-			return nil, fmt.Errorf("validator must be ECOSYSTEM type for OPEN issuer perm")
-		}
-	} else if applicantPerm.Type == types.PermissionType_PERMISSION_TYPE_VERIFIER &&
-		cs.VerifierPermManagementMode == credentialschematypes.CredentialSchemaPermManagementMode_OPEN {
-		// Ensure validator is ECOSYSTEM for fee collection in OPEN mode
-		if validatorPerm.Type != types.PermissionType_PERMISSION_TYPE_ECOSYSTEM {
-			return nil, fmt.Errorf("validator must be ECOSYSTEM type for OPEN verifier perm")
-		}
+	var vpExp *time.Time
+	if validityPeriod == 0 {
+		vpExp = nil
+	} else if applicantPerm.VpExp == nil {
+		exp := now.AddDate(0, 0, int(validityPeriod))
+		vpExp = &exp
+	} else {
+		exp := applicantPerm.VpExp.AddDate(0, 0, int(validityPeriod))
+		vpExp = &exp
 	}
 
-	// Check effective_until if provided
+	// Verify effective_until
 	if msg.EffectiveUntil != nil {
 		if applicantPerm.EffectiveUntil == nil {
+			// effective_until MUST be greater than current timestamp
 			if !msg.EffectiveUntil.After(now) {
-				return nil, fmt.Errorf("effective_until must be after current time")
+				return nil, fmt.Errorf("effective_until must be greater than current timestamp")
 			}
+			// if vp_exp is not null, lower or equal to vp_exp
 			if vpExp != nil && msg.EffectiveUntil.After(*vpExp) {
-				return nil, fmt.Errorf("effective_until cannot be after validation expiration")
+				return nil, fmt.Errorf("effective_until must be lower or equal to vp_exp")
 			}
 		} else {
+			// effective_until MUST be greater than applicant_perm.effective_until
 			if !msg.EffectiveUntil.After(*applicantPerm.EffectiveUntil) {
-				return nil, fmt.Errorf("effective_until must be after current effective_until")
+				return nil, fmt.Errorf("effective_until must be greater than current effective_until")
 			}
+			// if vp_exp is not null, lower or equal to vp_exp
 			if vpExp != nil && msg.EffectiveUntil.After(*vpExp) {
-				return nil, fmt.Errorf("effective_until cannot be after validation expiration")
+				return nil, fmt.Errorf("effective_until must be lower or equal to vp_exp")
 			}
 		}
-	} else {
-		msg.EffectiveUntil = vpExp
 	}
 
-	// Calculate validator trust deposit
-	validatorTrustDeposit := applicantPerm.VpCurrentFees * ms.GetTrustDepositRate(ctx)
+	// [MOD-PERM-MSG-3-2-2] Validator perms
+	// load validator_perm from applicant_perm.validator_perm_id
+	validatorPerm, err := ms.Keeper.GetPermissionByID(ctx, applicantPerm.ValidatorPermId)
+	if err != nil {
+		return nil, fmt.Errorf("validator permission not found: %w", err)
+	}
+	// TODO: check for valid perm
 
-	// Update validator's trust deposit
-	if validatorTrustDeposit > 0 {
-		err = ms.trustDeposit.AdjustTrustDeposit(ctx, validatorPerm.Grantee, int64(validatorTrustDeposit))
-		if err != nil {
-			return nil, fmt.Errorf("failed to adjust validator trust deposit: %w", err)
-		}
-		applicantPerm.VpValidatorDeposit += validatorTrustDeposit
+	// account running the method MUST be validator_perm.grantee
+	if validatorPerm.Grantee != msg.Creator {
+		return nil, fmt.Errorf("account running method must be validator grantee")
 	}
 
 	// [MOD-PERM-MSG-3-3] Execution
-	if err := ms.executeSetPermissionVPToValidated(ctx, applicantPerm, msg, now, vpExp); err != nil {
-		return nil, fmt.Errorf("failed to execute set to validated: %w", err)
-	}
-
-	return &types.MsgSetPermissionVPToValidatedResponse{}, nil
+	return ms.executeSetPermissionVPToValidated(ctx, applicantPerm, validatorPerm, msg, now, vpExp)
 }
 
 func (ms msgServer) RequestPermissionVPTermination(goCtx context.Context, msg *types.MsgRequestPermissionVPTermination) (*types.MsgRequestPermissionVPTerminationResponse, error) {

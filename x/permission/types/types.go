@@ -92,12 +92,28 @@ func (msg *MsgSetPermissionVPToValidated) ValidateBasic() error {
 		return fmt.Errorf("invalid country code format")
 	}
 
-	// Validate effective until if provided
-	if msg.EffectiveUntil != nil && msg.EffectiveUntil.Before(time.Now()) {
-		return fmt.Errorf("effective until must be in the future")
+	// Validate digest SRI format if provided (optional)
+	if msg.VpSummaryDigestSri != "" && !isValidDigestSRI(msg.VpSummaryDigestSri) {
+		return fmt.Errorf("invalid vp_summary_digest_sri format")
 	}
 
+	// NOTE: Do NOT validate effective_until against current time in stateless validation
+	// This will be done in stateful validation where we have access to block time
+
 	return nil
+}
+
+// Add this helper function for digest SRI validation
+func isValidDigestSRI(digestSRI string) bool {
+	// Validate digest SRI format: algorithm-hash
+	// Example: sha384-MzNNbQTWCSUSi0bbz7dbua+RcENv7C6FvlmYJ1Y+I727HsPOHdzwELMYO9Mz68M26
+	if digestSRI == "" {
+		return true // Empty is valid (optional)
+	}
+
+	// Simple regex for digest SRI format validation
+	matched, _ := regexp.MatchString(`^[a-z0-9]+-[A-Za-z0-9+/]+=*$`, digestSRI)
+	return matched
 }
 
 // ValidateBasic for MsgRequestPermissionVPTermination

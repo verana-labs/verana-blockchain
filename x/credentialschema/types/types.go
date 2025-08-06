@@ -17,12 +17,12 @@ const jsonSchemaMetaSchema = `{
   "$id": "https://example.com/meta-schema/credential-schema",
   "title": "Credential Schema Meta-Schema",
   "type": "object",
-  "required": ["$id", "$schema", "type", "properties"],
+  "required": ["$id", "$schema", "type", "title", "description", "properties"],
   "properties": {
     "$id": {
       "type": "string",
       "format": "uri-reference",
-      "pattern": "^/vpr/v1/cs/js/\\d+$",
+      "pattern": "^vpr:verana:mainnet/cs/v1/js/(VPR_CREDENTIAL_SCHEMA_ID|\\d+)$",
       "description": "$id must be a URI matching the rendering URL format"
     },
     "$schema": {
@@ -34,6 +34,14 @@ const jsonSchemaMetaSchema = `{
       "type": "string",
       "enum": ["object"],
       "description": "The root type must be 'object'"
+    },
+    "title": {
+      "type": "string",
+      "description": "The title of the credential schema"
+    },
+    "description": {
+      "type": "string",
+      "description": "The description of the credential schema"
     },
     "properties": {
       "type": "object",
@@ -78,7 +86,9 @@ const jsonSchemaMetaSchema = `{
   "examples": [
     {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "$id": "/vpr/v1/cs/js/1",
+      "$id": "vpr:verana:mainnet/cs/v1/js/1",
+      "title": "ExampleCredential",
+      "description": "ExampleCredential using JsonSchema",
       "type": "object",
       "properties": {
         "name": {
@@ -92,7 +102,6 @@ const jsonSchemaMetaSchema = `{
   ]
 }
 `
-
 const TypeMsgCreateCredentialSchema = "create_credential_schema"
 
 var _ sdk.Msg = &MsgCreateCredentialSchema{}
@@ -197,7 +206,7 @@ func validateJSONSchema(schemaJSON string) error {
 
 	// Only validate that $id follows the basic pattern, actual ID will be set later
 	if !isValidSchemaIdPattern(schemaId) {
-		return fmt.Errorf("$id must match the pattern '/vpr/v1/cs/js/{number}'")
+		return fmt.Errorf("$id must match the pattern 'vpr:verana:mainnet/cs/v1/js/VPR_CREDENTIAL_SCHEMA_ID' or 'vpr:verana:mainnet/cs/v1/js/{number}'")
 	}
 
 	// Load the meta-schema and validate
@@ -209,7 +218,7 @@ func validateJSONSchema(schemaJSON string) error {
 	}
 
 	if !result.Valid() {
-		var errMsgs []string
+		errMsgs := make([]string, 0, len(result.Errors()))
 		for _, err := range result.Errors() {
 			errMsgs = append(errMsgs, err.String())
 		}
@@ -217,7 +226,7 @@ func validateJSONSchema(schemaJSON string) error {
 	}
 
 	// Check required fields
-	requiredFields := []string{"$schema", "$id", "type"}
+	requiredFields := []string{"$schema", "$id", "type", "title", "description"}
 	for _, field := range requiredFields {
 		if _, ok := schemaDoc[field]; !ok {
 			return fmt.Errorf("missing required field: %s", field)
@@ -229,17 +238,30 @@ func validateJSONSchema(schemaJSON string) error {
 		return fmt.Errorf("root schema type must be 'object'")
 	}
 
+	// Validate title is non-empty string
+	if title, ok := schemaDoc["title"].(string); !ok || title == "" {
+		return fmt.Errorf("title must be a non-empty string")
+	}
+
+	// Validate description is non-empty string
+	if description, ok := schemaDoc["description"].(string); !ok || description == "" {
+		return fmt.Errorf("description must be a non-empty string")
+	}
+
 	// Validate properties exist
-	properties, ok := schemaDoc["properties"].(map[string]interface{})
-	if !ok || len(properties) == 0 {
+	if properties, ok := schemaDoc["properties"].(map[string]interface{}); !ok || len(properties) == 0 {
 		return fmt.Errorf("schema must define non-empty properties")
 	}
+
 	return nil
 }
 
 func isValidSchemaIdPattern(schemaId string) bool {
-	pattern := regexp.MustCompile(`^/vpr/v1/cs/js/\d+$`)
-	return pattern.MatchString(schemaId)
+	// Accept either the placeholder or an actual number
+	placeholderPattern := regexp.MustCompile(`^vpr:verana:mainnet/cs/v1/js/VPR_CREDENTIAL_SCHEMA_ID$`)
+	numberPattern := regexp.MustCompile(`^vpr:verana:mainnet/cs/v1/js/\d+$`)
+
+	return placeholderPattern.MatchString(schemaId) || numberPattern.MatchString(schemaId)
 }
 
 func validateValidityPeriods(msg *MsgCreateCredentialSchema) error {

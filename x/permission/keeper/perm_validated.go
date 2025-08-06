@@ -41,54 +41,62 @@ func calculateVPExp(currentVPExp *time.Time, validityPeriod uint64, now time.Tim
 	return &exp
 }
 
-func (ms msgServer) executeSetPermissionVPToValidated(ctx sdk.Context, perm types.Permission, msg *types.MsgSetPermissionVPToValidated, now time.Time, vpExp *time.Time) error {
-	// Update perm
-	perm.Modified = &now
-	perm.VpState = types.ValidationState_VALIDATION_STATE_VALIDATED
-	perm.VpLastStateChange = &now
-	perm.VpSummaryDigestSri = msg.VpSummaryDigestSri
-	perm.VpExp = vpExp
-	perm.EffectiveUntil = msg.EffectiveUntil
+func (ms msgServer) executeSetPermissionVPToValidated(
+	ctx sdk.Context,
+	applicantPerm types.Permission,
+	validatorPerm types.Permission,
+	msg *types.MsgSetPermissionVPToValidated,
+	now time.Time,
+	vpExp *time.Time,
+) (*types.MsgSetPermissionVPToValidatedResponse, error) {
 
-	// Set initial values if not a renewal
-	if perm.EffectiveFrom == nil {
-		perm.ValidationFees = msg.ValidationFees
-		perm.IssuanceFees = msg.IssuanceFees
-		perm.VerificationFees = msg.VerificationFees
-		perm.Country = msg.Country
-		perm.EffectiveFrom = &now
+	// Change value of provided effective_until if needed
+	effectiveUntil := msg.EffectiveUntil
+	if effectiveUntil == nil {
+		// if provided effective_until is NULL: change value to vp_exp
+		effectiveUntil = vpExp
 	}
 
-	// Handle fees and trust deposits
-	if perm.VpCurrentFees > 0 {
-		// Load validator perm
-		validatorPerm, err := ms.Keeper.GetPermissionByID(ctx, perm.ValidatorPermId)
-		if err != nil {
-			return fmt.Errorf("failed to get validator perm: %w", err)
-		}
+	// Update Permission applicant_perm:
+	applicantPerm.Modified = &now
+	applicantPerm.VpState = types.ValidationState_VALIDATION_STATE_VALIDATED
+	applicantPerm.VpLastStateChange = &now
+	applicantPerm.VpSummaryDigestSri = msg.VpSummaryDigestSri
+	applicantPerm.VpExp = vpExp
+	applicantPerm.EffectiveUntil = effectiveUntil
 
-		// Get validator address
+	// if applicant_perm.effective_from IS NULL (first time method is called for this perm, not a renewal):
+	if applicantPerm.EffectiveFrom == nil {
+		applicantPerm.ValidationFees = msg.ValidationFees
+		applicantPerm.IssuanceFees = msg.IssuanceFees
+		applicantPerm.VerificationFees = msg.VerificationFees
+		applicantPerm.Country = msg.Country
+		applicantPerm.EffectiveFrom = &now
+	}
+
+	// Fees and Trust Deposits:
+	// transfer the full amount applicant_perm.vp_current_fees from escrow account to validator account
+	if applicantPerm.VpCurrentFees > 0 {
 		validatorAddr, err := sdk.AccAddressFromBech32(validatorPerm.Grantee)
 		if err != nil {
-			return fmt.Errorf("invalid validator address: %w", err)
+			return nil, fmt.Errorf("invalid validator address: %w", err)
 		}
 
-		// First, transfer the full amount from escrow to validator
 		err = ms.bankKeeper.SendCoinsFromModuleToAccount(
 			ctx,
-			types.ModuleName, // Module escrow account
-			validatorAddr,    // Validator account
-			sdk.NewCoins(sdk.NewInt64Coin(types.BondDenom, int64(perm.VpCurrentFees))),
+			types.ModuleName,
+			validatorAddr,
+			sdk.NewCoins(sdk.NewInt64Coin(types.BondDenom, int64(applicantPerm.VpCurrentFees))),
 		)
 		if err != nil {
-			return fmt.Errorf("failed to transfer fees to validator: %w", err)
+			return nil, fmt.Errorf("failed to transfer fees to validator: %w", err)
 		}
 
-		// Calculate trust deposit portion
+		// Calculate validator_trust_deposit = applicant_perm.vp_current_fees * GlobalVariables.trust_deposit_rate
 		trustDepositRate := ms.trustDeposit.GetTrustDepositRate(ctx)
-		validatorTrustDeposit := ms.Keeper.validatorTrustDepositAmount(perm.VpCurrentFees, trustDepositRate)
+		validatorTrustDeposit := ms.Keeper.validatorTrustDepositAmount(applicantPerm.VpCurrentFees, trustDepositRate)
 
-		// Increase validator's trust deposit
+		// Increase validator perm trust deposit: use [MOD-TD-MSG-1] to increase by validator_trust_deposit
 		if validatorTrustDeposit > 0 {
 			err = ms.trustDeposit.AdjustTrustDeposit(
 				ctx,
@@ -96,19 +104,25 @@ func (ms msgServer) executeSetPermissionVPToValidated(ctx sdk.Context, perm type
 				int64(validatorTrustDeposit),
 			)
 			if err != nil {
-				return fmt.Errorf("failed to adjust validator trust deposit: %w", err)
+				return nil, fmt.Errorf("failed to adjust validator trust deposit: %w", err)
 			}
 
-			// Update validator deposit in applicant perm
-			perm.VpValidatorDeposit += validatorTrustDeposit
+			// Set applicant_perm.vp_validator_deposit to applicant_perm.vp_validator_deposit + validator_trust_deposit
+			applicantPerm.VpValidatorDeposit += validatorTrustDeposit
 		}
 	}
 
-	// Set current fees and deposit to zero after processing
-	perm.VpCurrentFees = 0
-	perm.VpCurrentDeposit = 0
+	// set applicant_perm.vp_current_fees to 0
+	applicantPerm.VpCurrentFees = 0
+	// set applicant_perm.vp_current_deposit to 0
+	applicantPerm.VpCurrentDeposit = 0
 
-	return ms.Keeper.UpdatePermission(ctx, perm)
+	// Persist the updated permission
+	if err := ms.Keeper.UpdatePermission(ctx, applicantPerm); err != nil {
+		return nil, fmt.Errorf("failed to update permission: %w", err)
+	}
+
+	return &types.MsgSetPermissionVPToValidatedResponse{}, nil
 }
 
 func (k Keeper) validatorTrustDepositAmount(vpCurrentFees uint64, trustDepositRate math.LegacyDec) uint64 {
