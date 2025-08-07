@@ -40,6 +40,13 @@ func (ms msgServer) executeTouchDID(ctx sdk.Context, msg *types.MsgTouchDID) err
 	if err = ms.DIDDirectory.Set(ctx, msg.Did, didEntry); err != nil {
 		return fmt.Errorf("failed to update DID: %w", err)
 	}
-
+	// Emit event
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTouchDID,
+			sdk.NewAttribute(types.AttributeKeyDID, msg.Did),
+			sdk.NewAttribute(types.AttributeKeyController, msg.Creator),
+		),
+	)
 	return nil
 }
